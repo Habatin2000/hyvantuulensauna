@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# OpenNext
+.open-next
+
+# Wrangler / dev cache
+.wrangler/
+.dev.vars
+
+# dist (build output, recreated on each build)
+dist/
+
+# next dev cache
+*.development.log

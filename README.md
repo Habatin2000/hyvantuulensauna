@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hyvän Tuulen Sauna
+
+A brand new Finnish-first website for Hyvän Tuulen Sauna - a sauna boat experience in Helsinki.
+
+## Features
+
+- **Next.js App Router** with TypeScript
+- **Modern Design** with warm maritime aesthetic
+- **Three Product Lines**:
+  - Summer sauna boats (primary)
+  - Private sauna bookings
+  - Public sauna sessions
+- **Booking UX Shells** - Ready for backend integration
+- **Finnish-first** content
+- **Fully Responsive** design
+
+## Project Structure
+
+```
+my-app/
+├── app/                    # Next.js app router pages
+│   ├── page.tsx           # Homepage
+│   ├── saunalautat-kesalla/  # Summer sauna boats
+│   ├── yksityissauna/        # Private sauna
+│   ├── julkinen-sauna/       # Public sauna
+│   ├── sijainti/             # Location
+│   ├── usein-kysyttya/       # FAQ
+│   ├── galleria/             # Gallery
+│   └── kiitos/               # Thank you
+├── components/
+│   ├── layout/            # Header, Footer, Navigation
+│   ├── sections/          # Reusable page sections
+│   ├── booking/           # Booking shell components
+│   └── ui/                # shadcn/ui components
+├── content/               # Content data files
+├── types/                 # TypeScript types
+└── public/images/         # Static images
+```
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Pages
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/` - Homepage with summer focus
+- `/saunalautat-kesalla` - Summer sauna boats (main product)
+- `/yksityissauna` - Private sauna bookings
+- `/julkinen-sauna` - Public sauna sessions
+- `/sijainti` - Location and directions
+- `/usein-kysyttya` - FAQ page
+- `/galleria` - Photo gallery
+- `/kiitos` - Thank you / confirmation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design System
 
-## Learn More
+- **Colors**: Warm stone palette with ocean teal accents
+- **Typography**: Clean, modern sans-serif
+- **Visual Style**: Maritime, warm, Finnish, premium but approachable
 
-To learn more about Next.js, take a look at the following resources:
+## TODO for Future Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Implement actual booking backend integration
+2. Add real calendar/date picker components
+3. Connect to payment provider
+4. Add email notifications
+5. Implement user authentication (if needed)
+6. Add image optimization
+7. SEO improvements
+8. Analytics integration
