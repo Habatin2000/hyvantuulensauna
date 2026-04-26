@@ -125,8 +125,30 @@ export default function PublicSaunaPage() {
         </div>
       </section>
 
-      {/* Info Section */}
+      {/* Pricing Section */}
       <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-4xl text-center">
+          <p className="mb-4 text-sm font-medium uppercase tracking-wider text-[#3b82f6]">
+            Venekuljetus ja sauna
+          </p>
+          <h2 className="text-3xl font-bold text-stone-900 md:text-4xl mb-8">
+            Varaa paikka julkiselta vuorolta
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <div className="rounded-2xl bg-stone-50 p-8">
+              <p className="text-4xl font-bold text-[#3b82f6]">15€</p>
+              <p className="text-stone-500 mt-1">/ 2h sauna</p>
+            </div>
+            <div className="rounded-2xl bg-stone-50 p-8">
+              <p className="text-4xl font-bold text-[#3b82f6]">12.5€</p>
+              <p className="text-stone-500 mt-1">/ 2h opiskelijat ja eläkeläiset</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Info Section */}
+      <section className="section-padding bg-stone-50">
         <div className="container-padding mx-auto max-w-4xl">
           <div className="mb-8 text-center">
             <p className="text-sm text-stone-500">

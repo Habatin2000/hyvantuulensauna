@@ -89,19 +89,19 @@ export const faqItems: FAQItem[] = [
   {
     id: 'public-when',
     question: 'Milloin julkiset saunavuorot ovat?',
-    answer: 'Julkiset saunavuorot järjestetään tiistaisin ja torstaisin klo 18-21, sekä lauantaisin klo 14-17. Tarkista ajankohtainen aikataulu varauskalenteristamme, sillä aikataulut voivat vaihdella kausittain.',
+    answer: 'Julkiset saunavuorot järjestetään joka sunnuntai 10-16. Vuoroja on vaihtelevasti viikolla, päivitämme tänne kalenteria joka maanantai!',
     category: 'public',
   },
   {
     id: 'public-price',
     question: 'Paljonko julkisen saunan hinta on?',
-    answer: 'Julkisen saunan hinta on 25€/aikuinen ja 15€/lapsi (7-15 v). Hinta sisältää saunomisen, pyyhkeen ja saunajuoman. Varaukset tehdään etukäteen verkkosivujemme kautta.',
+    answer: 'Julkinen saunavuoro maksaa 15€, ja vuoro kestää kaksi tuntia. Opiskelijat ja eläkeläiset 12.5€!',
     category: 'public',
   },
   {
     id: 'public-capacity',
     question: 'Kuinka monta henkeä mahtuu julkiselle vuorolle?',
-    answer: 'Jokaiselle vuorolle myydään enintään 15 lippua, jotta saunomiskokemus pysyy viihtyisänä. Suosittelemme varaamaan paikkasi etukäteen, sillä suosituimmat vuorot täyttyvät nopeasti.',
+    answer: '17hlö',
     category: 'public',
   },
   
