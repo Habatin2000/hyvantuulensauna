@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import HeroSection from '@/components/sections/HeroSection';
 import PublicBookingWidget from '@/components/booking/PublicBookingWidget';
 import FAQAccordion from '@/components/sections/FAQAccordion';
@@ -121,42 +120,24 @@ export default function PublicSaunaPage() {
               </p>
             </div>
           </div>
+
+          {/* Small pricing above calendar */}
+          <div className="mb-8 flex flex-wrap justify-center gap-4">
+            <div className="rounded-xl bg-white border border-stone-200 px-5 py-3 text-center">
+              <span className="text-lg font-bold text-[#3b82f6]">15€</span>
+              <span className="text-sm text-stone-500 ml-1">/ 2h</span>
+            </div>
+            <div className="rounded-xl bg-white border border-stone-200 px-5 py-3 text-center">
+              <span className="text-lg font-bold text-[#3b82f6]">12.5€</span>
+              <span className="text-sm text-stone-500 ml-1">/ 2h opiskelijat & eläkeläiset</span>
+            </div>
+          </div>
+
           <PublicBookingWidget />
-        </div>
-      </section>
 
-      {/* Pricing Section */}
-      <section className="section-padding bg-white">
-        <div className="container-padding mx-auto max-w-4xl text-center">
-          <p className="mb-4 text-sm font-medium uppercase tracking-wider text-[#3b82f6]">
-            Venekuljetus ja sauna
-          </p>
-          <h2 className="text-3xl font-bold text-stone-900 md:text-4xl mb-8">
-            Varaa paikka julkiselta vuorolta
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <div className="rounded-2xl bg-stone-50 p-8">
-              <p className="text-4xl font-bold text-[#3b82f6]">15€</p>
-              <p className="text-stone-500 mt-1">/ 2h sauna</p>
-            </div>
-            <div className="rounded-2xl bg-stone-50 p-8">
-              <p className="text-4xl font-bold text-[#3b82f6]">12.5€</p>
-              <p className="text-stone-500 mt-1">/ 2h opiskelijat ja eläkeläiset</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Info Section */}
-      <section className="section-padding bg-stone-50">
-        <div className="container-padding mx-auto max-w-4xl">
-          <div className="mb-8 text-center">
-            <p className="text-sm text-stone-500">
-              Päivitetty {new Date(DATE_MODIFIED).toLocaleDateString('fi-FI')}
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="rounded-2xl bg-stone-50 p-8">
+          {/* Service info blocks below calendar */}
+          <div className="mt-12 grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="rounded-2xl bg-white p-8">
               <h3 className="text-xl font-bold text-stone-900 mb-4">
                 Mitä mukaan?
               </h3>
@@ -183,7 +164,7 @@ export default function PublicSaunaPage() {
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl bg-stone-50 p-8">
+            <div className="rounded-2xl bg-white p-8">
               <h3 className="text-xl font-bold text-stone-900 mb-4">
                 Sisältyy hintaan
               </h3>
@@ -205,6 +186,26 @@ export default function PublicSaunaPage() {
                   <span>Terrassi</span>
                 </li>
               </ul>
+            </div>
+          </div>
+
+          {/* General info */}
+          <div className="mt-12 max-w-3xl mx-auto">
+            <div className="rounded-2xl bg-white p-8">
+              <h3 className="text-xl font-bold text-stone-900 mb-4">
+                INFO
+              </h3>
+              <div className="space-y-4 text-stone-600 leading-relaxed">
+                <p>
+                  <strong className="text-stone-900">Kun saavut julkiselle vuorolle, toimi näin.</strong>
+                </p>
+                <p>
+                  Tule osoitteeseen <strong>Kalkkihiekantori, 00980 Helsinki</strong>. Moottorivene tulee hakemaan sinut rannasta ja kuljettaa saunalautalle.
+                </p>
+                <p>
+                  Tule paikalle siis ajoissa! Jos saavut myöhässä ilmoitathan tästä. Lautalta pääsee myös tarpeen tullen poistumaan aikaisemmin.
+                </p>
+              </div>
             </div>
           </div>
         </div>
