@@ -79,7 +79,6 @@ export default function PrivateSaunaPage() {
         content={privatePageHero} 
         variant="page"
         ctaColor="yellow"
-        banner="TARJOUS! Varaa risteily ennen 30.04 ja säästä! 390€/3h (ovh 450€)"
       />
 
       {/* AI-optimized answer block */}

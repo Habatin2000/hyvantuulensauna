@@ -99,7 +99,6 @@ export default function PublicSaunaPage() {
         content={publicPageHero} 
         variant="page"
         ctaColor="teal"
-        banner="TARJOUS! Varaa risteily ennen 30.04 ja säästä! 390€/3h (ovh 450€)"
       />
 
       {/* Booking Widget */}

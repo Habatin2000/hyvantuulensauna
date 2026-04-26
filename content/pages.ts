@@ -78,7 +78,7 @@ Polttarit saunalautalla ovat yksi suosituimmista tavoista juhlistaa tulevaa hä�
 
 Saunalauttaristeilyt toimivat toukokuusta syyskuuhun ja lähtevät Kalkkihiekantorilta Vuosaaresta. Kokeneella tiimillämme on kahdeksan vuoden kokemus saunalauttojen operoinnista Helsingissä, joten voitte luottaa siihen, että kaikki sujuu moitteettomasti.
 
-Saunalauttaristeilyn hinta alkaa 130 €/tunti, ja minimivaraus on 3 tuntia. Hintaan sisältyy kapteeni, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Omat eväät ja juomat ovat tervetulleita!`,
+Saunalauttaristeilyn hinta alkaa 150 €/tunti, ja minimivaraus on 3 tuntia. Hintaan sisältyy kapteeni, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Omat eväät ja juomat ovat tervetulleita!`,
 };
 
 export const useCases = [

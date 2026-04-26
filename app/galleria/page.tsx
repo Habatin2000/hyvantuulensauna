@@ -68,7 +68,7 @@ export default function GalleryPage() {
         }}
       />
 
-      <HeroSection content={galleryPageHero} variant="page" banner="TARJOUS! Varaa risteily ennen 30.04 ja säästä! 390€/3h (ovh 450€)" />
+      <HeroSection content={galleryPageHero} variant="page" />
 
       {/* Visible date */}
       <section className="pt-8 pb-0 bg-white">

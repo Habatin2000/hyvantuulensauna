@@ -33,7 +33,7 @@ export const boats: Boat[] = [
       '/images/gallery-sauna-woman.jpg',
     ],
     pricing: {
-      basePrice: 130,
+      basePrice: 150,
       currency: 'EUR',
       unit: 'hour',
     },
@@ -70,7 +70,7 @@ export const boats: Boat[] = [
       '/images/gallery-bbq.jpg',
     ],
     pricing: {
-      basePrice: 130,
+      basePrice: 150,
       currency: 'EUR',
       unit: 'hour',
     },

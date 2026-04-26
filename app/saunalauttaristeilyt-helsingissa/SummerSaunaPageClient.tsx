@@ -50,7 +50,6 @@ export default function SummerSaunaPageClient({
       <HeroSection 
         content={summerPageHero} 
         variant="page" 
-        banner="TARJOUS! Varaa risteily ennen 30.04 ja säästä! 390€/3h (ovh 450€)"
         ctaColor="yellow"
       />
       
@@ -211,7 +210,7 @@ export default function SummerSaunaPageClient({
                 Päivitetty {new Date(dateModified).toLocaleDateString('fi-FI')}
               </p>
               <p className="text-stone-700 leading-relaxed">
-                <strong className="text-stone-900">Saunalautan vuokraus Helsingissä alkaen 130 €/tunti.</strong>{' '}
+                <strong className="text-stone-900">Saunalautan vuokraus Helsingissä alkaen 150 €/tunti.</strong>{' '}
                 Kaksi saunalauttaa – Aalto ja Virta – tarjoavat ainutlaatuisen tavan kokea Itä-Helsingin saaristo.
                 <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline">Julkiset saunavuorot</Link> ja 
                 <Link href="/yksityissauna" className="text-[#3b82f6] hover:underline">yksityistilaisuudet</Link> ovat myös saatavilla.

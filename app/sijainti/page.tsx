@@ -79,7 +79,7 @@ export default function LocationPage() {
         }}
       />
 
-      <HeroSection content={locationPageHero} variant="page" banner="TARJOUS! Varaa risteily ennen 30.04 ja säästä! 390€/3h (ovh 450€)" />
+      <HeroSection content={locationPageHero} variant="page" />
 
       {/* AI-optimized answer block */}
       <section className="section-padding bg-stone-50">

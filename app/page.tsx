@@ -99,7 +99,6 @@ export default function HomePage() {
       <HeroSection 
         content={homepageHero} 
         variant="homepage" 
-        banner="TARJOUS! Varaa risteily ennen 30.04 ja säästä! 390€/3h (ovh 450€)"
       />
 
       {/* Announcement */}

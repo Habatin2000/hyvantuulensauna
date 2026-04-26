@@ -35,7 +35,7 @@ export const faqItems: FAQItem[] = [
   {
     id: 'price',
     question: 'Paljonko saunalautan vuokraus Helsingissä maksaa?',
-    answer: 'Saunalautan vuokraus alkaa 130 €/tunti (Kevät-tarjous). Minimivaraus on 3 tuntia, eli kokonaishinta alkaen 390 €. Hintaan sisältyy saunalautta kapteeneineen, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Saunalauttaristeilyn hinta on sama molemmille lautoille.',
+    answer: 'Saunalautan vuokraus alkaa 150 €/tunti. Minimivaraus on 3 tuntia, eli kokonaishinta alkaen 450 €. Hintaan sisältyy saunalautta kapteeneineen, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Saunalauttaristeilyn hinta on sama molemmille lautoille.',
     category: 'summer',
   },
   {
