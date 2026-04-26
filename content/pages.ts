@@ -33,7 +33,7 @@ export const locationPageHero: HeroContent = {
   description: 'Olemme helposti saavutettavissa Kalkkihiekantorilla Aurinkolahdessa. Tervetuloa nauttimaan saunaelämyksestä meren äärellä.',
   ctaText: 'Katso reitti',
   ctaHref: '#kartta',
-  image: '/images/location-map.png',
+  image: '/images/gallery-sea-view.jpg',
 };
 
 export const galleryPageHero: HeroContent = {
