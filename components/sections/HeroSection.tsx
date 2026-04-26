@@ -57,10 +57,10 @@ export default function HeroSection({
             <p className="mb-4 text-sm font-medium uppercase tracking-wider text-amber-400">
               {content.subtitle}
             </p>
-            <h1 className="font-corben text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="font-corben text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
               {content.title}
             </h1>
-            <p className="mt-6 text-lg text-stone-200 sm:text-xl md:text-2xl leading-relaxed">
+            <p className="mt-6 text-base text-stone-200 sm:text-lg md:text-xl leading-relaxed">
               {content.description}
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
