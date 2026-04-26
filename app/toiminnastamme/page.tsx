@@ -91,7 +91,7 @@ export default function AboutPage() {
             <p className="text-stone-700 leading-relaxed">
               <strong className="text-stone-900">Hyvän Tuulen Sauna on tarjonnut saunalauttaristeilyjä Helsingissä jo vuodesta 2018.</strong>{' '}
               Kahdeksan vuoden kokemuksella tuotamme merellisiä saunaelämyksiä Itä-Helsingin saaristossa. 
-              Tiimimme kipparit Kalle, Onni, Ile ja Tuure varmistavat, että jokainen 
+              Tiimimme kipparit Kalle, Onni, Ile ja Tuure varmistavat, että jokainen{' '}
               <a href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">saunalauttaristeily</a> on turvallinen ja unohtumaton.
               Toimintamme perustuu aitouteen, meren läheisyyteen ja yhteisöllisyyteen.
             </p>
