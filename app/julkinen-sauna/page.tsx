@@ -112,18 +112,6 @@ export default function PublicSaunaPage() {
               Kesän julkiset saunavuorot
             </h2>
 
-            {/* AI-optimized answer block */}
-            <div className="mt-6 mx-auto max-w-2xl rounded-xl bg-white border border-stone-200 p-6 text-left">
-              <p className="text-stone-700 leading-relaxed">
-                <strong className="text-stone-900">Hyvän Tuulen Saunan julkiset saunavuorot</strong> ovat Helsingin uniikein tapa kokea aito puulämmitteinen sauna merellisessä ympäristössä. 
-                Vene noutaa sinut <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantorin laivalaiturista</Link>, ja kuljetamme sinut saunalautalle, 
-                jossa odottavat kaksi kuumaa saunaa, grilli, sup-laudat ja loistava tunnelma. 
-                Vuoro kestää kaksi tuntia – 
-                <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">varaa saunaelämys</Link> ajoissa, 
-                paikkoja on rajoitetusti!
-              </p>
-            </div>
-
             <div className="mt-4 text-stone-600 max-w-2xl mx-auto space-y-4">
               <p>
                 Saunavuorot Hyvän Tuulen Saunalla ovat varmaankin Helsingin uniikein tapa päästä nauttimaan merestä ja saunan lämmöstä.
@@ -153,19 +141,23 @@ export default function PublicSaunaPage() {
               <ul className="space-y-3 text-stone-600">
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Oma pyyhe (tai vuokraa meiltä)</span>
+                  <span>Vettä</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Uimapuvut / shortsit</span>
+                  <span>Uimapuku</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Sandaalit tai sisäkengät</span>
+                  <span>Pyyhe</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Juomapullo</span>
+                  <span>Sandaalit</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#3b82f6]">✓</span>
+                  <span>Sään mukainen vaatetus</span>
                 </li>
               </ul>
             </div>
@@ -176,19 +168,19 @@ export default function PublicSaunaPage() {
               <ul className="space-y-3 text-stone-600">
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Puulämmitteinen sauna</span>
+                  <span>Kaksi saunaa</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Avantouintimahdollisuus (talvisin)</span>
+                  <span>Pukkarit</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Saunajuomat</span>
+                  <span>WC-tilat</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-[#3b82f6]">✓</span>
-                  <span>Opastus saunomiseen</span>
+                  <span>Terrassi</span>
                 </li>
               </ul>
             </div>
