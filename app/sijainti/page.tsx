@@ -44,7 +44,7 @@ export default function LocationPage() {
     [
       { name: 'Metro', text: 'Mene metroasemalle Vuosaari. Kävele Kalkkihiekantorin laivalaiturille noin 10 minuuttia.' },
       { name: 'Bussi', text: 'Ota bussi 560 tai 78 ja jää pois Kalkkihiekantorin pysäkillä. Laituri on pysäkin lähellä.' },
-      { name: 'Auto', text: 'Aja moottoritieltä 4 Vuosaaren liittymästä. Ilmainen pysäköinti Kalkkihiekantorilla. Saavu 10 min ennen varausta.' }
+      { name: 'Auto', text: 'Ilmainen pysäköinti Kalkkihiekantorilla. Saavu 10 min ennen varausta.' }
     ]
   );
 
@@ -90,8 +90,7 @@ export default function LocationPage() {
             </p>
             <p className="text-stone-700 leading-relaxed">
               <strong className="text-stone-900">Hyvän Tuulen Sauna sijaitsee Kalkkihiekantorin laivalaiturissa Aurinkolahdessa, Helsingissä.</strong>{' '}
-              Saavu metrolla Vuosaareen (kävely 10 min) tai busseilla 560 ja 78. Autolla aja moottoritieltä 4 Vuosaaren liittymästä – 
-              ilmainen pysäköinti torilla. Täältä lähtevät <a href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">saunalauttaristeilyt</a> ja 
+              Saavu metrolla Vuosaareen (kävely 10 min) tai busseilla 560 ja 78. Ilmainen pysäköinti torilla. Täältä lähtevät <a href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">saunalauttaristeilyt</a> ja 
               <a href="/julkinen-sauna" className="text-[#3b82f6] hover:underline"> julkiset saunavuorot</a>.
             </p>
           </div>
@@ -167,7 +166,6 @@ export default function LocationPage() {
             <div className="rounded-xl bg-white p-6">
               <h3 className="text-xl font-bold text-stone-900 mb-4">Autolla</h3>
               <ul className="space-y-3 text-stone-600">
-                <li>• Moottoritieltä 4 Vuosaaren liittymä</li>
                 <li>• Ilmainen pysäköinti Kalkkihiekantorilla</li>
                 <li>• Saavuthan paikalle 10 min ennen varaustasi</li>
               </ul>
