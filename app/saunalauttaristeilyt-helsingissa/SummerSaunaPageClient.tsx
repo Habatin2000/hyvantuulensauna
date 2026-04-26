@@ -214,7 +214,7 @@ export default function SummerSaunaPageClient({
                 Kaksi saunalauttaa – Aalto ja Virta – tarjoavat ainutlaatuisen tavan kokea Itä-Helsingin saaristo.
                 <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline">Julkiset saunavuorot</Link> ja 
                 <Link href="/yksityissauna" className="text-[#3b82f6] hover:underline">yksityistilaisuudet</Link> ovat myös saatavilla.
-                Minimivaraus 3 tuntia, hintaan sisältyy kapteeni, sauna, grilli ja juomat.
+                Minimivaraus 3 tuntia, hintaan sisältyy kapteeni, sauna, grilli ja jääpalat.
               </p>
             </div>
 
