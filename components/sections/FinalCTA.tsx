@@ -64,6 +64,25 @@ export default function FinalCTA({
             </Link>
           )}
         </div>
+
+        {/* Sponsors */}
+        <div className="mt-12 flex flex-col items-center gap-4">
+          <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-white/60' : 'text-stone-500'}`}>
+            Yhteistyössä
+          </span>
+          <div className="flex items-center gap-8">
+            <img
+              src="/images/harvia-logo.png"
+              alt="Harvia"
+              className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
+            />
+            <img
+              src="/images/weber-logo.png"
+              alt="Weber"
+              className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

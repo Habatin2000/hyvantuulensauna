@@ -87,26 +87,6 @@ export default function HeroSection({
           </div>
         </div>
 
-        {/* Sponsor strip */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/30 backdrop-blur-sm">
-          <div className="container-padding mx-auto max-w-7xl py-3 flex flex-wrap items-center justify-center md:justify-end gap-3">
-            <span className="text-xs font-medium uppercase tracking-wider text-white/60">
-              Yhteistyössä:
-            </span>
-            <div className="flex items-center gap-4">
-              <img
-                src="/images/harvia-logo.png"
-                alt="Harvia"
-                className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-              />
-              <img
-                src="/images/weber-logo.png"
-                alt="Weber"
-                className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-              />
-            </div>
-          </div>
-        </div>
       </section>
     );
   }
@@ -166,26 +146,6 @@ export default function HeroSection({
         </div>
       </div>
 
-      {/* Sponsor strip */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/30 backdrop-blur-sm">
-        <div className="container-padding mx-auto max-w-7xl py-3 flex flex-wrap items-center justify-center md:justify-end gap-3">
-          <span className="text-xs font-medium uppercase tracking-wider text-white/60">
-            Yhteistyössä:
-          </span>
-          <div className="flex items-center gap-4">
-            <img
-              src="/images/harvia-logo.png"
-              alt="Harvia"
-              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-            />
-            <img
-              src="/images/weber-logo.png"
-              alt="Weber"
-              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-            />
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
