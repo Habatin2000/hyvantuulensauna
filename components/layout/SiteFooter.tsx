@@ -125,25 +125,6 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        {/* Sponsors */}
-        <div className="mt-12 flex flex-col items-center gap-3">
-          <span className="text-xs font-medium uppercase tracking-wider text-white/60">
-            Yhteistyössä
-          </span>
-          <div className="flex items-center gap-6">
-            <img
-              src="/images/harvia-logo.png"
-              alt="Harvia"
-              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-            />
-            <img
-              src="/images/weber-logo.png"
-              alt="Weber"
-              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-            />
-          </div>
-        </div>
-
         {/* Bottom Bar */}
         <div className="mt-12 border-t border-white/10 pt-8">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
