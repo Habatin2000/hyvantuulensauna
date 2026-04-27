@@ -89,7 +89,7 @@ export default function HeroSection({
 
         {/* Sponsor strip */}
         <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/30 backdrop-blur-sm">
-          <div className="container-padding mx-auto max-w-7xl py-3 flex flex-wrap items-center justify-center md:justify-end gap-3">
+          <div className="container-padding mx-auto max-w-7xl py-3 flex flex-wrap items-center justify-center md:justify-center gap-3">
             <span className="text-xs font-medium uppercase tracking-wider text-white/60">
               Yhteistyössä:
             </span>
@@ -168,7 +168,7 @@ export default function HeroSection({
 
       {/* Sponsor strip */}
       <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/30 backdrop-blur-sm">
-        <div className="container-padding mx-auto max-w-7xl py-3 flex flex-wrap items-center justify-center md:justify-end gap-3">
+        <div className="container-padding mx-auto max-w-7xl py-3 flex flex-wrap items-center justify-center md:justify-center gap-3">
           <span className="text-xs font-medium uppercase tracking-wider text-white/60">
             Yhteistyössä:
           </span>
