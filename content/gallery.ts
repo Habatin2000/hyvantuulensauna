@@ -57,13 +57,7 @@ export const galleryImages: GalleryImage[] = [
     caption: 'Ruokailu merellä',
     category: 'summer',
   },
-  {
-    id: '9',
-    src: '/images/gallery-company-event.jpg',
-    alt: 'Yritystilaisuus',
-    caption: 'Onnistuneet tiimipäivät',
-    category: 'summer',
-  },
+
   {
     id: '10',
     src: '/images/gallery-sunset-dock.jpeg',
@@ -95,8 +89,8 @@ export const galleryImages: GalleryImage[] = [
   {
     id: '14',
     src: '/images/gallery-sauna-stove.jpg',
-    alt: 'Kiuas',
-    caption: 'Harvia-kiuas',
+    alt: 'Lautta hämärällä',
+    caption: 'Lautta hämärällä',
     category: 'sauna',
   },
   {
@@ -137,8 +131,8 @@ export const galleryImages: GalleryImage[] = [
   {
     id: '20',
     src: '/images/gallery-cozy-bench.jpg',
-    alt: 'Lepotuoli kannella',
-    caption: 'Rentoutumista meren äärellä',
+    alt: 'Aallon grilli',
+    caption: 'Aallon grilli',
     category: 'experience',
   },
   {
