@@ -97,12 +97,12 @@ export default function HeroSection({
               <img
                 src="/images/harvia-logo.png"
                 alt="Harvia"
-                className="h-6 md:h-7 w-auto brightness-0 invert opacity-80"
+                className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
               />
               <img
                 src="/images/weber-logo.png"
                 alt="Weber"
-                className="h-6 md:h-7 w-auto brightness-0 invert opacity-80"
+                className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
               />
             </div>
           </div>
@@ -176,12 +176,12 @@ export default function HeroSection({
             <img
               src="/images/harvia-logo.png"
               alt="Harvia"
-              className="h-6 md:h-7 w-auto brightness-0 invert opacity-80"
+              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
             />
             <img
               src="/images/weber-logo.png"
               alt="Weber"
-              className="h-6 md:h-7 w-auto brightness-0 invert opacity-80"
+              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
             />
           </div>
         </div>
