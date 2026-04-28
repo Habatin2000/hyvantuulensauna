@@ -125,8 +125,6 @@ export async function POST(request: NextRequest) {
 
     // Build booking payload
     const bookingPayload: any = {
-      companyID: COMPANY_ID,
-      serviceID: SERVICE_ID,
       startTime: startTime,
       duration: 'PT2H',
       tickets: ticketsMap,
@@ -149,11 +147,12 @@ export async function POST(request: NextRequest) {
       console.log('[BOOKING] Member booking with code:', subscriptionCode);
     }
 
-    const bookingUrl = `${BOOKLA_BASE_URL}/client/bookings`;
+    const clientBookingUrl = `${BOOKLA_BASE_URL}/client/bookings`;
+    const companyBookingUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SERVICE_ID}/bookings`;
     let response: Response;
 
     if (isMemberBooking) {
-      // MEMBER FLOW: Authenticate first, then use Bearer auth
+      // MEMBER FLOW: Authenticate first, then use Bearer auth on /client/bookings
       const clientToken = await authenticateClient(
         client.email,
         client.firstName,
@@ -167,7 +166,7 @@ export async function POST(request: NextRequest) {
         delete memberPayload.client;
         
         console.log('[BOOKING] Sending to Bookla (Bearer):', JSON.stringify(memberPayload));
-        response = await fetch(bookingUrl, {
+        response = await fetch(clientBookingUrl, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${clientToken}`,
@@ -176,36 +175,36 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify(memberPayload),
         });
       } else {
-        // Fallback: use API key with guest client
-        console.warn('[BOOKING] Client auth failed, falling back to API key');
+        // Fallback: use company endpoint with API key + guest client
+        console.warn('[BOOKING] Client auth failed, falling back to company endpoint');
         bookingPayload.client = {
           email: client.email,
           firstName: client.firstName,
           lastName: client.lastName || '-',
         };
         
-        response = await fetch(bookingUrl, {
+        response = await fetch(companyBookingUrl, {
           method: 'POST',
           headers: {
-            'x-api-key': API_KEY,
+            'X-API-Key': API_KEY,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(bookingPayload),
         });
       }
     } else {
-      // NON-MEMBER FLOW: Use API key with guest client
+      // NON-MEMBER FLOW: Use company endpoint with API key + guest client
       bookingPayload.client = {
         email: client.email,
         firstName: client.firstName,
         lastName: client.lastName || '-',
       };
       
-      console.log('[BOOKING] Sending to Bookla (guest):', JSON.stringify(bookingPayload));
-      response = await fetch(bookingUrl, {
+      console.log('[BOOKING] Sending to Bookla (guest, company endpoint):', JSON.stringify(bookingPayload));
+      response = await fetch(companyBookingUrl, {
         method: 'POST',
         headers: {
-          'x-api-key': API_KEY,
+          'X-API-Key': API_KEY,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(bookingPayload),

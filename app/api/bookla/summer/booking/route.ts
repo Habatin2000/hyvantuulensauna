@@ -50,10 +50,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build booking payload for Bookla
+    // Build booking payload for Bookla (company endpoint)
     const bookingPayload: any = {
-      companyID: COMPANY_ID,
-      serviceID: SUMMER_SERVICE_ID,
       resourceID: resourceId,
       startTime,
       duration,
@@ -72,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     console.log('[SUMMER-BOOKING] Sending to Bookla:', JSON.stringify(bookingPayload));
 
-    const bookingUrl = `${BOOKLA_BASE_URL}/client/bookings`;
+    const bookingUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SUMMER_SERVICE_ID}/bookings`;
     const response = await fetch(bookingUrl, {
       method: 'POST',
       headers: {
