@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { booklaBooking } from '../../lib/booking';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
@@ -26,14 +27,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let responseText = '';
   try {
     const body: SummerBookingRequest = await request.json();
     console.log('[SUMMER-BOOKING] Request:', JSON.stringify(body));
 
     const { startTime, duration, resourceId, client, spots } = body;
 
-    // Validate required fields
     if (!startTime || !duration || !resourceId || !client?.email || !client?.firstName) {
       return NextResponse.json(
         { error: 'Missing required fields: startTime, duration, resourceId, client.email, client.firstName' },
@@ -41,7 +40,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate minimum duration (3 hours)
     const durationMatch = duration.match(/PT(\d+)H/);
     if (!durationMatch || parseInt(durationMatch[1]) < 3) {
       return NextResponse.json(
@@ -50,79 +48,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build booking payload for Bookla (company endpoint)
-    const bookingPayload: any = {
-      resourceID: resourceId,
+    const result = await booklaBooking({
+      baseUrl: BOOKLA_BASE_URL,
+      apiKey: API_KEY,
+      companyId: COMPANY_ID,
+      serviceId: SUMMER_SERVICE_ID,
+      resourceId: resourceId,
       startTime,
       duration,
-      spots: spots || 1,
       client: {
         email: client.email,
         firstName: client.firstName,
-        lastName: client.lastName || '-',
+        lastName: client.lastName,
+        phone: client.phone,
       },
-    };
-
-    // Add phone to metaData
-    if (client.phone) {
-      bookingPayload.metaData = { phone: client.phone };
-    }
-
-    console.log('[SUMMER-BOOKING] Sending to Bookla:', JSON.stringify(bookingPayload));
-
-    const bookingUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SUMMER_SERVICE_ID}/bookings`;
-    const response = await fetch(bookingUrl, {
-      method: 'POST',
-      headers: {
-        'X-API-Key': API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(bookingPayload),
+      spots: spots || 1,
+      metaData: client.phone ? { phone: client.phone } : undefined,
     });
 
-    responseText = await response.text();
-    console.log('[SUMMER-BOOKING] Bookla response status:', response.status);
-    console.log('[SUMMER-BOOKING] Bookla response:', responseText.slice(0, 2000));
-
-    if (!response.ok) {
-      if (response.status === 409) {
+    if (!result.ok) {
+      const status = result.status || 502;
+      if (status === 409) {
         return NextResponse.json(
           { error: 'Tämä aika on jo varattu. Valitse toinen aika.', code: 'SLOT_UNAVAILABLE' },
           { status: 409 }
         );
       }
-
-      if (response.status === 400) {
+      if (status === 400) {
         return NextResponse.json(
-          { error: 'Virheelliset varaustiedot. Tarkista tiedot ja yritä uudelleen.', code: 'BAD_REQUEST', details: responseText },
+          { error: 'Virheelliset varaustiedot. Tarkista tiedot ja yritä uudelleen.', code: 'BAD_REQUEST', details: result.error },
           { status: 400 }
         );
       }
-
-      // Bookla API returned an error — return it directly so frontend can show it
       return NextResponse.json(
-        { error: 'Bookla API error', status: response.status, details: responseText },
+        { error: 'Bookla API error', status, details: result.error },
         { status: 502 }
       );
     }
 
-    // Safely parse JSON response
-    let bookingData: any;
-    try {
-      bookingData = JSON.parse(responseText);
-    } catch (parseErr) {
-      console.error('[SUMMER-BOOKING] Failed to parse Bookla response as JSON:', responseText.slice(0, 500));
-      return NextResponse.json(
-        { error: 'Invalid response from booking service', details: responseText.slice(0, 500) },
-        { status: 502 }
-      );
-    }
+    const bookingData = result.data;
 
-    console.log('[SUMMER-BOOKING] Booking created:', JSON.stringify(bookingData).slice(0, 500));
-
-    // Check for payment URL
     if (bookingData.paymentURL || bookingData.paymentUrl) {
-      console.log('[SUMMER-BOOKING] Payment required');
       return NextResponse.json({
         success: false,
         requiresPayment: true,
@@ -131,7 +97,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Confirmed without payment
     return NextResponse.json({
       success: true,
       requiresPayment: false,

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { booklaBooking } from '../lib/booking';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
@@ -37,46 +38,6 @@ const isValidPublicSlot = (dow: number, hour: number, localDate: string): boolea
   }
   return false; // Friday - no public slots
 };
-
-/**
- * Authenticate a client with Bookla and get a Bearer token.
- */
-async function authenticateClient(email: string, firstName: string, lastName?: string): Promise<string | null> {
-  try {
-    const loginUrl = `${BOOKLA_BASE_URL}/client/auth/login`;
-    console.log('[AUTH] Authenticating client:', email);
-
-    const loginPayload = {
-      companyID: COMPANY_ID,
-      email: email,
-      externalUserID: email,
-      firstName: firstName,
-      lastName: lastName || '-',
-    };
-
-    const loginResponse = await fetch(loginUrl, {
-      method: 'POST',
-      headers: {
-        'x-api-key': API_KEY!,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(loginPayload),
-    });
-
-    if (!loginResponse.ok) {
-      const errorText = await loginResponse.text();
-      console.error('[AUTH] Client auth failed:', loginResponse.status, errorText.slice(0, 500));
-      return null;
-    }
-
-    const authData = await loginResponse.json();
-    console.log('[AUTH] Client authenticated, token received');
-    return authData.accessToken || null;
-  } catch (e) {
-    console.error('[AUTH] Client auth error:', e);
-    return null;
-  }
-}
 
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !SERVICE_ID || !API_KEY) {
@@ -123,131 +84,49 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build booking payload
-    const bookingPayload: any = {
-      startTime: startTime,
-      duration: 'PT2H',
-      tickets: ticketsMap,
-    };
-
-    // Add resource if configured
-    if (RESOURCE_ID) {
-      bookingPayload.resourceID = RESOURCE_ID;
-    }
-
-    // Add phone to metaData
-    if (client.phone) {
-      bookingPayload.metaData = { phone: client.phone };
-    }
-
-    // Add subscription code for member bookings
     const isMemberBooking = Boolean(subscriptionCode);
-    if (subscriptionCode) {
-      bookingPayload.code = subscriptionCode;
+    if (isMemberBooking) {
       console.log('[BOOKING] Member booking with code:', subscriptionCode);
     }
 
-    const clientBookingUrl = `${BOOKLA_BASE_URL}/client/bookings`;
-    const companyBookingUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SERVICE_ID}/bookings`;
-    let response: Response;
-
-    if (isMemberBooking) {
-      // MEMBER FLOW: Authenticate first, then use Bearer auth on /client/bookings
-      const clientToken = await authenticateClient(
-        client.email,
-        client.firstName,
-        client.lastName
-      );
-
-      if (clientToken) {
-        console.log('[BOOKING] Using Bearer auth for member booking');
-        // Don't send guest client data when using Bearer auth
-        const memberPayload = { ...bookingPayload };
-        delete memberPayload.client;
-        
-        console.log('[BOOKING] Sending to Bookla (Bearer):', JSON.stringify(memberPayload));
-        response = await fetch(clientBookingUrl, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${clientToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(memberPayload),
-        });
-      } else {
-        // Fallback: use company endpoint with API key + guest client
-        console.warn('[BOOKING] Client auth failed, falling back to company endpoint');
-        bookingPayload.client = {
-          email: client.email,
-          firstName: client.firstName,
-          lastName: client.lastName || '-',
-        };
-        
-        response = await fetch(companyBookingUrl, {
-          method: 'POST',
-          headers: {
-            'X-API-Key': API_KEY,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bookingPayload),
-        });
-      }
-    } else {
-      // NON-MEMBER FLOW: Use company endpoint with API key + guest client
-      bookingPayload.client = {
+    const result = await booklaBooking({
+      baseUrl: BOOKLA_BASE_URL,
+      apiKey: API_KEY,
+      companyId: COMPANY_ID,
+      serviceId: SERVICE_ID,
+      resourceId: RESOURCE_ID || undefined,
+      startTime,
+      duration: 'PT2H',
+      client: {
         email: client.email,
         firstName: client.firstName,
-        lastName: client.lastName || '-',
-      };
-      
-      console.log('[BOOKING] Sending to Bookla (guest, company endpoint):', JSON.stringify(bookingPayload));
-      response = await fetch(companyBookingUrl, {
-        method: 'POST',
-        headers: {
-          'X-API-Key': API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bookingPayload),
-      });
-    }
+        lastName: client.lastName,
+        phone: client.phone,
+      },
+      tickets: ticketsMap,
+      metaData: client.phone ? { phone: client.phone } : undefined,
+      code: subscriptionCode || undefined,
+    });
 
-    const responseText = await response.text();
-    console.log('[BOOKING] Bookla response status:', response.status);
-    console.log('[BOOKING] Bookla response:', responseText.slice(0, 2000));
-
-    if (!response.ok) {
-      if (response.status === 409) {
+    if (!result.ok) {
+      const status = result.status || 502;
+      if (status === 409) {
         return NextResponse.json(
           { error: 'Tämä aika on jo varattu. Valitse toinen aika.', code: 'SLOT_UNAVAILABLE' },
           { status: 409 }
         );
       }
-
       return NextResponse.json(
-        { error: 'Bookla API error', status: response.status, details: responseText },
+        { error: 'Bookla API error', status, details: result.error },
         { status: 502 }
       );
     }
 
-    // Safely parse JSON response
-    let bookingData: any;
-    try {
-      bookingData = JSON.parse(responseText);
-    } catch (parseErr) {
-      console.error('[BOOKING] Failed to parse Bookla response as JSON:', responseText.slice(0, 500));
-      return NextResponse.json(
-        { error: 'Invalid response from booking service', details: responseText.slice(0, 500) },
-        { status: 502 }
-      );
-    }
-
+    const bookingData = result.data;
     console.log('[BOOKING] Booking created:', JSON.stringify(bookingData).slice(0, 500));
 
-    // Check if payment is required
     const paymentURL = bookingData.paymentURL || bookingData.paymentUrl;
     const isConfirmed = bookingData.status === 'confirmed' || !paymentURL || bookingData.price === 0;
-    
-    // Membership is applied when we attempted member booking and Bookla accepted it (no payment required)
     const membershipApplied = isMemberBooking && !paymentURL;
 
     if (isConfirmed) {
@@ -261,7 +140,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Payment required
     return NextResponse.json({
       success: false,
       requiresPayment: true,
@@ -269,6 +147,7 @@ export async function POST(request: NextRequest) {
       paymentURL,
       bookingId: bookingData.id,
     });
+
   } catch (error: any) {
     console.error('[BOOKING] Unexpected error:', error);
     return NextResponse.json(
