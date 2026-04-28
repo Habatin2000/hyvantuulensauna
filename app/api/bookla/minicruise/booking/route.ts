@@ -7,8 +7,8 @@ const API_KEY = process.env.BOOKLA_API_KEY;
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !API_KEY) {
     return NextResponse.json(
-      { error: 'Missing Bookla configuration' },
-      { status: 500 }
+      { error: 'Missing Bookla configuration', missing: { companyId: !COMPANY_ID, apiKey: !API_KEY } },
+      { status: 400 }
     );
   }
 
@@ -52,13 +52,25 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(requestBody),
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+    console.log('[MINICRUISE-BOOKING] Bookla response status:', response.status);
+    console.log('[MINICRUISE-BOOKING] Bookla response:', responseText.slice(0, 2000));
 
     if (!response.ok) {
-      console.error('[MINICRUISE-BOOKING] Bookla error:', response.status, data);
       return NextResponse.json(
-        { error: data.message || 'Booking failed' },
-        { status: response.status }
+        { error: 'Bookla API error', status: response.status, details: responseText },
+        { status: 502 }
+      );
+    }
+
+    let data: any;
+    try {
+      data = JSON.parse(responseText);
+    } catch (parseErr) {
+      console.error('[MINICRUISE-BOOKING] Failed to parse Bookla response as JSON:', responseText.slice(0, 500));
+      return NextResponse.json(
+        { error: 'Invalid response from booking service', details: responseText.slice(0, 500) },
+        { status: 502 }
       );
     }
 
@@ -73,9 +85,9 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('[MINICRUISE-BOOKING] Error:', error);
+    console.error('[MINICRUISE-BOOKING] Unexpected error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create booking' },
+      { error: error.message || 'Failed to create booking', type: error.name },
       { status: 500 }
     );
   }

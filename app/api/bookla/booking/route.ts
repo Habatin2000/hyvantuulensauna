@@ -81,8 +81,8 @@ async function authenticateClient(email: string, firstName: string, lastName?: s
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !SERVICE_ID || !API_KEY) {
     return NextResponse.json(
-      { error: 'Missing Bookla configuration' },
-      { status: 500 }
+      { error: 'Missing Bookla configuration', missing: { companyId: !COMPANY_ID, serviceId: !SERVICE_ID, apiKey: !API_KEY } },
+      { status: 400 }
     );
   }
 
@@ -214,7 +214,7 @@ export async function POST(request: NextRequest) {
 
     const responseText = await response.text();
     console.log('[BOOKING] Bookla response status:', response.status);
-    console.log('[BOOKING] Bookla response:', responseText.slice(0, 1000));
+    console.log('[BOOKING] Bookla response:', responseText.slice(0, 2000));
 
     if (!response.ok) {
       if (response.status === 409) {
@@ -225,12 +225,23 @@ export async function POST(request: NextRequest) {
       }
 
       return NextResponse.json(
-        { error: `Varaus epäonnistui: ${response.status}`, details: responseText },
-        { status: response.status }
+        { error: 'Bookla API error', status: response.status, details: responseText },
+        { status: 502 }
       );
     }
 
-    const bookingData = JSON.parse(responseText);
+    // Safely parse JSON response
+    let bookingData: any;
+    try {
+      bookingData = JSON.parse(responseText);
+    } catch (parseErr) {
+      console.error('[BOOKING] Failed to parse Bookla response as JSON:', responseText.slice(0, 500));
+      return NextResponse.json(
+        { error: 'Invalid response from booking service', details: responseText.slice(0, 500) },
+        { status: 502 }
+      );
+    }
+
     console.log('[BOOKING] Booking created:', JSON.stringify(bookingData).slice(0, 500));
 
     // Check if payment is required
@@ -259,10 +270,10 @@ export async function POST(request: NextRequest) {
       paymentURL,
       bookingId: bookingData.id,
     });
-  } catch (error) {
-    console.error('[BOOKING] Error:', error);
+  } catch (error: any) {
+    console.error('[BOOKING] Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Varauksen luominen epäonnistui' },
+      { error: error.message || 'Varauksen luominen epäonnistui', type: error.name },
       { status: 500 }
     );
   }

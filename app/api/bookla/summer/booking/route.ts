@@ -21,11 +21,12 @@ interface SummerBookingRequest {
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !API_KEY) {
     return NextResponse.json(
-      { error: 'Missing Bookla configuration' },
-      { status: 500 }
+      { error: 'Missing Bookla configuration', missing: { companyId: !COMPANY_ID, apiKey: !API_KEY } },
+      { status: 400 }
     );
   }
 
+  let responseText = '';
   try {
     const body: SummerBookingRequest = await request.json();
     console.log('[SUMMER-BOOKING] Request:', JSON.stringify(body));
@@ -75,15 +76,15 @@ export async function POST(request: NextRequest) {
     const response = await fetch(bookingUrl, {
       method: 'POST',
       headers: {
-        'X-API-Key': API_KEY!,
+        'X-API-Key': API_KEY,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(bookingPayload),
     });
 
-    const responseText = await response.text();
+    responseText = await response.text();
     console.log('[SUMMER-BOOKING] Bookla response status:', response.status);
-    console.log('[SUMMER-BOOKING] Bookla response:', responseText.slice(0, 1000));
+    console.log('[SUMMER-BOOKING] Bookla response:', responseText.slice(0, 2000));
 
     if (!response.ok) {
       if (response.status === 409) {
@@ -100,10 +101,25 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      throw new Error(`Bookla API error: ${response.status} - ${responseText}`);
+      // Bookla API returned an error — return it directly so frontend can show it
+      return NextResponse.json(
+        { error: 'Bookla API error', status: response.status, details: responseText },
+        { status: 502 }
+      );
     }
 
-    const bookingData = JSON.parse(responseText);
+    // Safely parse JSON response
+    let bookingData: any;
+    try {
+      bookingData = JSON.parse(responseText);
+    } catch (parseErr) {
+      console.error('[SUMMER-BOOKING] Failed to parse Bookla response as JSON:', responseText.slice(0, 500));
+      return NextResponse.json(
+        { error: 'Invalid response from booking service', details: responseText.slice(0, 500) },
+        { status: 502 }
+      );
+    }
+
     console.log('[SUMMER-BOOKING] Booking created:', JSON.stringify(bookingData).slice(0, 500));
 
     // Check for payment URL
@@ -126,10 +142,10 @@ export async function POST(request: NextRequest) {
       confirmationCode: bookingData.confirmationCode || bookingData.code,
     });
 
-  } catch (error) {
-    console.error('[SUMMER-BOOKING] Error:', error);
+  } catch (error: any) {
+    console.error('[SUMMER-BOOKING] Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Varauksen luominen epäonnistui. Yritä uudelleen.' },
+      { error: error.message || 'Varauksen luominen epäonnistui', type: error.name },
       { status: 500 }
     );
   }
