@@ -100,7 +100,13 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
         );
       }
       setPaymentURL(result.paymentURL);
-      window.location.href = result.paymentURL;
+      // Don't redirect immediately — let user see the payment screen first
+    }
+  };
+
+  const handleProceedToPayment = () => {
+    if (paymentURL) {
+      window.location.href = paymentURL;
     }
   };
 
@@ -156,10 +162,43 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z" />
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-amber-900">Siirryt maksamaan...</h3>
-          <p className="mt-2 text-amber-700">
-            Sinut ohjataan turvalliseen maksuun.
+          <h3 className="text-xl font-bold text-amber-900">Siirry maksamaan</h3>
+          
+          {membershipNotApplied && membershipErrorMessage && (
+            <div className="mt-4 rounded-lg bg-amber-100 border border-amber-300 p-4">
+              <div className="flex gap-3 justify-center">
+                <Info className="h-5 w-5 shrink-0 text-amber-700" />
+                <div className="text-left">
+                  <p className="font-medium text-amber-900">Jäsenyyttä ei voitu käyttää</p>
+                  <p className="mt-1 text-sm text-amber-800">{membershipErrorMessage}</p>
+                  <p className="mt-1 text-sm text-amber-700">Varaus jatkuu normaalihintaisena.</p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <p className="mt-4 text-amber-700">
+            Painamalla alla olevaa nappia siirryt turvalliseen maksujärjestelmään.
           </p>
+          
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+              onClick={() => {
+                setPaymentURL(null);
+                setMembershipNotApplied(false);
+                setMembershipErrorMessage(null);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-amber-300 px-6 py-3 font-medium text-amber-800 hover:bg-amber-100"
+            >
+              Takaisin
+            </button>
+            <button
+              onClick={handleProceedToPayment}
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb]"
+            >
+              Jatka maksuun
+            </button>
+          </div>
         </div>
       ) : (
         <>

@@ -751,7 +751,7 @@ export default function SummerBookingShell({ showTitle = true }: { showTitle?: b
           )}
 
           {/* Navigation */}
-          {step < 4 && (
+          {step < 5 && (
             <div className="flex justify-between pt-4">
               {step > 1 ? (
                 <Button variant="outline" onClick={() => setStep(step - 1)}>
