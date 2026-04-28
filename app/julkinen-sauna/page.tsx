@@ -189,6 +189,15 @@ export default function PublicSaunaPage() {
             </div>
           </div>
 
+          {/* Grill notice */}
+          <div className="mt-8 max-w-4xl mx-auto">
+            <div className="rounded-2xl bg-amber-50 border border-amber-200 p-6 text-center">
+              <p className="text-amber-900 font-semibold">
+                HUOM. Grilliä pyörittää saunalautan kipparit, joten älä ota omia eväitä mukaan.
+              </p>
+            </div>
+          </div>
+
           {/* General info */}
           <div className="mt-12 max-w-3xl mx-auto">
             <div className="rounded-2xl bg-white p-8">
