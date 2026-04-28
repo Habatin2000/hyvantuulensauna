@@ -26,7 +26,7 @@ export default function SiteHeader() {
                 priority
               />
             </div>
-            <span className="font-pacifico text-lg text-[#3b82f6] hidden sm:block">
+            <span className="font-pacifico text-lg text-[#3b82f6]">
               Hyvän Tuulen Sauna
             </span>
           </Link>
