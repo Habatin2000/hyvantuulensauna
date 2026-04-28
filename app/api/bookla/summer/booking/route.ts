@@ -48,6 +48,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log('[SUMMER-BOOKING] Calling booklaBooking with:', {
+      serviceId: SUMMER_SERVICE_ID,
+      resourceId,
+      startTime,
+      duration,
+      spots: spots || 1,
+      clientEmail: client.email,
+    });
+
     const result = await booklaBooking({
       baseUrl: BOOKLA_BASE_URL,
       apiKey: API_KEY,
@@ -64,6 +73,13 @@ export async function POST(request: NextRequest) {
       },
       spots: spots || 1,
       metaData: client.phone ? { phone: client.phone } : undefined,
+    });
+
+    console.log('[SUMMER-BOOKING] booklaBooking result:', {
+      ok: result.ok,
+      status: result.status,
+      hasData: !!result.data,
+      error: result.error?.slice(0, 500),
     });
 
     if (!result.ok) {

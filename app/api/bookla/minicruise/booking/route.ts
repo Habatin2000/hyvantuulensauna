@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('[MINICRUISE-BOOKING] Creating booking:', { serviceId, resourceId, startTime });
+    console.log('[MINICRUISE-BOOKING] Creating booking:', { serviceId, resourceId, startTime, duration: duration || 'PT1H30M', spots: spots || 1, clientEmail: client.email });
 
     const result = await booklaBooking({
       baseUrl: BOOKLA_BASE_URL,

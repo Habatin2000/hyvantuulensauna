@@ -73,8 +73,13 @@ export async function booklaBooking(params: BooklaBookingParams): Promise<Bookla
     body.code = params.code;
   }
 
-  console.log('[BOOKLA-BOOKING] Request URL:', url);
-  console.log('[BOOKLA-BOOKING] Request body:', JSON.stringify(body));
+  // DIAGNOSTIC LOGGING — Phase 1
+  console.log('[BOOKLA REQUEST]', {
+    endpoint: url,
+    authMethod: 'x-api-key',
+    headers: { 'x-api-key': '***' + params.apiKey.slice(-4), 'Content-Type': 'application/json' },
+    payload: JSON.stringify(body, null, 2),
+  });
 
   const response = await fetch(url, {
     method: 'POST',
@@ -86,8 +91,24 @@ export async function booklaBooking(params: BooklaBookingParams): Promise<Bookla
   });
 
   const responseText = await response.text();
-  console.log('[BOOKLA-BOOKING] Response status:', response.status);
-  console.log('[BOOKLA-BOOKING] Response body:', responseText.slice(0, 2000));
+
+  let parsedData: any = null;
+  try {
+    parsedData = JSON.parse(responseText);
+  } catch {
+    // Not valid JSON — will be reported below
+  }
+
+  // DIAGNOSTIC LOGGING — Phase 1
+  console.log('[BOOKLA RESPONSE]', {
+    status: response.status,
+    body: responseText,
+    parsedPaymentURL: parsedData?.paymentURL || parsedData?.paymentUrl || null,
+    parsedPrice: parsedData?.price || null,
+    parsedStatus: parsedData?.status || null,
+    parsedBookingId: parsedData?.id || null,
+    parsedMessage: parsedData?.message || null,
+  });
 
   if (!response.ok) {
     return {
@@ -97,10 +118,7 @@ export async function booklaBooking(params: BooklaBookingParams): Promise<Bookla
     };
   }
 
-  try {
-    const data = JSON.parse(responseText);
-    return { ok: true, data };
-  } catch {
+  if (!parsedData) {
     return {
       ok: false,
       status: 502,
@@ -108,4 +126,6 @@ export async function booklaBooking(params: BooklaBookingParams): Promise<Bookla
       raw: responseText,
     };
   }
+
+  return { ok: true, data: parsedData };
 }

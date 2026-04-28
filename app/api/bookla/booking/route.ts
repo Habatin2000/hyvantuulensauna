@@ -89,6 +89,16 @@ export async function POST(request: NextRequest) {
       console.log('[BOOKING] Member booking with code:', subscriptionCode);
     }
 
+    console.log('[BOOKING] Calling booklaBooking with:', {
+      serviceId: SERVICE_ID,
+      resourceId: RESOURCE_ID,
+      startTime,
+      duration: 'PT2H',
+      tickets: ticketsMap,
+      clientEmail: client.email,
+      isMemberBooking,
+    });
+
     const result = await booklaBooking({
       baseUrl: BOOKLA_BASE_URL,
       apiKey: API_KEY,
