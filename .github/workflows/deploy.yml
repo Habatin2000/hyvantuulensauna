@@ -28,3 +28,30 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Set Bookla secrets
+        run: |
+          set_secrets() {
+            local name="$1"
+            local value="$2"
+            if [ -n "$value" ]; then
+              echo "Setting secret: $name"
+              printf '%s' "$value" | npx wrangler secret put "$name"
+            else
+              echo "Skipping secret $name (not provided)"
+            fi
+          }
+
+          set_secrets "BOOKLA_API_KEY" "$BOOKLA_API_KEY"
+          set_secrets "BOOKLA_COMPANY_ID" "$BOOKLA_COMPANY_ID"
+          set_secrets "BOOKLA_PUBLIC_SERVICE_ID" "$BOOKLA_PUBLIC_SERVICE_ID"
+          set_secrets "BOOKLA_PUBLIC_RESOURCE_ID" "$BOOKLA_PUBLIC_RESOURCE_ID"
+          set_secrets "BOOKLA_BOOKING_API_KEY" "$BOOKLA_BOOKING_API_KEY"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          BOOKLA_API_KEY: ${{ secrets.BOOKLA_API_KEY }}
+          BOOKLA_COMPANY_ID: ${{ secrets.BOOKLA_COMPANY_ID }}
+          BOOKLA_PUBLIC_SERVICE_ID: ${{ secrets.BOOKLA_PUBLIC_SERVICE_ID }}
+          BOOKLA_PUBLIC_RESOURCE_ID: ${{ secrets.BOOKLA_PUBLIC_RESOURCE_ID }}
+          BOOKLA_BOOKING_API_KEY: ${{ secrets.BOOKLA_BOOKING_API_KEY }}
