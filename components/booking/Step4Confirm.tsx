@@ -2,6 +2,13 @@
 
 import { Calendar, Clock, Ticket, User, CreditCard, AlertCircle, ChevronLeft, Loader2 } from 'lucide-react';
 
+interface TicketType {
+  id: string;
+  name: string;
+  price: number;
+  enabled: boolean;
+}
+
 interface Step4ConfirmProps {
   selectedDate: string;
   selectedSlot: {
@@ -9,6 +16,7 @@ interface Step4ConfirmProps {
     endHour: number;
   };
   tickets: { ticketID: string; name: string; quantity: number }[];
+  availableTickets: TicketType[];
   customerInfo: {
     firstName: string;
     lastName: string;
@@ -25,6 +33,7 @@ export default function Step4Confirm({
   selectedDate,
   selectedSlot,
   tickets,
+  availableTickets,
   customerInfo,
   isBooking,
   bookingError,
@@ -45,12 +54,14 @@ export default function Step4Confirm({
 
   const totalQuantity = tickets.reduce((sum, t) => sum + t.quantity, 0);
   
-  // Mock prices for display
-  const ticketPrices: Record<string, number> = {};
-  // These would come from the API in real implementation
+  // Use actual prices from Bookla API
+  const getTicketPrice = (ticketID: string) => {
+    const ticket = availableTickets.find(at => at.id === ticketID);
+    return ticket?.price || 0;
+  };
+
   const totalPrice = tickets.reduce((sum, t) => {
-    const price = ticketPrices[t.name] || (t.name.toLowerCase().includes('opiskelija') ? 20 : 25);
-    return sum + price * t.quantity;
+    return sum + getTicketPrice(t.ticketID) * t.quantity;
   }, 0);
 
   return (
@@ -117,9 +128,20 @@ export default function Step4Confirm({
         {/* Price */}
         <div className="flex items-start gap-3">
           <CreditCard className="h-5 w-5 text-[#3b82f6]" />
-          <div>
+          <div className="flex-1">
             <p className="text-sm text-stone-500">Maksu</p>
-            <p className="font-medium text-stone-900">{totalPrice.toFixed(2)}€</p>
+            <div className="mt-1 space-y-1">
+              {tickets.map((t, i) => {
+                const price = getTicketPrice(t.ticketID);
+                return (
+                  <p key={i} className="text-sm text-stone-700">
+                    {t.quantity}x {t.name} — {(price * t.quantity).toFixed(2)}€
+                    <span className="text-stone-400"> ({price.toFixed(2)}€/kpl)</span>
+                  </p>
+                );
+              })}
+            </div>
+            <p className="mt-2 font-semibold text-stone-900">Yhteensä: {totalPrice.toFixed(2)}€</p>
             <p className="text-xs text-stone-500">Maksu tapahtuu varauksen yhteydessä</p>
           </div>
         </div>

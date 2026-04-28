@@ -242,6 +242,7 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
                 selectedDate={selectedDate!}
                 selectedSlot={selectedSlot}
                 tickets={tickets}
+                availableTickets={availableTickets}
                 customerInfo={customerInfo}
                 isBooking={isBooking}
                 bookingError={bookingError}

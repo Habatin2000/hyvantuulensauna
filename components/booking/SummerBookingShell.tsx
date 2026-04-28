@@ -15,7 +15,8 @@ import {
   ChevronLeft,
   User,
   Mail,
-  Phone
+  Phone,
+  CreditCard
 } from 'lucide-react';
 import SummerCalendar from './SummerCalendar';
 
@@ -718,12 +719,31 @@ export default function SummerBookingShell({ showTitle = true }: { showTitle?: b
                   <div>
                     <p className="font-medium text-amber-900">Maksutiedot</p>
                     <p className="mt-1 text-sm text-amber-800">
-                      Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. 
+                      Painamalla "Varaa nyt" ohjaudut turvalliseen maksujärjestelmään. 
                       Varaus vahvistuu maksun jälkeen.
                     </p>
                   </div>
                 </div>
               </div>
+
+              {/* Primary CTA */}
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white py-6 text-lg font-semibold"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Varataan...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Vahvista varaus
+                  </>
+                )}
+              </Button>
             </div>
           )}
 
