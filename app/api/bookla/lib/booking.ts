@@ -1,62 +1,109 @@
 /**
- * Shared Bookla booking helper.
- * All booking routes (summer, minicruise, public sauna) use this function
- * to communicate with Bookla's Create Booking endpoint.
+ * Shared Bookla client booking helper.
  *
- * Bookla docs:
- *   POST /companies/{COMPANY_ID}/bookings
- *   Header: x-api-key
- *   Body:  serviceID (required), resourceID (required), startTime, duration,
- *          spots | tickets, client, metaData, code
+ * Flow:
+ *   1. authenticateClient: POST /client/auth/login → accessToken + clientId
+ *   2. booklaClientBooking: POST /client/bookings + Bearer → paymentURL
+ *
+ * No client object in booking body — Bearer token identifies the client.
+ * Client data goes to Bookla via /client/auth/login (upsert).
  */
 
-export interface BooklaBookingClient {
-  email: string;
-  firstName: string;
-  lastName?: string;
-  phone?: string;
+export interface BooklaAuthResult {
+  accessToken: string;
+  clientId: string;
 }
 
-export interface BooklaBookingParams {
+export interface BooklaClientBookingParams {
   baseUrl: string;
-  apiKey: string;
+  accessToken: string;
   companyId: string;
   serviceId: string;
-  resourceId?: string;
+  resourceId: string;
   startTime: string;
   duration: string;
-  client: BooklaBookingClient;
   spots?: number;
   tickets?: Record<string, number>;
   metaData?: Record<string, any>;
-  code?: string; // subscription code for members
+  code?: string; // subscription code — only for public sauna
 }
 
-export interface BooklaBookingResult {
+export interface BooklaClientBookingResult {
   ok: boolean;
   status?: number;
   data?: any;
   error?: string;
   raw?: string;
+  paymentURL?: string | null;
+  price?: number | null;
+  bookingStatus?: string;
+  bookingId?: string;
+  isConfirmed?: boolean;
 }
 
-export async function booklaBooking(params: BooklaBookingParams): Promise<BooklaBookingResult> {
-  const url = `${params.baseUrl}/companies/${params.companyId}/bookings`;
-
-  const body: any = {
-    serviceID: params.serviceId,
-    startTime: params.startTime,
-    duration: params.duration,
-    client: {
-      email: params.client.email,
-      firstName: params.client.firstName,
-      lastName: params.client.lastName || '-',
-    },
+/**
+ * Authenticate a client with Bookla and get a Bearer token.
+ * Throws if auth fails (does NOT return null).
+ */
+export async function authenticateClient(params: {
+  baseUrl: string;
+  apiKey: string;
+  companyId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}): Promise<BooklaAuthResult> {
+  const url = `${params.baseUrl}/client/auth/login`;
+  const body = {
+    companyID: params.companyId,
+    email: params.email,
+    externalUserID: params.email,
+    firstName: params.firstName,
+    lastName: params.lastName,
   };
 
-  if (params.resourceId) {
-    body.resourceID = params.resourceId;
+  console.log('[BOOKLA AUTH] Request:', { endpoint: url, email: params.email });
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'x-api-key': params.apiKey,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  const text = await res.text();
+  console.log('[BOOKLA AUTH] Response:', { status: res.status, body: text.slice(0, 500) });
+
+  if (!res.ok) {
+    throw new Error(`Client auth failed: ${res.status} — ${text.slice(0, 200)}`);
   }
+
+  const data = JSON.parse(text);
+  return {
+    accessToken: data.accessToken,
+    clientId: data.id || data.clientId,
+  };
+}
+
+/**
+ * Create a booking via Bookla's client endpoint.
+ * Uses Bearer token — NO client object in body (token identifies client).
+ */
+export async function booklaClientBooking(
+  params: BooklaClientBookingParams
+): Promise<BooklaClientBookingResult> {
+  const url = `${params.baseUrl}/client/bookings`;
+
+  const body: any = {
+    companyID: params.companyId,
+    serviceID: params.serviceId,
+    resourceID: params.resourceId,
+    startTime: params.startTime,
+    duration: params.duration,
+  };
+
   if (params.spots !== undefined) {
     body.spots = params.spots;
   }
@@ -66,66 +113,62 @@ export async function booklaBooking(params: BooklaBookingParams): Promise<Bookla
   if (params.metaData) {
     body.metaData = params.metaData;
   }
-  if (params.client.phone) {
-    body.client.phone = params.client.phone;
-  }
   if (params.code) {
     body.code = params.code;
   }
 
-  // DIAGNOSTIC LOGGING — Phase 1
   console.log('[BOOKLA REQUEST]', {
     endpoint: url,
-    authMethod: 'x-api-key',
-    headers: { 'x-api-key': '***' + params.apiKey.slice(-4), 'Content-Type': 'application/json' },
+    authMethod: 'Bearer',
     payload: JSON.stringify(body, null, 2),
   });
 
-  const response = await fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
-      'x-api-key': params.apiKey,
+      Authorization: `Bearer ${params.accessToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
 
-  const responseText = await response.text();
-
-  let parsedData: any = null;
+  const text = await res.text();
+  let data: any = null;
   try {
-    parsedData = JSON.parse(responseText);
+    data = JSON.parse(text);
   } catch {
-    // Not valid JSON — will be reported below
+    // Not valid JSON — reported below
   }
 
-  // DIAGNOSTIC LOGGING — Phase 1
   console.log('[BOOKLA RESPONSE]', {
-    status: response.status,
-    body: responseText,
-    parsedPaymentURL: parsedData?.paymentURL || parsedData?.paymentUrl || null,
-    parsedPrice: parsedData?.price || null,
-    parsedStatus: parsedData?.status || null,
-    parsedBookingId: parsedData?.id || null,
-    parsedMessage: parsedData?.message || null,
+    httpStatus: res.status,
+    bookingStatus: data?.status ?? null,
+    paymentURL: data?.paymentURL ?? data?.paymentUrl ?? null,
+    price: data?.price ?? null,
+    bookingId: data?.id ?? null,
+    body: text.slice(0, 1000),
   });
 
-  if (!response.ok) {
+  if (!res.ok) {
     return {
       ok: false,
-      status: response.status,
-      error: responseText,
+      status: res.status,
+      error: text,
     };
   }
 
-  if (!parsedData) {
-    return {
-      ok: false,
-      status: 502,
-      error: 'Invalid JSON response from Bookla',
-      raw: responseText,
-    };
-  }
+  const isConfirmedByBookla =
+    data?.status === 'confirmed' ||
+    (!data?.paymentURL && !data?.paymentUrl) ||
+    data?.price === 0;
 
-  return { ok: true, data: parsedData };
+  return {
+    ok: true,
+    data,
+    paymentURL: data?.paymentURL || data?.paymentUrl || null,
+    price: data?.price || null,
+    bookingStatus: data?.status,
+    bookingId: data?.id,
+    isConfirmed: isConfirmedByBookla,
+  };
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { booklaBooking } from '../lib/booking';
+import { authenticateClient, booklaClientBooking } from '../lib/booking';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
@@ -28,7 +28,7 @@ const getHelsinkiDate = (dateStr: string): { dow: number; hour: number; localDat
 const isValidPublicSlot = (dow: number, hour: number, localDate: string): boolean => {
   const isMonThu = dow >= 1 && dow <= 4;
   const isWeekend = dow === 0 || dow === 6;
-  
+
   if (isMonThu) {
     const useNewSchedule = localDate >= NEW_SCHEDULE_CUTOVER;
     return useNewSchedule ? [17, 19].includes(hour) : [16, 18, 20].includes(hour);
@@ -51,9 +51,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { startTime, tickets, client, subscriptionCode } = body;
 
-    if (!startTime || !tickets || !client?.email || !client?.firstName) {
+    if (!startTime || !tickets || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
-        { error: 'Missing required fields: startTime, tickets, client.email, client.firstName' },
+        { error: 'Missing required fields: startTime, tickets, client.email, client.firstName, client.lastName' },
         { status: 400 }
       );
     }
@@ -89,30 +89,25 @@ export async function POST(request: NextRequest) {
       console.log('[BOOKING] Member booking with code:', subscriptionCode);
     }
 
-    console.log('[BOOKING] Calling booklaBooking with:', {
-      serviceId: SERVICE_ID,
-      resourceId: RESOURCE_ID,
-      startTime,
-      duration: 'PT2H',
-      tickets: ticketsMap,
-      clientEmail: client.email,
-      isMemberBooking,
-    });
-
-    const result = await booklaBooking({
+    // Step 1: Authenticate client with Bookla
+    const auth = await authenticateClient({
       baseUrl: BOOKLA_BASE_URL,
       apiKey: API_KEY,
       companyId: COMPANY_ID,
+      email: client.email,
+      firstName: client.firstName,
+      lastName: client.lastName,
+    });
+
+    // Step 2: Create booking via client endpoint
+    const result = await booklaClientBooking({
+      baseUrl: BOOKLA_BASE_URL,
+      accessToken: auth.accessToken,
+      companyId: COMPANY_ID,
       serviceId: SERVICE_ID,
-      resourceId: RESOURCE_ID || undefined,
+      resourceId: RESOURCE_ID || '',
       startTime,
       duration: 'PT2H',
-      client: {
-        email: client.email,
-        firstName: client.firstName,
-        lastName: client.lastName,
-        phone: client.phone,
-      },
       tickets: ticketsMap,
       metaData: client.phone ? { phone: client.phone } : undefined,
       code: subscriptionCode || undefined,
@@ -132,30 +127,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const bookingData = result.data;
-    console.log('[BOOKING] Booking created:', JSON.stringify(bookingData).slice(0, 500));
-
-    const paymentURL = bookingData.paymentURL || bookingData.paymentUrl;
-    const isConfirmed = bookingData.status === 'confirmed' || !paymentURL || bookingData.price === 0;
-    const membershipApplied = isMemberBooking && !paymentURL;
-
-    if (isConfirmed) {
+    // Step 3: Handle member code fallback
+    // If code was sent but Bookla still returns paymentURL → code expired/used
+    // Let user pay normally, don't throw error
+    if (isMemberBooking && result.isConfirmed) {
       return NextResponse.json({
         success: true,
         requiresPayment: false,
-        membershipApplied,
-        bookingId: bookingData.id,
-        status: bookingData.status,
-        confirmationCode: bookingData.confirmationCode || bookingData.code,
+        membershipApplied: true,
+        bookingId: result.bookingId,
+        status: result.bookingStatus,
+        confirmationCode: result.data?.confirmationCode || result.data?.code,
+      });
+    }
+
+    if (result.paymentURL) {
+      if (isMemberBooking) {
+        console.warn('[BOOKING] Member code sent but payment still required — falling through to payment flow');
+      }
+      return NextResponse.json({
+        success: false,
+        requiresPayment: true,
+        membershipApplied: false,
+        paymentURL: result.paymentURL,
+        bookingId: result.bookingId,
       });
     }
 
     return NextResponse.json({
-      success: false,
-      requiresPayment: true,
+      success: true,
+      requiresPayment: false,
       membershipApplied: false,
-      paymentURL,
-      bookingId: bookingData.id,
+      bookingId: result.bookingId,
+      status: result.bookingStatus,
+      confirmationCode: result.data?.confirmationCode || result.data?.code,
     });
 
   } catch (error: any) {

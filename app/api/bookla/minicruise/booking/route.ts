@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { booklaBooking } from '../../lib/booking';
+import { authenticateClient, booklaClientBooking } from '../../lib/booking';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
@@ -17,30 +17,34 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { serviceId, resourceId, startTime, duration, client, spots } = body;
 
-    if (!serviceId || !startTime || !client?.email || !client?.firstName) {
+    if (!serviceId || !startTime || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
-        { error: 'Missing required fields: serviceId, startTime, client.email, client.firstName' },
+        { error: 'Missing required fields: serviceId, startTime, client.email, client.firstName, client.lastName' },
         { status: 400 }
       );
     }
 
     console.log('[MINICRUISE-BOOKING] Creating booking:', { serviceId, resourceId, startTime, duration: duration || 'PT1H30M', spots: spots || 1, clientEmail: client.email });
 
-    const result = await booklaBooking({
+    const auth = await authenticateClient({
       baseUrl: BOOKLA_BASE_URL,
       apiKey: API_KEY,
+      companyId: COMPANY_ID,
+      email: client.email,
+      firstName: client.firstName,
+      lastName: client.lastName,
+    });
+
+    const result = await booklaClientBooking({
+      baseUrl: BOOKLA_BASE_URL,
+      accessToken: auth.accessToken,
       companyId: COMPANY_ID,
       serviceId: serviceId,
       resourceId: resourceId,
       startTime,
       duration: duration || 'PT1H30M',
-      client: {
-        email: client.email,
-        firstName: client.firstName,
-        lastName: client.lastName,
-        phone: client.phone,
-      },
       spots: spots || 1,
+      metaData: client.phone ? { phone: client.phone } : undefined,
     });
 
     if (!result.ok) {
@@ -51,15 +55,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = result.data;
-    console.log('[MINICRUISE-BOOKING] Success:', data.id);
+    if (result.isConfirmed) {
+      return NextResponse.json({
+        success: true,
+        requiresPayment: false,
+        bookingId: result.bookingId,
+        confirmationCode: result.data?.confirmationCode,
+      });
+    }
+
+    if (result.paymentURL) {
+      return NextResponse.json({
+        success: false,
+        requiresPayment: true,
+        paymentUrl: result.paymentURL,
+        bookingId: result.bookingId,
+      });
+    }
 
     return NextResponse.json({
       success: true,
-      bookingId: data.id,
-      confirmationCode: data.confirmationCode,
-      requiresPayment: data.requiresPayment || false,
-      paymentUrl: data.paymentUrl || null,
+      requiresPayment: false,
+      bookingId: result.bookingId,
     });
 
   } catch (error: any) {

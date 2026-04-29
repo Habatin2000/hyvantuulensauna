@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { booklaBooking } from '../../lib/booking';
+import { authenticateClient, booklaClientBooking } from '../../lib/booking';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
-const API_KEY = process.env.BOOKLA_BOOKING_API_KEY || process.env.BOOKLA_API_KEY;
+const API_KEY = process.env.BOOKLA_API_KEY;
 const SUMMER_SERVICE_ID = '3ea1445e-c830-4604-a294-3dbe124446a5';
 
 interface SummerBookingRequest {
@@ -13,7 +13,7 @@ interface SummerBookingRequest {
   client: {
     email: string;
     firstName: string;
-    lastName?: string;
+    lastName: string;
     phone?: string;
   };
   spots?: number;
@@ -33,13 +33,15 @@ export async function POST(request: NextRequest) {
 
     const { startTime, duration, resourceId, client, spots } = body;
 
-    if (!startTime || !duration || !resourceId || !client?.email || !client?.firstName) {
+    // Validate required fields
+    if (!startTime || !duration || !resourceId || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
-        { error: 'Missing required fields: startTime, duration, resourceId, client.email, client.firstName' },
+        { error: 'Missing required fields: startTime, duration, resourceId, client.email, client.firstName, client.lastName' },
         { status: 400 }
       );
     }
 
+    // Validate minimum duration (3 hours)
     const durationMatch = duration.match(/PT(\d+)H/);
     if (!durationMatch || parseInt(durationMatch[1]) < 3) {
       return NextResponse.json(
@@ -48,38 +50,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('[SUMMER-BOOKING] Calling booklaBooking with:', {
-      serviceId: SUMMER_SERVICE_ID,
-      resourceId,
-      startTime,
-      duration,
-      spots: spots || 1,
-      clientEmail: client.email,
-    });
-
-    const result = await booklaBooking({
+    // Step 1: Authenticate client with Bookla
+    const auth = await authenticateClient({
       baseUrl: BOOKLA_BASE_URL,
       apiKey: API_KEY,
+      companyId: COMPANY_ID,
+      email: client.email,
+      firstName: client.firstName,
+      lastName: client.lastName,
+    });
+
+    // Step 2: Create booking via client endpoint
+    const result = await booklaClientBooking({
+      baseUrl: BOOKLA_BASE_URL,
+      accessToken: auth.accessToken,
       companyId: COMPANY_ID,
       serviceId: SUMMER_SERVICE_ID,
       resourceId: resourceId,
       startTime,
       duration,
-      client: {
-        email: client.email,
-        firstName: client.firstName,
-        lastName: client.lastName,
-        phone: client.phone,
-      },
       spots: spots || 1,
       metaData: client.phone ? { phone: client.phone } : undefined,
-    });
-
-    console.log('[SUMMER-BOOKING] booklaBooking result:', {
-      ok: result.ok,
-      status: result.status,
-      hasData: !!result.data,
-      error: result.error?.slice(0, 500),
     });
 
     if (!result.ok) {
@@ -102,23 +93,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const bookingData = result.data;
-
-    if (bookingData.paymentURL || bookingData.paymentUrl) {
+    // Step 3: Return response based on Bookla's confirmation/payment status
+    if (result.isConfirmed) {
       return NextResponse.json({
-        success: false,
-        requiresPayment: true,
-        paymentUrl: bookingData.paymentURL || bookingData.paymentUrl,
-        bookingId: bookingData.id,
+        success: true,
+        requiresPayment: false,
+        bookingId: result.bookingId,
+        status: result.bookingStatus,
+        confirmationCode: result.data?.confirmationCode || result.data?.code,
       });
     }
 
+    if (result.paymentURL) {
+      return NextResponse.json({
+        success: false,
+        requiresPayment: true,
+        paymentUrl: result.paymentURL,
+        bookingId: result.bookingId,
+      });
+    }
+
+    // Fallback — booking created but no payment required and not confirmed
     return NextResponse.json({
       success: true,
       requiresPayment: false,
-      bookingId: bookingData.id,
-      status: bookingData.status || 'confirmed',
-      confirmationCode: bookingData.confirmationCode || bookingData.code,
+      bookingId: result.bookingId,
+      status: result.bookingStatus,
     });
 
   } catch (error: any) {
