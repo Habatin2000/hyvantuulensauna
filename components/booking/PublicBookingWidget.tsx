@@ -86,6 +86,7 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
       tickets: tickets.map(t => ({ ticketID: t.ticketID, quantity: t.quantity })),
       client: customerInfo,
       contractId: membership?.contractId,
+      resourceId: selectedSlot.resourceId,
     });
 
     if (result.success) {

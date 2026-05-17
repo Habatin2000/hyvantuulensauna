@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { startTime, tickets, client, subscriptionCode, contractId } = body;
+    const { startTime, tickets, client, subscriptionCode, contractId, resourceId: bodyResourceId } = body;
 
     if (!startTime || !tickets || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
@@ -139,16 +139,21 @@ export async function POST(request: NextRequest) {
       console.log('[BOOKING] Member booking with code:', memberCode);
     }
 
+    // Determine effective resourceID: prefer the one from the selected slot, fallback to env
+    const effectiveResourceId = bodyResourceId || RESOURCE_ID;
+    const totalSpots = Object.values(ticketsMap).reduce((sum, qty) => sum + qty, 0);
+
     // Build booking payload (same structure for both flows)
     const bookingPayload: any = {
       companyID: COMPANY_ID,
       serviceID: SERVICE_ID,
       startTime: startTime,
       duration: 'PT2H',
+      spots: totalSpots,
     };
 
-    if (RESOURCE_ID) {
-      bookingPayload.resourceID = RESOURCE_ID;
+    if (effectiveResourceId) {
+      bookingPayload.resourceID = effectiveResourceId;
     }
 
     if (Object.keys(ticketsMap).length > 0) {
@@ -205,12 +210,13 @@ export async function POST(request: NextRequest) {
         });
       }
     } else {
-      // NON-MEMBER FLOW: clean payload without resourceID or code
+      // NON-MEMBER FLOW: API key auth with explicit guest client data
       const guestPayload: any = {
         companyID: COMPANY_ID,
         serviceID: SERVICE_ID,
         startTime,
         duration: 'PT2H',
+        spots: totalSpots,
         client: {
           email: client.email,
           firstName: client.firstName,
@@ -219,8 +225,8 @@ export async function POST(request: NextRequest) {
         tickets: ticketsMap,
       };
 
-      if (RESOURCE_ID) {
-        guestPayload.resourceID = RESOURCE_ID;
+      if (effectiveResourceId) {
+        guestPayload.resourceID = effectiveResourceId;
       }
 
       if (client.phone) {
