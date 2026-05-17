@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 // Carousel images for intro section
 const introCarouselImages = [
-  { id: '1', src: '/images/gallery-raft-sunset.jpg', alt: 'Saunalautta auringonlaskussa Helsingissä' },
+  { id: '1', src: '/images/gallery-raft-sunset.webp', alt: 'Saunalautta auringonlaskussa Helsingissä' },
   { id: '2', src: '/images/gallery-aalto-raft.jpeg', alt: 'Aalto-saunalautta Aurinkolahdessa' },
   { id: '3', src: '/images/gallery-virta-deck.jpeg', alt: 'Virran kansi merinäköalalla' },
   { id: '4', src: '/images/gallery-sauna-interior.jpg', alt: 'Puulämmitteinen sauna saunalautalla' },

@@ -96,6 +96,8 @@ export function useBooking() {
     tickets: { ticketID: string; quantity: number }[];
     client: { firstName: string; lastName: string; email: string; phone?: string };
     subscriptionCode?: string;
+    contractId?: string;
+    resourceId?: string;
   }) => {
     setIsLoading(true);
     setError(null);

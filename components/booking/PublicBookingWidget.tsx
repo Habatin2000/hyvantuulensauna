@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Info } from 'lucide-react';
 import { useServiceInfo, useAvailability, useBooking } from '@/hooks/useBookla';
+import { trackEvent, trackMetaEvent, trackConversion } from '@/hooks/useTracking';
 import BookingStepIndicator from './BookingStepIndicator';
 import PublicSaunaCalendar from './PublicSaunaCalendar';
 import Step2SelectSlotAndTickets from './Step2SelectSlotAndTickets';
@@ -29,8 +30,14 @@ interface TicketType {
 interface MembershipInfo {
   isMember: boolean;
   code?: string;
+  contractId?: string;
   subscriptionId?: string;
+  subscriptionName?: string;
   remainingUses?: number | null;
+  totalLimit?: number | null;
+  usedCount?: number | null;
+  isUnlimited?: boolean;
+  canUseSubscription?: boolean;
 }
 
 interface PublicBookingWidgetProps {
@@ -43,7 +50,7 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
   // Booking state
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
-  const [tickets, setTickets] = useState<{ ticketID: string; name: string; quantity: number }[]>([]);
+  const [tickets, setTickets] = useState<{ ticketID: string; name: string; quantity: number; price?: number }[]>([]);
   const [customerInfo, setCustomerInfo] = useState({
     firstName: '',
     lastName: '',
@@ -78,25 +85,37 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
       startTime: selectedSlot.startTime,
       tickets: tickets.map(t => ({ ticketID: t.ticketID, quantity: t.quantity })),
       client: customerInfo,
-      subscriptionCode: membership?.code,
+      contractId: membership?.contractId,
+      resourceId: selectedSlot.resourceId,
     });
 
     if (result.success) {
       setBookingSuccess(true);
-      // Track if membership was attempted but not applied
-      if (membership?.code && result.membershipApplied === false) {
-        setMembershipNotApplied(true);
-        setMembershipErrorMessage('Jäsenyyttä ei voitu käyttää tähän varaukseen.');
-      }
       setStep(5);
+      // Track successful booking
+      const totalValue = tickets.reduce((sum, t) => sum + (t.price || 0) * t.quantity, 0);
+      trackEvent('booking_success', {
+        currency: 'EUR',
+        value: totalValue,
+        ticket_count: tickets.reduce((sum, t) => sum + t.quantity, 0),
+      });
+      trackMetaEvent('InitiateCheckout', {
+        currency: 'EUR',
+        value: totalValue,
+      });
+      if (!result.requiresPayment) {
+        trackConversion(undefined, totalValue);
+        trackMetaEvent('Purchase', {
+          currency: 'EUR',
+          value: totalValue,
+        });
+      }
     } else if (result.requiresPayment && result.paymentURL) {
-      // Membership was attempted but Bookla requires payment
+      // Non-member or member code failed at API level (rare)
       if (membership?.code) {
         setMembershipNotApplied(true);
         setMembershipErrorMessage(
-          membership?.remainingUses === 0 
-            ? 'Sarjakortissasi ei ole käyntikertoja jäljellä.'
-            : 'Jäsenyytesi ei kata tätä varausta.'
+          'Jäsenyyttä ei voitu käyttää tähän varaukseen. Voit jatkaa maksullisena. Jos mielestäsi tämä on virhe, ota yhteyttä asiakaspalveluun.'
         );
       }
       setPaymentURL(result.paymentURL);
@@ -143,7 +162,6 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
                 <div className="text-left">
                   <p className="font-medium text-amber-900">Jäsenyyttä ei voitu käyttää</p>
                   <p className="mt-1 text-sm text-amber-800">{membershipErrorMessage}</p>
-                  <p className="mt-1 text-sm text-amber-700">Varaus on tehty normaalihintaisena.</p>
                 </div>
               </div>
             </div>
@@ -171,7 +189,6 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
                 <div className="text-left">
                   <p className="font-medium text-amber-900">Jäsenyyttä ei voitu käyttää</p>
                   <p className="mt-1 text-sm text-amber-800">{membershipErrorMessage}</p>
-                  <p className="mt-1 text-sm text-amber-700">Varaus jatkuu normaalihintaisena.</p>
                 </div>
               </div>
             </div>

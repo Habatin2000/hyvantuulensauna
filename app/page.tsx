@@ -21,7 +21,7 @@ import Link from 'next/link';
 import { generateBreadcrumbSchema, generateServiceSchema, generateArticleSchema } from './schema';
 
 const PAGE_URL = 'https://hyvantuulensauna.fi';
-const PAGE_IMAGE = 'https://hyvantuulensauna.fi/images/gallery-raft-sunset.jpg';
+const PAGE_IMAGE = 'https://hyvantuulensauna.fi/images/gallery-raft-sunset.webp';
 const DATE_PUBLISHED = '2024-01-15';
 const DATE_MODIFIED = '2026-04-14';
 
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     url: 'https://hyvantuulensauna.fi',
     images: [
       {
-        url: '/images/gallery-raft-sunset.jpg',
+        url: '/images/gallery-raft-sunset.webp',
         width: 1200,
         height: 630,
         alt: 'Hyvän Tuulen Sauna - Saunalautta auringonlaskussa',

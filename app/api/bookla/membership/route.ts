@@ -43,11 +43,10 @@ export async function POST(request: NextRequest) {
     }
 
     const clientData = await clientResponse.json();
-    // Response can be {clients: [...]} or just an array
     const clientsArray = clientData.clients || clientData;
     const clients = Array.isArray(clientsArray) ? clientsArray : [];
-    
-    const matchingClient = clients.find((c: any) => 
+
+    const matchingClient = clients.find((c: any) =>
       String(c.email ?? '').toLowerCase() === normalizedEmail
     );
 
@@ -80,9 +79,6 @@ export async function POST(request: NextRequest) {
     }
 
     const contractsData = await contractsResponse.json();
-    console.log('[MEMBERSHIP] Contracts data:', JSON.stringify(contractsData).slice(0, 1000));
-    
-    // Response can be {items: [...]} or just an array
     const contracts = contractsData.items || contractsData || [];
     const contractList = Array.isArray(contracts) ? contracts : [];
     const now = new Date();
@@ -93,9 +89,9 @@ export async function POST(request: NextRequest) {
       const activeFrom = contract.activeFrom ? new Date(contract.activeFrom) : null;
       const expiresAt = contract.expiresAt ? new Date(contract.expiresAt) : null;
 
-      return status === 'active' && 
-             (!activeFrom || activeFrom <= now) && 
-             (!expiresAt || expiresAt >= now);
+      return status === 'active' &&
+        (!activeFrom || activeFrom <= now) &&
+        (!expiresAt || expiresAt >= now);
     });
 
     if (!activeContract) {
@@ -105,13 +101,10 @@ export async function POST(request: NextRequest) {
 
     console.log('[MEMBERSHIP] Active contract found:', activeContract.id);
 
-    // Step 3: Fetch detailed contract info using the documented plugins endpoint
+    // Step 3: Fetch detailed contract info
     let contractDetails: any = activeContract;
-
     try {
       const contractUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/plugins/subscription/contracts/${activeContract.id}`;
-      console.log('[MEMBERSHIP] Fetching fresh contract:', contractUrl);
-
       const res = await fetch(contractUrl, {
         method: 'GET',
         headers: {
@@ -119,22 +112,16 @@ export async function POST(request: NextRequest) {
           'Content-Type': 'application/json',
         },
       });
-
       if (res.ok) {
         contractDetails = await res.json();
         console.log('[MEMBERSHIP] Fresh contract loaded');
-      } else {
-        const errorText = await res.text();
-        console.log('[MEMBERSHIP] Contract fetch failed:', res.status, errorText.slice(0, 500));
-        // Fall back to activeContract from search
       }
     } catch (e) {
-      console.log('[MEMBERSHIP] Contract refresh threw error, using search result:', e);
+      console.log('[MEMBERSHIP] Contract refresh failed, using search result:', e);
     }
 
     // Step 4: Calculate remaining uses
     const limitations = contractDetails?.limitations || {};
-    console.log('[MEMBERSHIP] Full limitations object:', JSON.stringify(limitations));
 
     const totalLimitRaw =
       contractDetails?.totalLimit ??
@@ -142,32 +129,32 @@ export async function POST(request: NextRequest) {
       limitations?.bookingsCount ??
       null;
 
-    const parsedTotalLimit =
-      typeof totalLimitRaw === 'number'
+    const totalLimit =
+      typeof totalLimitRaw === 'number' && Number.isFinite(totalLimitRaw)
         ? totalLimitRaw
-        : totalLimitRaw !== null && totalLimitRaw !== undefined && totalLimitRaw !== ''
-          ? Number(totalLimitRaw)
-          : null;
+        : null;
 
-    const totalLimit = Number.isFinite(parsedTotalLimit as number) ? (parsedTotalLimit as number) : null;
-
-    // Unlimited if Bookla uses null/0/-1 for unlimited
     const isUnlimited = totalLimit === null || totalLimit === 0 || totalLimit === -1;
 
-    // Get direct count fields (may not exist)
-    const directRemainingCount = limitations?.remainingCount ?? limitations?.remaining ?? contractDetails?.remainingCount ?? contractDetails?.remaining;
-    const directUsedCount = limitations?.usedCount ?? limitations?.used ?? contractDetails?.usedCount ?? contractDetails?.used ?? contractDetails?.bookingsUsed;
+    // Direct count fields from contract/limitations
+    const directRemainingCount =
+      limitations?.remainingCount ??
+      limitations?.remaining ??
+      contractDetails?.remainingCount ??
+      contractDetails?.remaining ??
+      null;
 
-    console.log('[MEMBERSHIP] Direct count fields:', { 
-      directRemainingCount, 
-      directUsedCount,
-      limitationsKeys: Object.keys(limitations),
-    });
+    const directUsedCount =
+      limitations?.usedCount ??
+      limitations?.used ??
+      contractDetails?.usedCount ??
+      contractDetails?.used ??
+      contractDetails?.bookingsUsed ??
+      null;
 
-    // Step 5: Fetch visits-ledger and parse with Bookla semantics
+    // Step 5: Fetch visits-ledger for remaining uses
     let usedCount: number | null = null;
     let remainingUses: number | null = null;
-    let ledgerParseConfidence: 'high' | 'medium' | 'low' | 'unknown' = 'unknown';
 
     try {
       const ledgerUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/plugins/subscription/contracts/${activeContract.id}/visits-ledger`;
@@ -184,129 +171,39 @@ export async function POST(request: NextRequest) {
       if (visitsRes.ok) {
         const ledgerData = await visitsRes.json();
         const entries = Array.isArray(ledgerData) ? ledgerData : ledgerData.items || [];
-        
-        console.log('[MEMBERSHIP] Ledger entries count:', entries.length);
-        
-        // Log full entry details for debugging
-        entries.forEach((entry: any, i: number) => {
-          console.log(`[MEMBERSHIP] Ledger[${i}]:`, {
-            id: entry.id,
-            transactionType: entry.transactionType,
-            amount: entry.amount,
-            usageID: entry.usageID,
-            createdAt: entry.createdAt,
-            balance: entry.balance,
-            remainingVisits: entry.remainingVisits,
-          });
-        });
 
-        // STRATEGY 1: Look for explicit balance/remainingVisits fields
-        const entryWithBalance = entries.find((e: any) => 
-          typeof e.balance === 'number' || typeof e.remainingVisits === 'number'
-        );
-        
-        if (entryWithBalance) {
-          // Use the most recent entry's balance
-          const latestEntry = entries[entries.length - 1];
+        console.log('[MEMBERSHIP] Ledger entries count:', entries.length);
+
+        // Strategy 1: Use explicit balance/remainingVisits from the latest entry
+        const latestEntry = entries[entries.length - 1];
+        if (latestEntry && (typeof latestEntry.remainingVisits === 'number' || typeof latestEntry.balance === 'number')) {
           const currentBalance = latestEntry.remainingVisits ?? latestEntry.balance ?? null;
-          
-          if (typeof currentBalance === 'number' && totalLimit !== null) {
+          if (typeof currentBalance === 'number') {
             remainingUses = Math.max(0, currentBalance);
-            usedCount = Math.max(0, totalLimit - remainingUses);
-            ledgerParseConfidence = 'high';
-            console.log('[MEMBERSHIP] Using ledger balance field:', {
-              remainingUses,
-              usedCount,
-              source: latestEntry.remainingVisits !== undefined ? 'remainingVisits' : 'balance',
-            });
-          }
-        }
-        
-        // STRATEGY 2: Parse by transactionType if no balance field
-        if (remainingUses === null && entries.length > 0) {
-          const CONSUMPTION_TYPES = ['usage', 'consume', 'visit', 'booking', 'debit'];
-          const CREDIT_TYPES = ['credit', 'topup', 'rollover', 'bonus', 'refund', 'reset', 'allocation'];
-          
-          let consumptionSum = 0;
-          let creditSum = 0;
-          let unknownTransactions: any[] = [];
-          
-          for (const entry of entries) {
-            const txType = String(entry.transactionType || '').toLowerCase();
-            const amount = Number(entry.amount ?? 0);
-            const hasUsageId = Boolean(entry.usageID);
-            
-            if (!Number.isFinite(amount)) continue;
-            
-            if (CONSUMPTION_TYPES.some(t => txType.includes(t)) || hasUsageId) {
-              // Consumption reduces remaining visits
-              consumptionSum += Math.abs(amount);
-            } else if (CREDIT_TYPES.some(t => txType.includes(t))) {
-              // Credits add to available visits
-              creditSum += Math.abs(amount);
-            } else if (txType === '') {
-              // Empty transaction type - check for usageID as hint
-              if (hasUsageId) {
-                consumptionSum += Math.abs(amount);
-              } else {
-                unknownTransactions.push(entry);
-              }
-            } else {
-              unknownTransactions.push(entry);
+            if (totalLimit !== null) {
+              usedCount = Math.max(0, totalLimit - remainingUses);
             }
-          }
-          
-          if (unknownTransactions.length === 0 && totalLimit !== null) {
-            // All transactions understood - calculate with confidence
-            const netUsed = Math.max(0, consumptionSum - creditSum);
-            usedCount = netUsed;
-            remainingUses = Math.max(0, totalLimit - netUsed);
-            ledgerParseConfidence = 'medium';
-            console.log('[MEMBERSHIP] Calculated from transaction types:', {
-              consumptionSum,
-              creditSum,
-              netUsed,
-              remainingUses,
-            });
-          } else if (unknownTransactions.length > 0) {
-            // Unknown transactions present - don't guess
-            console.log('[MEMBERSHIP] Unknown ledger transactions:', unknownTransactions);
-            ledgerParseConfidence = 'low';
+            console.log('[MEMBERSHIP] Using ledger balance:', { remainingUses, usedCount });
           }
         }
-        
-        // STRATEGY 3: Fallback to usage-only counting
-        if (remainingUses === null && entries.length > 0) {
-          const usageEntries = entries.filter((e: any) => 
-            Boolean(e.usageID) || 
-            String(e.transactionType || '').toLowerCase().includes('usage')
-          );
-          
-          if (usageEntries.length > 0) {
-            let usageSum = 0;
-            for (const entry of usageEntries) {
-              const amount = Number(entry.amount ?? 1); // Default to 1 if no amount
+
+        // Strategy 2: Sum usage entries if no balance field
+        if (remainingUses === null && entries.length > 0 && totalLimit !== null) {
+          let usageSum = 0;
+          for (const entry of entries) {
+            const hasUsageId = Boolean(entry.usageID);
+            const txType = String(entry.transactionType || '').toLowerCase();
+            const isConsumption = hasUsageId || ['usage', 'consume', 'visit', 'booking', 'debit'].some(t => txType.includes(t));
+            if (isConsumption) {
+              const amount = Number(entry.amount ?? 1);
               if (Number.isFinite(amount)) {
                 usageSum += Math.abs(amount);
               }
             }
-            
-            if (totalLimit !== null) {
-              usedCount = usageSum;
-              remainingUses = Math.max(0, totalLimit - usageSum);
-              ledgerParseConfidence = 'medium';
-              console.log('[MEMBERSHIP] Calculated from usage entries only:', {
-                usageEntries: usageEntries.length,
-                usageSum,
-                remainingUses,
-              });
-            }
           }
-        }
-        
-        // If still no values, mark as unknown
-        if (remainingUses === null) {
-          ledgerParseConfidence = 'unknown';
+          usedCount = usageSum;
+          remainingUses = Math.max(0, totalLimit - usageSum);
+          console.log('[MEMBERSHIP] Calculated from usage entries:', { usageSum, remainingUses });
         }
       } else {
         console.log('[MEMBERSHIP] Failed to fetch visits ledger:', visitsRes.status);
@@ -315,33 +212,20 @@ export async function POST(request: NextRequest) {
       console.log('[MEMBERSHIP] Error fetching visits ledger:', e);
     }
 
-    // Final calculation with priority: direct fields > ledger > fallback
+    // Final priority: direct fields > ledger > fallback
     if (typeof directRemainingCount === 'number' && Number.isFinite(directRemainingCount)) {
-      remainingUses = directRemainingCount;
+      remainingUses = Math.max(0, directRemainingCount);
       if (totalLimit !== null) {
-        usedCount = totalLimit - directRemainingCount;
+        usedCount = Math.max(0, totalLimit - directRemainingCount);
       }
       console.log('[MEMBERSHIP] Using direct remainingCount:', remainingUses);
     } else if (typeof directUsedCount === 'number' && Number.isFinite(directUsedCount) && totalLimit !== null) {
       usedCount = directUsedCount;
       remainingUses = Math.max(0, totalLimit - directUsedCount);
       console.log('[MEMBERSHIP] Using direct usedCount:', usedCount);
-    } else if (remainingUses === null) {
-      // Ledger couldn't parse - leave as null for safe fallback
-      console.log('[MEMBERSHIP] Could not determine usage from ledger, leaving null');
-    }
-    
-    // Safety: never allow used > totalLimit unless explicitly documented
-    if (usedCount !== null && totalLimit !== null && usedCount > totalLimit) {
-      console.log('[MEMBERSHIP] Warning: usedCount > totalLimit, this may indicate rollover/credits not accounted for', {
-        usedCount,
-        totalLimit,
-        ledgerParseConfidence,
-      });
-      // Keep the values but flag for investigation
     }
 
-    // Step 5: Fetch subscription name
+    // Step 6: Fetch subscription name
     let subscriptionName = 'Kanta-asiakkuus';
     if (activeContract.subscriptionID) {
       try {
@@ -363,16 +247,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Calculate canUseSubscription based on available data
+    // Active membership verification
     const canUseSubscription = isUnlimited || (remainingUses !== null && remainingUses > 0);
-    
+
     console.log('[MEMBERSHIP] Final usage calculation:', {
       totalLimit,
       isUnlimited,
       usedCount,
       remainingUses,
       canUseSubscription,
-      ledgerParseConfidence,
     });
 
     return NextResponse.json({
@@ -388,8 +271,6 @@ export async function POST(request: NextRequest) {
       isUnlimited,
       canUseSubscription,
       expiresAt: activeContract.expiresAt || null,
-      // Debug info for troubleshooting
-      _ledgerParseConfidence: ledgerParseConfidence,
     });
 
   } catch (error) {

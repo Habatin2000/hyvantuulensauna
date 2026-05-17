@@ -1,18 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useEffect } from 'react';
 import { Check } from 'lucide-react';
 import { thankYouPageContent } from '@/content/pages';
-
-// SEO Metadata - ei indeksoitava
-export const metadata: Metadata = {
-  title: 'Kiitos Varauksestasi | Hyvän Tuulen Sauna',
-  description: 'Vastaanotimme varauskyselysi. Olemme sinuun yhteydessä pian!',
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+import { trackBookingConversion } from '@/hooks/useTracking';
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    // Track conversion when thank-you page loads
+    trackBookingConversion();
+  }, []);
   return (
     <section className="section-padding bg-stone-50 min-h-[60vh] flex items-center">
       <div className="container-padding mx-auto max-w-2xl">

@@ -42,7 +42,7 @@ export const galleryPageHero: HeroContent = {
   description: 'Kurkista saunaelämyksiimme kuvien välityksellä. Kesän auringonlaskut, talven avantouinnit ja kaikki siltä väliltä.',
   ctaText: 'Tutustu palveluihin',
   ctaHref: '/saunalauttaristeilyt-helsingissa',
-  image: '/images/gallery-raft-sunset.jpg',
+  image: '/images/gallery-raft-sunset.webp',
 };
 
 export const thankYouPageContent = {

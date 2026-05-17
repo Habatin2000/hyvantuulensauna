@@ -32,7 +32,7 @@ export const organizationSchema = {
     }
   ],
   "image": [
-    "https://hyvantuulensauna.fi/images/gallery-raft-sunset.jpg",
+    "https://hyvantuulensauna.fi/images/gallery-raft-sunset.webp",
     "https://hyvantuulensauna.fi/images/gallery-aalto-raft.jpeg",
     "https://hyvantuulensauna.fi/images/gallery-virta-deck.jpeg"
   ],
