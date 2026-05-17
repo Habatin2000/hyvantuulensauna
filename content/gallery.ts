@@ -3,7 +3,7 @@ import { GalleryImage } from '@/types';
 export const galleryImages: GalleryImage[] = [
   {
     id: '1',
-    src: '/images/gallery-raft-sunset.jpg',
+    src: '/images/gallery-raft-sunset.webp',
     alt: 'Saunalautta auringonlaskussa',
     caption: 'Kesän kauneimmat hetket merellä',
     category: 'boats',

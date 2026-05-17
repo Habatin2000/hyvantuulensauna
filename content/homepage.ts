@@ -10,7 +10,7 @@ export const homepageHero: HeroContent = {
     text: 'Varaa Julkinen saunavuoro',
     href: '/julkinen-sauna',
   },
-  image: '/images/gallery-raft-sunset.jpg',
+  image: '/images/gallery-raft-sunset.webp',
 };
 
 export const homepageFeatures: Feature[] = [

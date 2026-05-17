@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     url: 'https://hyvantuulensauna.fi/galleria',
     images: [
       {
-        url: '/images/gallery-raft-sunset.jpg',
+        url: '/images/gallery-raft-sunset.webp',
         width: 1200,
         height: 630,
         alt: 'Hyvän Tuulen Sauna galleria',

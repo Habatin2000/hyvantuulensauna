@@ -40,7 +40,7 @@ export default function FAQPage() {
     'Usein Kysyttyä | Sauna ja Saunalautta Helsinki',
     'Vastaukset yleisimpiin kysymyksiin saunalauttaristeilyistä, julkisesta saunasta ja varauksista.',
     PAGE_URL,
-    'https://hyvantuulensauna.fi/images/gallery-raft-sunset.jpg',
+    'https://hyvantuulensauna.fi/images/gallery-raft-sunset.webp',
     DATE_PUBLISHED,
     DATE_MODIFIED
   );
