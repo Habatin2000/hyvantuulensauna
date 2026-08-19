@@ -19,7 +19,7 @@ export default function BookingStepIndicator({
   totalSteps = 4 
 }: BookingStepIndicatorProps) {
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       <div className="flex items-center justify-between">
         {steps.map((label, index) => {
           const stepNumber = index + 1;
@@ -29,7 +29,7 @@ export default function BookingStepIndicator({
           return (
             <div key={label} className="flex items-center">
               <div 
-                className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium transition-colors ${
                   isCompleted 
                     ? 'bg-[#3b82f6] text-white' 
                     : isCurrent 
@@ -37,17 +37,17 @@ export default function BookingStepIndicator({
                       : 'bg-stone-200 text-stone-500'
                 }`}
               >
-                {isCompleted ? <Check className="h-4 w-4" /> : stepNumber}
+                {isCompleted ? <Check className="h-3.5 w-3.5" /> : stepNumber}
               </div>
               <span 
-                className={`ml-2 hidden text-sm font-medium sm:block ${
+                className={`ml-1.5 hidden text-xs font-medium sm:block ${
                   isCurrent ? 'text-stone-900' : 'text-stone-500'
                 }`}
               >
                 {label}
               </span>
               {index < totalSteps - 1 && (
-                <div className="mx-2 h-px w-8 bg-stone-300 sm:mx-4 sm:w-12" />
+                <div className="mx-1.5 h-px w-6 bg-stone-300 sm:mx-3 sm:w-10" />
               )}
             </div>
           );
@@ -55,8 +55,8 @@ export default function BookingStepIndicator({
       </div>
       
       {/* Mobile progress text */}
-      <div className="mt-4 text-center sm:hidden">
-        <p className="text-sm font-medium text-stone-900">
+      <div className="mt-3 text-center sm:hidden">
+        <p className="text-xs font-medium text-stone-900">
           Vaihe {currentStep}/{totalSteps}: {steps[currentStep - 1]}
         </p>
       </div>

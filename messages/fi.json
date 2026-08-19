@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "siteName": "Hyvän Tuulen Sauna",
+    "defaultTitle": "Hyvän Tuulen Sauna | Saunalautat Helsingissä",
+    "defaultDescription": "Aito suomalainen saunaelämys merellisessä Helsingissä. Varaa saunalautta kesäksi tai yksityissauna ympäri vuoden. Kalkkihiekantori, Aurinkolahti, Helsinki."
+  },
+  "nav": {
+    "home": "Etusivu",
+    "saunaBoat": "Saunalauttaristeilyt",
+    "events": "Tapahtumat",
+    "privateSauna": "Yksityissauna",
+    "publicSauna": "Julkinen sauna",
+    "gallery": "Galleria",
+    "location": "Sijainti",
+    "about": "Toiminnastamme",
+    "faq": "Usein kysyttyä",
+    "bookNow": "Varaa sauna",
+    "private": "Yksityinen sauna",
+    "public": "Julkinen sauna",
+    "phone": "Soita",
+    "contact": "Yhteystiedot",
+    "openMenu": "Avaa valikko",
+    "closeMenu": "Sulje valikko"
+  },
+  "footer": {
+    "companyName": "Hyvän Tuulen Sauna",
+    "tagline": "Aito saunaelämys Helsingissä — saunalautat kesällä, yksityissauna ympäri vuoden.",
+    "links": "Linkit",
+    "contact": "Yhteystiedot",
+    "social": "Seuraa meitä",
+    "rights": "Kaikki oikeudet pidätetään."
+  }
+}

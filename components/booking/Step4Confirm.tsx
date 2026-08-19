@@ -1,6 +1,7 @@
 'use client';
 
 import { Calendar, Clock, Ticket, User, CreditCard, AlertCircle, ChevronLeft, Loader2 } from 'lucide-react';
+import { calculateFriendOfferTotal } from '@/lib/pricing';
 
 interface TicketType {
   id: string;
@@ -53,26 +54,27 @@ export default function Step4Confirm({
   const formatTime = (hour: number) => `${String(hour).padStart(2, '0')}:00`;
 
   const totalQuantity = tickets.reduce((sum, t) => sum + t.quantity, 0);
-  
+
   // Use actual prices from Bookla API
   const getTicketPrice = (ticketID: string) => {
     const ticket = availableTickets.find(at => at.id === ticketID);
     return ticket?.price || 0;
   };
 
-  const totalPrice = tickets.reduce((sum, t) => {
-    return sum + getTicketPrice(t.ticketID) * t.quantity;
-  }, 0);
+  const { total: totalPrice, originalTotal, savings } = calculateFriendOfferTotal(
+    tickets,
+    getTicketPrice
+  );
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-stone-900">Vahvista varaus</h3>
+    <div className="space-y-4">
+      <h3 className="text-base font-semibold text-stone-900">Vahvista varaus</h3>
 
       {/* Summary Card */}
-      <div className="rounded-xl border border-stone-200 bg-white p-6 space-y-4">
+      <div className="rounded-xl border border-stone-200 bg-white p-3 space-y-2.5">
         {/* Date */}
-        <div className="flex items-start gap-3">
-          <Calendar className="h-5 w-5 text-[#3b82f6]" />
+        <div className="flex items-start gap-2.5">
+          <Calendar className="h-4 w-4 text-[#3b82f6]" />
           <div>
             <p className="text-sm text-stone-500">Päivämäärä</p>
             <p className="font-medium text-stone-900">{formatDate(selectedDate)}</p>
@@ -80,8 +82,8 @@ export default function Step4Confirm({
         </div>
 
         {/* Time */}
-        <div className="flex items-start gap-3">
-          <Clock className="h-5 w-5 text-[#3b82f6]" />
+        <div className="flex items-start gap-2.5">
+          <Clock className="h-4 w-4 text-[#3b82f6]" />
           <div>
             <p className="text-sm text-stone-500">Aika</p>
             <p className="font-medium text-stone-900">
@@ -91,8 +93,8 @@ export default function Step4Confirm({
         </div>
 
         {/* Tickets */}
-        <div className="flex items-start gap-3">
-          <Ticket className="h-5 w-5 text-[#3b82f6]" />
+        <div className="flex items-start gap-2.5">
+          <Ticket className="h-4 w-4 text-[#3b82f6]" />
           <div>
             <p className="text-sm text-stone-500">Liput ({totalQuantity})</p>
             <div className="space-y-1">
@@ -111,8 +113,8 @@ export default function Step4Confirm({
         </div>
 
         {/* Customer */}
-        <div className="flex items-start gap-3">
-          <User className="h-5 w-5 text-[#3b82f6]" />
+        <div className="flex items-start gap-2.5">
+          <User className="h-4 w-4 text-[#3b82f6]" />
           <div>
             <p className="text-sm text-stone-500">Varaaja</p>
             <p className="font-medium text-stone-900">
@@ -126,31 +128,56 @@ export default function Step4Confirm({
         </div>
 
         {/* Price */}
-        <div className="flex items-start gap-3">
-          <CreditCard className="h-5 w-5 text-[#3b82f6]" />
+        <div className="flex items-start gap-2.5">
+          <CreditCard className="h-4 w-4 text-[#3b82f6]" />
           <div className="flex-1">
             <p className="text-sm text-stone-500">Maksu</p>
             <div className="mt-1 space-y-1">
               {tickets.map((t, i) => {
                 const price = getTicketPrice(t.ticketID);
+                const freeQty = Math.floor(t.quantity / 3);
+                const lineTotal = price * (t.quantity - freeQty);
+                const lineOriginal = price * t.quantity;
                 return (
                   <p key={i} className="text-sm text-stone-700">
-                    {t.quantity}x {t.name} — {(price * t.quantity).toFixed(2)}€
+                    {t.quantity}x {t.name} — {lineTotal.toFixed(2)}€
                     <span className="text-stone-400"> ({price.toFixed(2)}€/kpl)</span>
+                    {freeQty > 0 && (
+                      <span className="ml-1 text-xs font-medium text-amber-600">
+                        ({freeQty}x ilmainen kaveritarjouksella)
+                      </span>
+                    )}
+                    {freeQty > 0 && (
+                      <span className="ml-1 text-xs text-stone-400 line-through">
+                        {lineOriginal.toFixed(2)}€
+                      </span>
+                    )}
                   </p>
                 );
               })}
             </div>
-            <p className="mt-2 font-semibold text-stone-900">Yhteensä: {totalPrice.toFixed(2)}€</p>
+            <p className="mt-2 font-semibold text-stone-900">
+              Yhteensä: {totalPrice.toFixed(2)}€
+              {savings > 0 && (
+                <span className="ml-2 text-sm font-normal text-stone-400 line-through">
+                  {originalTotal.toFixed(2)}€
+                </span>
+              )}
+            </p>
+            {savings > 0 && (
+              <p className="text-xs font-medium text-amber-600">
+                Säästät {savings.toFixed(2)}€ kaveritarjouksella
+              </p>
+            )}
             <p className="text-xs text-stone-500">Maksu tapahtuu varauksen yhteydessä</p>
           </div>
         </div>
       </div>
 
       {/* Info Box */}
-      <div className="rounded-lg bg-[#3b82f6]/5 p-4">
-        <div className="flex gap-3">
-          <AlertCircle className="h-5 w-5 shrink-0 text-[#3b82f6]" />
+      <div className="rounded-lg bg-[#3b82f6]/5 p-3">
+        <div className="flex gap-2.5">
+          <AlertCircle className="h-4 w-4 shrink-0 text-[#3b82f6]" />
           <div>
             <p className="font-medium text-stone-900">Tärkeää muistaa</p>
             <ul className="mt-1 space-y-1 text-sm text-stone-600">
@@ -163,10 +190,10 @@ export default function Step4Confirm({
       </div>
 
       {bookingError && (
-        <div className="rounded-lg bg-red-50 p-4">
+        <div className="rounded-lg bg-red-50 p-3">
           <div className="flex items-start gap-2">
-            <AlertCircle className="h-5 w-5 shrink-0 text-red-600" />
-            <p className="text-sm text-red-700">{bookingError}</p>
+            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+            <p className="text-xs text-red-700">{bookingError}</p>
           </div>
         </div>
       )}
@@ -176,19 +203,19 @@ export default function Step4Confirm({
         <button
           onClick={onBack}
           disabled={isBooking}
-          className="inline-flex items-center gap-2 rounded-lg border border-stone-300 px-6 py-3 font-medium text-stone-700 hover:bg-stone-50 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-stone-300 px-5 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50 disabled:opacity-50"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-3.5 w-3.5" />
           Takaisin
         </button>
         <button
           onClick={onBook}
           disabled={isBooking}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isBooking ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
               Käsitellään...
             </>
           ) : (

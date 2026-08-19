@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "siteName": "Hyvän Tuulen Sauna",
+    "defaultTitle": "Hyvän Tuulen Sauna | Sauna Boats in Helsinki",
+    "defaultDescription": "Authentic Finnish sauna experience by the sea in Helsinki. Book a sauna boat for summer or a private sauna all year round. Kalkkihiekantori, Aurinkolahti, Helsinki."
+  },
+  "nav": {
+    "home": "Home",
+    "saunaBoat": "Sauna Boat Cruises",
+    "events": "Events",
+    "privateSauna": "Private Sauna",
+    "publicSauna": "Public Sauna",
+    "gallery": "Gallery",
+    "location": "Location",
+    "about": "About Us",
+    "faq": "FAQ",
+    "bookNow": "Book sauna",
+    "private": "Private sauna",
+    "public": "Public sauna",
+    "phone": "Call",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "footer": {
+    "companyName": "Hyvän Tuulen Sauna",
+    "tagline": "Authentic sauna experience in Helsinki — sauna boats in summer, private sauna all year round.",
+    "links": "Links",
+    "contact": "Contact",
+    "social": "Follow us",
+    "rights": "All rights reserved."
+  }
+}

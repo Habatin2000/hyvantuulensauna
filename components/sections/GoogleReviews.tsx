@@ -1,39 +1,72 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import { useLocale } from 'next-intl';
 import { ReactGoogleReviews } from "react-google-reviews";
 import "react-google-reviews/dist/index.css";
 import { Star } from 'lucide-react';
 
 export default function GoogleReviews() {
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const isEn = locale === 'en';
+
+  useEffect(() => {
+    const container = widgetRef.current;
+    if (!container) return;
+
+    // The third-party Featurable widget renders outside React, so its markup
+    // can't be fixed at the source. Still needed: patch missing aria-labels
+    // and avatar alt attributes after it renders (and on later DOM changes).
+    const patchAccessibility = () => {
+      // Featurable widget uses aria-description, but Lighthouse wants aria-label
+      container.querySelectorAll('button[aria-description]:not([aria-label])').forEach((btn) => {
+        const desc = btn.getAttribute('aria-description');
+        if (desc) btn.setAttribute('aria-label', desc);
+      });
+      // Reviewer avatars load without alt text
+      container.querySelectorAll('img:not([alt])').forEach((img) => {
+        img.setAttribute('alt', '');
+      });
+    };
+
+    patchAccessibility();
+
+    const observer = new MutationObserver(patchAccessibility);
+    observer.observe(container, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className="py-16 bg-stone-50">
       <div className="container-padding mx-auto max-w-7xl">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 mb-4">
             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium uppercase tracking-wider text-[#3b82f6]">
-              Asiakasarvostelut
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-amber-700">
+              {isEn ? 'Customer reviews' : 'Asiakasarvostelut'}
             </span>
           </div>
-          <h2 className="text-3xl font-bold text-stone-900 md:text-4xl">
-            Mitä asiakkaamme sanovat
+          <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+            {isEn ? 'What our customers say' : 'Mitä asiakkaamme sanovat'}
           </h2>
           <p className="mt-3 text-stone-600">
-            Katso kaikki arvostelut{' '}
+            {isEn ? 'See all reviews on our' : 'Katso kaikki arvostelut'}{' '}
             <a 
               href="https://g.co/kgs/8YJkG5p" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-[#3b82f6] hover:underline"
+              className="text-blue-700 hover:underline"
             >
-              Google Business Profiilistamme
+              {isEn ? 'Google Business Profile' : 'Google Business Profiilistamme'}
             </a>
           </p>
         </div>
         
-        <div className="relative">
-          <ReactGoogleReviews 
-            layout="carousel" 
+        <div ref={widgetRef} className="relative min-h-[420px] overflow-hidden">
+          <ReactGoogleReviews
+            layout="carousel"
             featurableId="e7dc207d-e31b-44a3-b616-7c576651271f"
             carouselAutoplay={true}
             carouselSpeed={5000}

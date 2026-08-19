@@ -5,11 +5,10 @@ const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/ap
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
 const SERVICE_ID = process.env.BOOKLA_PUBLIC_SERVICE_ID;
 const RESOURCE_ID = process.env.BOOKLA_PUBLIC_RESOURCE_ID;
-const API_KEY = process.env.BOOKLA_API_KEY;
+const API_KEY = process.env.BOOKLA_BOOKING_API_KEY || process.env.BOOKLA_API_KEY;
 
 // Time validation helpers
 const TIME_ZONE = 'Europe/Helsinki';
-const NEW_SCHEDULE_CUTOVER = '2026-03-20';
 
 const getHelsinkiDate = (dateStr: string): { dow: number; hour: number; localDate: string } => {
   const date = new Date(dateStr);
@@ -25,31 +24,19 @@ const getHelsinkiDate = (dateStr: string): { dow: number; hour: number; localDat
   };
 };
 
-const isValidPublicSlot = (dow: number, hour: number, localDate: string): boolean => {
-  const isMonThu = dow >= 1 && dow <= 4;
-  const isWeekend = dow === 0 || dow === 6;
-
-  if (isMonThu) {
-    const useNewSchedule = localDate >= NEW_SCHEDULE_CUTOVER;
-    return useNewSchedule ? [17, 19].includes(hour) : [16, 18, 20].includes(hour);
-  }
-  if (isWeekend) {
-    return [10, 12, 14].includes(hour);
-  }
-  return false; // Friday - no public slots
-};
+// No hardcoded time validation — Bookla is the source of truth for slot validity
 
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !SERVICE_ID || !API_KEY) {
     return NextResponse.json(
-      { error: 'Missing Bookla configuration', missing: { companyId: !COMPANY_ID, serviceId: !SERVICE_ID, apiKey: !API_KEY } },
-      { status: 400 }
+      { error: 'Missing Bookla configuration' },
+      { status: 500 }
     );
   }
 
   try {
     const body = await request.json();
-    const { startTime, tickets, client, subscriptionCode } = body;
+    const { startTime, tickets, client, subscriptionCode, resourceId: bodyResourceId } = body;
 
     if (!startTime || !tickets || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
@@ -58,16 +45,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate business hours
+    // Log time info for debugging
     const { dow, hour, localDate } = getHelsinkiDate(startTime);
-    console.log('[BOOKING] Time validation:', { dow, hour, localDate });
-
-    if (!isValidPublicSlot(dow, hour, localDate)) {
-      return NextResponse.json(
-        { error: 'Julkiset saunavuorot: Ma-To 16-22, La-Su 10-16', code: 'INVALID_TIME_SLOT' },
-        { status: 400 }
-      );
-    }
+    console.log('[BOOKING] Selected slot:', { dow, hour, localDate });
 
     // Build tickets map (Bookla expects {ticketId: quantity}, not array)
     const ticketsMap: Record<string, number> = {};
@@ -86,8 +66,15 @@ export async function POST(request: NextRequest) {
 
     const isMemberBooking = Boolean(subscriptionCode);
     if (isMemberBooking) {
-      console.log('[BOOKING] Member booking with code:', subscriptionCode);
+      // Never log the subscription code — it authorizes free bookings.
+      console.log('[BOOKING] Member booking with subscription code');
     }
+
+    // Compute total spots from tickets
+    const totalSpots = Object.values(ticketsMap).reduce((sum, qty) => sum + qty, 0);
+
+    // Determine effective resourceID: prefer the one from the selected slot, fallback to env
+    const effectiveResourceId = bodyResourceId || RESOURCE_ID || '';
 
     // Step 1: Authenticate client with Bookla
     const auth = await authenticateClient({
@@ -105,9 +92,10 @@ export async function POST(request: NextRequest) {
       accessToken: auth.accessToken,
       companyId: COMPANY_ID,
       serviceId: SERVICE_ID,
-      resourceId: RESOURCE_ID || '',
+      resourceId: effectiveResourceId,
       startTime,
       duration: 'PT2H',
+      spots: totalSpots,
       tickets: ticketsMap,
       metaData: client.phone ? { phone: client.phone } : undefined,
       code: subscriptionCode || undefined,
@@ -121,8 +109,9 @@ export async function POST(request: NextRequest) {
           { status: 409 }
         );
       }
+      console.error('[BOOKING] Bookla API error:', status, typeof result.error === 'string' ? result.error.slice(0, 500) : result.error);
       return NextResponse.json(
-        { error: 'Bookla API error', status, details: result.error },
+        { error: 'Varauksen luominen epäonnistui. Yritä myöhemmin uudelleen.', code: 'BOOKING_FAILED' },
         { status: 502 }
       );
     }
@@ -163,10 +152,10 @@ export async function POST(request: NextRequest) {
       confirmationCode: result.data?.confirmationCode || result.data?.code,
     });
 
-  } catch (error: any) {
-    console.error('[BOOKING] Unexpected error:', error);
+  } catch (error) {
+    console.error('[BOOKING] Unexpected error:', error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { error: error.message || 'Varauksen luominen epäonnistui', type: error.name },
+      { error: 'Varauksen luominen epäonnistui', code: 'BOOKING_FAILED' },
       { status: 500 }
     );
   }

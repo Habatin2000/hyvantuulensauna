@@ -1,4 +1,6 @@
 import { FAQItem } from '@/types';
+import { Link } from '@/i18n/navigation';
+import type { Locale } from '@/content/homepage';
 import {
   Accordion,
   AccordionContent,
@@ -11,13 +13,15 @@ interface FAQAccordionProps {
   title?: string;
   subtitle?: string;
   showAllLink?: boolean;
+  locale?: Locale;
 }
 
 export default function FAQAccordion({ 
   items, 
   title, 
   subtitle,
-  showAllLink 
+  showAllLink,
+  locale = 'fi'
 }: FAQAccordionProps) {
   return (
     <section className="section-padding bg-white">
@@ -25,12 +29,12 @@ export default function FAQAccordion({
         {(title || subtitle) && (
           <div className="mb-12 text-center">
             {subtitle && (
-              <p className="mb-2 text-sm font-medium uppercase tracking-wider text-[#3b82f6]">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-700">
                 {subtitle}
               </p>
             )}
             {title && (
-              <h2 className="text-3xl font-bold text-stone-900 md:text-4xl">
+              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
                 {title}
               </h2>
             )}
@@ -52,12 +56,14 @@ export default function FAQAccordion({
 
         {showAllLink && (
           <div className="mt-8 text-center">
-            <a 
+            <Link 
               href="/usein-kysyttya" 
               className="text-sm font-medium text-[#3b82f6] hover:underline"
             >
-              Katso kaikki usein kysytyt kysymykset →
-            </a>
+              {locale === 'en'
+                ? 'See all frequently asked questions →'
+                : 'Katso kaikki usein kysytyt kysymykset →'}
+            </Link>
           </div>
         )}
       </div>

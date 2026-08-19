@@ -8,8 +8,8 @@ const API_KEY = process.env.BOOKLA_API_KEY;
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !API_KEY) {
     return NextResponse.json(
-      { error: 'Missing Bookla configuration', missing: { companyId: !COMPANY_ID, apiKey: !API_KEY } },
-      { status: 400 }
+      { error: 'Missing Bookla configuration' },
+      { status: 500 }
     );
   }
 
@@ -17,14 +17,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { serviceId, resourceId, startTime, duration, client, spots } = body;
 
-    if (!serviceId || !startTime || !client?.email || !client?.firstName || !client?.lastName) {
+    if (!serviceId || !resourceId || !startTime || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
-        { error: 'Missing required fields: serviceId, startTime, client.email, client.firstName, client.lastName' },
+        { error: 'Missing required fields: serviceId, resourceId, startTime, client.email, client.firstName, client.lastName' },
         { status: 400 }
       );
     }
 
-    console.log('[MINICRUISE-BOOKING] Creating booking:', { serviceId, resourceId, startTime, duration: duration || 'PT1H30M', spots: spots || 1, clientEmail: client.email });
+    console.log('[MINICRUISE-BOOKING] Creating booking:', { serviceId, resourceId, startTime, duration: duration || 'PT1H30M', spots: spots || 1 });
 
     const auth = await authenticateClient({
       baseUrl: BOOKLA_BASE_URL,
@@ -49,8 +49,22 @@ export async function POST(request: NextRequest) {
 
     if (!result.ok) {
       const status = result.status || 502;
+      if (status === 409) {
+        return NextResponse.json(
+          { error: 'Tämä aika on jo varattu. Valitse toinen aika.', code: 'SLOT_UNAVAILABLE' },
+          { status: 409 }
+        );
+      }
+      if (status === 400) {
+        console.error('[MINICRUISE-BOOKING] Bookla rejected booking:', typeof result.error === 'string' ? result.error.slice(0, 500) : result.error);
+        return NextResponse.json(
+          { error: 'Virheelliset varaustiedot. Tarkista tiedot ja yritä uudelleen.', code: 'BAD_REQUEST' },
+          { status: 400 }
+        );
+      }
+      console.error('[MINICRUISE-BOOKING] Bookla API error:', status, typeof result.error === 'string' ? result.error.slice(0, 500) : result.error);
       return NextResponse.json(
-        { error: 'Bookla API error', status, details: result.error },
+        { error: 'Varauksen luominen epäonnistui. Yritä myöhemmin uudelleen.', code: 'BOOKING_FAILED' },
         { status: 502 }
       );
     }
@@ -79,10 +93,10 @@ export async function POST(request: NextRequest) {
       bookingId: result.bookingId,
     });
 
-  } catch (error: any) {
-    console.error('[MINICRUISE-BOOKING] Unexpected error:', error);
+  } catch (error) {
+    console.error('[MINICRUISE-BOOKING] Unexpected error:', error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create booking', type: error.name },
+      { error: 'Varauksen luominen epäonnistui', code: 'BOOKING_FAILED' },
       { status: 500 }
     );
   }

@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
-const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
-const API_KEY = process.env.BOOKLA_API_KEY;
+import { booklaFetch, getBooklaConfig } from '../../lib/bookla-fetch';
 
 const TIME_ZONE = 'Europe/Helsinki';
 
@@ -15,7 +12,8 @@ const formatDateInTZ = (d: Date, tz: string) =>
   }).format(d);
 
 export async function POST(request: NextRequest) {
-  if (!COMPANY_ID || !API_KEY) {
+  const { companyId, apiKey } = getBooklaConfig();
+  if (!companyId || !apiKey) {
     return NextResponse.json(
       { error: 'Missing Bookla configuration' },
       { status: 500 }
@@ -65,6 +63,7 @@ export async function POST(request: NextRequest) {
     const baseRequest = {
       from: fromDate.toISOString(),
       to: toDate.toISOString(),
+      duration: 'PT1H30M',
       spots: 1,
     };
 
@@ -130,7 +129,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('[MINICRUISE-TIMES] Error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch times', slots: [] },
@@ -139,16 +138,22 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function fetchTimes(serviceId: string, requestBody: any) {
-  const timesUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${serviceId}/times`;
-  const response = await fetch(timesUrl, {
-    method: 'POST',
-    headers: {
-      'X-API-Key': API_KEY!,
-      'Content-Type': 'application/json',
+async function fetchTimes(serviceId: string, requestBody: {
+  from: string;
+  to: string;
+  duration: string;
+  spots: number;
+  resourceIDs?: string[];
+}) {
+  const { companyId, apiKey } = getBooklaConfig();
+  const response = await booklaFetch(
+    `/companies/${companyId}/services/${serviceId}/times`,
+    {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
     },
-    body: JSON.stringify(requestBody),
-  });
+    apiKey
+  );
 
   if (!response.ok) {
     const errorText = await response.text();

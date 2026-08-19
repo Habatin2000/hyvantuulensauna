@@ -52,3 +52,6 @@ dist/
 
 # next dev cache
 *.development.log
+
+# Original hi-res images (build-time source, not deployed)
+assets-originals/

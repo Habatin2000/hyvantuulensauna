@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { booklaFetch, getBooklaConfig } from '../../lib/bookla-fetch';
 
-const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
-const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
-const API_KEY = process.env.BOOKLA_API_KEY;
 const SUMMER_SERVICE_ID = '3ea1445e-c830-4604-a294-3dbe124446a5';
 
 const TIME_ZONE = 'Europe/Helsinki';
 
-// Resource IDs - Aalto and Virta only
-const AALTO_RESOURCE_ID = '3dd71bee-f303-463e-ad78-e05b4faa2234';
-const VIRTA_RESOURCE_ID = '3bffeff6-4ef4-4865-a99b-370b956e355e';
-
 export async function POST(request: NextRequest) {
-  if (!COMPANY_ID || !API_KEY) {
+  const { companyId, apiKey } = getBooklaConfig();
+  if (!companyId || !apiKey) {
     return NextResponse.json(
       { error: 'Missing Bookla configuration' },
       { status: 500 }
@@ -65,15 +60,15 @@ export async function POST(request: NextRequest) {
 }
 
 async function fetchDates(resourceIDs: string[], from: string, to: string) {
-  const datesUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SUMMER_SERVICE_ID}/dates`;
-  const response = await fetch(datesUrl, {
-    method: 'POST',
-    headers: {
-      'X-API-Key': API_KEY!,
-      'Content-Type': 'application/json',
+  const { companyId, apiKey } = getBooklaConfig();
+  const response = await booklaFetch(
+    `/companies/${companyId}/services/${SUMMER_SERVICE_ID}/dates`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ from, to, resourceIDs }),
     },
-    body: JSON.stringify({ from, to, resourceIDs }),
-  });
+    apiKey
+  );
 
   if (!response.ok) {
     const errorText = await response.text();

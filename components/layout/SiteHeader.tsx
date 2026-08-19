@@ -1,15 +1,18 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Menu, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
-import { mainNavigation } from '@/content/navigation';
+import { mainNavigation, footerNavigation } from '@/content/navigation';
 import MobileNav from './MobileNav';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function SiteHeader() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const t = useTranslations('nav');
 
   return (
     <>
@@ -20,7 +23,7 @@ export default function SiteHeader() {
             <div className="relative h-10 w-10">
               <Image
                 src="/images/logo.png"
-                alt="Hyvän Tuulen Sauna"
+                alt=""
                 fill
                 className="object-contain"
                 priority
@@ -39,21 +42,24 @@ export default function SiteHeader() {
                 href={item.href}
                 className="px-3 py-2 text-sm font-medium text-stone-700 transition-colors hover:text-[#3b82f6]"
               >
-                {item.label}
+                {t(item.labelKey)}
               </Link>
             ))}
           </nav>
 
-          {/* CTA + Mobile Menu */}
-          <div className="flex items-center gap-2">
-            <Link href="tel:+358401234567" className="hidden sm:flex" aria-label="Soita meille">
-              <Button variant="ghost" size="icon" className="text-stone-600 hover:text-[#3b82f6]">
-                <Phone className="h-5 w-5" aria-hidden="true" />
-              </Button>
+          {/* CTA + Language + Mobile Menu */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            <LanguageSwitcher />
+            <Link
+              href={`tel:${footerNavigation.contact.phone.replace(/\s/g, '')}`}
+              className="hidden sm:flex h-10 w-10 items-center justify-center rounded-md text-stone-600 hover:text-[#3b82f6] hover:bg-stone-100 transition-colors"
+              aria-label={t('phone')}
+            >
+              <Phone className="h-5 w-5" aria-hidden="true" />
             </Link>
-            <Link href="/saunalauttaristeilyt-helsingissa#varaus" className="hidden sm:block">
+            <Link href="/saunalauttaristeilyt-helsingissa#boats" className="hidden sm:block">
               <Button className="bg-[#3b82f6] hover:bg-[#2563eb] text-white">
-                Varaa risteily
+                {t('bookNow')}
               </Button>
             </Link>
             <Button
@@ -61,7 +67,9 @@ export default function SiteHeader() {
               size="icon"
               className="lg:hidden"
               onClick={() => setMobileNavOpen(true)}
-              aria-label="Avaa valikko"
+              aria-expanded={mobileNavOpen}
+              aria-controls="mobile-nav"
+              aria-label={t('openMenu')}
             >
               <Menu className="h-6 w-6" aria-hidden="true" />
             </Button>

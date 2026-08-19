@@ -21,7 +21,7 @@ export interface Boat {
   pricing: {
     basePrice: number;
     currency: string;
-    unit: 'hour' | 'session' | 'day';
+    unit: 'hour' | 'session' | 'day' | '3h' | '4h';
   };
   amenities: string[];
   idealFor: string[];
@@ -128,6 +128,7 @@ export interface HeroContent {
     href: string;
   };
   image: string;
+  images?: string[];
 }
 
 export interface SectionContent {

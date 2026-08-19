@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
-  Calendar, 
-  Clock, 
-  Users, 
   Check, 
   ChevronRight,
   Info,
@@ -17,15 +14,32 @@ import {
   Ship
 } from 'lucide-react';
 import SummerCalendar from './SummerCalendar';
+import { boats as boatContent } from '@/content/boats';
+import type { Locale } from '@/content/pages';
+import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { trackInitiateCheckout, trackAddPaymentInfo, trackPurchase, trackSchedule } from '@/lib/meta';
 
 const MINI_CRUISE_SERVICE_ID = '533f08d0-c5ab-4358-a300-6d87295a2a26';
 const AALTO_RESOURCE_ID = '3dd71bee-f303-463e-ad78-e05b4faa2234';
 const VIRTA_RESOURCE_ID = '3bffeff6-4ef4-4865-a99b-370b956e355e';
 const TIME_ZONE = 'Europe/Helsinki';
 
-const boats = [
-  { id: AALTO_RESOURCE_ID, name: 'Aalto', capacity: 'Max 8hlö' },
-  { id: VIRTA_RESOURCE_ID, name: 'Virta', capacity: 'Max 8hlö' },
+// Format date to YYYY-MM-DD in Helsinki timezone
+const formatDateInHelsinki = (date: Date): string => {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+};
+
+const getMaxCapacity = (boatId: string): number | undefined =>
+  boatContent.find((b) => b.id === boatId)?.capacity.max;
+
+const cruiseBoats = [
+  { id: AALTO_RESOURCE_ID, contentId: 'aalto', name: 'Aalto' },
+  { id: VIRTA_RESOURCE_ID, contentId: 'virta', name: 'Virta' },
 ];
 
 interface TimeSlot {
@@ -45,9 +59,68 @@ interface CustomerInfo {
 
 interface MiniCruiseBookingShellProps {
   onClose?: () => void;
+  locale?: Locale;
 }
 
-export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShellProps) {
+export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniCruiseBookingShellProps) {
+  const isEn = locale === 'en';
+  const t = {
+    title: isEn ? 'Book a mini cruise' : 'Varaa miniristeily',
+    close: isEn ? 'Close' : 'Sulje',
+    steps: isEn
+      ? ['Boat', 'Date & time', 'Contact details', 'Confirmation']
+      : ['Vene', 'Päivä ja aika', 'Yhteystiedot', 'Vahvistus'],
+    selectBoat: isEn ? 'Choose a sauna boat' : 'Valitse saunalautta',
+    selectBoatSubtitle: isEn
+      ? 'The mini cruise is available on both of our sauna boats.'
+      : 'Miniristeily on saatavilla molemmilla saunalautoillamme.',
+    selectDate: isEn ? 'Choose a date' : 'Valitse päivämäärä',
+    selectDateSubtitle: isEn
+      ? 'Mini cruises are available on Sundays.'
+      : 'Miniristeilyt saatavilla sunnuntaisin.',
+    loadingCalendar: isEn ? 'Loading calendar...' : 'Ladataan kalenteria...',
+    changeDay: isEn ? 'Change day' : 'Vaihda päivä',
+    selectTime: isEn ? 'Choose a start time' : 'Valitse aloitusaika',
+    loadingTimes: isEn ? 'Loading times...' : 'Ladataan aikoja...',
+    noSlots: isEn ? 'No available times for the selected day' : 'Ei vapaita aikoja valitulle päivälle',
+    chooseAnotherDay: isEn ? 'Choose another day' : 'Valitse toinen päivä',
+    contactTitle: isEn ? 'Contact details' : 'Yhteystiedot',
+    firstName: isEn ? 'First name' : 'Etunimi',
+    lastName: isEn ? 'Last name' : 'Sukunimi',
+    email: isEn ? 'Email' : 'Sähköposti',
+    phone: isEn ? 'Phone number' : 'Puhelinnumero',
+    firstNamePlaceholder: isEn ? 'John' : 'Matti',
+    lastNamePlaceholder: isEn ? 'Doe' : 'Meikäläinen',
+    emailPlaceholder: isEn ? 'john@example.com' : 'matti@example.com',
+    summary: isEn ? 'Booking summary' : 'Varauksen yhteenveto',
+    boat: isEn ? 'Boat' : 'Vene',
+    date: isEn ? 'Date' : 'Päivämäärä',
+    time: isEn ? 'Time' : 'Aika',
+    booker: isEn ? 'Booked by' : 'Varaaja',
+    total: isEn ? 'Total' : 'Yhteensä',
+    paymentInfoTitle: isEn ? 'Payment details' : 'Maksutiedot',
+    paymentInfoText: isEn
+      ? 'By clicking "Proceed to payment" you will be redirected to a secure payment system. The booking is confirmed after payment.'
+      : 'Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
+    successTitle: isEn ? 'Booking confirmed!' : 'Varaus vahvistettu!',
+    successText: isEn
+      ? 'The mini cruise is now booked for you. A confirmation has been sent to your email.'
+      : 'Miniristeily on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
+    bookingNumber: isEn ? 'Booking number' : 'Varausnumero',
+    back: isEn ? 'Back' : 'Takaisin',
+    continue: isEn ? 'Continue' : 'Jatka',
+    proceedToPayment: isEn ? 'Proceed to payment' : 'Siirry maksuun',
+    submitting: isEn ? 'Booking...' : 'Varataan...',
+    errorLoadDates: isEn ? 'Failed to load dates' : 'Päivämäärien lataaminen epäonnistui',
+    errorLoadSlots: isEn ? 'Failed to load times' : 'Aikojen lataaminen epäonnistui',
+    errorSelectBoatAndTime: isEn
+      ? 'Select a boat and time before booking'
+      : 'Valitse vene ja aika ennen varausta',
+    errorBookingFailed: isEn ? 'Failed to create booking' : 'Varauksen luominen epäonnistui',
+    capacity: (boatId: string) =>
+      isEn ? `Max ${getMaxCapacity(boatId)} people` : `Max ${getMaxCapacity(boatId)} hlö`,
+  };
+
   const requestIdRef = useRef(0);
   
   const [step, setStep] = useState(1);
@@ -71,7 +144,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
   const [isLoadingMonthData, setIsLoadingMonthData] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [bookingResult, setBookingResult] = useState<any>(null);
+  const [bookingResult, setBookingResult] = useState<{ bookingId?: string; confirmationCode?: string } | null>(null);
 
   // Fetch available dates when boat is selected
   useEffect(() => {
@@ -96,14 +169,14 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
         setAvailableDates(data.dates || []);
       } catch (e) {
         console.error('Error fetching dates:', e);
-        setError('Päivämäärien lataaminen epäonnistui');
+        setError(t.errorLoadDates);
       } finally {
         setIsLoadingDates(false);
       }
     };
     
     fetchDates();
-  }, [selectedBoat]);
+  }, [selectedBoat, t.errorLoadDates]);
 
   // Fetch time slots when date or boat changes
   useEffect(() => {
@@ -132,14 +205,14 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
         }
       } catch (e) {
         console.error('Error fetching slots:', e);
-        setError('Aikojen lataaminen epäonnistui');
+        setError(t.errorLoadSlots);
       } finally {
         setIsLoadingSlots(false);
       }
     };
     
     fetchSlots();
-  }, [selectedBoat, selectedDate]);
+  }, [selectedBoat, selectedDate, t.errorLoadSlots]);
 
   // Fetch available times for the month
   const fetchMonthSlots = async (year: number, month: number) => {
@@ -197,7 +270,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
     } else {
       date.setDate(date.getDate() + 1);
     }
-    const newDateStr = date.toISOString().split('T')[0];
+    const newDateStr = formatDateInHelsinki(date);
     setSelectedDate(newDateStr);
     setTimeSlots(monthSlotsByDate[newDateStr] || []);
     setSelectedSlot(null);
@@ -205,7 +278,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('fi-FI', { 
+    return date.toLocaleDateString(isEn ? 'en-GB' : 'fi-FI', { 
       weekday: 'short', 
       day: 'numeric', 
       month: 'long' 
@@ -214,7 +287,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
 
   const formatTime = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString(isEn ? 'en-GB' : 'fi-FI', { hour: '2-digit', minute: '2-digit' });
   };
 
   const formatPrice = (cents: number | null | undefined) => {
@@ -222,8 +295,20 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
     return `${(cents / 100).toFixed(0)} €`;
   };
 
+  const formatDuration = (duration: string) => {
+    const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+    const h = parseInt(match?.[1] || '0', 10);
+    const m = parseInt(match?.[2] || '0', 10);
+    if (h && m) return `${h} h ${m} min`;
+    if (h) return `${h} h`;
+    return `${m} min`;
+  };
+
   const handleSubmit = async () => {
-    if (!selectedSlot) return;
+    if (!selectedSlot || !selectedBoat) {
+      setError(t.errorSelectBoatAndTime);
+      return;
+    }
     
     setIsSubmitting(true);
     setError(null);
@@ -250,20 +335,35 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
       const data = await res.json();
       
       if (!res.ok) {
-        throw new Error(data.error || 'Varauksen luominen epäonnistui');
+        throw new Error(data.error || t.errorBookingFailed);
       }
       
       setBookingResult(data);
-      
+
+      const value = selectedSlot?.price ? selectedSlot.price.amount / 100 : 120;
+      trackBookingCompleted({
+        value,
+        currency: 'EUR',
+        transaction_id: data.bookingId || 'minicruise-' + Date.now(),
+      });
+      trackPurchase({
+        content_ids: selectedBoat ? [selectedBoat] : undefined,
+        content_name: 'Miniristeily',
+        currency: 'EUR',
+        value,
+        transaction_id: data.bookingId || 'minicruise-' + Date.now(),
+        num_items: 1,
+      });
+
       if (data.requiresPayment && data.paymentUrl) {
         window.location.href = data.paymentUrl;
         return;
       }
       
-      setStep(4); // Success step
-    } catch (e: any) {
+      setStep(5); // Success step
+    } catch (e: unknown) {
       console.error('Error creating booking:', e);
-      setError(e.message || 'Varauksen luominen epäonnistui');
+      setError(e instanceof Error ? e.message : t.errorBookingFailed);
     } finally {
       setIsSubmitting(false);
     }
@@ -280,6 +380,28 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
   };
 
   const handleNext = () => {
+    if (step === 2) {
+      const value = selectedSlot?.price ? selectedSlot.price.amount / 100 : 120;
+      trackBookingStarted({
+        value,
+        currency: 'EUR',
+      });
+      trackInitiateCheckout({
+        content_ids: selectedBoat ? [selectedBoat] : undefined,
+        content_name: 'Miniristeily',
+        currency: 'EUR',
+        value,
+      });
+    }
+    if (step === 3) {
+      const value = selectedSlot?.price ? selectedSlot.price.amount / 100 : 120;
+      trackAddPaymentInfo({
+        content_ids: selectedBoat ? [selectedBoat] : undefined,
+        content_name: 'Miniristeily',
+        currency: 'EUR',
+        value,
+      });
+    }
     if (step === 4) {
       handleSubmit();
     } else {
@@ -291,9 +413,9 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
     <div className="bg-white rounded-xl border border-stone-200 p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-stone-900">Varaa miniristeily</h3>
+        <h3 className="text-xl font-bold text-stone-900">{t.title}</h3>
         {onClose && (
-          <button onClick={onClose} className="text-stone-400 hover:text-stone-600">
+          <button onClick={onClose} className="text-stone-400 hover:text-stone-600" aria-label={t.close}>
             ✕
           </button>
         )}
@@ -302,7 +424,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
       {/* Progress Steps */}
       <div className="mb-6">
         <div className="flex items-center justify-between">
-          {['Vene', 'Päivä ja aika', 'Yhteystiedot', 'Vahvistus'].map((label, index) => {
+          {t.steps.map((label, index) => {
             const stepNumber = index + 1;
             const isCompleted = step > stepNumber;
             const isCurrent = step === stepNumber;
@@ -339,12 +461,12 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
       {step === 1 && (
         <div className="space-y-6">
           <div>
-            <h4 className="mb-4 text-lg font-semibold text-stone-900">Valitse saunalautta</h4>
+            <h4 className="mb-4 text-lg font-semibold text-stone-900">{t.selectBoat}</h4>
             <p className="mb-4 text-sm text-stone-600">
-              Miniristeily on saatavilla molemmilla saunalautoillamme.
+              {t.selectBoatSubtitle}
             </p>
             <div className="grid gap-4">
-              {boats.map((boat) => (
+              {cruiseBoats.map((boat) => (
                 <button
                   key={boat.id}
                   onClick={() => {
@@ -366,7 +488,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
                     </div>
                     <div>
                       <p className="font-semibold text-stone-900">{boat.name}</p>
-                      <p className="text-sm text-stone-600">{boat.capacity}</p>
+                      <p className="text-sm text-stone-600">{t.capacity(boat.contentId)}</p>
                     </div>
                   </div>
                   {selectedBoat === boat.id && <Check className="h-5 w-5 text-[#3b82f6]" />}
@@ -383,14 +505,14 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
           {!selectedDate ? (
             // Show calendar first
             <div>
-              <h4 className="mb-4 text-lg font-semibold text-stone-900">Valitse päivämäärä</h4>
+              <h4 className="mb-4 text-lg font-semibold text-stone-900">{t.selectDate}</h4>
               <p className="mb-4 text-sm text-stone-600">
-                Miniristeilyt saatavilla torstaisin ja sunnuntaisin.
+                {t.selectDateSubtitle}
               </p>
               {isLoadingDates ? (
                 <div className="flex items-center justify-center gap-2 py-8 text-stone-600 rounded-xl border border-stone-200 bg-white">
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Ladataan kalenteria...</span>
+                  <span>{t.loadingCalendar}</span>
                 </div>
               ) : (
                 <SummerCalendar
@@ -399,12 +521,14 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
                     setSelectedDate(date);
                     setTimeSlots(monthSlotsByDate[date] || []);
                     setSelectedSlot(null);
+                    trackSchedule({ content_name: 'Mini cruise date selected' });
                   }}
                   availableDates={availableDates}
                   datesWithSlots={datesWithSlots}
                   onMonthChange={fetchMonthSlots}
                   isLoading={isLoadingMonthData}
                   onNavigateDay={navigateDay}
+                  locale={locale}
                 />
               )}
             </div>
@@ -436,20 +560,20 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
                   }}
                   className="text-sm text-[#3b82f6] hover:underline"
                 >
-                  Vaihda päivä
+                  {t.changeDay}
                 </button>
               </div>
 
               <div>
-                <h4 className="mb-4 text-lg font-semibold text-stone-900">Valitse aloitusaika</h4>
+                <h4 className="mb-4 text-lg font-semibold text-stone-900">{t.selectTime}</h4>
                 {isLoadingSlots ? (
                   <div className="flex items-center justify-center gap-2 py-8 text-stone-600">
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span className="text-sm">Ladataan aikoja...</span>
+                    <span className="text-sm">{t.loadingTimes}</span>
                   </div>
                 ) : timeSlots.length === 0 ? (
                   <div className="rounded-xl bg-stone-50 p-6 text-center">
-                    <p className="text-stone-600">Ei vapaita aikoja valitulle päivälle</p>
+                    <p className="text-stone-600">{t.noSlots}</p>
                     <button
                       onClick={() => {
                         setSelectedDate(null);
@@ -457,15 +581,22 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
                       }}
                       className="mt-3 text-sm text-[#3b82f6] hover:underline"
                     >
-                      Valitse toinen päivä
+                      {t.chooseAnotherDay}
                     </button>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {timeSlots.map((slot, i) => (
+                    {timeSlots.map((slot) => (
                       <button
-                        key={i}
-                        onClick={() => setSelectedSlot(slot)}
+                        key={slot.startTime}
+                        onClick={() => {
+                          setSelectedSlot(slot);
+                          trackSchedule({
+                            content_name: 'Mini cruise time selected',
+                            currency: 'EUR',
+                            value: slot.price ? slot.price.amount / 100 : 120,
+                          });
+                        }}
                         className={`rounded-lg border p-4 text-left transition-all ${
                           selectedSlot?.startTime === slot.startTime 
                             ? 'border-[#3b82f6] bg-[#3b82f6]/5' 
@@ -493,65 +624,69 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
       {/* Step 3: Contact Info */}
       {step === 3 && (
         <div className="space-y-6">
-          <h4 className="text-lg font-semibold text-stone-900">Yhteystiedot</h4>
+          <h4 className="text-lg font-semibold text-stone-900">{t.contactTitle}</h4>
           
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-1">
-                  Etunimi *
+                <label htmlFor="mini-first-name" className="block text-sm font-medium text-stone-700 mb-1">
+                  {t.firstName} *
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
                   <input
+                    id="mini-first-name"
                     type="text"
                     value={customerInfo.firstName}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, firstName: e.target.value })}
                     className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
-                    placeholder="Matti"
+                    placeholder={t.firstNamePlaceholder}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-1">
-                  Sukunimi *
+                <label htmlFor="mini-last-name" className="block text-sm font-medium text-stone-700 mb-1">
+                  {t.lastName} *
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
                   <input
+                    id="mini-last-name"
                     type="text"
                     value={customerInfo.lastName}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, lastName: e.target.value })}
                     className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
-                    placeholder="Meikäläinen"
+                    placeholder={t.lastNamePlaceholder}
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Sähköposti *
+              <label htmlFor="mini-email" className="block text-sm font-medium text-stone-700 mb-1">
+                {t.email} *
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
                 <input
+                  id="mini-email"
                   type="email"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
                   className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
-                  placeholder="matti@example.com"
+                  placeholder={t.emailPlaceholder}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Puhelinnumero
+              <label htmlFor="mini-phone" className="block text-sm font-medium text-stone-700 mb-1">
+                {t.phone}
               </label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
                 <input
+                  id="mini-phone"
                   type="tel"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
@@ -567,30 +702,30 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
       {/* Step 4: Summary */}
       {step === 4 && (
         <div className="space-y-6">
-          <h4 className="text-lg font-semibold text-stone-900">Varauksen yhteenveto</h4>
+          <h4 className="text-lg font-semibold text-stone-900">{t.summary}</h4>
           
           <div className="rounded-xl border border-stone-200 bg-white p-6 space-y-4">
             <div className="flex justify-between">
-              <span className="text-stone-600">Vene</span>
-              <span className="font-medium">{boats.find(b => b.id === selectedBoat)?.name}</span>
+              <span className="text-stone-600">{t.boat}</span>
+              <span className="font-medium">{cruiseBoats.find(b => b.id === selectedBoat)?.name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-stone-600">Päivämäärä</span>
+              <span className="text-stone-600">{t.date}</span>
               <span className="font-medium">{selectedDate && formatDate(selectedDate)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-stone-600">Aika</span>
+              <span className="text-stone-600">{t.time}</span>
               <span className="font-medium">
-                {selectedSlot && formatTime(selectedSlot.startTime)} (1.5h)
+                {selectedSlot && `${formatTime(selectedSlot.startTime)} (${formatDuration(selectedSlot.duration)})`}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-stone-600">Varaaja</span>
+              <span className="text-stone-600">{t.booker}</span>
               <span className="font-medium">{customerInfo.firstName} {customerInfo.lastName}</span>
             </div>
             <div className="border-t border-stone-200 pt-4">
               <div className="flex justify-between text-lg font-semibold">
-                <span>Yhteensä</span>
+                <span>{t.total}</span>
                 <span>{selectedSlot?.price ? formatPrice(selectedSlot.price.amount) : '120 €'}</span>
               </div>
             </div>
@@ -600,10 +735,9 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
             <div className="flex gap-3">
               <Info className="h-5 w-5 shrink-0 text-amber-600" />
               <div>
-                <p className="font-medium text-amber-900">Maksutiedot</p>
+                <p className="font-medium text-amber-900">{t.paymentInfoTitle}</p>
                 <p className="mt-1 text-sm text-amber-800">
-                  Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. 
-                  Varaus vahvistuu maksun jälkeen.
+                  {t.paymentInfoText}
                 </p>
               </div>
             </div>
@@ -620,14 +754,14 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
             </div>
           </div>
           <div>
-            <h4 className="text-xl font-semibold text-stone-900">Varaus vahvistettu!</h4>
+            <h4 className="text-xl font-semibold text-stone-900">{t.successTitle}</h4>
             <p className="mt-2 text-stone-600">
-              Miniristeily on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.
+              {t.successText}
             </p>
           </div>
           {bookingResult?.confirmationCode && (
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-              <p className="text-sm text-stone-600">Varausnumero</p>
+              <p className="text-sm text-stone-600">{t.bookingNumber}</p>
               <p className="text-2xl font-bold text-stone-900">{bookingResult.confirmationCode}</p>
             </div>
           )}
@@ -640,7 +774,7 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
           {step > 1 ? (
             <Button variant="outline" onClick={() => setStep(step - 1)}>
               <ChevronLeft className="mr-2 h-4 w-4" />
-              Takaisin
+              {t.back}
             </Button>
           ) : (
             <div></div>
@@ -653,13 +787,13 @@ export default function MiniCruiseBookingShell({ onClose }: MiniCruiseBookingShe
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Varataan...
+                {t.submitting}
               </>
             ) : step === 4 ? (
-              'Siirry maksuun'
+              t.proceedToPayment
             ) : (
               <>
-                Jatka
+                {t.continue}
                 <ChevronRight className="ml-2 h-4 w-4" />
               </>
             )}

@@ -1,9 +1,16 @@
-import Link from 'next/link';
+'use client';
+
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { footerNavigation } from '@/content/navigation';
+import { trackContact } from '@/lib/meta';
 
 export default function SiteFooter() {
+  const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
+
   return (
     <footer className="border-t border-[#163d3d] bg-[#1e40af]">
       <div className="container-padding mx-auto max-w-7xl py-12 md:py-16">
@@ -14,7 +21,7 @@ export default function SiteFooter() {
               <div className="relative h-10 w-10">
                 <Image
                   src="/images/logo.png"
-                  alt="Hyvän Tuulen Sauna"
+                  alt=""
                   fill
                   className="object-contain"
                 />
@@ -24,8 +31,7 @@ export default function SiteFooter() {
               </span>
             </Link>
             <p className="mt-4 text-sm text-white/70 leading-relaxed">
-              Aito suomalainen saunaelämys merellisessä Helsingissä. 
-              Kesäisin saunomme kelluvissa saunoissamme, talvisin avantouinnin kera.
+              {t('tagline')}
             </p>
             
             {/* Social Links */}
@@ -58,7 +64,7 @@ export default function SiteFooter() {
           {/* Services */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white/90">
-              Palvelut
+              {t('links')}
             </h3>
             <ul className="mt-4 space-y-3">
               {footerNavigation.services.map((item) => (
@@ -67,7 +73,7 @@ export default function SiteFooter() {
                     href={item.href}
                     className="text-sm text-white/70 transition-colors hover:text-white"
                   >
-                    {item.label}
+                    {tNav(item.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -77,7 +83,7 @@ export default function SiteFooter() {
           {/* Info */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white/90">
-              Tietoa
+              {t('links')}
             </h3>
             <ul className="mt-4 space-y-3">
               {footerNavigation.info.map((item) => (
@@ -86,7 +92,7 @@ export default function SiteFooter() {
                     href={item.href}
                     className="text-sm text-white/70 transition-colors hover:text-white"
                   >
-                    {item.label}
+                    {tNav(item.labelKey)}
                   </Link>
                 </li>
               ))}
@@ -96,12 +102,13 @@ export default function SiteFooter() {
           {/* Contact */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white/90">
-              Yhteystiedot
+              {t('contact')}
             </h3>
             <ul className="mt-4 space-y-3">
               <li>
                 <a 
                   href={`tel:${footerNavigation.contact.phone}`}
+                  onClick={() => trackContact({ content_name: 'Footer phone' })}
                   className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
                 >
                   <Phone className="h-4 w-4" />
@@ -111,6 +118,7 @@ export default function SiteFooter() {
               <li>
                 <a 
                   href={`mailto:${footerNavigation.contact.email}`}
+                  onClick={() => trackContact({ content_name: 'Footer email' })}
                   className="flex items-center gap-2 text-sm text-white/70 transition-colors hover:text-white"
                 >
                   <Mail className="h-4 w-4" />
@@ -129,16 +137,8 @@ export default function SiteFooter() {
         <div className="mt-12 border-t border-white/10 pt-8">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-sm text-white/50">
-              © {new Date().getFullYear()} Hyvän Tuulen Sauna. Kaikki oikeudet pidätetään.
+              © {new Date().getFullYear()} {t('companyName')}. {t('rights')}
             </p>
-            <div className="flex gap-6">
-              <Link href="#" className="text-sm text-white/50 hover:text-white/80">
-                Tietosuoja
-              </Link>
-              <Link href="#" className="text-sm text-white/50 hover:text-white/80">
-                Toimitusehdot
-              </Link>
-            </div>
           </div>
         </div>
       </div>

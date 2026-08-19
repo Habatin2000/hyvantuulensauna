@@ -86,6 +86,38 @@ export function useAvailability() {
   return { availability, isLoading, error, fetchAvailability };
 }
 
+interface MonthAvailability {
+  year: number;
+  month: number;
+  dates: Record<string, { hasSlots: boolean; slots: TimeSlot[] }>;
+}
+
+// Hook: Get month availability overview
+export function useMonthAvailability() {
+  const [data, setData] = useState<MonthAvailability | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchMonth = useCallback(async (year: number, month: number) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/bookla/availability/month?year=${year}&month=${month}`);
+      if (!res.ok) throw new Error('Failed to fetch month availability');
+      const result = await res.json();
+      setData(result);
+      return result;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return { data, isLoading, error, fetchMonth };
+}
+
 // Hook: Create booking
 export function useBooking() {
   const [isLoading, setIsLoading] = useState(false);
@@ -96,6 +128,8 @@ export function useBooking() {
     tickets: { ticketID: string; quantity: number }[];
     client: { firstName: string; lastName: string; email: string; phone?: string };
     subscriptionCode?: string;
+    contractId?: string;
+    resourceId?: string;
   }) => {
     setIsLoading(true);
     setError(null);

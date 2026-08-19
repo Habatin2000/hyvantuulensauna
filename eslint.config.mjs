@@ -12,6 +12,13 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Build artifacts and non-source directories:
+    ".open-next/**",
+    ".wrangler/**",
+    "trace/**",
+    "assets-originals/**",
+    // Standalone Node utility scripts (CommonJS, run manually) — not app code.
+    "scripts/**",
   ]),
 ]);
 

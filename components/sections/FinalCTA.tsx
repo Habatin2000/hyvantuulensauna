@@ -1,6 +1,11 @@
-import Link from 'next/link';
+'use client';
+
+import Image from 'next/image';
+import { useLocale } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone } from 'lucide-react';
+import { trackLead, trackContact } from '@/lib/meta';
 
 interface FinalCTAProps {
   title: string;
@@ -24,6 +29,7 @@ export default function FinalCTA({
   variant = 'dark' 
 }: FinalCTAProps) {
   const isDark = variant === 'dark';
+  const isEn = useLocale() === 'en';
 
   return (
     <section className={`section-padding ${isDark ? 'bg-[#2563eb]' : 'bg-stone-100'}`}>
@@ -36,7 +42,7 @@ export default function FinalCTA({
         </p>
         
         <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Link href={primaryCta.href}>
+          <Link href={primaryCta.href} onClick={() => trackLead({ content_name: primaryCta.text })}>
             <Button 
               size="lg" 
               className={`font-bold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 ${isDark 
@@ -50,7 +56,7 @@ export default function FinalCTA({
           </Link>
           
           {secondaryCta && (
-            <Link href={secondaryCta.href}>
+            <Link href={secondaryCta.href} onClick={() => trackContact({ content_name: secondaryCta.text })}>
               <Button 
                 size="lg" 
                 className={`font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ${isDark 
@@ -68,17 +74,23 @@ export default function FinalCTA({
         {/* Sponsors */}
         <div className="mt-12 flex flex-col items-center gap-4">
           <span className={`text-sm font-medium uppercase tracking-wider ${isDark ? 'text-white/60' : 'text-stone-500'}`}>
-            Yhteistyössä
+            {isEn ? 'In cooperation with' : 'Yhteistyössä'}
           </span>
           <div className="flex items-center gap-8">
-            <img
+            <Image
               src="/images/harvia-logo.png"
               alt="Harvia"
+              width={114}
+              height={64}
+              loading="lazy"
               className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
             />
-            <img
+            <Image
               src="/images/weber-logo.png"
               alt="Weber"
+              width={64}
+              height={64}
+              loading="lazy"
               className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
             />
           </div>

@@ -22,16 +22,18 @@ interface SummerBookingRequest {
 export async function POST(request: NextRequest) {
   if (!COMPANY_ID || !API_KEY) {
     return NextResponse.json(
-      { error: 'Missing Bookla configuration', missing: { companyId: !COMPANY_ID, apiKey: !API_KEY } },
-      { status: 400 }
+      { error: 'Missing Bookla configuration' },
+      { status: 500 }
     );
   }
 
   try {
     const body: SummerBookingRequest = await request.json();
-    console.log('[SUMMER-BOOKING] Request:', JSON.stringify(body));
 
     const { startTime, duration, resourceId, client, spots } = body;
+
+    // Don't log the full body — it contains customer PII (name, email, phone).
+    console.log('[SUMMER-BOOKING] Request:', { startTime, duration, resourceId, spots });
 
     // Validate required fields
     if (!startTime || !duration || !resourceId || !client?.email || !client?.firstName || !client?.lastName) {
@@ -41,11 +43,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate minimum duration (3 hours)
+    // Validate minimum duration: 2h on Mon-Thu, 3h on Fri-Sun (Helsinki time)
     const durationMatch = duration.match(/PT(\d+)H/);
-    if (!durationMatch || parseInt(durationMatch[1]) < 3) {
+    const durationHours = durationMatch ? parseInt(durationMatch[1]) : 0;
+    const startDayName = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Helsinki',
+      weekday: 'short',
+    }).format(new Date(startTime));
+    // Mon-Thu -> 2h, Fri-Sun -> 3h
+    const isWeekend = ['Fri', 'Sat', 'Sun'].includes(startDayName);
+    const minHours = isWeekend ? 3 : 2;
+
+    if (!durationMatch || durationHours < minHours) {
       return NextResponse.json(
-        { error: 'Minimi varausaika on 3 tuntia', code: 'MIN_DURATION' },
+        {
+          error: `Minimi varausaika on ${minHours} tuntia`,
+          code: 'MIN_DURATION',
+          minHours,
+        },
         { status: 400 }
       );
     }
@@ -82,13 +97,15 @@ export async function POST(request: NextRequest) {
         );
       }
       if (status === 400) {
+        console.error('[SUMMER-BOOKING] Bookla rejected booking:', typeof result.error === 'string' ? result.error.slice(0, 500) : result.error);
         return NextResponse.json(
-          { error: 'Virheelliset varaustiedot. Tarkista tiedot ja yritä uudelleen.', code: 'BAD_REQUEST', details: result.error },
+          { error: 'Virheelliset varaustiedot. Tarkista tiedot ja yritä uudelleen.', code: 'BAD_REQUEST' },
           { status: 400 }
         );
       }
+      console.error('[SUMMER-BOOKING] Bookla API error:', status, typeof result.error === 'string' ? result.error.slice(0, 500) : result.error);
       return NextResponse.json(
-        { error: 'Bookla API error', status, details: result.error },
+        { error: 'Varauksen luominen epäonnistui. Yritä myöhemmin uudelleen.', code: 'BOOKING_FAILED' },
         { status: 502 }
       );
     }
@@ -121,10 +138,10 @@ export async function POST(request: NextRequest) {
       status: result.bookingStatus,
     });
 
-  } catch (error: any) {
-    console.error('[SUMMER-BOOKING] Unexpected error:', error);
+  } catch (error) {
+    console.error('[SUMMER-BOOKING] Unexpected error:', error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { error: error.message || 'Varauksen luominen epäonnistui', type: error.name },
+      { error: 'Varauksen luominen epäonnistui', code: 'BOOKING_FAILED' },
       { status: 500 }
     );
   }

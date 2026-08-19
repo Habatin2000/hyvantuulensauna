@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useLocale } from 'next-intl';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface GalleryImage {
@@ -17,6 +18,8 @@ interface SquareGalleryProps {
 
 export default function SquareGallery({ images, title }: SquareGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const locale = useLocale();
+  const isEn = locale === 'en';
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -32,8 +35,23 @@ export default function SquareGallery({ images, title }: SquareGalleryProps) {
 
   if (images.length === 0) return null;
 
-  // Duplicate images for infinite loop effect
-  const duplicatedImages = [...images, ...images];
+  const renderSlide = (image: GalleryImage, index: number, keyPrefix: string, isDuplicate: boolean) => (
+    <div
+      key={`${keyPrefix}-${image.id}-${index}`}
+      className="relative aspect-square w-1/2 md:w-1/4 flex-shrink-0 p-2"
+    >
+      <div className="relative h-full w-full overflow-hidden rounded-xl shadow-md">
+        <Image
+          src={image.src}
+          alt={isDuplicate ? '' : image.alt}
+          fill
+          loading={isDuplicate ? 'lazy' : undefined}
+          className="object-cover transition-transform duration-300 hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 25vw"
+        />
+      </div>
+    </div>
+  );
 
   return (
     <section className="py-8 bg-stone-50">
@@ -43,30 +61,20 @@ export default function SquareGallery({ images, title }: SquareGalleryProps) {
             {title}
           </h2>
         )}
-        
+
         <div className="relative">
           {/* Image Carousel with smooth sliding */}
           <div className="overflow-hidden rounded-xl">
-            <div 
+            <div
               className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${currentIndex * (100 / 4)}%)` }}
             >
-              {duplicatedImages.map((image, index) => (
-                <div
-                  key={`${image.id}-${index}`}
-                  className="relative aspect-square w-1/2 md:w-1/4 flex-shrink-0 p-2"
-                >
-                  <div className="relative h-full w-full overflow-hidden rounded-xl shadow-md">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      className="object-cover transition-transform duration-300 hover:scale-105"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                  </div>
-                </div>
-              ))}
+              {images.map((image, index) => renderSlide(image, index, 'main', false))}
+              {/* Duplicated set keeps the visual loop seamless; hidden from
+                  assistive tech so alts are not read twice */}
+              <div className="contents" aria-hidden="true">
+                {images.map((image, index) => renderSlide(image, index, 'loop', true))}
+              </div>
             </div>
           </div>
 
@@ -76,14 +84,14 @@ export default function SquareGallery({ images, title }: SquareGalleryProps) {
               <button
                 onClick={goToPrevious}
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-stone-800 shadow-lg transition-all hover:bg-white hover:scale-105"
-                aria-label="Edellinen"
+                aria-label={isEn ? 'Previous' : 'Edellinen'}
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={goToNext}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-stone-800 shadow-lg transition-all hover:bg-white hover:scale-105"
-                aria-label="Seuraava"
+                aria-label={isEn ? 'Next' : 'Seuraava'}
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -100,7 +108,7 @@ export default function SquareGallery({ images, title }: SquareGalleryProps) {
                   className={`h-2 rounded-full transition-all duration-300 ${
                     index === currentIndex ? 'bg-[#3b82f6] w-6' : 'bg-stone-300 w-2 hover:bg-stone-400'
                   }`}
-                  aria-label={`Siirry kuvaan ${index + 1}`}
+                  aria-label={isEn ? `Go to image ${index + 1}` : `Siirry kuvaan ${index + 1}`}
                 />
               ))}
             </div>

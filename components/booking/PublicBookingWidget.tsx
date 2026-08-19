@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Info } from 'lucide-react';
-import { useServiceInfo, useAvailability, useBooking } from '@/hooks/useBookla';
+import { useServiceInfo, useAvailability, useBooking, useMonthAvailability } from '@/hooks/useBookla';
+import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { trackSchedule, trackInitiateCheckout, trackAddPaymentInfo, trackPurchase } from '@/lib/meta';
+import { calculateFriendOfferTotal } from '@/lib/pricing';
 import BookingStepIndicator from './BookingStepIndicator';
 import PublicSaunaCalendar from './PublicSaunaCalendar';
 import Step2SelectSlotAndTickets from './Step2SelectSlotAndTickets';
@@ -29,16 +32,29 @@ interface TicketType {
 interface MembershipInfo {
   isMember: boolean;
   code?: string;
+  contractId?: string;
   subscriptionId?: string;
   remainingUses?: number | null;
 }
 
 interface PublicBookingWidgetProps {
   showTitle?: boolean;
+  locale?: 'fi' | 'en';
 }
 
-export default function PublicBookingWidget({ showTitle = true }: PublicBookingWidgetProps) {
+export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }: PublicBookingWidgetProps) {
+  const isEn = locale === 'en';
+  const widgetRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(1);
+  const prevStepRef = useRef(step);
+
+  // Auto-scroll to top of widget only when advancing past step 1
+  useEffect(() => {
+    if (step > 1 && prevStepRef.current !== step) {
+      widgetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    prevStepRef.current = step;
+  }, [step]);
   
   // Booking state
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -55,21 +71,79 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
   const [paymentURL, setPaymentURL] = useState<string | null>(null);
   const [membershipNotApplied, setMembershipNotApplied] = useState(false);
   const [membershipErrorMessage, setMembershipErrorMessage] = useState<string | null>(null);
+  const [availableDates, setAvailableDates] = useState<Set<string>>(new Set());
 
   // Hooks
   const { info, isLoading: isLoadingInfo } = useServiceInfo();
+
   const { availability, isLoading: isLoadingAvailability, fetchAvailability } = useAvailability();
   const { isLoading: isBooking, error: bookingError, createBooking } = useBooking();
+  const { data: monthData, isLoading: isLoadingMonth, fetchMonth } = useMonthAvailability();
+
+  const soldOutDates = useMemo(() => {
+    const set = new Set<string>();
+    if (monthData?.dates) {
+      for (const [date, info] of Object.entries(monthData.dates)) {
+        if (
+          info.slots.length > 0 &&
+          info.slots.every((s) => s.spotsAvailable <= 0)
+        ) {
+          set.add(date);
+        }
+      }
+    }
+    return set;
+  }, [monthData]);
+
+  // Populate availableDates when month data arrives
+  useEffect(() => {
+    if (monthData?.dates) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncs fetched month availability into local state; intentional cache-merge pattern
+      setAvailableDates(prev => {
+        const next = new Set(prev);
+        for (const [date, info] of Object.entries(monthData.dates)) {
+          if (info.hasSlots) {
+            next.add(date);
+          }
+        }
+        return next;
+      });
+    }
+  }, [monthData]);
 
   const handleDateSelect = async (date: string) => {
     setSelectedDate(date);
-    await fetchAvailability(date);
+    trackSchedule({ content_name: 'Public sauna date selected' });
+    // Use cached month slots if available
+    const cached = monthData?.dates?.[date];
+    if (cached) {
+      setAvailableDates(prev => {
+        const next = new Set(prev);
+        if (cached.hasSlots) next.add(date);
+        return next;
+      });
+      setStep(2);
+      return;
+    }
+    // Fallback: fetch per-day
+    const data = await fetchAvailability(date);
+    if (data?.slots?.some((s: { spotsAvailable: number }) => s.spotsAvailable > 0)) {
+      setAvailableDates(prev => new Set(prev).add(date));
+    }
     setStep(2);
   };
 
+  // Use cached month slots for the selected date if available
+  const currentSlots = monthData?.dates?.[selectedDate || '']?.slots || availability?.slots || [];
+
+  const getBooklaPrice = (ticketID: string) =>
+    info?.tickets?.find((ti: TicketType) => ti.id === ticketID)?.price || 0;
+
+  const bookingValue = calculateFriendOfferTotal(tickets, getBooklaPrice).total;
+
   const handleBook = async () => {
     if (!selectedSlot || tickets.length === 0) return;
-    
+
     // Reset membership error state
     setMembershipNotApplied(false);
     setMembershipErrorMessage(null);
@@ -79,9 +153,24 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
       tickets: tickets.map(t => ({ ticketID: t.ticketID, quantity: t.quantity })),
       client: customerInfo,
       subscriptionCode: membership?.code,
+      contractId: membership?.contractId,
+      resourceId: selectedSlot.resourceId,
     });
 
     if (result.success) {
+      const value = bookingValue;
+      trackBookingCompleted({
+        value,
+        currency: 'EUR',
+        transaction_id: result.bookingId || 'public-' + Date.now(),
+      });
+      trackPurchase({
+        content_name: 'Julkinen saunavuoro',
+        currency: 'EUR',
+        value,
+        transaction_id: result.bookingId || 'public-' + Date.now(),
+        num_items: tickets.reduce((sum, t) => sum + t.quantity, 0),
+      });
       setBookingSuccess(true);
       // Track if membership was attempted but not applied
       if (membership?.code && result.membershipApplied === false) {
@@ -106,6 +195,11 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
 
   const handleProceedToPayment = () => {
     if (paymentURL) {
+      trackPurchase({
+        content_name: 'Julkinen saunavuoro',
+        currency: 'EUR',
+        value: bookingValue,
+      });
       window.location.href = paymentURL;
     }
   };
@@ -113,12 +207,22 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
   const availableTickets = info?.tickets?.filter((t: TicketType) => t.enabled) || [];
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div ref={widgetRef} className="relative mx-auto max-w-4xl min-h-[500px]">
+      {/* Friend offer corner badge */}
+      <div className="absolute -top-4 -right-4 z-10 rotate-3 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 px-4 py-2 text-center text-xs font-bold text-white shadow-xl shadow-amber-500/30 md:-top-5 md:-right-5 md:px-5 md:py-2.5 md:text-sm">
+        <span className="block leading-tight">
+          {isEn ? 'Friend offer:' : 'Kaveritarjous:'}
+        </span>
+        <span className="block leading-tight">
+          {isEn ? '3 for 2 ❤️' : 'kolme kahden hinnalla ❤️'}
+        </span>
+      </div>
+
       {showTitle && (
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold text-stone-900">Varaa paikka julkiselta vuorolta</h2>
-          <p className="mt-2 text-stone-600">
-            {info?.service?.name || 'Valitse päivämäärä, aika ja liput'}
+        <div className="mb-6 text-center">
+          <h2 className="text-xl font-bold text-stone-900">{isEn ? 'Book a public sauna session' : 'Varaa paikka julkiselta vuorolta'}</h2>
+          <p className="mt-2 text-sm text-stone-600">
+            {info?.service?.name || (isEn ? 'Select date, time and tickets' : 'Valitse päivämäärä, aika ja liput')}
           </p>
         </div>
       )}
@@ -208,23 +312,48 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
             {step === 1 && (
               <PublicSaunaCalendar
                 selectedDate={selectedDate}
-                isLoading={isLoadingAvailability}
+                isLoading={isLoadingMonth || isLoadingAvailability}
                 onSelectDate={handleDateSelect}
+                availableDates={availableDates}
+                soldOutDates={soldOutDates}
+                onMonthChange={(year, month) => fetchMonth(year, month)}
+                locale={locale}
               />
             )}
 
-            {step === 2 && selectedDate && availability && (
+            {step === 2 && selectedDate && currentSlots.length > 0 && (
               <Step2SelectSlotAndTickets
                 selectedDate={selectedDate}
-                slots={availability.slots}
+                slots={currentSlots}
                 availableTickets={availableTickets}
                 selectedSlot={selectedSlot}
                 tickets={tickets}
                 onSelectSlot={setSelectedSlot}
                 onUpdateTickets={setTickets}
-                onNext={() => setStep(3)}
+                locale={locale}
+                onNext={() => {
+                  trackBookingStarted();
+                  trackInitiateCheckout({
+                    content_name: 'Julkinen saunavuoro',
+                    currency: 'EUR',
+                    value: bookingValue,
+                  });
+                  setStep(3);
+                }}
                 onBack={() => setStep(1)}
               />
+            )}
+
+            {step === 2 && selectedDate && currentSlots.length === 0 && !isLoadingAvailability && (
+              <div className="text-center py-8">
+                <p className="text-stone-600">Ei vapaita aikoja tälle päivälle.</p>
+                <button
+                  onClick={() => setStep(1)}
+                  className="mt-4 inline-flex items-center gap-2 rounded-lg border border-stone-300 px-6 py-3 font-medium text-stone-700 hover:bg-stone-50"
+                >
+                  Takaisin
+                </button>
+              </div>
             )}
 
             {step === 3 && (
@@ -232,7 +361,11 @@ export default function PublicBookingWidget({ showTitle = true }: PublicBookingW
                 customerInfo={customerInfo}
                 onUpdateInfo={setCustomerInfo}
                 onMembershipCheck={setMembership}
-                onNext={() => setStep(4)}
+                locale={locale}
+                onNext={() => {
+                  trackAddPaymentInfo({ content_name: 'Julkinen saunavuoro' });
+                  setStep(4);
+                }}
                 onBack={() => setStep(2)}
               />
             )}

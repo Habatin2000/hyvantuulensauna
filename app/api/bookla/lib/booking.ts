@@ -24,14 +24,26 @@ export interface BooklaClientBookingParams {
   duration: string;
   spots?: number;
   tickets?: Record<string, number>;
-  metaData?: Record<string, any>;
+  metaData?: Record<string, unknown>;
   code?: string; // subscription code — only for public sauna
+}
+
+// Shape of the Bookla /client/bookings response (fields actually accessed).
+export interface BooklaClientBookingData {
+  id?: string;
+  status?: string;
+  paymentURL?: string;
+  paymentUrl?: string;
+  price?: number;
+  confirmationCode?: string;
+  code?: string;
+  [key: string]: unknown;
 }
 
 export interface BooklaClientBookingResult {
   ok: boolean;
   status?: number;
-  data?: any;
+  data?: BooklaClientBookingData;
   error?: string;
   raw?: string;
   paymentURL?: string | null;
@@ -62,7 +74,7 @@ export async function authenticateClient(params: {
     lastName: params.lastName,
   };
 
-  console.log('[BOOKLA AUTH] Request:', { endpoint: url, email: params.email });
+  console.log('[BOOKLA AUTH] Request:', { endpoint: url });
 
   const res = await fetch(url, {
     method: 'POST',
@@ -74,7 +86,8 @@ export async function authenticateClient(params: {
   });
 
   const text = await res.text();
-  console.log('[BOOKLA AUTH] Response:', { status: res.status, body: text.slice(0, 500) });
+  // Never log the body — it contains the accessToken.
+  console.log('[BOOKLA AUTH] Response:', { status: res.status });
 
   if (!res.ok) {
     throw new Error(`Client auth failed: ${res.status} — ${text.slice(0, 200)}`);
@@ -96,7 +109,17 @@ export async function booklaClientBooking(
 ): Promise<BooklaClientBookingResult> {
   const url = `${params.baseUrl}/client/bookings`;
 
-  const body: any = {
+  const body: {
+    companyID: string;
+    serviceID: string;
+    resourceID: string;
+    startTime: string;
+    duration: string;
+    spots?: number;
+    tickets?: Record<string, number>;
+    metaData?: Record<string, unknown>;
+    code?: string;
+  } = {
     companyID: params.companyId,
     serviceID: params.serviceId,
     resourceID: params.resourceId,
@@ -117,10 +140,11 @@ export async function booklaClientBooking(
     body.code = params.code;
   }
 
+  // Don't log the payload — it contains customer PII (metaData.phone, tickets).
   console.log('[BOOKLA REQUEST]', {
     endpoint: url,
     authMethod: 'Bearer',
-    payload: JSON.stringify(body, null, 2),
+    serviceId: params.serviceId,
   });
 
   const res = await fetch(url, {
@@ -133,20 +157,20 @@ export async function booklaClientBooking(
   });
 
   const text = await res.text();
-  let data: any = null;
+  let data: BooklaClientBookingData | null = null;
   try {
     data = JSON.parse(text);
   } catch {
     // Not valid JSON — reported below
   }
 
+  // Don't log the raw body — it may contain customer PII.
   console.log('[BOOKLA RESPONSE]', {
     httpStatus: res.status,
     bookingStatus: data?.status ?? null,
-    paymentURL: data?.paymentURL ?? data?.paymentUrl ?? null,
+    hasPaymentURL: Boolean(data?.paymentURL ?? data?.paymentUrl),
     price: data?.price ?? null,
     bookingId: data?.id ?? null,
-    body: text.slice(0, 1000),
   });
 
   if (!res.ok) {
@@ -159,12 +183,11 @@ export async function booklaClientBooking(
 
   const isConfirmedByBookla =
     data?.status === 'confirmed' ||
-    (!data?.paymentURL && !data?.paymentUrl) ||
     data?.price === 0;
 
   return {
     ok: true,
-    data,
+    data: data ?? undefined,
     paymentURL: data?.paymentURL || data?.paymentUrl || null,
     price: data?.price || null,
     bookingStatus: data?.status,

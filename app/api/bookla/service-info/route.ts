@@ -1,12 +1,58 @@
 import { NextResponse } from 'next/server';
+import { booklaFetch, getBooklaConfig } from '../lib/bookla-fetch';
 
-const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
-const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
 const SERVICE_ID = process.env.BOOKLA_PUBLIC_SERVICE_ID;
-const API_KEY = process.env.BOOKLA_API_KEY;
+
+const CACHE_HEADERS = { 'Cache-Control': 'public, max-age=30, s-maxage=60' };
+
+type PriceRule = {
+  ticketID: string;
+  price: { price: number } | number;
+  createdAt?: string;
+  priority?: number;
+  limitation?: {
+    dates?: { start: string; end: string }[];
+    daysOfWeek?: number;
+    times?: { start: string; end: string }[];
+  };
+};
+
+function getPriceValue(rule?: PriceRule): number {
+  if (!rule) return 0;
+  const priceValue = rule.price;
+  if (typeof priceValue === 'object' && priceValue !== null) {
+    return (priceValue as { price: number }).price;
+  }
+  if (typeof priceValue === 'number') {
+    return priceValue;
+  }
+  return 0;
+}
+
+function isRuleActive(rule: PriceRule, ref = new Date()): boolean {
+  const dates = rule.limitation?.dates;
+  if (dates && dates.length > 0) {
+    const t = ref.getTime();
+    return dates.some(
+      (d) => new Date(d.start).getTime() <= t && t <= new Date(d.end).getTime()
+    );
+  }
+  return true;
+}
+
+function selectPriceRule(rules: PriceRule[]): PriceRule | undefined {
+  if (rules.length === 0) return undefined;
+  const active = rules.filter((r) => isRuleActive(r));
+  const pool = active.length > 0 ? active : rules;
+  return pool.sort(
+    (a, b) =>
+      new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+  )[0];
+}
 
 export async function GET() {
-  if (!COMPANY_ID || !SERVICE_ID || !API_KEY) {
+  const { companyId, apiKey } = getBooklaConfig({ preferBookingKey: true });
+  if (!companyId || !SERVICE_ID || !apiKey) {
     return NextResponse.json(
       { error: 'Missing Bookla configuration' },
       { status: 500 }
@@ -15,10 +61,11 @@ export async function GET() {
 
   try {
     // Fetch service info
-    const serviceUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SERVICE_ID}`;
-    const serviceRes = await fetch(serviceUrl, {
-      headers: { 'x-api-key': API_KEY },
-    });
+    const serviceRes = await booklaFetch(
+      `/companies/${companyId}/services/${SERVICE_ID}`,
+      {},
+      apiKey
+    );
 
     if (!serviceRes.ok) {
       throw new Error(`Service fetch failed: ${serviceRes.status}`);
@@ -27,10 +74,11 @@ export async function GET() {
     const service = await serviceRes.json();
 
     // Fetch tickets
-    const ticketsUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SERVICE_ID}/tickets`;
-    const ticketsRes = await fetch(ticketsUrl, {
-      headers: { 'x-api-key': API_KEY },
-    });
+    const ticketsRes = await booklaFetch(
+      `/companies/${companyId}/services/${SERVICE_ID}/tickets`,
+      {},
+      apiKey
+    );
 
     let tickets = [];
     if (ticketsRes.ok) {
@@ -38,12 +86,13 @@ export async function GET() {
     }
 
     // Fetch prices
-    const pricesUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SERVICE_ID}/prices`;
-    const pricesRes = await fetch(pricesUrl, {
-      headers: { 'x-api-key': API_KEY },
-    });
+    const pricesRes = await booklaFetch(
+      `/companies/${companyId}/services/${SERVICE_ID}/prices`,
+      {},
+      apiKey
+    );
 
-    let prices: { rules?: { ticketID: string; price: { price: number } | number }[] } = {};
+    let prices: { rules?: PriceRule[] } = {};
     if (pricesRes.ok) {
       prices = await pricesRes.json();
     }
@@ -51,16 +100,9 @@ export async function GET() {
     // Combine ticket info with prices
     // Note: Bookla returns price as an object with {id, price, comparedPrice}
     const ticketsWithPrices = tickets.map((ticket: { id: string; name: string; enabled: boolean }) => {
-      const priceRule = prices.rules?.find((r: { ticketID: string; price?: { price: number } | number }) => r.ticketID === ticket.id);
-      // Handle both object price {price: number} and direct number
-      // Note: Bookla returns prices in cents, convert to euros
-      const priceValue = priceRule?.price;
-      const priceInCents = typeof priceValue === 'object' && priceValue !== null 
-        ? (priceValue as { price: number }).price 
-        : typeof priceValue === 'number' 
-          ? priceValue 
-          : 0;
-      const numericPrice = priceInCents / 100;
+      const ticketRules = (prices.rules || []).filter((r) => r.ticketID === ticket.id);
+      const priceRule = selectPriceRule(ticketRules);
+      const numericPrice = getPriceValue(priceRule) / 100;
       return {
         id: ticket.id,
         name: ticket.name,
@@ -69,10 +111,13 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json({
-      service,
-      tickets: ticketsWithPrices,
-    });
+    return NextResponse.json(
+      {
+        service,
+        tickets: ticketsWithPrices,
+      },
+      { headers: CACHE_HEADERS }
+    );
   } catch (error) {
     console.error('Error fetching service info:', error);
     return NextResponse.json(

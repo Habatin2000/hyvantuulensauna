@@ -1,6 +1,7 @@
 'use client';
 
 import { Minus, Plus, ChevronLeft, ChevronRight, Info, Clock } from 'lucide-react';
+import { calculateFriendOfferTotal } from '@/lib/pricing';
 
 interface TimeSlot {
   startTime: string;
@@ -28,6 +29,7 @@ interface Step2SelectSlotAndTicketsProps {
   onUpdateTickets: (tickets: { ticketID: string; name: string; quantity: number }[]) => void;
   onNext: () => void;
   onBack: () => void;
+  locale?: 'fi' | 'en';
 }
 
 export default function Step2SelectSlotAndTickets({
@@ -40,7 +42,9 @@ export default function Step2SelectSlotAndTickets({
   onUpdateTickets,
   onNext,
   onBack,
+  locale = 'fi',
 }: Step2SelectSlotAndTicketsProps) {
+  const isEn = locale === 'en';
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr + 'T00:00:00');
     return date.toLocaleDateString('fi-FI', {
@@ -73,30 +77,32 @@ export default function Step2SelectSlotAndTickets({
   };
 
   const totalQuantity = tickets.reduce((sum, t) => sum + t.quantity, 0);
-  const totalPrice = tickets.reduce((sum, t) => {
-    const ticket = availableTickets.find(at => at.id === t.ticketID);
-    return sum + (ticket?.price || 0) * t.quantity;
-  }, 0);
+  const getTicketPrice = (ticketID: string) =>
+    availableTickets.find(at => at.id === ticketID)?.price || 0;
+  const { total: totalPrice, originalTotal, savings } = calculateFriendOfferTotal(
+    tickets,
+    getTicketPrice
+  );
 
   const formatTime = (hour: number) => `${String(hour).padStart(2, '0')}:00`;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Date info */}
-      <div className="rounded-lg bg-[#3b82f6]/5 p-4">
-        <p className="font-medium text-stone-900">{formatDate(selectedDate)}</p>
+      <div className="rounded-lg bg-[#3b82f6]/5 p-2.5">
+        <p className="text-sm font-medium text-stone-900">{formatDate(selectedDate)}</p>
       </div>
 
       {/* Time slots */}
       <div>
-        <h3 className="mb-4 text-lg font-semibold text-stone-900">Valitse aika</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <h3 className="mb-3 text-base font-semibold text-stone-900">Valitse aika</h3>
+        <div className="grid grid-cols-2 gap-2.5">
           {slots.map((slot) => (
             <button
               key={slot.startTime}
               onClick={() => onSelectSlot(slot)}
               disabled={slot.spotsAvailable === 0}
-              className={`rounded-xl border p-4 text-center transition-all ${
+              className={`rounded-lg border p-3 text-center transition-all ${
                 selectedSlot?.startTime === slot.startTime
                   ? 'border-[#3b82f6] bg-[#3b82f6]/5'
                   : slot.spotsAvailable === 0
@@ -105,12 +111,12 @@ export default function Step2SelectSlotAndTickets({
               }`}
             >
               <div className="flex items-center justify-center gap-2">
-                <Clock className="h-4 w-4 text-[#3b82f6]" />
-                <span className="font-semibold text-stone-900">
+                <Clock className="h-3.5 w-3.5 text-[#3b82f6]" />
+                <span className="text-sm font-semibold text-stone-900">
                   {formatTime(slot.startHour)} - {formatTime(slot.endHour)}
                 </span>
               </div>
-              <p className={`mt-1 text-sm ${
+              <p className={`mt-1 text-xs ${
                 slot.spotsAvailable > 5 ? 'text-green-600' : 
                 slot.spotsAvailable > 0 ? 'text-amber-600' : 'text-red-600'
               }`}>
@@ -124,9 +130,9 @@ export default function Step2SelectSlotAndTickets({
       {/* Tickets */}
       {selectedSlot && (
         <div>
-          <h3 className="mb-4 text-lg font-semibold text-stone-900">Valitse liput</h3>
+          <h3 className="mb-3 text-base font-semibold text-stone-900">Valitse liput</h3>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             {availableTickets.map((ticket) => {
               const selected = tickets.find(t => t.ticketID === ticket.id);
               const quantity = selected?.quantity || 0;
@@ -134,34 +140,36 @@ export default function Step2SelectSlotAndTickets({
               return (
                 <div 
                   key={ticket.id}
-                  className="flex items-center justify-between rounded-xl border border-stone-200 bg-white p-4"
+                  className="flex items-center justify-between rounded-lg border border-stone-200 bg-white p-3"
                 >
                   <div>
-                    <p className="font-medium text-stone-900">{ticket.name}</p>
-                    <p className="text-sm text-stone-600">{ticket.price.toFixed(2)}€ / hlö</p>
+                    <p className="text-sm font-medium text-stone-900">{ticket.name}</p>
+                    <p className="text-xs text-stone-600">{ticket.price.toFixed(2)}€ / hlö</p>
                     {ticket.name.toLowerCase().includes('opiskelija') && (
-                      <p className="mt-1 flex items-center gap-1 text-xs text-amber-600">
+                      <p className="mt-1 flex items-center gap-1 text-[10px] text-amber-600">
                         <Info className="h-3 w-3" />
                         Opiskelijakortti tarkistetaan
                       </p>
                     )}
                   </div>
                   
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => updateTicketQuantity(ticket, -1)}
                       disabled={quantity === 0}
-                      className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-50"
+                      aria-label={isEn ? `Decrease ${ticket.name}` : `Vähennä ${ticket.name}`}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-50"
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
-                    <span className="w-8 text-center font-medium">{quantity}</span>
+                    <span className="w-6 text-center text-sm font-medium" aria-live="polite">{quantity}</span>
                     <button
                       onClick={() => updateTicketQuantity(ticket, 1)}
                       disabled={totalQuantity >= selectedSlot.spotsAvailable}
-                      className="flex h-10 w-10 items-center justify-center rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-50"
+                      aria-label={isEn ? `Increase ${ticket.name}` : `Lisää ${ticket.name}`}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-50"
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-3.5 w-3.5" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -170,7 +178,7 @@ export default function Step2SelectSlotAndTickets({
           </div>
 
           {totalQuantity >= selectedSlot.spotsAvailable && (
-            <p className="mt-3 text-center text-sm text-amber-600">
+            <p className="mt-2 text-center text-xs text-amber-600">
               Enintään {selectedSlot.spotsAvailable} lippua tähän vuoroon
             </p>
           )}
@@ -179,11 +187,23 @@ export default function Step2SelectSlotAndTickets({
 
       {/* Total */}
       {totalQuantity > 0 && (
-        <div className="rounded-lg bg-stone-50 p-4">
+        <div className="rounded-lg bg-stone-50 p-3">
           <div className="flex items-center justify-between">
-            <span className="text-stone-600">Yhteensä ({totalQuantity} lippua)</span>
-            <span className="text-xl font-bold">{totalPrice.toFixed(2)}€</span>
+            <span className="text-sm text-stone-600">Yhteensä ({totalQuantity} lippua)</span>
+            <div className="text-right">
+              {savings > 0 && (
+                <span className="mr-2 text-sm text-stone-400 line-through">
+                  {originalTotal.toFixed(2)}€
+                </span>
+              )}
+              <span className="text-lg font-bold">{totalPrice.toFixed(2)}€</span>
+            </div>
           </div>
+          {savings > 0 && (
+            <p className="mt-1 text-right text-xs font-medium text-amber-600">
+              Säästät {savings.toFixed(2)}€ kaveritarjouksella
+            </p>
+          )}
         </div>
       )}
 
@@ -191,18 +211,18 @@ export default function Step2SelectSlotAndTickets({
       <div className="flex justify-between">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 rounded-lg border border-stone-300 px-6 py-3 font-medium text-stone-700 hover:bg-stone-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-stone-300 px-5 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-3.5 w-3.5" />
           Takaisin
         </button>
         <button
           onClick={onNext}
           disabled={!selectedSlot || totalQuantity === 0}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:bg-stone-300"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:bg-stone-300"
         >
           Jatka
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight className="h-3.5 w-3.5" />
         </button>
       </div>
     </div>

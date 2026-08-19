@@ -1,6 +1,7 @@
 import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Users, Clock, Check } from 'lucide-react';
 import { Boat } from '@/types';
 
@@ -53,7 +54,7 @@ export default function BoatComparisonCards({
 
               <CardContent className="p-6">
                 {/* Specs */}
-                <div className="mb-4 flex gap-6 text-sm text-stone-600">
+                <div className="mb-4 flex gap-6 text-base text-stone-600">
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-[#3b82f6]" />
                     <span>{boat.capacity.min}-{boat.capacity.max} hlö</span>
@@ -65,14 +66,14 @@ export default function BoatComparisonCards({
                 </div>
 
                 {/* Description */}
-                <p className="mb-6 text-stone-600 leading-relaxed">
+                <p className="mb-6 text-lg text-stone-600 leading-relaxed">
                   {boat.description}
                 </p>
 
                 {/* Features */}
                 <div className="mb-6 space-y-2">
                   {boat.features.slice(0, 4).map((feature) => (
-                    <div key={feature} className="flex items-center gap-2 text-sm text-stone-700">
+                    <div key={feature} className="flex items-center gap-2 text-base text-stone-700">
                       <Check className="h-4 w-4 text-[#3b82f6]" />
                       {feature}
                     </div>
@@ -81,14 +82,14 @@ export default function BoatComparisonCards({
 
                 {/* Ideal for */}
                 <div className="mb-6">
-                  <p className="mb-2 text-xs font-medium uppercase tracking-wider text-stone-500">
+                  <p className="mb-2 text-sm font-medium uppercase tracking-wider text-stone-500">
                     Erinomainen valinta
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {boat.idealFor.map((ideal) => (
                       <span
                         key={ideal}
-                        className="rounded-full bg-stone-100 px-3 py-1 text-xs text-stone-600"
+                        className="rounded-full bg-stone-100 px-3 py-1 text-sm text-stone-600"
                       >
                         {ideal}
                       </span>
@@ -97,9 +98,11 @@ export default function BoatComparisonCards({
                 </div>
 
                 {/* CTA */}
-                <Button className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white">
-                  Varaa {boat.name}
-                </Button>
+                <Link href="/saunalauttaristeilyt-helsingissa#boats" className="block">
+                  <Button size="lg" className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white">
+                    Varaa {boat.name}
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}

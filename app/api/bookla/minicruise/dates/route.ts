@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
-const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
-const API_KEY = process.env.BOOKLA_API_KEY;
+import { booklaFetch, getBooklaConfig } from '../../lib/bookla-fetch';
 
 const TIME_ZONE = 'Europe/Helsinki';
 
 export async function POST(request: NextRequest) {
-  if (!COMPANY_ID || !API_KEY) {
+  const { companyId, apiKey } = getBooklaConfig();
+  if (!companyId || !apiKey) {
     return NextResponse.json(
       { error: 'Missing Bookla configuration' },
       { status: 500 }
@@ -30,7 +28,7 @@ export async function POST(request: NextRequest) {
     // Season: May-September
     const now = new Date();
     const currentYear = now.getFullYear();
-    let seasonStart = new Date(Date.UTC(currentYear, 4, 1, 0, 0, 0)); // May 1
+    const seasonStart = new Date(Date.UTC(currentYear, 4, 1, 0, 0, 0)); // May 1
     const seasonEnd = new Date(Date.UTC(currentYear, 8, 30, 23, 59, 59)); // September 30
     if (seasonEnd < now) {
       seasonStart.setFullYear(currentYear + 1);
@@ -73,15 +71,15 @@ export async function POST(request: NextRequest) {
 }
 
 async function fetchDates(serviceId: string, resourceIDs: string[], from: string, to: string) {
-  const datesUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${serviceId}/dates`;
-  const response = await fetch(datesUrl, {
-    method: 'POST',
-    headers: {
-      'X-API-Key': API_KEY!,
-      'Content-Type': 'application/json',
+  const { companyId, apiKey } = getBooklaConfig();
+  const response = await booklaFetch(
+    `/companies/${companyId}/services/${serviceId}/dates`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ from, to, resourceIDs }),
     },
-    body: JSON.stringify({ from, to, resourceIDs }),
-  });
+    apiKey
+  );
 
   if (!response.ok) {
     const errorText = await response.text();

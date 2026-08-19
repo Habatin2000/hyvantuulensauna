@@ -1,11 +1,9 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
-  // Note: API routes require server mode (not static export)
-  // For static hosting, use 'output: export' without API routes
-  images: {
-    unoptimized: true,
-  },
+  // Image optimization is handled by the OpenNext Cloudflare adapter via the
+  // IMAGES binding in wrangler.jsonc (see https://opennext.js.org/cloudflare/howtos/image)
   trailingSlash: true,
   async redirects() {
     return [
@@ -18,6 +16,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+
+export default withNextIntl(nextConfig);
 
 import('@opennextjs/cloudflare').then(m => m.initOpenNextCloudflareForDev());

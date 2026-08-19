@@ -1,55 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { booklaFetch, getBooklaConfig } from '../lib/bookla-fetch';
 
-const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
-const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
 const SERVICE_ID = process.env.BOOKLA_PUBLIC_SERVICE_ID;
 const RESOURCE_ID = process.env.BOOKLA_PUBLIC_RESOURCE_ID;
-const API_KEY = process.env.BOOKLA_API_KEY;
+
+const CACHE_HEADERS = { 'Cache-Control': 'public, max-age=30, s-maxage=60' };
 
 const TIME_ZONE = 'Europe/Helsinki';
 
 // Public ticket ID (adult) for availability checks
 const PUBLIC_TICKET_ID = '74ef0b6e-c3d2-4da2-aecc-cd8d0b1a09ee';
 
-// Standard time slots for public sauna
-// Mon-Thu: 17-19, 19-21 (new schedule from 2026-03-20), Sat-Sun: 10-12, 12-14, 14-16
-const getStandardSlotHours = (dateStr: string): number[] => {
-  const date = new Date(dateStr + 'T12:00:00Z');
-  const helsinkiStr = date.toLocaleString('en-US', { timeZone: TIME_ZONE });
-  const helsinkiDate = new Date(helsinkiStr);
-  const dow = helsinkiDate.getDay();
-  const isMonThu = dow >= 1 && dow <= 4;
-  const isWeekend = dow === 0 || dow === 6;
-  
-  const NEW_SCHEDULE_CUTOVER = '2026-03-20';
-  const useNewSchedule = dateStr >= NEW_SCHEDULE_CUTOVER;
-  
-  if (isMonThu) {
-    return useNewSchedule ? [17, 19] : [16, 18, 20];
-  }
-  if (isWeekend) {
-    return [10, 12, 14];
-  }
-  return []; // Friday - no public slots
-};
-
-// Convert local Helsinki hour to UTC ISO string
-const toUtcIsoForLocalDateHour = (dateStr: string, hour: number, tz: string): string => {
-  const [y, m, d] = dateStr.split('-').map(Number);
-  const utcGuessBase = new Date(Date.UTC(y, m - 1, d, hour, 0, 0));
-  
-  const getTzOffsetMs = (utcDate: Date) => {
-    const tzDate = new Date(utcDate.toLocaleString('en-US', { timeZone: tz }));
-    return tzDate.getTime() - utcDate.getTime();
-  };
-  
-  let offset = getTzOffsetMs(utcGuessBase);
-  let utc = new Date(utcGuessBase.getTime() - offset);
-  offset = getTzOffsetMs(utc);
-  utc = new Date(utcGuessBase.getTime() - offset);
-  
-  return utc.toISOString();
-};
+// No hardcoded slot hours — Bookla is the source of truth
+// We return all PT2H slots that Bookla returns for the requested date
 
 // Format date for display
 const formatDateInTimeZone = (d: Date, tz: string): string => {
@@ -62,7 +25,8 @@ const formatDateInTimeZone = (d: Date, tz: string): string => {
 };
 
 export async function GET(request: NextRequest) {
-  if (!COMPANY_ID || !SERVICE_ID || !API_KEY) {
+  const { companyId, apiKey } = getBooklaConfig({ preferBookingKey: true });
+  if (!companyId || !SERVICE_ID || !apiKey) {
     return NextResponse.json(
       { error: 'Missing Bookla configuration' },
       { status: 500 }
@@ -95,19 +59,18 @@ export async function GET(request: NextRequest) {
     console.log('Fetching times:', { date, fromISO, toISO });
 
     // Fetch available times from Bookla
-    const timesUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/services/${SERVICE_ID}/times`;
-    const response = await fetch(timesUrl, {
-      method: 'POST',
-      headers: {
-        'x-api-key': API_KEY,
-        'Content-Type': 'application/json',
+    const response = await booklaFetch(
+      `/companies/${companyId}/services/${SERVICE_ID}/times`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          from: fromISO,
+          to: toISO,
+          tickets: { [PUBLIC_TICKET_ID]: 1 },
+        }),
       },
-      body: JSON.stringify({
-        from: fromISO,
-        to: toISO,
-        tickets: { [PUBLIC_TICKET_ID]: 1 },
-      }),
-    });
+      apiKey
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -156,9 +119,15 @@ export async function GET(request: NextRequest) {
     const bestByHour = new Map<number, { spotsAvailable: number; resourceId: string; startTime: string }>();
     for (const s of booklaSlotsForDate) {
       const slotDate = new Date(s.startTime);
-      const helsinkiStr = slotDate.toLocaleString('en-US', { timeZone: TIME_ZONE });
-      const helsinkiDate = new Date(helsinkiStr);
-      const hour = helsinkiDate.getHours();
+      // Use Intl.DateTimeFormat directly for reliable timezone conversion on Cloudflare Workers
+      const hour = parseInt(
+        new Intl.DateTimeFormat('en-US', {
+          timeZone: TIME_ZONE,
+          hour: 'numeric',
+          hour12: false,
+        }).format(slotDate),
+        10
+      );
       
       const existing = bestByHour.get(hour);
       if (!existing || s.spotsAvailable > existing.spotsAvailable) {
@@ -170,33 +139,33 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Build standard slots
-    const standardHours = getStandardSlotHours(date);
-    const slots = standardHours.map((hour) => {
-      const best = bestByHour.get(hour);
-      const startTime = best?.startTime || toUtcIsoForLocalDateHour(date, hour, TIME_ZONE);
-      
-      // Calculate end time (2 hours later)
-      const startDate = new Date(startTime);
+    // Build slots from all unique hours Bookla returned
+    const sortedHours = Array.from(bestByHour.keys()).sort((a, b) => a - b);
+    const slots = sortedHours.map((hour) => {
+      const best = bestByHour.get(hour)!;
+      const startDate = new Date(best.startTime);
       const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
       
       return {
-        startTime,
+        startTime: best.startTime,
         endTime: endDate.toISOString(),
         startHour: hour,
         endHour: hour + 2,
-        spotsAvailable: best ? best.spotsAvailable : 0,
-        resourceId: best?.resourceId || RESOURCE_ID || '',
+        spotsAvailable: best.spotsAvailable,
+        resourceId: best.resourceId,
       };
     });
 
     console.log(`Returning ${slots.length} time slots`);
 
-    return NextResponse.json({
-      date,
-      slots,
-      timeZone,
-    });
+    return NextResponse.json(
+      {
+        date,
+        slots,
+        timeZone,
+      },
+      { headers: CACHE_HEADERS }
+    );
   } catch (error) {
     console.error('Error fetching availability:', error);
     return NextResponse.json(

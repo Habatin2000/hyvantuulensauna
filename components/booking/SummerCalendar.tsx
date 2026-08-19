@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, RefreshCw, Loader2 } from 'lucide-react';
 
 interface SummerCalendarProps {
@@ -12,6 +12,7 @@ interface SummerCalendarProps {
   isLoading?: boolean; // Loading state for fetching month data
   onRefresh?: () => void; // Refresh button handler
   onNavigateDay?: (direction: 'prev' | 'next') => void; // Day navigation handler
+  locale?: 'fi' | 'en';
 }
 
 const WEEKDAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
@@ -32,43 +33,40 @@ const formatDateInHelsinki = (date: Date): string => {
   }).format(date);
 };
 
-export default function SummerCalendar({ 
-  selectedDate, 
-  onSelectDate, 
+export default function SummerCalendar({
+  selectedDate,
+  onSelectDate,
   availableDates,
   datesWithSlots,
   onMonthChange,
   isLoading = false,
   onRefresh,
-  onNavigateDay
+  locale = 'fi',
 }: SummerCalendarProps) {
-  // Start from May 1st of current year (summer season start)
-  const [currentMonth, setCurrentMonth] = useState(() => {
-    const now = new Date();
-    // Get current date in Helsinki timezone
-    const helsinkiDateStr = new Intl.DateTimeFormat('en-CA', {
-      timeZone: TIME_ZONE,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    }).format(now);
-    const [year, month] = helsinkiDateStr.split('-').map(Number);
-    // If we're before May, start from May; otherwise start from current month
-    const startMonth = month < 5 ? 4 : month - 1; // 4 = May (0-indexed)
-    return new Date(year, startMonth, 1);
-  });
+  const isEn = locale === 'en';
+  const [mounted, setMounted] = useState(false);
 
-  const today = useMemo(() => {
+  // Start from May 1st of current year (summer season start)
+  const [currentMonth, setCurrentMonth] = useState(() => new Date(2026, 4, 1));
+  const [today, setToday] = useState(() => new Date(2026, 4, 1));
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration guard: must set state after mount (server has no clock/timezone)
+    setMounted(true);
     const now = new Date();
-    // Get today's date in Helsinki timezone
     const helsinkiDateStr = new Intl.DateTimeFormat('en-CA', {
       timeZone: TIME_ZONE,
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
     }).format(now);
-    return new Date(helsinkiDateStr + 'T00:00:00');
-  }, []);
+    const [year, month, day] = helsinkiDateStr.split('-').map(Number);
+    const startMonth = month < 5 ? 4 : month - 1;
+    const initialMonth = new Date(year, startMonth, 1);
+    setCurrentMonth(initialMonth);
+    setToday(new Date(year, month - 1, day));
+    onMonthChange?.(initialMonth.getFullYear(), initialMonth.getMonth() + 1);
+  }, [onMonthChange]);
 
   // Create set for faster lookup
   const availableDatesSet = useMemo(() => new Set(availableDates), [availableDates]);
@@ -130,18 +128,6 @@ export default function SummerCalendar({
     return days;
   }, [currentMonth, today]);
 
-  // Track if initial fetch has been done
-  const hasInitialFetchRef = useRef(false);
-  
-  // Initial fetch on mount only
-  useEffect(() => {
-    if (!hasInitialFetchRef.current && onMonthChange) {
-      hasInitialFetchRef.current = true;
-      onMonthChange(currentMonth.getFullYear(), currentMonth.getMonth());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only on mount
-
   const navigateMonth = (direction: 'prev' | 'next') => {
     const newMonth = new Date(currentMonth);
     if (direction === 'prev') {
@@ -152,7 +138,7 @@ export default function SummerCalendar({
     setCurrentMonth(newMonth);
     // Notify parent after state update (use setTimeout to avoid render-phase update)
     setTimeout(() => {
-      onMonthChange?.(newMonth.getFullYear(), newMonth.getMonth());
+      onMonthChange?.(newMonth.getFullYear(), newMonth.getMonth() + 1);
     }, 0);
   };
 
@@ -168,10 +154,11 @@ export default function SummerCalendar({
     switch (status) {
       case 'selected':
         return 'bg-[#3b82f6] text-white ring-2 ring-[#3b82f6] ring-offset-2';
+      // Underline styles are the non-color cues for availability status
       case 'available':
-        return 'bg-green-500 text-white hover:bg-green-600 font-medium'; // Vihreä = vapaa
+        return 'bg-green-500 text-white hover:bg-green-600 font-medium underline underline-offset-2'; // Vihreä = vapaa
       case 'booked':
-        return 'bg-amber-200 text-amber-900 hover:bg-amber-300 font-medium border border-amber-300'; // Haalea keltainen = osittain varattu
+        return 'bg-amber-200 text-amber-900 hover:bg-amber-300 font-medium border border-amber-300 underline decoration-dotted underline-offset-2'; // Haalea keltainen = osittain varattu
       case 'unavailable':
         return 'text-stone-300 cursor-not-allowed';
       case 'disabled':
@@ -181,43 +168,73 @@ export default function SummerCalendar({
     }
   };
 
+  // Full-date bilingual accessible name, e.g. "12. kesäkuuta, vapaa" / "12 June, available"
+  const getDayAriaLabel = (date: string, status: string) => {
+    const dateText = new Intl.DateTimeFormat(isEn ? 'en-GB' : 'fi-FI', {
+      day: 'numeric',
+      month: 'long',
+    }).format(new Date(date + 'T00:00:00'));
+    const statusText = (() => {
+      switch (status) {
+        case 'selected':
+          return isEn ? 'selected' : 'valittu';
+        case 'available':
+          return isEn ? 'available' : 'vapaa';
+        case 'booked':
+          return isEn ? 'partially booked' : 'osittain varattu';
+        default:
+          return isEn ? 'not available' : 'ei varattavissa';
+      }
+    })();
+    return `${dateText}, ${statusText}`;
+  };
+
+  if (!mounted) {
+    return (
+      <div className="rounded-xl border border-stone-200 bg-white p-3 w-full flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-[#3b82f6]" />
+        <span className="ml-2 text-sm text-stone-600">Ladataan kalenteria...</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-4">
+    <div className="rounded-xl border border-stone-200 bg-white w-full p-2 md:p-3">
       {/* Month navigation */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2 md:mb-3">
         <div className="flex items-center gap-1">
           <button
             onClick={() => navigateMonth('prev')}
-            className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
+            className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
             aria-label="Edellinen kuukausi"
           >
-            <ChevronLeft className="h-5 w-5 text-stone-600" />
+            <ChevronLeft className="h-[18px] w-[18px] text-stone-600" />
           </button>
           {onRefresh && (
             <button
               onClick={onRefresh}
               disabled={isLoading}
-              className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors disabled:opacity-50"
+              className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors disabled:opacity-50"
               aria-label="Päivitä"
               title="Päivitä"
             >
-              <RefreshCw className={`h-4 w-4 text-stone-600 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-[18px] w-[18px] text-stone-600 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
           )}
         </div>
-        <h4 className="text-lg font-semibold text-stone-900">
+        <h4 className="font-semibold text-stone-900 text-sm md:text-base">
           {MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}
         </h4>
         <button
           onClick={() => navigateMonth('next')}
-          className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
+          className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
           aria-label="Seuraava kuukausi"
         >
-          <ChevronRight className="h-5 w-5 text-stone-600" />
+          <ChevronRight className="h-[18px] w-[18px] text-stone-600" />
         </button>
       </div>
 
-      {/* Loading indicator -->
+      {/* Loading indicator */}
       {isLoading && (
         <div className="flex items-center justify-center py-4 mb-2">
           <Loader2 className="h-6 w-6 animate-spin text-[#3b82f6]" />
@@ -226,16 +243,16 @@ export default function SummerCalendar({
       )}
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 gap-1 mb-2">
+      <div className="grid grid-cols-7 gap-0.5 mb-1.5">
         {WEEKDAYS.map(day => (
-          <div key={day} className="text-center text-xs font-medium text-stone-500 py-2">
+          <div key={day} className="text-center font-medium text-stone-500 text-[10px] md:text-xs py-1 md:py-1.5">
             {day}
           </div>
         ))}
       </div>
 
       {/* Calendar grid */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-0.5" data-testid="calendar-grid">
         {calendarDays.map((day, i) => {
           const status = getDayStatus(day.date, day.isPast, day.isCurrentMonth);
           const isClickable = status === 'available' || (status === 'booked' && datesWithSlotsSet.has(day.date));
@@ -249,8 +266,9 @@ export default function SummerCalendar({
                 }
               }}
               disabled={!isClickable && !availableDatesSet.has(day.date)}
+              aria-label={getDayAriaLabel(day.date, status)}
               className={`
-                aspect-square rounded-lg text-sm transition-all
+                rounded-md transition-all h-8 text-[10px] md:aspect-square md:h-auto md:text-xs
                 ${getDayStyles(status)}
                 ${!day.isCurrentMonth ? 'opacity-50' : ''}
               `}
@@ -262,19 +280,26 @@ export default function SummerCalendar({
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex gap-4 text-xs text-stone-600 justify-center">
+      <div className="mt-3 hidden md:flex gap-4 text-[10px] text-stone-600 justify-center">
         <div className="flex items-center gap-1">
-          <div className="h-3 w-3 rounded bg-green-500"></div>
+          <div className="h-2.5 w-2.5 rounded bg-green-500"></div>
           <span>Vapaa (ei varauksia)</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="h-3 w-3 rounded bg-amber-200 border border-amber-300"></div>
+          <div className="h-2.5 w-2.5 rounded bg-amber-200 border border-amber-300"></div>
           <span>Osittain varattu</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="h-3 w-3 rounded bg-[#3b82f6]"></div>
+          <div className="h-2.5 w-2.5 rounded bg-[#3b82f6]"></div>
           <span>Valittu</span>
         </div>
+      </div>
+
+      {/* Payment notice */}
+      <div className="mt-4 hidden md:block rounded-lg bg-[#fef3c7] border border-amber-200 p-3 text-center">
+        <p className="text-xs font-medium text-amber-900">
+          Haluatko maksaa myöhemmin? Tiedustele saatavuutta puhelimitse, Whatsapilla tai sähköpostilla!
+        </p>
       </div>
     </div>
   );

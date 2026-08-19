@@ -34,7 +34,7 @@ interface FeatureGridProps {
   features: Feature[];
   title?: string;
   subtitle?: string;
-  columns?: 2 | 3 | 4;
+  columns?: 2 | 3 | 4 | 5;
 }
 
 export default function FeatureGrid({ 
@@ -47,6 +47,7 @@ export default function FeatureGrid({
     2: 'md:grid-cols-2',
     3: 'md:grid-cols-2 lg:grid-cols-3',
     4: 'sm:grid-cols-2 lg:grid-cols-4',
+    5: 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
   };
 
   return (
@@ -55,33 +56,33 @@ export default function FeatureGrid({
         {(title || subtitle) && (
           <div className="mb-12 text-center">
             {subtitle && (
-              <p className="mb-2 text-sm font-medium uppercase tracking-wider text-[#3b82f6]">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {subtitle}
               </p>
             )}
             {title && (
-              <h2 className="text-3xl font-bold text-stone-900 md:text-4xl">
+              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
                 {title}
               </h2>
             )}
           </div>
         )}
 
-        <div className={`grid gap-8 ${gridCols[columns]}`}>
+        <div className={`grid gap-6 ${gridCols[columns]}`}>
           {features.map((feature) => {
             const Icon = iconMap[feature.icon] || Flame;
             return (
               <div
                 key={feature.id}
-                className="flex flex-col items-center text-center md:items-start md:text-left"
+                className="flex flex-col items-center rounded-2xl bg-[#faf9f7] p-6 text-center md:items-start md:text-left"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#3b82f6]/10 text-[#3b82f6]">
-                  <Icon className="h-6 w-6" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3b82f6]/10 text-[#3b82f6]">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-stone-900">
+                <h3 className="mt-3 text-base font-semibold text-stone-900">
                   {feature.title}
                 </h3>
-                <p className="mt-2 text-stone-600 leading-relaxed">
+                <p className="mt-1.5 text-sm text-stone-600 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
