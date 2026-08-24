@@ -5,15 +5,17 @@ import { User, Mail, Phone, ChevronLeft, ChevronRight, Check, X, Loader2 } from 
 
 interface MembershipInfo {
   isMember: boolean;
-  // code is no longer returned by the API — it is entered manually by the
-  // user (from their purchase confirmation email) and passed up from here.
-  code?: string;
+  // The subscription code never leaves the server — when a membership is
+  // recognized we only pass useMembership: true up and the booking route
+  // resolves the code from the customer email server-side.
+  useMembership?: boolean;
   subscriptionId?: string;
   subscriptionName?: string;
   remainingUses?: number | null;
   totalLimit?: number | null;
   usedCount?: number | null;
   isUnlimited?: boolean;
+  canUseSubscription?: boolean;
   expiresAt?: string | null;
 }
 
@@ -62,11 +64,9 @@ export default function Step3PersonalInfo({
         ? `${remaining} visits remaining${total ? ` (total ${total})` : ''}`
         : `${remaining} käyntiä jäljellä${total ? ` (yht. ${total})` : ''}`,
     memberPrice: isEn ? 'You get the member price for your booking.' : 'Saat jäsenhinnan varaukseesi.',
-    membershipCode: isEn ? 'Membership code' : 'Kanta-asiakkuuskoodi',
-    membershipCodePlaceholder: isEn ? 'Enter your membership code' : 'Syötä jäsenkoodisi',
-    membershipCodeHelp: isEn
-      ? 'You can find the code in your membership purchase confirmation email. Without the code, the booking is charged at the normal price.'
-      : 'Löydät koodin kanta-asiakkuuden ostovahvistussähköpostistasi. Ilman koodia varaus veloitetaan normaalihintaan.',
+    membershipCharged: isEn
+      ? 'Membership recognized — your booking will be charged to your membership.'
+      : 'Kanta-asiakkuus tunnistettu — varaus veloitetaan jäsenyydestäsi.',
     noMembership: isEn ? 'No active membership' : 'Ei aktiivista kanta-asiakkuutta',
     back: isEn ? 'Back' : 'Takaisin',
     continue: isEn ? 'Continue' : 'Jatka',
@@ -75,7 +75,6 @@ export default function Step3PersonalInfo({
   const [localInfo, setLocalInfo] = useState(customerInfo);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [membership, setMembership] = useState<MembershipInfo | null>(null);
-  const [membershipCode, setMembershipCode] = useState('');
   const [isCheckingMembership, setIsCheckingMembership] = useState(false);
 
   // Check membership when email changes
@@ -83,13 +82,11 @@ export default function Step3PersonalInfo({
     const checkMembership = async () => {
       if (!localInfo.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(localInfo.email)) {
         setMembership(null);
-        setMembershipCode('');
         onMembershipCheck(null);
         return;
       }
 
       setIsCheckingMembership(true);
-      setMembershipCode('');
       try {
         const res = await fetch('/api/bookla/membership', {
           method: 'POST',
@@ -98,9 +95,14 @@ export default function Step3PersonalInfo({
         });
 
         if (res.ok) {
-          const data = await res.json();
-          setMembership(data);
-          onMembershipCheck(data);
+          const data: MembershipInfo = await res.json();
+          // The API only reports status — flag the booking to use the
+          // membership; the server re-verifies and resolves the code itself.
+          const membershipData: MembershipInfo = data.isMember
+            ? { ...data, useMembership: true }
+            : data;
+          setMembership(membershipData);
+          onMembershipCheck(membershipData);
         }
       } catch (e) {
         console.error('Membership check failed:', e);
@@ -112,15 +114,6 @@ export default function Step3PersonalInfo({
     const timeout = setTimeout(checkMembership, 500);
     return () => clearTimeout(timeout);
   }, [localInfo.email]);
-
-  // Pass the manually entered membership code up with the membership info.
-  // The API only tells us a membership exists — the code itself comes from
-  // the user's purchase confirmation email and is validated server-side.
-  useEffect(() => {
-    if (membership?.isMember) {
-      onMembershipCheck({ ...membership, code: membershipCode.trim() || undefined });
-    }
-  }, [membershipCode, membership]);
 
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -250,23 +243,7 @@ export default function Step3PersonalInfo({
                   ) : (
                     <p className="text-sm text-green-600">{t.memberPrice}</p>
                   )}
-                  <div className="mt-2">
-                    <label htmlFor="step3-membership-code" className="block text-sm font-medium text-green-800">
-                      {t.membershipCode}
-                    </label>
-                    <input
-                      id="step3-membership-code"
-                      type="text"
-                      value={membershipCode}
-                      onChange={(e) => setMembershipCode(e.target.value)}
-                      autoComplete="off"
-                      className="mt-1 w-full rounded-lg border border-green-300 bg-white py-2 px-3 text-sm text-stone-900 focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
-                      placeholder={t.membershipCodePlaceholder}
-                    />
-                    <p className="mt-1 text-xs text-green-600">
-                      {t.membershipCodeHelp}
-                    </p>
-                  </div>
+                  <p className="mt-1 text-sm text-green-600">{t.membershipCharged}</p>
                 </div>
               </div>
             ) : (

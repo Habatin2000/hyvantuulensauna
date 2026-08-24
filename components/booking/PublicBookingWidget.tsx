@@ -31,8 +31,9 @@ interface TicketType {
 
 interface MembershipInfo {
   isMember: boolean;
-  code?: string;
-  contractId?: string;
+  // The subscription code never reaches the client — the booking route
+  // resolves it server-side from the customer email when this flag is set.
+  useMembership?: boolean;
   subscriptionId?: string;
   remainingUses?: number | null;
 }
@@ -152,8 +153,7 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
       startTime: selectedSlot.startTime,
       tickets: tickets.map(t => ({ ticketID: t.ticketID, quantity: t.quantity })),
       client: customerInfo,
-      subscriptionCode: membership?.code,
-      contractId: membership?.contractId,
+      useMembership: membership?.useMembership === true,
       resourceId: selectedSlot.resourceId,
     });
 
@@ -173,14 +173,14 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
       });
       setBookingSuccess(true);
       // Track if membership was attempted but not applied
-      if (membership?.code && result.membershipApplied === false) {
+      if (membership?.useMembership && result.membershipApplied === false) {
         setMembershipNotApplied(true);
         setMembershipErrorMessage('Jäsenyyttä ei voitu käyttää tähän varaukseen.');
       }
       setStep(5);
     } else if (result.requiresPayment && result.paymentURL) {
       // Membership was attempted but Bookla requires payment
-      if (membership?.code) {
+      if (membership?.useMembership) {
         setMembershipNotApplied(true);
         setMembershipErrorMessage(
           membership?.remainingUses === 0 

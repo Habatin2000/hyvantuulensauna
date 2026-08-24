@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateClient, booklaClientBooking } from '../lib/booking';
+import { findActiveMembership } from '../lib/membership';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
 const COMPANY_ID = process.env.BOOKLA_COMPANY_ID;
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { startTime, tickets, client, subscriptionCode, resourceId: bodyResourceId } = body;
+    const { startTime, tickets, client, useMembership, resourceId: bodyResourceId } = body;
 
     if (!startTime || !tickets || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
@@ -64,11 +65,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isMemberBooking = Boolean(subscriptionCode);
-    if (isMemberBooking) {
-      // Never log the subscription code — it authorizes free bookings.
-      console.log('[BOOKING] Member booking with subscription code');
+    // If the client asks to use a membership, resolve the subscription code
+    // server-side from the customer email — the code never leaves the server.
+    // Never trust the client: verify the contract is active and has remaining
+    // uses, and fall back to a normal paid booking when lookup fails.
+    let subscriptionCode: string | undefined;
+    if (useMembership === true) {
+      try {
+        const membership = await findActiveMembership(client.email);
+        if (membership?.canUseSubscription && membership.code) {
+          subscriptionCode = membership.code;
+          // Never log the subscription code — it authorizes free bookings.
+          console.log('[BOOKING] Member booking — subscription applied server-side');
+        } else {
+          console.log('[BOOKING] useMembership requested but no usable membership found — proceeding as paid booking');
+        }
+      } catch (e) {
+        console.error('[BOOKING] Membership lookup failed, proceeding as paid booking:', e instanceof Error ? e.message : e);
+      }
     }
+
+    const isMemberBooking = Boolean(subscriptionCode);
 
     // Compute total spots from tickets
     const totalSpots = Object.values(ticketsMap).reduce((sum, qty) => sum + qty, 0);

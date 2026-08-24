@@ -127,8 +127,9 @@ export function useBooking() {
     startTime: string;
     tickets: { ticketID: string; quantity: number }[];
     client: { firstName: string; lastName: string; email: string; phone?: string };
-    subscriptionCode?: string;
-    contractId?: string;
+    // The server resolves the subscription code from the client email —
+    // the code is never sent from or to the browser.
+    useMembership?: boolean;
     resourceId?: string;
   }) => {
     setIsLoading(true);
