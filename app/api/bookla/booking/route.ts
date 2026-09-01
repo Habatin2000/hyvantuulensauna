@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateClient, booklaClientBooking } from '../lib/booking';
+import { authenticateClient, booklaClientBooking, validateClientCode } from '../lib/booking';
 import { findActiveMembership } from '../lib/membership';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
@@ -85,8 +85,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const isMemberBooking = Boolean(subscriptionCode);
-
     // Compute total spots from tickets
     const totalSpots = Object.values(ticketsMap).reduce((sum, qty) => sum + qty, 0);
 
@@ -103,7 +101,33 @@ export async function POST(request: NextRequest) {
       lastName: client.lastName,
     });
 
-    // Step 2: Create booking via client endpoint
+    // Step 2: Authoritative eligibility — ask Bookla whether the resolved
+    // code applies to THIS booking before using it. Never log the code.
+    if (subscriptionCode) {
+      const canApply = await validateClientCode({
+        baseUrl: BOOKLA_BASE_URL,
+        accessToken: auth.accessToken,
+        code: subscriptionCode,
+        companyId: COMPANY_ID,
+        serviceId: SERVICE_ID,
+        resourceId: effectiveResourceId,
+        startTime,
+        duration: 'PT2H',
+        spots: totalSpots,
+        tickets: ticketsMap,
+      });
+      if (canApply === false) {
+        // Bookla says the code does not apply — fall back to a paid booking.
+        console.log('[BOOKING] Subscription code not applicable to this booking — proceeding as paid booking');
+        subscriptionCode = undefined;
+      }
+      // canApply === null → validation unavailable (network/5xx): keep the
+      // local canUseSubscription result rather than blocking the booking.
+    }
+
+    const isMemberBooking = Boolean(subscriptionCode);
+
+    // Step 3: Create booking via client endpoint
     const result = await booklaClientBooking({
       baseUrl: BOOKLA_BASE_URL,
       accessToken: auth.accessToken,
@@ -133,7 +157,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Step 3: Handle member code fallback
+    // Step 4: Handle member code fallback
     // If code was sent but Bookla still returns paymentURL → code expired/used
     // Let user pay normally, don't throw error
     if (isMemberBooking && result.isConfirmed) {

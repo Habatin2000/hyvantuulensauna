@@ -28,11 +28,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ isMember: false });
     }
 
-    // Never return the subscription code, contractId or clientId here —
-    // the code authorizes free bookings and is only applied server-side
-    // by the booking route (see app/api/bookla/lib/membership.ts).
+    // Never return the subscription code or clientId here — the code
+    // authorizes free bookings and is only applied server-side by the
+    // booking route (see app/api/bookla/lib/membership.ts). The contractId
+    // is inert without API credentials and is returned for cross-referencing
+    // with the Bookla admin.
     return NextResponse.json({
       isMember: true,
+      contractId: membership.contractId,
       subscriptionId: membership.subscriptionId,
       subscriptionName: membership.subscriptionName,
       remainingUses: membership.remainingUses,

@@ -7,6 +7,13 @@
  *
  * SECURITY: the returned `code` authorizes free bookings. It must never be
  * sent to the client or written to logs.
+ *
+ * Usage counters come from the visits-ledger, a signed journal (verified
+ * against real Bookla data, Sep 2026): remaining = Σ amount, where
+ * ALLOCATION entries are positive grants and USAGE entries are negative.
+ * This correctly handles manual allocations and rollovers. When the ledger
+ * is unavailable, falls back to limitations.bookingsCount − usages.length
+ * (which ignores allocations/rollovers).
  */
 import { booklaFetch, getBooklaConfig } from './bookla-fetch';
 
@@ -23,36 +30,16 @@ interface BooklaContract {
   activeFrom?: string;
   expiresAt?: string;
   subscriptionID?: string;
-}
-
-interface BooklaContractDetails {
-  totalLimit?: number | string | null;
-  remainingCount?: number;
-  remaining?: number;
-  usedCount?: number;
-  used?: number;
-  bookingsUsed?: number;
   limitations?: {
-    count?: number | string;
-    bookingsCount?: number | string;
-    remainingCount?: number;
-    remaining?: number;
-    usedCount?: number;
-    used?: number;
+    bookingsCount?: number | string | null;
   };
-}
-
-interface BooklaLedgerEntry {
-  balance?: number;
-  remainingVisits?: number;
-  transactionType?: string;
-  amount?: number | string;
-  usageID?: string;
+  usages?: unknown[] | null;
 }
 
 export interface ActiveMembership {
   /** Subscription contract code — NEVER return to the client or log it. */
   code?: string;
+  contractId?: string;
   subscriptionId?: string;
   subscriptionName: string;
   remainingUses: number | null;
@@ -77,7 +64,9 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   const normalizedEmail = email.trim().toLowerCase();
   console.log('[MEMBERSHIP] Checking membership');
 
-  // Step 1: Find client by email
+  // Step 1: Find client by email. Duplicate Bookla clients can exist for the
+  // same address (created before email normalization) — collect ALL matches,
+  // a contractless duplicate must not shadow the record holding the contract.
   const clientResponse = await booklaFetch(
     `/companies/${companyId}/clients/search?email=${encodeURIComponent(normalizedEmail)}`,
     { method: 'GET' }
@@ -93,25 +82,26 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   const clientsArray = clientData.clients || clientData;
   const clients = Array.isArray(clientsArray) ? clientsArray : [];
 
-  const matchingClient = clients.find((c: BooklaClient) =>
-    String(c.email ?? '').toLowerCase() === normalizedEmail
-  );
+  const matchingClientIds = clients
+    .filter((c: BooklaClient) => String(c.email ?? '').toLowerCase() === normalizedEmail)
+    .map((c: BooklaClient) => c.id)
+    .filter((id): id is string => Boolean(id));
 
-  if (!matchingClient) {
+  if (matchingClientIds.length === 0) {
     console.log('[MEMBERSHIP] No client found');
     return null;
   }
 
-  const clientId = matchingClient.id;
-  console.log('[MEMBERSHIP] Client found:', clientId);
+  console.log('[MEMBERSHIP] Clients found:', matchingClientIds.length);
 
-  // Step 2: Search subscription contracts
+  // Step 2: Search active subscription contracts across all matching clients
+  // in one call (clientIDs is a list). Common case is a single client.
   const contractsResponse = await booklaFetch(
     `/companies/${companyId}/plugins/subscription/contracts/search`,
     {
       method: 'POST',
       body: JSON.stringify({
-        clientIDs: [clientId],
+        clientIDs: matchingClientIds,
         status: 'active',
       }),
     }
@@ -129,16 +119,32 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   const contractList = Array.isArray(contracts) ? contracts : [];
   const now = new Date();
 
-  // Find active contract
-  const activeContract = contractList.find((contract: BooklaContract) => {
+  // Among all currently-active contracts pick the one with the latest
+  // expiresAt (a contract without expiry outranks any dated one).
+  let activeContract: BooklaContract | null = null;
+  for (const contract of contractList as BooklaContract[]) {
     const status = String(contract.status ?? '').toLowerCase();
     const activeFrom = contract.activeFrom ? new Date(contract.activeFrom) : null;
     const expiresAt = contract.expiresAt ? new Date(contract.expiresAt) : null;
 
-    return status === 'active' &&
-           (!activeFrom || activeFrom <= now) &&
-           (!expiresAt || expiresAt >= now);
-  });
+    const isActive =
+      status === 'active' &&
+      (!activeFrom || activeFrom <= now) &&
+      (!expiresAt || expiresAt >= now);
+    if (!isActive) continue;
+
+    if (!activeContract) {
+      activeContract = contract;
+      continue;
+    }
+    const bestExpiry = activeContract.expiresAt
+      ? new Date(activeContract.expiresAt).getTime()
+      : Number.POSITIVE_INFINITY;
+    const thisExpiry = expiresAt ? expiresAt.getTime() : Number.POSITIVE_INFINITY;
+    if (thisExpiry > bestExpiry) {
+      activeContract = contract;
+    }
+  }
 
   if (!activeContract) {
     console.log('[MEMBERSHIP] No active contract');
@@ -148,7 +154,7 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   console.log('[MEMBERSHIP] Active contract found:', activeContract.id);
 
   // Step 3: Fetch detailed contract info using the documented plugins endpoint
-  let contractDetails: BooklaContractDetails = activeContract;
+  let contractDetails: BooklaContract = activeContract;
 
   try {
     const res = await booklaFetch(
@@ -167,196 +173,83 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
     console.log('[MEMBERSHIP] Contract refresh threw error, using search result:', e instanceof Error ? e.message : e);
   }
 
-  // Step 4: Calculate remaining uses
-  const limitations = contractDetails?.limitations || {};
+  // Step 4: Resolve usage counters. Primary source: the visits-ledger, which
+  // is a signed journal — verified against real Bookla data (Sep 2026):
+  //   {"transactionType":"ALLOCATION","amount":5}   — initial grant
+  //   {"transactionType":"ALLOCATION","amount":5}   — manual admin allocation
+  //   {"transactionType":"USAGE","amount":-1,...}   — one per redeemed booking
+  // So remaining = Σ amount, which correctly handles manual allocations,
+  // rollovers and reversal entries. totalLimit = Σ positive amounts (all
+  // grants), usedCount = Σ |negative amounts| (all consumptions).
+  const bookingsCountRaw = contractDetails?.limitations?.bookingsCount ?? null;
 
-  const totalLimitRaw =
-    contractDetails?.totalLimit ??
-    limitations?.count ??
-    limitations?.bookingsCount ??
-    null;
-
-  const parsedTotalLimit =
-    typeof totalLimitRaw === 'number'
-      ? totalLimitRaw
-      : totalLimitRaw !== null && totalLimitRaw !== undefined && totalLimitRaw !== ''
-        ? Number(totalLimitRaw)
+  const parsedBookingsCount =
+    typeof bookingsCountRaw === 'number'
+      ? bookingsCountRaw
+      : bookingsCountRaw !== null && bookingsCountRaw !== undefined && bookingsCountRaw !== ''
+        ? Number(bookingsCountRaw)
         : null;
 
-  const totalLimit = Number.isFinite(parsedTotalLimit as number) ? (parsedTotalLimit as number) : null;
+  const bookingsCount = Number.isFinite(parsedBookingsCount as number) ? (parsedBookingsCount as number) : null;
 
-  // Unlimited if Bookla uses null/0/-1 for unlimited
-  const isUnlimited = totalLimit === null || totalLimit === 0 || totalLimit === -1;
-
-  // Get direct count fields (may not exist)
-  const directRemainingCount = limitations?.remainingCount ?? limitations?.remaining ?? contractDetails?.remainingCount ?? contractDetails?.remaining;
-  const directUsedCount = limitations?.usedCount ?? limitations?.used ?? contractDetails?.usedCount ?? contractDetails?.used ?? contractDetails?.bookingsUsed;
-
-  console.log('[MEMBERSHIP] Direct count fields:', {
-    directRemainingCount,
-    directUsedCount,
-    limitationsKeys: Object.keys(limitations),
-  });
-
-  // Step 5: Fetch visits-ledger and parse with Bookla semantics
+  let totalLimit: number | null = null;
   let usedCount: number | null = null;
   let remainingUses: number | null = null;
-  let ledgerParseConfidence: 'high' | 'medium' | 'low' | 'unknown' = 'unknown';
 
   try {
-    const visitsRes = await booklaFetch(
+    const ledgerRes = await booklaFetch(
       `/companies/${companyId}/plugins/subscription/contracts/${activeContract.id}/visits-ledger`,
       { method: 'GET' }
     );
 
-    if (visitsRes.ok) {
-      const ledgerData = await visitsRes.json();
+    if (ledgerRes.ok) {
+      const ledgerData = await ledgerRes.json();
       const entries = Array.isArray(ledgerData) ? ledgerData : ledgerData.items || [];
 
-      console.log('[MEMBERSHIP] Ledger entries count:', entries.length);
-
-      // STRATEGY 1: Look for explicit balance/remainingVisits fields
-      const entryWithBalance = entries.find((e: BooklaLedgerEntry) =>
-        typeof e.balance === 'number' || typeof e.remainingVisits === 'number'
-      );
-
-      if (entryWithBalance) {
-        // Use the most recent entry's balance
-        const latestEntry = entries[entries.length - 1];
-        const currentBalance = latestEntry.remainingVisits ?? latestEntry.balance ?? null;
-
-        if (typeof currentBalance === 'number' && totalLimit !== null) {
-          remainingUses = Math.max(0, currentBalance);
-          usedCount = Math.max(0, totalLimit - remainingUses);
-          ledgerParseConfidence = 'high';
-          console.log('[MEMBERSHIP] Using ledger balance field:', {
-            remainingUses,
-            usedCount,
-            source: latestEntry.remainingVisits !== undefined ? 'remainingVisits' : 'balance',
-          });
-        }
+      let granted = 0;
+      let consumed = 0;
+      let sawAmount = false;
+      for (const entry of entries) {
+        const amount = Number(entry?.amount);
+        if (!Number.isFinite(amount)) continue;
+        sawAmount = true;
+        if (amount > 0) granted += amount;
+        else consumed += -amount;
       }
 
-      // STRATEGY 2: Parse by transactionType if no balance field
-      if (remainingUses === null && entries.length > 0) {
-        const CONSUMPTION_TYPES = ['usage', 'consume', 'visit', 'booking', 'debit'];
-        const CREDIT_TYPES = ['credit', 'topup', 'rollover', 'bonus', 'refund', 'reset', 'allocation'];
-
-        let consumptionSum = 0;
-        let creditSum = 0;
-        const unknownTransactions: BooklaLedgerEntry[] = [];
-
-        for (const entry of entries) {
-          const txType = String(entry.transactionType || '').toLowerCase();
-          const amount = Number(entry.amount ?? 0);
-          const hasUsageId = Boolean(entry.usageID);
-
-          if (!Number.isFinite(amount)) continue;
-
-          if (CONSUMPTION_TYPES.some(t => txType.includes(t)) || hasUsageId) {
-            // Consumption reduces remaining visits
-            consumptionSum += Math.abs(amount);
-          } else if (CREDIT_TYPES.some(t => txType.includes(t))) {
-            // Credits add to available visits
-            creditSum += Math.abs(amount);
-          } else if (txType === '') {
-            // Empty transaction type - check for usageID as hint
-            if (hasUsageId) {
-              consumptionSum += Math.abs(amount);
-            } else {
-              unknownTransactions.push(entry);
-            }
-          } else {
-            unknownTransactions.push(entry);
-          }
-        }
-
-        if (unknownTransactions.length === 0 && totalLimit !== null) {
-          // All transactions understood - calculate with confidence
-          const netUsed = Math.max(0, consumptionSum - creditSum);
-          usedCount = netUsed;
-          remainingUses = Math.max(0, totalLimit - netUsed);
-          ledgerParseConfidence = 'medium';
-          console.log('[MEMBERSHIP] Calculated from transaction types:', {
-            consumptionSum,
-            creditSum,
-            netUsed,
-            remainingUses,
-          });
-        } else if (unknownTransactions.length > 0) {
-          // Unknown transactions present - don't guess
-          console.log('[MEMBERSHIP] Unknown ledger transactions:', unknownTransactions.length);
-          ledgerParseConfidence = 'low';
-        }
-      }
-
-      // STRATEGY 3: Fallback to usage-only counting
-      if (remainingUses === null && entries.length > 0) {
-        const usageEntries = entries.filter((e: BooklaLedgerEntry) =>
-          Boolean(e.usageID) ||
-          String(e.transactionType || '').toLowerCase().includes('usage')
-        );
-
-        if (usageEntries.length > 0) {
-          let usageSum = 0;
-          for (const entry of usageEntries) {
-            const amount = Number(entry.amount ?? 1); // Default to 1 if no amount
-            if (Number.isFinite(amount)) {
-              usageSum += Math.abs(amount);
-            }
-          }
-
-          if (totalLimit !== null) {
-            usedCount = usageSum;
-            remainingUses = Math.max(0, totalLimit - usageSum);
-            ledgerParseConfidence = 'medium';
-            console.log('[MEMBERSHIP] Calculated from usage entries only:', {
-              usageEntries: usageEntries.length,
-              usageSum,
-              remainingUses,
-            });
-          }
-        }
-      }
-
-      // If still no values, mark as unknown
-      if (remainingUses === null) {
-        ledgerParseConfidence = 'unknown';
+      if (sawAmount) {
+        totalLimit = granted;
+        usedCount = consumed;
+        remainingUses = Math.max(0, granted - consumed);
+        console.log('[MEMBERSHIP] Ledger balance:', { granted, consumed, remainingUses });
       }
     } else {
-      console.log('[MEMBERSHIP] Failed to fetch visits ledger:', visitsRes.status);
+      console.log('[MEMBERSHIP] Ledger fetch failed:', ledgerRes.status);
     }
   } catch (e) {
-    console.log('[MEMBERSHIP] Error fetching visits ledger:', e instanceof Error ? e.message : e);
+    console.log('[MEMBERSHIP] Ledger fetch threw:', e instanceof Error ? e.message : e);
   }
 
-  // Final calculation with priority: direct fields > ledger > fallback
-  if (typeof directRemainingCount === 'number' && Number.isFinite(directRemainingCount)) {
-    remainingUses = directRemainingCount;
-    if (totalLimit !== null) {
-      usedCount = totalLimit - directRemainingCount;
-    }
-    console.log('[MEMBERSHIP] Using direct remainingCount:', remainingUses);
-  } else if (typeof directUsedCount === 'number' && Number.isFinite(directUsedCount) && totalLimit !== null) {
-    usedCount = directUsedCount;
-    remainingUses = Math.max(0, totalLimit - directUsedCount);
-    console.log('[MEMBERSHIP] Using direct usedCount:', usedCount);
-  } else if (remainingUses === null) {
-    // Ledger couldn't parse - leave as null for safe fallback
-    console.log('[MEMBERSHIP] Could not determine usage from ledger, leaving null');
+  // Fallback when the ledger is unavailable or empty: quota minus usages[].
+  // usages[] has one entry per consumed booking. Bookla is a Go API: a fresh
+  // contract with zero usages serializes its nil slice as `"usages": null`,
+  // which means 0 used — not "unknown". Only a wholly absent field is unknown.
+  // NOTE: this fallback ignores manual allocations and rollovers.
+  if (remainingUses === null) {
+    totalLimit = bookingsCount;
+    const usages = contractDetails?.usages;
+    usedCount = Array.isArray(usages) ? usages.length : usages === null ? 0 : null;
+    remainingUses =
+      totalLimit !== null && usedCount !== null
+        ? Math.max(0, totalLimit - usedCount)
+        : null;
+    console.log('[MEMBERSHIP] Using usages[] fallback:', { totalLimit, usedCount, remainingUses });
   }
 
-  // Safety: never allow used > totalLimit unless explicitly documented
-  if (usedCount !== null && totalLimit !== null && usedCount > totalLimit) {
-    console.log('[MEMBERSHIP] Warning: usedCount > totalLimit, this may indicate rollover/credits not accounted for', {
-      usedCount,
-      totalLimit,
-      ledgerParseConfidence,
-    });
-    // Keep the values but flag for investigation
-  }
+  // Unlimited if Bookla uses null/0/-1 for unlimited (based on the quota field)
+  const isUnlimited = bookingsCount === null || bookingsCount === 0 || bookingsCount === -1;
 
-  // Step 6: Fetch subscription name
+  // Step 5: Fetch subscription name
   let subscriptionName = 'Kanta-asiakkuus';
   if (activeContract.subscriptionID) {
     try {
@@ -383,11 +276,11 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
     usedCount,
     remainingUses,
     canUseSubscription,
-    ledgerParseConfidence,
   });
 
   return {
     code: activeContract.code,
+    contractId: activeContract.id,
     subscriptionId: activeContract.subscriptionID,
     subscriptionName,
     remainingUses: isUnlimited ? null : remainingUses,

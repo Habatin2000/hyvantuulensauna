@@ -67,6 +67,14 @@ export default function Step3PersonalInfo({
     membershipCharged: isEn
       ? 'Membership recognized — your booking will be charged to your membership.'
       : 'Kanta-asiakkuus tunnistettu — varaus veloitetaan jäsenyydestäsi.',
+    validUntil: (date: string) => {
+      const formatted = new Intl.DateTimeFormat(isEn ? 'en-GB' : 'fi-FI', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date(date));
+      return isEn ? `Valid until ${formatted}` : `Voimassa ${formatted} asti`;
+    },
     noMembership: isEn ? 'No active membership' : 'Ei aktiivista kanta-asiakkuutta',
     back: isEn ? 'Back' : 'Takaisin',
     continue: isEn ? 'Continue' : 'Jatka',
@@ -244,6 +252,9 @@ export default function Step3PersonalInfo({
                     <p className="text-sm text-green-600">{t.memberPrice}</p>
                   )}
                   <p className="mt-1 text-sm text-green-600">{t.membershipCharged}</p>
+                  {membership.expiresAt && (
+                    <p className="mt-1 text-sm text-green-600">{t.validUntil(membership.expiresAt)}</p>
+                  )}
                 </div>
               </div>
             ) : (
