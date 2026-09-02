@@ -60,14 +60,14 @@ export const getPublicPageHero = (locale: Locale): HeroContent => isEn(locale) ?
   description: 'Eight years of experience with sauna boats, prime löyly and great vibes. We guarantee hot saunas here.',
   ctaText: 'Book Your Spot',
   ctaHref: '#booking',
-  image: '/images/gallery-sauna-group.webp',
+  image: '/images/public-sauna-hero.webp',
 } : {
   title: 'Julkinen saunavuoro Hyvän Tuulen Saunalla Helsingissä',
   subtitle: 'Helsingin uniikein saunavuoro Saunalautalla',
   description: '8 Vuoden kokemuksella saunalauttoja, priimaa löylyä ja hyvää tunnelmaa. Näistä pidämme kiinni, kuumat saunat ovat täällä taattuja.',
   ctaText: 'Varaa paikkasi',
   ctaHref: '#varaus',
-  image: '/images/gallery-sauna-group.webp',
+  image: '/images/public-sauna-hero.webp',
 };
 
 export const publicPageHero = getPublicPageHero('fi');

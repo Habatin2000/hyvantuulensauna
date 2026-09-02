@@ -17,6 +17,10 @@ export const getHomepageHero = (locale: Locale): HeroContent => {
       image: '/images/gallery-sauna-woman.webp',
       images: [
         '/images/gallery-sauna-woman.webp',
+        '/images/hero-raft-sup.webp',
+        '/images/hero-helsinki-night.webp',
+        '/images/hero-rainbow.webp',
+        '/images/hero-raft-dusk.webp',
         '/images/generated-image.webp',
         '/images/seasauna.webp',
         '/images/saunagang.webp',
@@ -37,6 +41,10 @@ export const getHomepageHero = (locale: Locale): HeroContent => {
     image: '/images/gallery-sauna-woman.webp',
     images: [
       '/images/gallery-sauna-woman.webp',
+      '/images/hero-raft-sup.webp',
+      '/images/hero-helsinki-night.webp',
+      '/images/hero-rainbow.webp',
+      '/images/hero-raft-dusk.webp',
       '/images/generated-image.webp',
       '/images/seasauna.webp',
       '/images/saunagang.webp',
