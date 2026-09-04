@@ -262,6 +262,17 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
         subscriptionName = subData.name || subscriptionName;
         console.log('[MEMBERSHIP] Subscription name:', subscriptionName);
       }
+      // TEMPORARY DEBUG3: fetch subscription product via documented endpoint
+      try {
+        const dbgSub = await booklaFetch(
+          `/companies/${companyId}/plugins/subscription/list/${activeContract.subscriptionID}`,
+          { method: 'GET' }
+        );
+        console.log('[MEMBERSHIP DEBUG3] list endpoint status:', dbgSub.status);
+        if (dbgSub.ok) {
+          console.log('[MEMBERSHIP DEBUG3] subscription:', (await dbgSub.text()).slice(0, 2000));
+        }
+      } catch { /* debug only */ }
     } catch (e) {
       console.log('[MEMBERSHIP] Error fetching subscription name:', e instanceof Error ? e.message : e);
     }

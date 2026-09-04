@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 import HomePageContent from "@/components/pages/HomePageContent";
 import { SITE_URL } from "@/lib/site";
 import type { Locale } from "@/content/homepage";
+import fiMessages from "@/messages/fi.json";
+import enMessages from "@/messages/en.json";
 
 export async function generateMetadata({
   params,
@@ -10,13 +12,16 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "metadata" });
+  // NOTE: read messages directly — next-intl's getTranslations({ locale })
+  // resolves the request-locale (fi) instead of the explicit locale in this
+  // generateMetadata context, which served Finnish titles on /en/.
+  const meta = (locale === "en" ? enMessages : fiMessages).metadata;
   const isEn = locale === "en";
   const pageUrl = isEn ? `${SITE_URL}/en` : SITE_URL;
 
   return {
-    title: { absolute: t("defaultTitle") },
-    description: t("defaultDescription"),
+    title: { absolute: meta.defaultTitle },
+    description: meta.defaultDescription,
     alternates: {
       canonical: pageUrl,
       languages: {
@@ -31,8 +36,8 @@ export async function generateMetadata({
       locale: isEn ? "en_US" : "fi_FI",
       url: pageUrl,
       siteName: "Hyvän Tuulen Sauna",
-      title: t("defaultTitle"),
-      description: t("defaultDescription"),
+      title: meta.defaultTitle,
+      description: meta.defaultDescription,
       images: [
         {
           url: "/images/gallery-raft-sunset.webp",

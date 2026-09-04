@@ -324,6 +324,8 @@ export async function validateClientCode(
       return null;
     }
     console.log('[BOOKLA VALIDATE] canApply:', data.canApply);
+    // TEMPORARY DEBUG4: log price-after-code + plugin details (no code/PII).
+    console.log('[BOOKLA DEBUG4] validate detail:', JSON.stringify({ price: data.price, pluginNameSpace: data.pluginNameSpace, pluginResponse: data.pluginResponse }).slice(0, 800));
     return data.canApply;
   } catch {
     console.log('[BOOKLA VALIDATE] Could not parse response');
