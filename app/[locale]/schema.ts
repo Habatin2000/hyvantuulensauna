@@ -103,6 +103,11 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
       }
     ]
   },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "333"
+  },
   "sameAs": [
     "https://maps.app.goo.gl/VtS6aSXd3hxFEPxH6",
     "https://instagram.com/hyvantuulensauna",
