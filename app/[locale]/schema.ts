@@ -24,9 +24,10 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 60.198930,
-    "longitude": 25.141096
+    "latitude": 60.1989759,
+    "longitude": 25.1407083
   },
+  "hasMap": "https://maps.app.goo.gl/VtS6aSXd3hxFEPxH6",
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
@@ -102,12 +103,8 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
       }
     ]
   },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5.0",
-    "reviewCount": "300"
-  },
   "sameAs": [
+    "https://maps.app.goo.gl/VtS6aSXd3hxFEPxH6",
     "https://instagram.com/hyvantuulensauna",
     "https://facebook.com/hyvantuulensauna"
   ]

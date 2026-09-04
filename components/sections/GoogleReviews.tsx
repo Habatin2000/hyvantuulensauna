@@ -62,6 +62,15 @@ export default function GoogleReviews() {
               {isEn ? 'Google Business Profile' : 'Google Business Profiilistamme'}
             </a>
           </p>
+          <a
+            href="https://maps.google.com/?cid=756504557143769353"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#3b82f6] px-6 py-3 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-2xl"
+          >
+            <Star className="h-4 w-4 fill-white" />
+            {isEn ? 'Write a review on Google' : 'Jätä arvostelu Googleen'}
+          </a>
         </div>
         
         <div ref={widgetRef} className="relative min-h-[420px] overflow-hidden">
