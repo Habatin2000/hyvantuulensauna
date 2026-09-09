@@ -109,7 +109,7 @@ export default async function SummerSaunaPage({
     '2026-05-01T10:00:00+03:00',
     '2026-09-30T22:00:00+03:00',
     isEn ? 'Kalkkihiekantori boat pier' : 'Kalkkihiekantorin laivalaituri',
-    '525',
+    '175',
     '2026-05-01'
   );
 

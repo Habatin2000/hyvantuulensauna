@@ -51,10 +51,10 @@ export default function SummerSaunaPageClient({
   const [showBooking, setShowBooking] = useState(false);
   const [preSelectedBoat, setPreSelectedBoat] = useState<string | null>(null);
 
-  const priceLabel = isEn ? 'From 200 € / booking' : 'Alkaen 200 € / varaus';
+  const priceLabel = isEn ? 'From €175 / 2h' : 'Alkaen 175 € / 2h';
   const priceSubLabel = isEn
-    ? 'From price is for weekday daytime; evenings and weekends are priced separately.'
-    : 'Alkaen hinta on arkipäivä, illat ja viikonloput eri hinnalla.';
+    ? 'Weekday daytime €175–200; evenings and weekends priced separately.'
+    : 'Arkisin aamupäivisin 175–200 €, illat ja viikonloput erikseen.';
 
   const openBooking = (boatId?: string) => {
     setPreSelectedBoat(boatId || null);

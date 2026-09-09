@@ -61,7 +61,7 @@ export default function BoatComparisonCards({
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-[#3b82f6]" />
-                    <span>alk. {boat.pricing.basePrice}€/tunti</span>
+                    <span>alk. {boat.pricing.basePrice}€/{boat.pricing.unit}</span>
                   </div>
                 </div>
 

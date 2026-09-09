@@ -38,7 +38,7 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
   {
     id: 'price',
     question: 'How much does it cost to rent a sauna boat in Helsinki?',
-    answer: 'The price for a sauna boat cruise starts from €525 / 3 hours (€52 / person). Minimum booking is 3 hours. The price includes the sauna boat with captain, wood-fired sauna, Weber grill, ice for drinks, toilet and sound system. The price is the same for both boats.',
+    answer: 'The price for a sauna boat cruise starts from €175 / 2 hours. On weekday daytime the price is €175–200. Minimum booking is 2 hours. The price includes the sauna boat with captain, wood-fired sauna, Weber grill, ice for drinks, toilet and sound system. The price is the same for both boats.',
     category: 'summer',
   },
   {
@@ -164,7 +164,7 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
   {
     id: 'price',
     question: 'Paljonko saunalautan vuokraus Helsingissä maksaa?',
-    answer: 'Saunalauttaristeilyn hinta alkaen 525 €/3 tuntia (52 €/hlö). Minimivaraus on 3 tuntia. Hintaan sisältyy saunalautta kapteeneineen, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Saunalauttaristeilyn hinta on sama molemmille lautoille.',
+    answer: 'Saunalauttaristeilyn hinta alkaen 175 €/2 tuntia. Arkisin aamupäivisin 175–200 €. Minimivaraus on 2 tuntia. Hintaan sisältyy saunalautta kapteeneineen, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Saunalauttaristeilyn hinta on sama molemmille lautoille.',
     category: 'summer',
   },
   {

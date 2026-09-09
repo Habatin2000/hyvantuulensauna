@@ -21,7 +21,7 @@ export interface Boat {
   pricing: {
     basePrice: number;
     currency: string;
-    unit: 'hour' | 'session' | 'day' | '3h' | '4h';
+    unit: 'hour' | 'session' | 'day' | '2h' | '3h' | '4h';
   };
   amenities: string[];
   idealFor: string[];

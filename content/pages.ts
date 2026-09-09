@@ -165,7 +165,7 @@ Bachelor parties on a sauna boat are one of the most popular ways to celebrate a
 
 Sauna boat cruises operate from May to September and depart from Kalkkihiekantori in Vuosaari. Our experienced team has eight years of operating sauna boats in Helsinki, so you can trust that everything will go smoothly.
 
-The price for a sauna boat cruise starts from €525 / 3 hours (€52 / person). Minimum booking is 3 hours. The price includes a captain, wood-fired sauna, Weber grill, ice for drinks, toilet and sound system. Own food and drinks are welcome!`,
+The price for a sauna boat cruise starts from €175 / 2 hours. On weekday daytime the price is €175–200. Minimum booking is 2 hours. The price includes a captain, wood-fired sauna, Weber grill, ice for drinks, toilet and sound system. Own food and drinks are welcome!`,
 } : {
   title: 'Miksi valita saunalauttaristeily Helsingissä?',
   text: `Saunalautan vuokraus Helsingissä on ainutlaatuinen tapa nauttia Itä-Helsingin saaristosta. Toisin kuin perinteisillä saunoilla, saunalauttaristeilyllä yhdistyvät puulämmitteinen sauna, merimaisema ja mahdollisuus pulahtaa suoraan mereen – kaikki yhdessä paketissa.
@@ -174,7 +174,7 @@ Polttarit saunalautalla ovat yksi suosituimmista tavoista juhlistaa tulevaa hä�
 
 Saunalauttaristeilyt toimivat toukokuusta syyskuuhun ja lähtevät Kalkkihiekantorilta Vuosaaresta. Kokeneella tiimillämme on kahdeksan vuoden kokemus saunalauttojen operoinnista Helsingissä, joten voitte luottaa siihen, että kaikki sujuu moitteettomasti.
 
-Saunalauttaristeilyn hinta alkaen 525 €/3 tuntia (52 €/hlö). Minimivaraus on 3 tuntia. Hintaan sisältyy kapteeni, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Omat eväät ja juomat ovat tervetulleita!`,
+Saunalauttaristeilyn hinta alkaen 175 €/2 tuntia. Arkisin aamupäivisin 175–200 €. Minimivaraus on 2 tuntia. Hintaan sisältyy kapteeni, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Omat eväät ja juomat ovat tervetulleita!`,
 };
 
 export const whyChooseContent = getWhyChooseContent('fi');

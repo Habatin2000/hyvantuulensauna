@@ -44,10 +44,10 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
   );
   const router = useRouter();
 
-  const priceLabel = isEn ? 'From 200 € / booking' : 'Alkaen 200 € / varaus';
+  const priceLabel = isEn ? 'From €175 / 2h' : 'Alkaen 175 € / 2h';
   const priceSubLabel = isEn
-    ? 'From price is for weekday daytime; evenings and weekends are priced separately.'
-    : 'Alkaen hinta on arkipäivä, illat ja viikonloput eri hinnalla.';
+    ? 'Weekday daytime €175–200; evenings and weekends priced separately.'
+    : 'Arkisin aamupäivisin 175–200 €, illat ja viikonloput erikseen.';
 
   const navigateToBoats = () => {
     router.push('/saunalauttaristeilyt-helsingissa#boats');
@@ -126,6 +126,17 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
               aria-labelledby="service-tab-cruises"
               className="grid min-w-0 gap-4 md:grid-cols-2"
             >
+              {/* Autumn offer banner */}
+              <div className="flex flex-wrap items-center justify-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-center md:col-span-2">
+                <span className="rounded-full bg-amber-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+                  {isEn ? 'Autumn offer' : 'Syys tarjous'}
+                </span>
+                <p className="text-sm font-medium text-stone-800">
+                  {isEn
+                    ? 'Weekday daytime cruises from €175 / 2 h — book now!'
+                    : 'Risteilyt arkisin aamupäivisin alk. 175 € / 2 h — varaa nyt!'}
+                </p>
+              </div>
               <BoatCard
                 id={aaltoBoat.id}
                 name="Aalto"
