@@ -39,9 +39,23 @@ export async function booklaFetch(
     headers.set('Content-Type', 'application/json');
   }
 
-  try {
-    return await fetch(`${baseUrl}${path}`, { ...init, headers });
-  } catch (err) {
-    throw new Error(`Bookla request failed: ${err instanceof Error ? err.message : String(err)}`);
+  // 15s timeout + one retry on network-level failure. Bookla occasionally
+  // hangs or blips; without this, transient failures surface as 500s and
+  // hung requests pile up. Only used for read/query calls — booking creation
+  // deliberately uses its own fetch (no retry, no double-booking risk).
+  const TIMEOUT_MS = 15000;
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      return await fetch(`${baseUrl}${path}`, {
+        ...init,
+        headers,
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+    } catch (err) {
+      lastError = err;
+      console.log(`[BOOKLA FETCH] attempt ${attempt + 1} failed:`, err instanceof Error ? err.message : err);
+    }
   }
+  throw new Error(`Bookla request failed: ${lastError instanceof Error ? lastError.message : String(lastError)}`);
 }
