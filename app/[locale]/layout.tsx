@@ -160,6 +160,11 @@ export default async function LocaleLayout({
           src="https://www.googletagmanager.com/gtag/js?id=AW-17838327897"
           strategy="lazyOnload"
         />
+        {/* Google Preferred Sources button library */}
+        <Script
+          src="https://news.google.com/swg/js/v1/publisher.js"
+          strategy="lazyOnload"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

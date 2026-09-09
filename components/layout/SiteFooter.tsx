@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { footerNavigation } from '@/content/navigation';
@@ -10,6 +10,7 @@ import { trackContact } from '@/lib/meta';
 export default function SiteFooter() {
   const t = useTranslations('footer');
   const tNav = useTranslations('nav');
+  const locale = useLocale();
 
   return (
     <footer className="border-t border-[#163d3d] bg-[#1e40af]">
@@ -139,6 +140,13 @@ export default function SiteFooter() {
             <p className="text-sm text-white/50">
               © {new Date().getFullYear()} {t('companyName')}. {t('rights')}
             </p>
+            {/* Google "Preferred Sources" button (library loaded in layout) */}
+            <div
+              suppressHydrationWarning
+              google-add-preferred-source-btn=""
+              data-theme="dark"
+              data-lang={locale}
+            />
           </div>
         </div>
       </div>
