@@ -237,6 +237,7 @@ export const getStoryContent = (locale: Locale) => {
       quote: 'Hyvän Tuulen Sauna means good wind and good mood. We wish for good winds, but we provide good vibes in any case.',
       paragraphs: [
         'The mission of Hyvän Tuulen Sauna is to bring relaxation and well-being to people. We strive for excellence in löyly, service, fairness and in making YOU feel as comfortable as possible.',
+        'The story begins at the same time in Tampere and Helsinki, when Captain Kalle and the twins became interested in sauna boats. On the Helsinki side, Onni and Ilmari set up a sauna boat company, while Kalle took up captain\u2019s duties in Tampere. Our paths ran separately until 2022, when Kalle jumped aboard the Helsinki sauna boat crew. The bonds deepened, and in 2023 Kalle and the twins were pushing the sauna boat business forward together. In 2024 we changed our name to Hyvän Tuulen Sauna — and that\u2019s the course we\u2019re keeping!',
         'We have offered sauna boat cruises in Helsinki for eight years. Creating maritime experiences is like second nature to us! Captain Kalle has driven sauna boats in Tampere and Helsinki, Onni and Ile in Helsinki, on the same waters for eight years now. Tuure is coming for his second summer and the vibe is still great.',
         'The most unique experiences of the year are created here, so —',
         'Welcome to Hyvän Tuulen Sauna.',
@@ -249,6 +250,7 @@ export const getStoryContent = (locale: Locale) => {
     quote: 'Hyvän Tuulen Sauna tarkoittaa hyvää tuulta ja hyvää mieltä. Toivomme hyviä tuulia, mutta tarjoamme hyvää mieltä joka tapauksessa.',
     paragraphs: [
       'Hyvän Tuulen Saunan missio on tuoda rentoutumista ja hyvää oloa ihmisille. Tavoittelemme erinomaisuutta löylyissä, palveluissa, reiluudessa ja siinä, että SINÄ tunnet olosi mahdollisimman mukavaksi.',
+      'Tarina alkaa samaan aikaan Tampereella ja Helsingissä, kun Kippari Kalle ja kaksoset kiinnostuvat saunalautoista. Helsingin päädyssä Onni ja Ilmari laittavat saunalauttafirman pystyyn ja Kalle käy Tampereella Kipparin hommiin. Tiet olivat erillään vuoteen 2022, jolloin Kalle hyppäsi Helsingin päädyssä saunalautan remmiin. Välit syvenivät, ja vuonna 2023 Kalle ja kaksoset onkin painanut kimpassa saunalauttahommia eteenpäin. 2024 vaihdoimme nimeksi Hyvän Tuulen Sauna, ja sillä mennään eteenpäin!',
       'Olemme tarjonneet saunalauttaristeilyjä Helsingissä jo kahdeksan vuotta. Merellisten kokemusten tuottaminen on siis meille jo kuin toinen luonne! Kippari Kalle on ajanut saunalauttaa niin Tampereella kuin Helsingissä, Onni ja Ile stadissa, samoilla vesillä jo kahdeksatta vuotta, Tuure tulee toiselle kesälle ja meininki on edelleen mainio.',
       'Vuoden uniikeimmat kokemukset syntyvät täällä, joten-',
       'Tervetuloa Hyvän Tuulen Saunaan.',

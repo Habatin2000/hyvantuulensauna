@@ -191,20 +191,24 @@ export default function HeroSection({
               {isEn ? 'In cooperation with:' : 'Yhteistyössä:'}
             </span>
             <div className="flex items-center gap-4">
-              <Image
-                src="/images/harvia-logo.png"
-                alt="Harvia"
-                width={80}
-                height={45}
-                className="h-8 md:h-10 w-auto brightness-0 invert opacity-80"
-              />
-              <Image
-                src="/images/weber-logo.png"
-                alt="Weber"
-                width={40}
-                height={40}
-                className="h-8 md:h-10 w-auto brightness-0 invert opacity-80"
-              />
+              <a href="https://www.harvia.com" target="_blank" rel="noopener noreferrer" aria-label="Harvia" className="transition-opacity hover:opacity-100">
+                <Image
+                  src="/images/harvia-logo.png"
+                  alt="Harvia"
+                  width={80}
+                  height={45}
+                  className="h-8 md:h-10 w-auto brightness-0 invert opacity-80"
+                />
+              </a>
+              <a href="https://www.weber.com/FI/fi/" target="_blank" rel="noopener noreferrer" aria-label="Weber" className="transition-opacity hover:opacity-100">
+                <Image
+                  src="/images/weber-logo.png"
+                  alt="Weber"
+                  width={40}
+                  height={40}
+                  className="h-8 md:h-10 w-auto brightness-0 invert opacity-80"
+                />
+              </a>
             </div>
           </div>
         </div>
@@ -306,20 +310,24 @@ export default function HeroSection({
             {isEn ? 'In cooperation with:' : 'Yhteistyössä:'}
           </span>
           <div className="flex items-center gap-4">
-            <Image
-              src="/images/harvia-logo.png"
-              alt="Harvia"
-              width={96}
-              height={54}
-              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-            />
-            <Image
-              src="/images/weber-logo.png"
-              alt="Weber"
-              width={48}
-              height={48}
-              className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
-            />
+            <a href="https://www.harvia.com" target="_blank" rel="noopener noreferrer" aria-label="Harvia" className="transition-opacity hover:opacity-100">
+              <Image
+                src="/images/harvia-logo.png"
+                alt="Harvia"
+                width={96}
+                height={54}
+                className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
+              />
+            </a>
+            <a href="https://www.weber.com/FI/fi/" target="_blank" rel="noopener noreferrer" aria-label="Weber" className="transition-opacity hover:opacity-100">
+              <Image
+                src="/images/weber-logo.png"
+                alt="Weber"
+                width={48}
+                height={48}
+                className="h-10 md:h-12 w-auto brightness-0 invert opacity-80"
+              />
+            </a>
           </div>
         </div>
       </div>

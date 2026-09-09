@@ -77,22 +77,26 @@ export default function FinalCTA({
             {isEn ? 'In cooperation with' : 'Yhteistyössä'}
           </span>
           <div className="flex items-center gap-8">
-            <Image
-              src="/images/harvia-logo.png"
-              alt="Harvia"
-              width={114}
-              height={64}
-              loading="lazy"
-              className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
-            />
-            <Image
-              src="/images/weber-logo.png"
-              alt="Weber"
-              width={64}
-              height={64}
-              loading="lazy"
-              className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
-            />
+            <a href="https://www.harvia.com" target="_blank" rel="noopener noreferrer" aria-label="Harvia" className="transition-opacity hover:opacity-100">
+              <Image
+                src="/images/harvia-logo.png"
+                alt="Harvia"
+                width={114}
+                height={64}
+                loading="lazy"
+                className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
+              />
+            </a>
+            <a href="https://www.weber.com/FI/fi/" target="_blank" rel="noopener noreferrer" aria-label="Weber" className="transition-opacity hover:opacity-100">
+              <Image
+                src="/images/weber-logo.png"
+                alt="Weber"
+                width={64}
+                height={64}
+                loading="lazy"
+                className={`h-14 md:h-16 w-auto ${isDark ? 'brightness-0 invert opacity-90' : 'opacity-80'}`}
+              />
+            </a>
           </div>
         </div>
       </div>
