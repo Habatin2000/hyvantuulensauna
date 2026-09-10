@@ -34,31 +34,58 @@ export async function POST(request: NextRequest) {
       seasonStart.setFullYear(currentYear + 1);
       seasonEnd.setFullYear(currentYear + 1);
     }
-    const from = seasonStart.toISOString();
-    const to = seasonEnd.toISOString();
 
-    // Fetch dates for the service
-    const data = await fetchDates(
-      serviceId,
-      resourceId ? [resourceId] : [],
-      from,
-      to
+    // Don't query past dates: useless for booking, and a single date without
+    // a price rule fails the ENTIRE range query in Bookla (409
+    // no_price_rule_found) — fewer dates, fewer failure modes.
+    const effectiveStart = now > seasonStart ? now : seasonStart;
+
+    if (effectiveStart > seasonEnd) {
+      return NextResponse.json({ dates: [], timeZone: TIME_ZONE });
+    }
+
+    // Chunk by month so one bad date range can't fail the whole season
+    // (same lesson as the summer routes — see JOURNAL.md).
+    const chunks: Array<{ from: string; to: string }> = [];
+    let cursor = new Date(effectiveStart);
+    while (cursor <= seasonEnd) {
+      const nextMonth = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth() + 1, 1));
+      const chunkEnd = nextMonth < seasonEnd ? nextMonth : seasonEnd;
+      chunks.push({ from: cursor.toISOString(), to: chunkEnd.toISOString() });
+      cursor = nextMonth;
+    }
+
+    const results = await Promise.allSettled(
+      chunks.map((c) => fetchDates(serviceId, resourceId ? [resourceId] : [], c.from, c.to))
     );
 
     const allDates = new Set<string>();
-    const datesObj = data.dates || {};
-    
-    // Collect all dates from all resources
-    for (const resId of Object.keys(datesObj)) {
-      if (resourceId && resId !== resourceId) continue;
-      for (const d of datesObj[resId]) {
-        allDates.add(d);
+    let timeZone = TIME_ZONE;
+    let failedChunks = 0;
+    for (const result of results) {
+      if (result.status === 'rejected') {
+        failedChunks++;
+        console.warn('[MINICRUISE-DATES] Chunk failed, skipping:', result.reason instanceof Error ? result.reason.message : result.reason);
+        continue;
       }
+      const data = result.value;
+      timeZone = data.timeZone || timeZone;
+      const datesObj = data.dates || {};
+      for (const resId of Object.keys(datesObj)) {
+        if (resourceId && resId !== resourceId) continue;
+        for (const d of datesObj[resId]) {
+          allDates.add(d);
+        }
+      }
+    }
+
+    if (failedChunks === chunks.length && chunks.length > 0) {
+      throw new Error('All Bookla date chunks failed');
     }
 
     return NextResponse.json({
       dates: Array.from(allDates).sort(),
-      timeZone: data.timeZone || TIME_ZONE,
+      timeZone,
     });
 
   } catch (error) {
