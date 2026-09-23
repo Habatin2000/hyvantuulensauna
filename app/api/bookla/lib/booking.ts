@@ -264,13 +264,22 @@ export interface BooklaCodeValidateParams {
  * Authoritative eligibility check: POST /client/codes/{code}/validate asks
  * Bookla whether a subscription code applies to a specific booking context.
  *
- * Returns the `canApply` verdict, or null when validation is unavailable
- * (network error, non-OK status, unparsable body) — callers should then fall
- * back to their local eligibility check instead of blocking the booking.
+ * Returns the verdict plus Bookla's own usage counters (visitsRemaining /
+ * visitsTotal — the numbers its redemption engine actually enforces), or null
+ * when validation is unavailable (network error, non-OK status, unparsable
+ * body) — callers should then fall back to their local check instead of
+ * blocking the booking.
  */
+export interface BooklaCodeValidation {
+  canApply: boolean;
+  price?: number;
+  visitsRemaining?: number;
+  visitsTotal?: number;
+}
+
 export async function validateClientCode(
   params: BooklaCodeValidateParams
-): Promise<boolean | null> {
+): Promise<BooklaCodeValidation | null> {
   const url = `${params.baseUrl}/client/codes/${encodeURIComponent(params.code)}/validate`;
 
   const body: {
@@ -324,7 +333,13 @@ export async function validateClientCode(
       return null;
     }
     console.log('[BOOKLA VALIDATE] canApply:', data.canApply);
-    return data.canApply;
+    const plugin = data.pluginResponse || {};
+    return {
+      canApply: data.canApply,
+      price: typeof data.price === 'number' ? data.price : undefined,
+      visitsRemaining: typeof plugin.visitsRemaining === 'number' ? plugin.visitsRemaining : undefined,
+      visitsTotal: typeof plugin.visitsTotal === 'number' ? plugin.visitsTotal : undefined,
+    };
   } catch {
     console.log('[BOOKLA VALIDATE] Could not parse response');
     return null;

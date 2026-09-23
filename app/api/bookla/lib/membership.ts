@@ -16,6 +16,11 @@
  * (which ignores allocations/rollovers).
  */
 import { booklaFetch, getBooklaConfig } from './bookla-fetch';
+import { authenticateClient, validateClientCode } from './booking';
+
+// Public-sauna service context used for the authoritative validate call.
+const PUBLIC_SERVICE_ID = process.env.BOOKLA_PUBLIC_SERVICE_ID;
+const PUBLIC_TICKET_ID = '74ef0b6e-c3d2-4da2-aecc-cd8d0b1a09ee';
 
 // Minimal shapes for the Bookla fields actually accessed below.
 interface BooklaClient {
@@ -30,6 +35,7 @@ interface BooklaContract {
   activeFrom?: string;
   expiresAt?: string;
   subscriptionID?: string;
+  duration?: string;
   limitations?: {
     bookingsCount?: number | string | null;
   };
@@ -56,7 +62,7 @@ export interface ActiveMembership {
  * Never throws on Bookla errors — callers fall back to a paid booking.
  */
 export async function findActiveMembership(email: string): Promise<ActiveMembership | null> {
-  const { companyId, apiKey } = getBooklaConfig();
+  const { companyId, apiKey, baseUrl } = getBooklaConfig();
   if (!companyId || !apiKey) {
     throw new Error('Missing Bookla configuration');
   }
@@ -278,10 +284,13 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
     }
   }
 
-  // Effective expiry: explicit expiresAt wins; otherwise activeFrom + duration.
+  // Effective expiry: explicit expiresAt wins; otherwise activeFrom +
+  // duration — the CONTRACT's own duration field first (admins can extend a
+  // single contract this way), then the subscription product's duration.
   let effectiveExpiresAt = activeContract.expiresAt || null;
-  if (!effectiveExpiresAt && activeContract.activeFrom && subscriptionDuration) {
-    const days = parseISODurationDays(subscriptionDuration);
+  const contractDuration = contractDetails?.duration || subscriptionDuration;
+  if (!effectiveExpiresAt && activeContract.activeFrom && contractDuration) {
+    const days = parseISODurationDays(contractDuration);
     if (days !== null) {
       const from = new Date(activeContract.activeFrom);
       effectiveExpiresAt = new Date(from.getTime() + days * 86400000).toISOString();
@@ -292,8 +301,83 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
     continue;
   }
 
-  // Calculate canUseSubscription based on available data
-  const canUseSubscription = isUnlimited || (remainingUses !== null && remainingUses > 0);
+  // Authoritative counter from Bookla's redemption engine: codes/validate's
+  // pluginResponse carries visitsRemaining/visitsTotal — the numbers the
+  // booking engine actually enforces. The ledger is incomplete for older
+  // contracts (Teija: ledger granted 7 vs 23 real usages) and disagrees with
+  // usages[] on multi-seat bookings, so when validate can run, its numbers
+  // win. Falls back to the ledger-derived numbers when validate can't run
+  // (no upcoming slots, network failure, etc.).
+  let canUseSubscription = isUnlimited || (remainingUses !== null && remainingUses > 0);
+  if (activeContract.code && PUBLIC_SERVICE_ID && apiKey) {
+    try {
+      const auth = await authenticateClient({
+        baseUrl,
+        apiKey,
+        companyId: companyId!,
+        email: normalizedEmail,
+        firstName: 'Membership',
+        lastName: 'Check',
+      });
+      const timesRes = await booklaFetch(
+        `/companies/${companyId}/services/${PUBLIC_SERVICE_ID}/times`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            from: new Date().toISOString(),
+            to: new Date(Date.now() + 14 * 86400000).toISOString(),
+            tickets: { [PUBLIC_TICKET_ID]: 1 },
+          }),
+        },
+        apiKey
+      );
+      if (timesRes.ok) {
+        const timesData = await timesRes.json();
+        const times = timesData.times || {};
+        let slot: { startTime: string; resourceId: string; duration?: string } | null = null;
+        for (const rid of Object.keys(times)) {
+          const first = (times[rid] || [])[0];
+          if (first?.startTime) {
+            slot = { startTime: first.startTime, resourceId: rid, duration: first.duration };
+            break;
+          }
+        }
+        if (slot) {
+          const validation = await validateClientCode({
+            baseUrl,
+            accessToken: auth.accessToken,
+            code: activeContract.code,
+            companyId: companyId!,
+            serviceId: PUBLIC_SERVICE_ID,
+            resourceId: slot.resourceId,
+            startTime: slot.startTime,
+            duration: slot.duration || 'PT2H',
+            spots: 1,
+            tickets: { [PUBLIC_TICKET_ID]: 1 },
+          });
+          if (validation) {
+            console.log('[MEMBERSHIP] Authoritative validate numbers:', {
+              canApply: validation.canApply,
+              visitsRemaining: validation.visitsRemaining,
+              visitsTotal: validation.visitsTotal,
+            });
+            canUseSubscription = validation.canApply;
+            if (!isUnlimited && typeof validation.visitsRemaining === 'number') {
+              remainingUses = validation.visitsRemaining;
+              if (typeof validation.visitsTotal === 'number') {
+                totalLimit = validation.visitsTotal;
+                usedCount = validation.visitsTotal - validation.visitsRemaining;
+              }
+            }
+          }
+        } else {
+          console.log('[MEMBERSHIP] No upcoming slot for validate — using ledger numbers');
+        }
+      }
+    } catch (e) {
+      console.log('[MEMBERSHIP] Validate-based counter failed, using ledger numbers:', e instanceof Error ? e.message : e);
+    }
+  }
 
   console.log('[MEMBERSHIP] Final usage calculation:', {
     totalLimit,
@@ -321,13 +405,14 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   return null;
 }
 
-/** Minimal ISO-8601 day-parser for Bookla durations (P30D, P180D, P6M, P1Y). */
+/** Minimal ISO-8601 duration parser for Bookla (P30D, P180D, P239DT21H57M…). */
 function parseISODurationDays(duration: string): number | null {
-  const m = /^P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?$/.exec(duration);
+  const m = /^P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?$/.exec(duration);
   if (!m) return null;
   const years = Number(m[1] || 0);
   const months = Number(m[2] || 0);
   const days = Number(m[3] || 0);
-  if (!years && !months && !days) return null;
-  return years * 365 + months * 30 + days;
+  const hours = Number(m[4] || 0) + Number(m[5] || 0) / 60;
+  if (!years && !months && !days && !hours) return null;
+  return years * 365 + months * 30 + days + hours / 24;
 }

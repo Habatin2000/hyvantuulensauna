@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
     // Step 2: Authoritative eligibility — ask Bookla whether the resolved
     // code applies to THIS booking before using it. Never log the code.
     if (subscriptionCode) {
-      const canApply = await validateClientCode({
+      const validation = await validateClientCode({
         baseUrl: BOOKLA_BASE_URL,
         accessToken: auth.accessToken,
         code: subscriptionCode,
@@ -124,12 +124,12 @@ export async function POST(request: NextRequest) {
         spots: totalSpots,
         tickets: ticketsMap,
       });
-      if (canApply === false) {
+      if (validation?.canApply === false) {
         // Bookla says the code does not apply — fall back to a paid booking.
         console.log('[BOOKING] Subscription code not applicable to this booking — proceeding as paid booking');
         subscriptionCode = undefined;
       }
-      // canApply === null → validation unavailable (network/5xx): keep the
+      // validation === null → validation unavailable (network/5xx): keep the
       // local canUseSubscription result rather than blocking the booking.
     }
 
