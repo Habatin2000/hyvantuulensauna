@@ -65,10 +65,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If the client asks to use a membership, resolve the subscription code
-    // server-side from the customer email — the code never leaves the server.
+    // If the client asks to use a membership, resolve the subscription
+    // server-side from the customer email — it never leaves the server.
     // Never trust the client: verify the contract is active and has remaining
     // uses, and fall back to a normal paid booking when lookup fails.
+    //
+    // IMPORTANT (Bookla debug session, Sep 2026): the code is used ONLY for
+    // the read-only eligibility check below. It is NOT sent in the booking
+    // request — Bookla auto-redeems the authenticated client's active
+    // contract when `code` is omitted, and that path correctly spends from
+    // manual ledger allocations. Sending the code switches Bookla to its
+    // code-redemption path, which ignores manual allocations and wrongly
+    // charges members full price.
     let subscriptionCode: string | undefined;
     if (useMembership === true) {
       try {
@@ -127,7 +135,9 @@ export async function POST(request: NextRequest) {
 
     const isMemberBooking = Boolean(subscriptionCode);
 
-    // Step 3: Create booking via client endpoint
+    // Step 3: Create booking via client endpoint. Deliberately NO code field —
+    // see the comment above: Bearer-only booking lets Bookla auto-redeem the
+    // contract (the path that respects manual allocations).
     const result = await booklaClientBooking({
       baseUrl: BOOKLA_BASE_URL,
       accessToken: auth.accessToken,
@@ -139,7 +149,6 @@ export async function POST(request: NextRequest) {
       spots: totalSpots,
       tickets: ticketsMap,
       metaData: client.phone ? { phone: client.phone } : undefined,
-      code: subscriptionCode || undefined,
     });
 
     if (!result.ok) {
@@ -157,9 +166,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Step 4: Handle member code fallback
-    // If code was sent but Bookla still returns paymentURL → code expired/used
-    // Let user pay normally, don't throw error
+    // Step 4: Member fallback — if Bookla still returns a paymentURL for an
+    // eligible member (e.g. contract exhausted between check and booking),
+    // let the user pay normally instead of erroring.
     if (isMemberBooking && result.isConfirmed) {
       return NextResponse.json({
         success: true,
@@ -173,7 +182,7 @@ export async function POST(request: NextRequest) {
 
     if (result.paymentURL) {
       if (isMemberBooking) {
-        console.warn('[BOOKING] Member code sent but payment still required — falling through to payment flow');
+        console.warn('[BOOKING] Eligible member booking still requires payment — falling through to payment flow');
       }
       return NextResponse.json({
         success: false,

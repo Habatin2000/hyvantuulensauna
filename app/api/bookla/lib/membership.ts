@@ -206,22 +206,32 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
       const ledgerData = await ledgerRes.json();
       const entries = Array.isArray(ledgerData) ? ledgerData : ledgerData.items || [];
 
+      // Skip entries whose allocation has expired — Bookla treats expired
+      // balances as 0 (verified against admin: expired card showed 0 while a
+      // naive ledger sum showed 1). Entries without expiresAt never expire.
+      const now = new Date();
       let granted = 0;
       let consumed = 0;
       let sawAmount = false;
+      let expiredBalance = 0;
       for (const entry of entries) {
         const amount = Number(entry?.amount);
         if (!Number.isFinite(amount)) continue;
+        const expired = entry?.expiresAt && new Date(entry.expiresAt) < now;
+        if (expired) {
+          expiredBalance += amount;
+          continue;
+        }
         sawAmount = true;
         if (amount > 0) granted += amount;
         else consumed += -amount;
       }
 
-      if (sawAmount) {
+      if (sawAmount || expiredBalance !== 0) {
         totalLimit = granted;
         usedCount = consumed;
         remainingUses = Math.max(0, granted - consumed);
-        console.log('[MEMBERSHIP] Ledger balance:', { granted, consumed, remainingUses });
+        console.log('[MEMBERSHIP] Ledger balance:', { granted, consumed, remainingUses, expiredBalance });
       }
     } else {
       console.log('[MEMBERSHIP] Ledger fetch failed:', ledgerRes.status);
