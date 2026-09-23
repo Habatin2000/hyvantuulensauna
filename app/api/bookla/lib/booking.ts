@@ -304,6 +304,7 @@ export async function validateClientCode(
   const url = `${params.baseUrl}/client/codes/${encodeURIComponent(params.code)}/validate`;
 
   const body: {
+    code: string;
     companyID: string;
     serviceID: string;
     resourceID: string;
@@ -312,6 +313,8 @@ export async function validateClientCode(
     spots?: number;
     tickets?: Record<string, number>;
   } = {
+    // code is REQUIRED in the body per the spec (in addition to the path param)
+    code: params.code,
     companyID: params.companyId,
     serviceID: params.serviceId,
     resourceID: params.resourceId,
