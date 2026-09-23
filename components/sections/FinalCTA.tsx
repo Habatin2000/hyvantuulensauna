@@ -12,11 +12,11 @@ interface FinalCTAProps {
   description: string;
   primaryCta: {
     text: string;
-    href: string;
+    href: string | { pathname: string; hash?: string };
   };
   secondaryCta?: {
     text: string;
-    href: string;
+    href: string | { pathname: string; hash?: string };
   };
   variant?: 'light' | 'dark';
 }

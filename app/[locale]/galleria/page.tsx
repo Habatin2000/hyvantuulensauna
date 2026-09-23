@@ -18,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/galleria`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/gallery' : '/galleria'}`;
 
   return {
     title: isEn
@@ -31,8 +31,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/galleria`,
-        'en-US': `${SITE_URL}/en/galleria`,
-        'en-GB': `${SITE_URL}/en/galleria`,
+        'en-US': `${SITE_URL}/en/gallery`,
+        'en-GB': `${SITE_URL}/en/gallery`,
         'x-default': `${SITE_URL}/galleria`,
       },
     },
@@ -67,7 +67,7 @@ export default async function GalleryPage({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/galleria`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/gallery' : '/galleria'}`;
   const galleryImages = getGalleryImages(safeLocale);
 
   // Schemas
@@ -158,7 +158,7 @@ export default async function GalleryPage({
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/saunalauttaristeilyt-helsingissa#boats"
+              href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }}
               className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb]"
             >
               {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}

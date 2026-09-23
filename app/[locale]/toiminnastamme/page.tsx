@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { getStoryContent, getTrustBadges } from '@/content/homepage';
 import { generateBreadcrumbSchema, generateArticleSchema } from '../schema';
 import { SITE_URL } from '@/lib/site';
@@ -17,7 +17,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/toiminnastamme`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/about' : '/toiminnastamme'}`;
 
   return {
     title: isEn ? 'About Us' : 'Toiminnastamme',
@@ -28,8 +28,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/toiminnastamme`,
-        'en-US': `${SITE_URL}/en/toiminnastamme`,
-        'en-GB': `${SITE_URL}/en/toiminnastamme`,
+        'en-US': `${SITE_URL}/en/about`,
+        'en-GB': `${SITE_URL}/en/about`,
         'x-default': `${SITE_URL}/toiminnastamme`,
       },
     },
@@ -64,7 +64,7 @@ export default async function AboutPage({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/toiminnastamme`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/about' : '/toiminnastamme'}`;
 
   const storyContent = getStoryContent(safeLocale);
   const trustBadges = getTrustBadges(safeLocale);
@@ -134,7 +134,7 @@ export default async function AboutPage({
                   <strong className="text-stone-900">Hyvän Tuulen Sauna has offered sauna boat cruises in Helsinki since 2018.</strong>{' '}
                   With eight years of experience, we provide maritime sauna experiences in the Eastern Helsinki archipelago.
                   Our skippers Kalle, Onni, Ile and Tuure make sure every{' '}
-                  <Link href="/en/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruise</Link> is safe and unforgettable.
+                  <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruise</Link> is safe and unforgettable.
                   Our work is built on authenticity, closeness to the sea and community.
                 </>
               ) : (

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import HeroSection from '@/components/sections/HeroSection';
 import { getLocationPageHero } from '@/content/pages';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
@@ -17,7 +17,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/sijainti`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/location' : '/sijainti'}`;
 
   return {
     title: isEn
@@ -30,8 +30,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/sijainti`,
-        'en-US': `${SITE_URL}/en/sijainti`,
-        'en-GB': `${SITE_URL}/en/sijainti`,
+        'en-US': `${SITE_URL}/en/location`,
+        'en-GB': `${SITE_URL}/en/location`,
         'x-default': `${SITE_URL}/sijainti`,
       },
     },
@@ -66,7 +66,7 @@ export default async function LocationPage({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/sijainti`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/location' : '/sijainti'}`;
 
   // Schemas
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -139,8 +139,8 @@ export default async function LocationPage({
               {isEn ? (
                 <>
                   <strong className="text-stone-900">Hyvän Tuulen Sauna is located at the Kalkkihiekantori boat pier in Aurinkolahti, Helsinki.</strong>{' '}
-                  Arrive by metro to Vuosaari (10 min walk) or by buses 560 and 78. Free parking at the square. This is where the <Link href="/en/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruises</Link> and
-                  <Link href="/en/julkinen-sauna" className="text-[#3b82f6] hover:underline"> public sauna sessions</Link> depart from.
+                  Arrive by metro to Vuosaari (10 min walk) or by buses 560 and 78. Free parking at the square. This is where the <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruises</Link> and
+                  <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline"> public sauna sessions</Link> depart from.
                 </>
               ) : (
                 <>

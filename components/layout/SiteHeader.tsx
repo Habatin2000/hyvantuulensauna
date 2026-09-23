@@ -57,7 +57,7 @@ export default function SiteHeader() {
             >
               <Phone className="h-5 w-5" aria-hidden="true" />
             </Link>
-            <Link href="/saunalauttaristeilyt-helsingissa#boats" className="hidden sm:block">
+            <Link href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }} className="hidden sm:block">
               <Button className="bg-[#3b82f6] hover:bg-[#2563eb] text-white">
                 {t('bookNow')}
               </Button>

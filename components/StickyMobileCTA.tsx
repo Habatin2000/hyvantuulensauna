@@ -1,12 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 export default function StickyMobileCTA() {
   const [isVisible, setIsVisible] = useState(false);
   const t = useTranslations('nav');
+  // The booking section anchor is localized on the target page
+  // (julkinen-sauna renders id="booking" for en, id="varaus" for fi).
+  const locale = useLocale();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,13 +31,13 @@ export default function StickyMobileCTA() {
       <div className="mx-3 mb-3 rounded-2xl border border-white/20 bg-stone-900/80 backdrop-blur-xl p-2 shadow-2xl shadow-black/30">
         <div className="flex gap-2">
           <Link
-            href="/saunalauttaristeilyt-helsingissa#boats"
+            href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }}
             className="flex-1 rounded-xl bg-white/10 px-3 py-2.5 text-center text-xs font-semibold text-white ring-1 ring-white/10 transition-all hover:bg-white/20 hover:scale-[1.02] active:scale-[0.98]"
           >
             {t('private')}
           </Link>
           <Link
-            href="/julkinen-sauna#varaus"
+            href={{ pathname: '/julkinen-sauna', hash: locale === 'en' ? 'booking' : 'varaus' }}
             className="flex-1 rounded-xl bg-[#3b82f6] px-3 py-2.5 text-center text-xs font-semibold text-white shadow-lg shadow-[#3b82f6]/30 transition-all hover:bg-[#2563eb] hover:scale-[1.02] active:scale-[0.98]"
           >
             {t('public')}

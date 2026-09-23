@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import HeroSection from '@/components/sections/HeroSection';
 import BoatComparisonCards from '@/components/sections/BoatComparisonCards';
 import FAQAccordion from '@/components/sections/FAQAccordion';
@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/yksityissauna`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/private-sauna-helsinki' : '/yksityissauna'}`;
 
   return {
     title: isEn
@@ -36,8 +36,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/yksityissauna`,
-        'en-US': `${SITE_URL}/en/yksityissauna`,
-        'en-GB': `${SITE_URL}/en/yksityissauna`,
+        'en-US': `${SITE_URL}/en/private-sauna-helsinki`,
+        'en-GB': `${SITE_URL}/en/private-sauna-helsinki`,
         'x-default': `${SITE_URL}/yksityissauna`,
       },
     },
@@ -72,7 +72,7 @@ export default async function PrivateSaunaPage({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/yksityissauna`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/private-sauna-helsinki' : '/yksityissauna'}`;
 
   const faqItems = getFAQsByCategory('private', safeLocale);
   const useCases = getUseCases(safeLocale);
@@ -136,7 +136,7 @@ export default async function PrivateSaunaPage({
                   <strong className="text-stone-900">Hyvän Tuulen Sauna is the perfect venue for private events in Helsinki.</strong>{' '}
                   Organize bachelor parties, birthdays, team days or a corporate event in the maritime setting of Aurinkolahti.
                   Two sauna boats – Aalto and Virta – offer unique facilities for groups of 8–25 people.
-                  Book a <Link href="/en/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruise</Link> and experience Helsinki&apos;s best sauna experience!
+                  Book a <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruise</Link> and experience Helsinki&apos;s best sauna experience!
                 </>
               ) : (
                 <>
@@ -222,7 +222,7 @@ export default async function PrivateSaunaPage({
         primaryCta={{ text: isEn ? 'Contact us' : 'Ota yhteyttä', href: 'tel:+358442313546' }}
         secondaryCta={{
           text: isEn ? 'See sauna boats' : 'Katso saunalautat',
-          href: isEn ? '/en/saunalauttaristeilyt-helsingissa' : '/saunalauttaristeilyt-helsingissa',
+          href: '/saunalauttaristeilyt-helsingissa',
         }}
         variant="dark"
       />

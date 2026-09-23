@@ -16,7 +16,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/usein-kysyttya`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/faq' : '/usein-kysyttya'}`;
 
   return {
     title: isEn
@@ -29,8 +29,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/usein-kysyttya`,
-        'en-US': `${SITE_URL}/en/usein-kysyttya`,
-        'en-GB': `${SITE_URL}/en/usein-kysyttya`,
+        'en-US': `${SITE_URL}/en/faq`,
+        'en-GB': `${SITE_URL}/en/faq`,
         'x-default': `${SITE_URL}/usein-kysyttya`,
       },
     },
@@ -55,7 +55,7 @@ export default async function FAQPage({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/usein-kysyttya`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/faq' : '/usein-kysyttya'}`;
 
   const allFaqs = getAllFAQs(safeLocale);
 
@@ -154,11 +154,11 @@ export default async function FAQPage({
           : 'Varaa oma saunaelämyksesi nyt ja koe unohtumaton päivä merellä.'}
         primaryCta={{
           text: isEn ? 'Book a sauna boat' : 'Varaa saunalautta',
-          href: isEn ? '/en/saunalauttaristeilyt-helsingissa#boats' : '/saunalauttaristeilyt-helsingissa#boats',
+          href: { pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' },
         }}
         secondaryCta={{
           text: isEn ? 'Public sauna' : 'Julkinen sauna',
-          href: isEn ? '/en/julkinen-sauna' : '/julkinen-sauna',
+          href: '/julkinen-sauna',
         }}
         variant="dark"
       />

@@ -121,7 +121,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
         description={locale === "en"
           ? "Welcome to enjoy the most fun moments of the summer at Hyvän Tuulen Sauna <3"
           : "Tervetuloa nauttimaan kesän hauskimmista hetkistä Hyvän Tuulen Saunalle <3"}
-        primaryCta={{ text: locale === "en" ? "Book a sauna boat" : "Varaa saunalautta", href: "/saunalauttaristeilyt-helsingissa#boats" }}
+        primaryCta={{ text: locale === "en" ? "Book a sauna boat" : "Varaa saunalautta", href: { pathname: "/saunalauttaristeilyt-helsingissa", hash: "boats" } }}
         secondaryCta={{ text: locale === "en" ? "Call us" : "Soita meille", href: "tel:+358442313546" }}
         variant="dark"
       />

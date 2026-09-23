@@ -82,7 +82,7 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
 
             {/* CTA */}
             <div className="mt-6 px-4">
-              <Link href="/saunalauttaristeilyt-helsingissa#boats" onClick={onClose}>
+              <Link href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }} onClick={onClose}>
                 <Button className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white">
                   {t('bookNow')}
                 </Button>

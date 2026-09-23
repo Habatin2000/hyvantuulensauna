@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useRouter } from '@/i18n/navigation';
+import { useRouter } from 'next/navigation';
 import BoatCard from './BoatCard';
 import PublicBookingWidget from '../booking/PublicBookingWidget';
 import { getBoats } from '@/content/boats';
@@ -49,8 +49,10 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
     ? 'Weekday daytime €175–200; evenings and weekends priced separately.'
     : 'Arkisin aamupäivisin 175–200 €, illat ja viikonloput erikseen.';
 
+  // next/navigation router on purpose: the target URL is already localized,
+  // and the i18n router has no hash support for programmatic navigation.
   const navigateToBoats = () => {
-    router.push('/saunalauttaristeilyt-helsingissa#boats');
+    router.push(isEn ? '/en/sauna-boat-cruises-helsinki/#boats' : '/saunalauttaristeilyt-helsingissa/#boats');
   };
 
   // Roving-tabindex arrow-key navigation between tabs (WAI-ARIA tabs pattern)

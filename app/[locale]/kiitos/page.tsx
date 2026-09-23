@@ -21,7 +21,7 @@ export async function generateMetadata({
       ? 'We have received your booking request. We will be in touch soon!'
       : 'Vastaanotimme varauskyselysi. Olemme sinuun yhteydessä pian!',
     alternates: {
-      canonical: `${SITE_URL}${isEn ? '/en' : ''}/kiitos`,
+      canonical: `${SITE_URL}${isEn ? '/en/thank-you' : '/kiitos'}`,
     },
     robots: {
       index: false,

@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/saunalauttaristeilyt-helsingissa`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/sauna-boat-cruises-helsinki' : '/saunalauttaristeilyt-helsingissa'}`;
 
   return {
     title: isEn
@@ -30,8 +30,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/saunalauttaristeilyt-helsingissa`,
-        'en-US': `${SITE_URL}/en/saunalauttaristeilyt-helsingissa`,
-        'en-GB': `${SITE_URL}/en/saunalauttaristeilyt-helsingissa`,
+        'en-US': `${SITE_URL}/en/sauna-boat-cruises-helsinki`,
+        'en-GB': `${SITE_URL}/en/sauna-boat-cruises-helsinki`,
         'x-default': `${SITE_URL}/saunalauttaristeilyt-helsingissa`,
       },
     },
@@ -68,7 +68,7 @@ export default async function SummerSaunaPage({
   const isEn = safeLocale === 'en';
 
   const faqItems = getFAQsByCategory('summer', safeLocale);
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/saunalauttaristeilyt-helsingissa`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/sauna-boat-cruises-helsinki' : '/saunalauttaristeilyt-helsingissa'}`;
 
   const serviceSchema = generateServiceSchema(
     isEn ? 'Sauna Boat Cruises in Helsinki | Aalto and Virta' : 'Saunalauttaristeilyt Helsingissä | Aalto ja Virta',

@@ -98,7 +98,7 @@ export default function BoatComparisonCards({
                 </div>
 
                 {/* CTA */}
-                <Link href="/saunalauttaristeilyt-helsingissa#boats" className="block">
+                <Link href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }} className="block">
                   <Button size="lg" className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white">
                     Varaa {boat.name}
                   </Button>

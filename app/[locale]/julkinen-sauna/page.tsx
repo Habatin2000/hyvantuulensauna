@@ -23,7 +23,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/julkinen-sauna`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/public-sauna-helsinki' : '/julkinen-sauna'}`;
 
   return {
     title: isEn
@@ -36,8 +36,8 @@ export async function generateMetadata({
       canonical: pageUrl,
       languages: {
         'fi-FI': `${SITE_URL}/julkinen-sauna`,
-        'en-US': `${SITE_URL}/en/julkinen-sauna`,
-        'en-GB': `${SITE_URL}/en/julkinen-sauna`,
+        'en-US': `${SITE_URL}/en/public-sauna-helsinki`,
+        'en-GB': `${SITE_URL}/en/public-sauna-helsinki`,
         'x-default': `${SITE_URL}/julkinen-sauna`,
       },
     },
@@ -75,7 +75,7 @@ export default async function PublicSaunaPage({
 
   const faqItems = getFAQsByCategory('public', safeLocale);
   const publicPageHero = getPublicPageHero(safeLocale);
-  const pageUrl = `${SITE_URL}${isEn ? '/en' : ''}/julkinen-sauna`;
+  const pageUrl = `${SITE_URL}${isEn ? '/en/public-sauna-helsinki' : '/julkinen-sauna'}`;
 
   const serviceSchema = generateServiceSchema(
     isEn ? 'Public sauna' : 'Julkinen sauna',

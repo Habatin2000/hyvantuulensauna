@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
         '/api/',
         '/_next/',
         '/kiitos',
-        '/en/kiitos',
+        '/en/thank-you',
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
