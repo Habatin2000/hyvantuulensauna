@@ -259,22 +259,42 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   // Unlimited if Bookla uses null/0/-1 for unlimited (based on the quota field)
   const isUnlimited = bookingsCount === null || bookingsCount === 0 || bookingsCount === -1;
 
-  // Step 5: Fetch subscription name
+  // Step 5: Fetch subscription product (name + duration). NOTE: the correct
+  // endpoint is /plugins/subscription/list/{id} — the old /subscriptions/{id}
+  // path 404s silently. Duration matters: contracts with no expiresAt expire
+  // at activeFrom + duration (e.g. "30x kortti" P30D), and Bookla rejects
+  // redemptions after that even though contract.expiresAt is null.
   let subscriptionName = 'Kanta-asiakkuus';
+  let subscriptionDuration: string | null = null;
   if (activeContract.subscriptionID) {
     try {
       const subResponse = await booklaFetch(
-        `/companies/${companyId}/plugins/subscription/subscriptions/${activeContract.subscriptionID}`,
+        `/companies/${companyId}/plugins/subscription/list/${activeContract.subscriptionID}`,
         { method: 'GET' }
       );
       if (subResponse.ok) {
         const subData = await subResponse.json();
-        subscriptionName = subData.name || subscriptionName;
-        console.log('[MEMBERSHIP] Subscription name:', subscriptionName);
+        subscriptionName = subData.title || subData.name || subscriptionName;
+        subscriptionDuration = typeof subData.duration === 'string' ? subData.duration : null;
+        console.log('[MEMBERSHIP] Subscription:', subscriptionName, subscriptionDuration);
       }
     } catch (e) {
-      console.log('[MEMBERSHIP] Error fetching subscription name:', e instanceof Error ? e.message : e);
+      console.log('[MEMBERSHIP] Error fetching subscription product:', e instanceof Error ? e.message : e);
     }
+  }
+
+  // Effective expiry: explicit expiresAt wins; otherwise activeFrom + duration.
+  let effectiveExpiresAt = activeContract.expiresAt || null;
+  if (!effectiveExpiresAt && activeContract.activeFrom && subscriptionDuration) {
+    const days = parseISODurationDays(subscriptionDuration);
+    if (days !== null) {
+      const from = new Date(activeContract.activeFrom);
+      effectiveExpiresAt = new Date(from.getTime() + days * 86400000).toISOString();
+    }
+  }
+  if (effectiveExpiresAt && new Date(effectiveExpiresAt) < new Date()) {
+    console.log('[MEMBERSHIP] Contract expired (derived expiry):', effectiveExpiresAt);
+    return null;
   }
 
   // Calculate canUseSubscription based on available data
@@ -298,6 +318,17 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
     usedCount,
     isUnlimited,
     canUseSubscription,
-    expiresAt: activeContract.expiresAt || null,
+    expiresAt: effectiveExpiresAt,
   };
+}
+
+/** Minimal ISO-8601 day-parser for Bookla durations (P30D, P180D, P6M, P1Y). */
+function parseISODurationDays(duration: string): number | null {
+  const m = /^P(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)D)?$/.exec(duration);
+  if (!m) return null;
+  const years = Number(m[1] || 0);
+  const months = Number(m[2] || 0);
+  const days = Number(m[3] || 0);
+  if (!years && !months && !days) return null;
+  return years * 365 + months * 30 + days;
 }
