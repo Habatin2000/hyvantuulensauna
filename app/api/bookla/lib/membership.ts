@@ -119,39 +119,34 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   const contractList = Array.isArray(contracts) ? contracts : [];
   const now = new Date();
 
-  // Among all currently-active contracts pick the one with the latest
-  // expiresAt (a contract without expiry outranks any dated one).
-  let activeContract: BooklaContract | null = null;
-  for (const contract of contractList as BooklaContract[]) {
-    const status = String(contract.status ?? '').toLowerCase();
-    const activeFrom = contract.activeFrom ? new Date(contract.activeFrom) : null;
-    const expiresAt = contract.expiresAt ? new Date(contract.expiresAt) : null;
+  // Candidates: currently-active contracts, best (latest expiry) first.
+  // NOTE: expiry may derive from activeFrom + subscription duration when
+  // expiresAt is null, so a candidate can still turn out expired later in
+  // this function — hence we try each candidate in turn instead of picking
+  // one upfront (Teija regression: expired 30x card shadowed a valid card).
+  const expiryTs = (c: BooklaContract) =>
+    c.expiresAt ? new Date(c.expiresAt).getTime() : Number.POSITIVE_INFINITY;
 
-    const isActive =
-      status === 'active' &&
-      (!activeFrom || activeFrom <= now) &&
-      (!expiresAt || expiresAt >= now);
-    if (!isActive) continue;
+  const candidates = (contractList as BooklaContract[])
+    .filter((contract) => {
+      const status = String(contract.status ?? '').toLowerCase();
+      const activeFrom = contract.activeFrom ? new Date(contract.activeFrom) : null;
+      const expiresAt = contract.expiresAt ? new Date(contract.expiresAt) : null;
+      return (
+        status === 'active' &&
+        (!activeFrom || activeFrom <= now) &&
+        (!expiresAt || expiresAt >= now)
+      );
+    })
+    .sort((a, b) => expiryTs(b) - expiryTs(a));
 
-    if (!activeContract) {
-      activeContract = contract;
-      continue;
-    }
-    const bestExpiry = activeContract.expiresAt
-      ? new Date(activeContract.expiresAt).getTime()
-      : Number.POSITIVE_INFINITY;
-    const thisExpiry = expiresAt ? expiresAt.getTime() : Number.POSITIVE_INFINITY;
-    if (thisExpiry > bestExpiry) {
-      activeContract = contract;
-    }
-  }
-
-  if (!activeContract) {
+  if (candidates.length === 0) {
     console.log('[MEMBERSHIP] No active contract');
     return null;
   }
 
-  console.log('[MEMBERSHIP] Active contract found:', activeContract.id);
+  for (const activeContract of candidates) {
+  console.log('[MEMBERSHIP] Trying contract:', activeContract.id);
 
   // Step 3: Fetch detailed contract info using the documented plugins endpoint
   let contractDetails: BooklaContract = activeContract;
@@ -292,9 +287,9 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
       effectiveExpiresAt = new Date(from.getTime() + days * 86400000).toISOString();
     }
   }
-  if (effectiveExpiresAt && new Date(effectiveExpiresAt) < new Date()) {
-    console.log('[MEMBERSHIP] Contract expired (derived expiry):', effectiveExpiresAt);
-    return null;
+  if (effectiveExpiresAt && new Date(effectiveExpiresAt) < now) {
+    console.log('[MEMBERSHIP] Contract expired (derived expiry), trying next candidate:', effectiveExpiresAt);
+    continue;
   }
 
   // Calculate canUseSubscription based on available data
@@ -320,6 +315,10 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
     canUseSubscription,
     expiresAt: effectiveExpiresAt,
   };
+  } // end for candidates
+
+  console.log('[MEMBERSHIP] No usable contract (all candidates expired or invalid)');
+  return null;
 }
 
 /** Minimal ISO-8601 day-parser for Bookla durations (P30D, P180D, P6M, P1Y). */
