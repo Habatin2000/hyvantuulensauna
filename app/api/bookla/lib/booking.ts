@@ -116,6 +116,27 @@ export async function authenticateClient(params: {
 }
 
 /**
+ * Cancel a booking via the client endpoint (Bearer). Used to clean up member
+ * bookings that came back as paid despite a validated membership.
+ */
+export async function cancelClientBooking(params: {
+  baseUrl: string;
+  accessToken: string;
+  bookingId: string;
+}): Promise<boolean> {
+  try {
+    const res = await fetch(`${params.baseUrl}/client/bookings/${params.bookingId}/cancel`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${params.accessToken}` },
+    });
+    console.log('[BOOKLA CANCEL] status:', res.status);
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Looks up an existing Bookla client's externalUserID by email (merchant
  * endpoint). Returns null when no client matches or on any failure — callers
  * fall back to using the email as the external id. Never logs PII.

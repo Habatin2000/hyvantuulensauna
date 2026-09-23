@@ -19,7 +19,7 @@ import { booklaFetch, getBooklaConfig } from './bookla-fetch';
 import { authenticateClient, validateClientCode } from './booking';
 
 // Public-sauna service context used for the authoritative validate call.
-const PUBLIC_SERVICE_ID = process.env.BOOKLA_PUBLIC_SERVICE_ID;
+// Read at request time (module scope can evaluate before env is loaded).
 const PUBLIC_TICKET_ID = '74ef0b6e-c3d2-4da2-aecc-cd8d0b1a09ee';
 
 // Minimal shapes for the Bookla fields actually accessed below.
@@ -309,7 +309,8 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
   // win. Falls back to the ledger-derived numbers when validate can't run
   // (no upcoming slots, network failure, etc.).
   let canUseSubscription = isUnlimited || (remainingUses !== null && remainingUses > 0);
-  if (activeContract.code && PUBLIC_SERVICE_ID && apiKey) {
+  const publicServiceId = process.env.BOOKLA_PUBLIC_SERVICE_ID;
+  if (activeContract.code && publicServiceId && apiKey) {
     try {
       const auth = await authenticateClient({
         baseUrl,
@@ -319,22 +320,29 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
         firstName: 'Membership',
         lastName: 'Check',
       });
-      const timesRes = await booklaFetch(
-        `/companies/${companyId}/services/${PUBLIC_SERVICE_ID}/times`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            from: new Date().toISOString(),
-            to: new Date(Date.now() + 14 * 86400000).toISOString(),
-            tickets: { [PUBLIC_TICKET_ID]: 1 },
-          }),
-        },
-        apiKey
-      );
-      if (timesRes.ok) {
+      // Find a real upcoming slot to validate against. Query single-day
+      // windows: Bookla 409s an entire range if ANY date in it lacks a price
+      // rule (per JOURNAL.md), so a wide range silently kills the lookup.
+      let slot: { startTime: string; resourceId: string; duration?: string } | null = null;
+      for (let dayOffset = 0; dayOffset < 14 && !slot; dayOffset++) {
+        const dayStart = new Date(Date.now() + dayOffset * 86400000);
+        dayStart.setUTCHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart.getTime() + 86400000);
+        const timesRes = await booklaFetch(
+          `/companies/${companyId}/services/${publicServiceId}/times`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              from: dayStart.toISOString(),
+              to: dayEnd.toISOString(),
+              tickets: { [PUBLIC_TICKET_ID]: 1 },
+            }),
+          },
+          apiKey
+        );
+        if (!timesRes.ok) continue; // day without price rules — try next
         const timesData = await timesRes.json();
         const times = timesData.times || {};
-        let slot: { startTime: string; resourceId: string; duration?: string } | null = null;
         for (const rid of Object.keys(times)) {
           const first = (times[rid] || [])[0];
           if (first?.startTime) {
@@ -342,13 +350,17 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
             break;
           }
         }
-        if (slot) {
+      }
+      if (!slot) {
+        console.log('[MEMBERSHIP] No upcoming slot for validate — using ledger numbers');
+      }
+      if (slot) {
           const validation = await validateClientCode({
             baseUrl,
             accessToken: auth.accessToken,
             code: activeContract.code,
             companyId: companyId!,
-            serviceId: PUBLIC_SERVICE_ID,
+            serviceId: publicServiceId,
             resourceId: slot.resourceId,
             startTime: slot.startTime,
             duration: slot.duration || 'PT2H',
@@ -370,9 +382,6 @@ export async function findActiveMembership(email: string): Promise<ActiveMembers
               }
             }
           }
-        } else {
-          console.log('[MEMBERSHIP] No upcoming slot for validate — using ledger numbers');
-        }
       }
     } catch (e) {
       console.log('[MEMBERSHIP] Validate-based counter failed, using ledger numbers:', e instanceof Error ? e.message : e);

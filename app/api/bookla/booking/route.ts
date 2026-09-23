@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authenticateClient, booklaClientBooking, validateClientCode } from '../lib/booking';
+import { authenticateClient, booklaClientBooking, cancelClientBooking, validateClientCode } from '../lib/booking';
 import { findActiveMembership } from '../lib/membership';
 
 const BOOKLA_BASE_URL = process.env.BOOKLA_BASE_URL || 'https://eu.bookla.com/api/v1';
@@ -65,18 +65,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // If the client asks to use a membership, resolve the subscription
-    // server-side from the customer email — it never leaves the server.
+    // If the client asks to use a membership, resolve the subscription code
+    // server-side from the customer email — the code never leaves the server.
     // Never trust the client: verify the contract is active and has remaining
     // uses, and fall back to a normal paid booking when lookup fails.
-    //
-    // IMPORTANT (Bookla debug session, Sep 2026): the code is used ONLY for
-    // the read-only eligibility check below. It is NOT sent in the booking
-    // request — Bookla auto-redeems the authenticated client's active
-    // contract when `code` is omitted, and that path correctly spends from
-    // manual ledger allocations. Sending the code switches Bookla to its
-    // code-redemption path, which ignores manual allocations and wrongly
-    // charges members full price.
     let subscriptionCode: string | undefined;
     if (useMembership === true) {
       try {
@@ -135,9 +127,11 @@ export async function POST(request: NextRequest) {
 
     const isMemberBooking = Boolean(subscriptionCode);
 
-    // Step 3: Create booking via client endpoint. Deliberately NO code field —
-    // see the comment above: Bearer-only booking lets Bookla auto-redeem the
-    // contract (the path that respects manual allocations).
+    // Step 3: Create booking via client endpoint. The code IS sent: Bookla's
+    // Bearer-only bookings do NOT auto-redeem (verified E2E, Sep 2026), so the
+    // validated code is required for member pricing. The validate pre-check
+    // above guards eligibility; the paymentURL safety net below catches the
+    // Bookla validate/redeem inconsistency (validate says yes, engine says no).
     const result = await booklaClientBooking({
       baseUrl: BOOKLA_BASE_URL,
       accessToken: auth.accessToken,
@@ -149,6 +143,7 @@ export async function POST(request: NextRequest) {
       spots: totalSpots,
       tickets: ticketsMap,
       metaData: client.phone ? { phone: client.phone } : undefined,
+      code: subscriptionCode,
     });
 
     if (!result.ok) {
@@ -182,7 +177,25 @@ export async function POST(request: NextRequest) {
 
     if (result.paymentURL) {
       if (isMemberBooking) {
-        console.warn('[BOOKING] Eligible member booking still requires payment — falling through to payment flow');
+        // Safety net: the membership validated but the booking still came back
+        // payable (Bookla validate/redeem inconsistency). Cancel the pending
+        // booking and surface an error — never send a validated member to
+        // Stripe, and never leave orphan pending bookings behind.
+        console.error('[BOOKING] Validated member booking returned paymentURL — cancelling and erroring out');
+        if (result.bookingId) {
+          await cancelClientBooking({
+            baseUrl: BOOKLA_BASE_URL,
+            accessToken: auth.accessToken,
+            bookingId: result.bookingId,
+          });
+        }
+        return NextResponse.json(
+          {
+            error: 'Jäsenyyttä ei voitu käyttää tähän varaukseen juuri nyt. Varausta ei tehty — kokeile hetken kuluttua uudelleen tai ota yhteyttä info@hyvantuulensauna.fi.',
+            code: 'MEMBERSHIP_NOT_APPLIED',
+          },
+          { status: 502 }
+        );
       }
       return NextResponse.json({
         success: false,
