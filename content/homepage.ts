@@ -29,7 +29,7 @@ export const getHomepageHero = (locale: Locale): HeroContent => {
     };
   }
   return {
-    title: 'Se uniikein sauna Helsingissä',
+    title: 'Se Kelluva Sauna Helsingissä',
     subtitle: 'Hyvän Tuulen Sauna',
     description: 'Saunomista, risteilyjä ja unohtumattomia hetkiä vesillä. Itä-Helsingin upeassa saaristossa.',
     ctaText: 'Varaa saunalauttaristeily',
