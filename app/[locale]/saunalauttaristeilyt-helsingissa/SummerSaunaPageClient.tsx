@@ -6,22 +6,18 @@ import SquareGallery from '@/components/sections/SquareGallery';
 import BoatCard from '@/components/sections/BoatCard';
 import FAQAccordion from '@/components/sections/FAQAccordion';
 import FinalCTA from '@/components/sections/FinalCTA';
-import FeatureGrid from '@/components/sections/FeatureGrid';
 import SummerBookingShell from '@/components/booking/SummerBookingShell';
 import LazyGoogleReviews from '@/components/sections/LazyGoogleReviews';
 import AnimatedSection from '@/components/AnimatedSection';
 import {
   getSummerPageHero,
   getSummerIntroContent,
-  getWhyChooseContent,
   getArchipelagoContent,
   getCruiseExperienceContent,
   getRentalContent,
   getOccasionContent,
   getIncludedContent,
-  getReadyToBookContent,
 } from '@/content/pages';
-import { getHomepageFeatures } from '@/content/homepage';
 import { getBoats } from '@/content/boats';
 import { getFAQsByCategory } from '@/content/faq';
 import type { Locale } from '@/content/pages';
@@ -52,15 +48,12 @@ export default function SummerSaunaPageClient({
 
   const summerPageHero = getSummerPageHero(locale);
   const summerIntroContent = getSummerIntroContent(locale);
-  const whyChooseContent = getWhyChooseContent(locale);
   const archipelagoContent = getArchipelagoContent(locale);
   const cruiseExperienceContent = getCruiseExperienceContent(locale);
   const rentalContent = getRentalContent(locale);
   const occasionContent = getOccasionContent(locale);
   const includedContent = getIncludedContent(locale);
-  const readyToBookContent = getReadyToBookContent(locale);
   const boats = getBoats(locale);
-  const homepageFeatures = getHomepageFeatures(locale);
 
   const [showBooking, setShowBooking] = useState(false);
   const [preSelectedBoat, setPreSelectedBoat] = useState<string | null>(null);
@@ -200,6 +193,18 @@ export default function SummerSaunaPageClient({
               );
             })}
           </div>
+
+          {/* Lisäpalvelut CTA under boats */}
+          <AnimatedSection delay={300}>
+            <div className="mt-12 text-center">
+              <a
+                href="#lisapalvelut"
+                className="inline-flex items-center justify-center rounded-full border-2 border-[#3b82f6] bg-white px-8 py-3 text-sm font-bold text-[#3b82f6] shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#3b82f6] hover:text-white hover:shadow-lg"
+              >
+                {isEn ? 'Explore additional services' : 'Tutustu lisäpalveluihin'}
+              </a>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -247,14 +252,6 @@ export default function SummerSaunaPageClient({
                   </p>
                 );
               })}
-            </div>
-            <div className="mt-8 text-center">
-              <a
-                href={isEn ? '/en/contact' : '/yhteys'}
-                className="inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
-              >
-                {isEn ? 'Ask about free slots' : 'Kysy vapaista ajankohdista'}
-              </a>
             </div>
           </AnimatedSection>
         </div>
@@ -339,34 +336,8 @@ export default function SummerSaunaPageClient({
         </div>
       </section>
 
-      {/* Why Choose Section */}
-      <section className="section-padding bg-white">
-        <div className="container-padding mx-auto max-w-4xl">
-          <AnimatedSection>
-            <div className="rounded-3xl bg-[#faf9f7] p-8 md:p-12 lg:p-16">
-              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-                {whyChooseContent.title}
-              </h2>
-              <div className="text-left">
-                {renderParagraphs(whyChooseContent.text)}
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Feature Grid */}
-      <AnimatedSection>
-        <FeatureGrid
-          features={homepageFeatures}
-          title={isEn ? 'Why choose Hyvän Tuulen Sauna?' : 'Miksi valita Hyvän Tuulen Sauna?'}
-          subtitle={isEn ? 'Experiences at sea' : 'Kokemuksia merellä'}
-          columns={4}
-        />
-      </AnimatedSection>
-
       {/* Extras Section */}
-      <section className="section-padding bg-white">
+      <section id="lisapalvelut" className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
             <div className="mb-10 text-center md:mb-12">
@@ -457,27 +428,14 @@ export default function SummerSaunaPageClient({
 
       {/* Ready to book CTA */}
       <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-[#faf9f7]">
-        <div className="container-padding mx-auto max-w-2xl">
+        <div className="container-padding mx-auto max-w-2xl text-center">
           <AnimatedSection>
-            <div className="rounded-2xl border border-stone-200 bg-white p-6 text-center shadow-sm md:p-10">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-                {isEn ? 'Book your sauna boat' : 'Varaa saunalautta'}
-              </p>
-              <h2 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl">
-                {readyToBookContent.title}
-              </h2>
-              <div className="mt-4 text-left text-sm text-stone-600 md:text-base">
-                {readyToBookContent.text.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-3">{paragraph}</p>
-                ))}
-              </div>
-              <a
-                href="#boats"
-                className="mt-6 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
-              >
-                {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}
-              </a>
-            </div>
+            <a
+              href="#boats"
+              className="inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-10 py-4 text-base font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
+            >
+              {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}
+            </a>
           </AnimatedSection>
         </div>
       </section>

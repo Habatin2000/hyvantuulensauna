@@ -141,17 +141,15 @@ export default async function PublicSaunaPage({
   ]);
 
   const bringItems = isEn ? [
+    'Weather-appropriate clothing',
     'Towel',
     'Swimwear',
-    'Sandals',
-    'Water bottle or water',
-    'Weather-appropriate clothing',
+    'Water bottle',
   ] : [
+    'Säänmukainen varustus',
     'Pyyhe',
-    'Uimapuku',
-    'Sandaalit',
-    'Juomapullo tai vettä',
-    'Sään mukainen vaatetus',
+    'Uikkarit',
+    'Juomapullo',
   ];
 
   const includedItems = isEn ? [
@@ -284,18 +282,11 @@ export default async function PublicSaunaPage({
               {isEn ? 'Summer public sauna sessions' : 'Kesän julkiset saunavuorot'}
             </h2>
 
-            <div className="mt-4 text-stone-600 max-w-2xl mx-auto space-y-4">
-              <p>
-                {isEn
-                  ? 'Public sauna sessions at Hyvän Tuulen Sauna are probably the most unique way in Helsinki to enjoy the sea and the warmth of a sauna.'
-                  : 'Saunavuorot Hyvän Tuulen Saunalla ovat varmaankin Helsingin uniikein tapa päästä nauttimaan merestä ja saunan lämmöstä.'}
-              </p>
-              <p>
-                {isEn
-                  ? "Here's how it works: we will pick you up by boat at the agreed time from Kalkkihiekantori boat pier and transport you to the sauna boat. The boat has two hot saunas and a grill. We also sell cold drinks. The sauna session lasts two hours, SUP boards are available and the atmosphere is guaranteed great. These are the summer's finest low-threshold sauna sessions ❤️"
-                  : 'Homma toimii näin: tulemme hakemaan teidät sovittuun aikaan veneellä Kalkkihiekantorin laivalaiturista, ja kuljetamme teidät saunalautalle. Lautalla on kuumana kaksi saunaa ja grilli. Myymme myös kylmiä juomia. Saunavuoro kestää kaksi tuntia, käytössä on myös sup-lautoja ja tunnelma on taatusti loistava. Nämä ovat kesän hienoimpia matalan kynnyksen saunavuoroja ❤️'}
-              </p>
-            </div>
+            <p className="mt-4 text-stone-600 max-w-2xl mx-auto">
+            {isEn
+              ? 'Book your spot, arrive at Kalkkihiekantori and enjoy a public sauna session by the sea.'
+              : 'Varaa paikkasi, saavu Kalkkihiekantorille ja nauti julkisesta saunavuorosta meren äärellä.'}
+          </p>
           </div>
 
           {/* Grill notice */}
@@ -461,21 +452,16 @@ export default async function PublicSaunaPage({
                   <h4 className="mb-2 font-bold text-stone-900">{isEn ? 'Arrival' : 'Saapuminen'}</h4>
                   <p>
                     {isEn
-                      ? 'Come to Kalkkihiekantori, 00980 Helsinki. A motorboat will pick up the sauna-goers from the shore and transport them to the sauna boat.'
-                      : 'Tule osoitteeseen Kalkkihiekantori, 00980 Helsinki. Moottorivene tulee hakemaan saunojat rannasta ja kuljettaa heidät saunalautalle.'}
-                  </p>
-                  <p className="mt-2">
-                    {isEn
-                      ? 'Please arrive on time so the boat transfer can leave according to schedule. If you know you will be late, let us know in advance.'
-                      : 'Saavu paikalle ajoissa, jotta venekuljetus pääsee lähtemään aikataulussa. Jos tiedät myöhästyväsi, ilmoita siitä etukäteen.'}
+                      ? 'Arrive at Kalkkihiekantori, 00980 Helsinki. You only need to be there a few minutes before the session starts. If you know you will be late for the sauna session, let us know in advance.'
+                      : 'Saavu osoitteeseen Kalkkihiekantori 00980 Helsinki. Paikalla ei tarvitse olla kuin muutama minuutti ennen vuoron alkamista. Jos tiedät myöhästyväsi saunavuorolta, ilmoita siitä etukäteen.'}
                   </p>
                 </div>
                 <div>
-                  <h4 className="mb-2 font-bold text-stone-900">{isEn ? 'Drinks and food' : 'Juomat ja ruoka'}</h4>
+                  <h4 className="mb-2 font-bold text-stone-900">{isEn ? 'What to bring' : 'Mukaan'}</h4>
                   <p>
                     {isEn
-                      ? 'Cold drinks are available at the sauna. Own food for grilling is not allowed on the public sauna session, as the grill and serving are handled by our skippers.'
-                      : 'Kylmiä juomia on saatavilla saunalla. Omat grillattavat eivät kuulu julkiseen saunavuoroon, sillä grillistä ja tarjoilusta vastaavat kipparimme.'}
+                      ? 'Weather-appropriate clothing, towel, swimwear and a water bottle.'
+                      : 'Säänmukainen varustus, pyyhe, uikkarit, juomapullo.'}
                   </p>
                 </div>
               </div>
