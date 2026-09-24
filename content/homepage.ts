@@ -5,7 +5,7 @@ export type Locale = 'fi' | 'en';
 export const getHomepageHero = (locale: Locale): HeroContent => {
   if (locale === 'en') {
     return {
-      title: 'Sauna experiences, cruises and unforgettable moments',
+      title: 'Sauna Boat Helsinki — sauna experiences, cruises and unforgettable moments',
       subtitle: 'Hyvän Tuulen Sauna',
       description: 'Sauna boat cruises, bachelor parties, birthdays, public sauna sessions and sauna rituals in the beautiful Eastern Helsinki archipelago.',
       ctaText: 'Book a sauna boat cruise',
@@ -29,7 +29,7 @@ export const getHomepageHero = (locale: Locale): HeroContent => {
     };
   }
   return {
-    title: 'Saunomista, risteilyjä ja unohtumattomia hetkiä',
+    title: 'Saunalautta Helsingissä — saunomista, risteilyjä ja unohtumattomia hetkiä',
     subtitle: 'Hyvän Tuulen Sauna',
     description: 'Saunalauttaristeilyitä, polttareita, synttäreitä, julkisia saunavuoroja ja saunarituaaleja. Itä-Helsingin upeassa saaristossa.',
     ctaText: 'Varaa saunalauttaristeily',

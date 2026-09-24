@@ -55,7 +55,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                 {locale === "en" ? (
                   <>
                     With eight years of experience, we organize{" "}
-                    <Link href="/saunalauttaristeilyt-helsingissa" className="text-blue-700 hover:underline">sauna boat cruises</Link>
+                    <Link href="/saunalauttaristeilyt-helsingissa" className="text-blue-700 hover:underline">sauna boat cruises in Helsinki</Link>
                     ,{" "}
                     <Link href="/julkinen-sauna" className="text-blue-700 hover:underline">public sauna sessions</Link>
                     {" and "}
@@ -65,7 +65,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                 ) : (
                   <>
                     Kahdeksan vuoden kokemuksella järjestämme{" "}
-                    <Link href="/saunalauttaristeilyt-helsingissa" className="text-blue-700 hover:underline">saunalauttaristeilyjä</Link>
+                    <Link href="/saunalauttaristeilyt-helsingissa" className="text-blue-700 hover:underline">saunalauttaristeilyjä Helsingissä</Link>
                     ,{" "}
                     <Link href="/julkinen-sauna" className="text-blue-700 hover:underline">julkisia saunavuoroja</Link>
                     {" ja "}
