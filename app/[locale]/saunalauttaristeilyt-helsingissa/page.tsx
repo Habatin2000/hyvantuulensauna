@@ -21,11 +21,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Sauna Boat Cruises in Helsinki 2026'
-      : 'Saunalauttaristeilyt Helsingissä 2026',
+      ? 'Sauna Boat in Helsinki | Aalto & Virta | Private Sauna Space'
+      : 'Saunalautta Helsingissä | Aalto ja Virta | Yksityinen saunatila',
     description: isEn
-      ? 'Book a sauna boat in Helsinki for summer 2026! Two unique sauna boats, Aalto and Virta, in the Eastern Helsinki archipelago. Departing from Kalkkihiekantori, Vuosaari. Bachelor parties, birthdays, team days.'
-      : 'Varaa saunalautta Helsingistä kesäksi 2026! Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, Itä-Helsingin saaristossa. Lähtö Kalkkihiekantorilta, Vuosaari. Polttarit, synttärit, tyky-päivät.',
+      ? 'Rent a sauna boat in Helsinki! Aalto and Virta offer a private sauna space, sea views and unforgettable moments in the Eastern Helsinki archipelago. Departing from Kalkkihiekantori. Bachelor parties, birthdays, team days.'
+      : 'Varaa saunalautta Helsingissä! Aalto ja Virta tarjoavat yksityisen saunatilan, merelliset maisemat ja unohtumattomia hetkiä Itä-Helsingin saaristossa. Lähtö Kalkkihiekantorilta. Polttarit, synttärit, tyky-päivät.',
     alternates: {
       canonical: pageUrl,
       languages: {
@@ -132,7 +132,7 @@ export default async function SummerSaunaPage({
   );
 
   return (
-    <SummerSaunaPageClient 
+    <SummerSaunaPageClient
       faqItems={faqItems}
       serviceSchema={serviceSchema}
       faqSchema={faqSchema}
@@ -140,7 +140,6 @@ export default async function SummerSaunaPage({
       articleSchema={articleSchema}
       eventSchema={eventSchema}
       howToSchema={howToSchema}
-      dateModified={DATE_MODIFIED}
       locale={safeLocale}
     />
   );

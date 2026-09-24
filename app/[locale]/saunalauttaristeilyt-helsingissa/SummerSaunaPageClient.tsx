@@ -10,7 +10,17 @@ import FeatureGrid from '@/components/sections/FeatureGrid';
 import SummerBookingShell from '@/components/booking/SummerBookingShell';
 import LazyGoogleReviews from '@/components/sections/LazyGoogleReviews';
 import AnimatedSection from '@/components/AnimatedSection';
-import { getSummerPageHero, getSummerIntroContent, getWhyChooseContent, getArchipelagoContent } from '@/content/pages';
+import {
+  getSummerPageHero,
+  getSummerIntroContent,
+  getWhyChooseContent,
+  getArchipelagoContent,
+  getCruiseExperienceContent,
+  getRentalContent,
+  getOccasionContent,
+  getIncludedContent,
+  getReadyToBookContent,
+} from '@/content/pages';
 import { getHomepageFeatures } from '@/content/homepage';
 import { getBoats } from '@/content/boats';
 import { getFAQsByCategory } from '@/content/faq';
@@ -25,13 +35,12 @@ interface SummerSaunaPageClientProps {
   articleSchema: Record<string, unknown>;
   eventSchema: Record<string, unknown>;
   howToSchema: Record<string, unknown>;
-  dateModified: string;
   locale: Locale;
 }
 
-export default function SummerSaunaPageClient({ 
-  faqItems, 
-  serviceSchema, 
+export default function SummerSaunaPageClient({
+  faqItems,
+  serviceSchema,
   faqSchema,
   breadcrumbSchema,
   articleSchema,
@@ -45,6 +54,11 @@ export default function SummerSaunaPageClient({
   const summerIntroContent = getSummerIntroContent(locale);
   const whyChooseContent = getWhyChooseContent(locale);
   const archipelagoContent = getArchipelagoContent(locale);
+  const cruiseExperienceContent = getCruiseExperienceContent(locale);
+  const rentalContent = getRentalContent(locale);
+  const occasionContent = getOccasionContent(locale);
+  const includedContent = getIncludedContent(locale);
+  const readyToBookContent = getReadyToBookContent(locale);
   const boats = getBoats(locale);
   const homepageFeatures = getHomepageFeatures(locale);
 
@@ -61,6 +75,24 @@ export default function SummerSaunaPageClient({
     setShowBooking(true);
   };
 
+  const renderParagraphs = (text: string) =>
+    text.split('\n\n').map((paragraph, index) => {
+      // Render bullet-style paragraphs that start with a title followed by —
+      if (paragraph.includes(' — ')) {
+        const [title, ...rest] = paragraph.split(' — ');
+        return (
+          <p key={index} className="mb-3 text-base leading-relaxed text-stone-600 md:text-lg">
+            <strong className="text-stone-900">{title}</strong> — {rest.join(' — ')}
+          </p>
+        );
+      }
+      return (
+        <p key={index} className="mb-4 text-base leading-relaxed text-stone-600 md:text-lg">
+          {paragraph}
+        </p>
+      );
+    });
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -70,7 +102,7 @@ export default function SummerSaunaPageClient({
           __html: JSON.stringify([serviceSchema, faqSchema, breadcrumbSchema, articleSchema, eventSchema, howToSchema]),
         }}
       />
-      
+
       <HeroSection
         content={summerPageHero}
         variant="homepage"
@@ -78,40 +110,23 @@ export default function SummerSaunaPageClient({
 
       {/* Google Reviews */}
       <LazyGoogleReviews />
-      
-      {/* Intro Section */}
+
+      {/* Intro: Saunatila Helsingissä */}
       <section className="section-padding bg-[#faf9f7]">
         <div className="container-padding mx-auto max-w-3xl text-center">
           <AnimatedSection>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-              {isEn ? 'Explore our cruises' : 'Tutustu risteilyihimme'}
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
+              {isEn ? 'Private sauna space' : 'Yksityinen saunatila'}
             </p>
             <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
               {summerIntroContent.title}
             </h2>
-            <div className="mt-6 space-y-4 text-base leading-relaxed text-stone-600 md:text-lg whitespace-pre-line">
-              {summerIntroContent.text}
+            <div className="mt-6 text-left">
+              {renderParagraphs(summerIntroContent.text)}
             </div>
           </AnimatedSection>
         </div>
       </section>
-
-      {/* Image Gallery */}
-      <AnimatedSection>
-        <SquareGallery images={[
-          { id: '1', src: '/images/gallery-sauna-group-new.webp', alt: isEn ? 'Sauna guests in the sauna room' : 'Saunojia löylyhuoneessa' },
-          { id: '2', src: '/images/gallery-raft-sunset.webp', alt: isEn ? 'Sauna boat at sunset in Helsinki' : 'Saunalautta auringonlaskussa Helsingissä' },
-          { id: '3', src: '/images/gallery-bbq.webp', alt: isEn ? 'Grilling on the boat' : 'Grillailua lautalla' },
-          { id: '4', src: '/images/aalto-01.webp', alt: isEn ? 'Aalto sauna boat in Aurinkolahti' : 'Aalto-saunalautta Aurinkolahdessa' },
-          { id: '5', src: '/images/gallery-sauna-woman-new.webp', alt: isEn ? 'Sauna guest enjoying the löyly' : 'Saunoja nauttimassa löylyistä' },
-          { id: '6', src: '/images/virta-01.webp', alt: isEn ? 'Virta deck with sea view' : 'Virran kansi merinäköalalla' },
-          { id: '7', src: '/images/gallery-ice-swimming.webp', alt: isEn ? 'Winter swimming from sauna boat' : 'Talviuinti saunalautalla' },
-          { id: '8', src: '/images/gallery-sauna-interior.webp', alt: isEn ? 'Wood-fired sauna on sauna boat' : 'Puulämmitteinen sauna saunalautalla' },
-          { id: '9', src: '/images/gallery-deck-chairs.webp', alt: isEn ? 'Relaxing on deck' : 'Rentoutumista kannella' },
-          { id: '11', src: '/images/gallery-sauna-guy.webp', alt: isEn ? 'Sauna guest in the löyly' : 'Saunoja löylyissä' },
-          { id: '12', src: '/images/gallery-winter-swim.webp', alt: isEn ? 'Ice swimming in winter' : 'Avantouinti talvella' },
-        ]} title={isEn ? 'Moments from our sauna boats' : 'Tunnelmia saunalautoiltamme'} />
-      </AnimatedSection>
 
       {/* Boat Cards */}
       <section id="boats" className="section-padding bg-white">
@@ -119,18 +134,11 @@ export default function SummerSaunaPageClient({
           <AnimatedSection>
             <div className="mb-12 text-center md:mb-16">
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-                {isEn ? 'Choose your cruise' : 'Valitse oma risteilysi'}
+                {isEn ? 'Two unique sauna boats' : 'Kaksi ainutlaatuista saunalauttaa'}
               </p>
               <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
-                {isEn
-                  ? 'Aalto and Virta'
-                  : 'Aalto ja Virta'}
+                {isEn ? 'Aalto and Virta' : 'Aalto ja Virta'}
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-base text-stone-500 md:text-lg">
-                {isEn
-                  ? 'Two unique sauna boats for different kinds of cruises'
-                  : 'Kaksi ainutlaatuista saunalauttaa erilaisiin risteilyihin'}
-              </p>
             </div>
           </AnimatedSection>
 
@@ -149,11 +157,11 @@ export default function SummerSaunaPageClient({
                     name={boat.name}
                     tagline={boat.id === 'aalto'
                       ? (isEn
-                          ? 'Anchored at sea – perfect for larger groups'
-                          : 'Kelluva keidas')
+                          ? 'Floating oasis for larger groups'
+                          : 'Kelluva keidas suuremmalle seurueelle')
                       : (isEn
-                          ? 'Cruise in the archipelago – a more intimate experience for smaller groups'
-                          : 'Risteily saaristossa – intiimimpi kokemus pienemmälle porukalle')
+                          ? 'A more intimate sauna experience for smaller groups'
+                          : 'Intiimimpi saunakokemus pienemmälle porukalle')
                     }
                     description={mainDescription}
                     itinerary={itineraryText}
@@ -192,51 +200,170 @@ export default function SummerSaunaPageClient({
               );
             })}
           </div>
-
-          {/* Info note */}
-          <AnimatedSection delay={300}>
-            <div className="mt-12 rounded-2xl bg-[#faf9f7] p-6 text-center md:mt-16 md:p-8">
-              <p className="text-stone-700">
-                {isEn
-                  ? <>Need space for up to <span className="font-bold text-stone-900">25 people</span>? Book both boats and ask about our grill master service.</>
-                  : <>Tarvitsetko tilaa jopa <span className="font-bold text-stone-900">25 hengelle</span>? Varaa molemmat lautat ja kysy grillimestarin palvelua.</>}
-              </p>
-            </div>
-          </AnimatedSection>
         </div>
       </section>
 
-      {/* Booking CTA */}
-      <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-[#faf9f7]">
-        <div className="container-padding mx-auto max-w-2xl">
+      {/* Saunalauttaristeily Helsingissä */}
+      <section className="section-padding bg-[#faf9f7]">
+        <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
-            <div className="rounded-2xl border border-stone-200 bg-white p-6 text-center shadow-sm md:p-10">
-              <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-                {isEn ? 'Book your cruise' : 'Varaa risteilysi'}
-              </p>
-              <h2 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl">
-                {isEn ? 'Ready to book?' : 'Valmis varaamaan?'}
-              </h2>
-              <p className="mt-3 text-sm text-stone-600">
-                {isEn
-                  ? 'Choose Aalto or Virta above and open the booking window.'
-                  : 'Valitse yläpuolelta Aalto tai Virta ja avaa varausikkuna.'}
-              </p>
-              <a
-                href="#boats"
-                className="mt-6 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
-              >
-                {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}
-              </a>
-              <p className="mt-4 text-xs text-stone-500">
-                {isEn
-                  ? 'Want to pay later? Ask about availability by phone, WhatsApp, or email!'
-                  : 'Haluatko maksaa myöhemmin? Tiedustele saatavuutta puhelimitse, Whatsapilla tai sähköpostilla!'}
-              </p>
+            <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
+              {isEn ? 'Cruise' : 'Risteily'}
+            </p>
+            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {cruiseExperienceContent.title}
+            </h2>
+            <div className="text-left">
+              {renderParagraphs(cruiseExperienceContent.text)}
             </div>
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Saunalautan vuokraus Helsingissä */}
+      <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
+              {isEn ? 'Rental' : 'Vuokraus'}
+            </p>
+            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {rentalContent.title}
+            </h2>
+            <div className="text-left">
+              {rentalContent.text.split('\n\n').map((paragraph, index) => {
+                if (paragraph.startsWith('•') || paragraph.startsWith('-')) {
+                  return (
+                    <ul key={index} className="my-4 list-disc space-y-1 pl-6 text-stone-600 md:text-lg">
+                      {paragraph.split('\n').filter(Boolean).map((item, i) => (
+                        <li key={i}>{item.replace(/^[•\-]\s*/, '')}</li>
+                      ))}
+                    </ul>
+                  );
+                }
+                return (
+                  <p key={index} className="mb-4 text-base leading-relaxed text-stone-600 md:text-lg">
+                    {paragraph}
+                  </p>
+                );
+              })}
+            </div>
+            <div className="mt-8 text-center">
+              <a
+                href={isEn ? '/en/contact' : '/yhteys'}
+                className="inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
+              >
+                {isEn ? 'Ask about free slots' : 'Kysy vapaista ajankohdista'}
+              </a>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Saunalautta polttareihin, juhliin ja tyky-päivään */}
+      <section className="section-padding bg-[#faf9f7]">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {occasionContent.title}
+            </h2>
+            <div className="text-left">
+              {renderParagraphs(occasionContent.text)}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Mitä saunalautan hintaan kuuluu? */}
+      <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {includedContent.title}
+            </h2>
+            <div className="text-left">
+              {includedContent.text.split('\n\n').map((block, index) => {
+                const items = block.split('\n').filter(Boolean);
+                if (items.length > 1 && !items[0].includes(' — ')) {
+                  return (
+                    <ul key={index} className="mb-6 grid list-none gap-3 sm:grid-cols-2">
+                      {items.map((item, i) => (
+                        <li key={i} className="flex items-center gap-2 text-stone-700 md:text-lg">
+                          <span className="text-[#3b82f6]">✓</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                }
+                return (
+                  <p key={index} className="mb-4 text-base leading-relaxed text-stone-600 md:text-lg">
+                    {block}
+                  </p>
+                );
+              })}
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Image Gallery */}
+      <AnimatedSection>
+        <SquareGallery images={[
+          { id: '1', src: '/images/gallery-sunset-raft.webp', alt: isEn ? 'Sauna boat in Helsinki on a summer evening' : 'Saunalautta Helsingissä kesäillalla' },
+          { id: '2', src: '/images/gallery-sauna-interior.webp', alt: isEn ? 'Sauna on sauna boat Aalto' : 'Saunomista saunalautta Aallolla' },
+          { id: '3', src: '/images/gallery-virta-deck.webp', alt: isEn ? 'Sauna boat Virta in the Eastern Helsinki archipelago' : 'Saunalautta Virta Itä-Helsingin saaristossa' },
+          { id: '4', src: '/images/gallery-sauna-steam.webp', alt: isEn ? 'Wood-fired sauna on a sauna boat' : 'Puulämmitteinen sauna saunalautalla' },
+          { id: '5', src: '/images/gallery-deck-view.webp', alt: isEn ? 'Sauna boat terrace with sea view' : 'Saunalautan terassi merinäköalalla' },
+          { id: '6', src: '/images/gallery-bbq.webp', alt: isEn ? 'Grilling on a sauna boat in Helsinki' : 'Grillausta saunalautalla Helsingissä' },
+          { id: '7', src: '/images/gallery-ice-swimming.webp', alt: isEn ? 'Ice swimming from a sauna boat' : 'Avantouintia saunalautalla' },
+        ]} title={isEn ? 'Moments from our sauna boats' : 'Tunnelmia saunalautoiltamme'} />
+      </AnimatedSection>
+
+      {/* Archipelago Section */}
+      <section className="section-padding bg-[#faf9f7]">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <div className="rounded-3xl bg-white p-8 md:p-12 lg:p-16">
+              <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
+                {isEn ? 'The route' : 'Reitti'}
+              </p>
+              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+                {archipelagoContent.title}
+              </h2>
+              <div className="text-left">
+                {renderParagraphs(archipelagoContent.text)}
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Why Choose Section */}
+      <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <div className="rounded-3xl bg-[#faf9f7] p-8 md:p-12 lg:p-16">
+              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+                {whyChooseContent.title}
+              </h2>
+              <div className="text-left">
+                {renderParagraphs(whyChooseContent.text)}
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Feature Grid */}
+      <AnimatedSection>
+        <FeatureGrid
+          features={homepageFeatures}
+          title={isEn ? 'Why choose Hyvän Tuulen Sauna?' : 'Miksi valita Hyvän Tuulen Sauna?'}
+          subtitle={isEn ? 'Experiences at sea' : 'Kokemuksia merellä'}
+          columns={4}
+        />
+      </AnimatedSection>
 
       {/* Extras Section */}
       <section className="section-padding bg-white">
@@ -247,7 +374,7 @@ export default function SummerSaunaPageClient({
                 {isEn ? 'Extras' : 'Lisää elämyksiä'}
               </p>
               <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
-                {isEn ? 'Additional Services' : 'Lisäpalvelut'}
+                {isEn ? 'Additional services' : 'Lisäpalvelut'}
               </h2>
             </div>
           </AnimatedSection>
@@ -262,15 +389,15 @@ export default function SummerSaunaPageClient({
                 <div className="space-y-6">
                   <div>
                     <p className="font-bold text-stone-900">
-                      {isEn ? 'Black Angus Burger 220 g' : 'BLACK ANGUS BURGERI 220G'}
+                      {isEn ? 'Black Angus Burger 220 g' : 'Black Angus Burgeri 220 g'}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-stone-600">
                       {isEn
-                        ? 'Restaurant Vilamo burger cooked fresh for you on the sauna boat. Our skipper will cook the burger; vegetarian option available.'
-                        : 'Ravintola Vilamon Burgeri paistettuna juuri teille saunalautalla. Kipparimme kokkaa teille burgerin, saatavilla myös vege vaihtehto.'}
+                        ? 'Restaurant Vilamo burger cooked fresh for you on the sauna boat. Vegetarian option available.'
+                        : 'Ravintola Vilamon burgeri valmistettuna saunalautalla. Saatavilla myös vegetarinen vaihtoehto.'}
                     </p>
                     <p className="mt-2 text-sm font-bold text-amber-600">
-                      {isEn ? '€25 / pcs' : '25€/kpl'}
+                      {isEn ? '€25 / pcs' : '25 € / kpl'}
                     </p>
                   </div>
                   <div>
@@ -279,11 +406,11 @@ export default function SummerSaunaPageClient({
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-stone-600">
                       {isEn
-                        ? 'Mediterranean salad from Vilamo, a classic.'
-                        : 'Välimerellinen salaatti Vilamosta, klassikko.'}
+                        ? 'Mediterranean salad from Vilamo.'
+                        : 'Välimerellinen salaatti Vilamosta.'}
                     </p>
                     <p className="mt-2 text-sm font-bold text-amber-600">
-                      {isEn ? '€20 / serving · min. order 8 pcs' : '20€/annos. Min tilaus 8kpl.'}
+                      {isEn ? '€20 / serving · min. order 8 pcs' : '20 € / annos. Minimitilaus 8 kpl.'}
                     </p>
                   </div>
                 </div>
@@ -299,14 +426,14 @@ export default function SummerSaunaPageClient({
                 <div className="space-y-6">
                   <div>
                     <p className="font-bold text-stone-900">
-                      {isEn ? 'Water Jet Ski' : 'VESIJETTI'}
+                      {isEn ? 'Water jet ski' : 'Vesijetti'}
                     </p>
                     <p className="mt-1 text-sm leading-relaxed text-stone-600">
                       {isEn
-                        ? '€200 / 2 h. Rental includes fuel and guidance. The jet skis are 130 hp 2022 SEADOO GTI-130s equipped with navigation.'
-                        : '200€/2h. Vuokran hinta sisältää polttoaineen ja opastuksen. Vesijetit ovat 130hv 2022 vuoden SEADOO GTI-130 jettejä, varustettuna navigaattoreilla.'}
+                        ? '€200 / 2 h. Rental includes fuel and guidance.'
+                        : '200 € / 2 h. Vuokra sisältää polttoaineen ja opastuksen.'}
                     </p>
-                    <p className="mt-2 text-sm font-bold text-amber-600">200€/2h</p>
+                    <p className="mt-2 text-sm font-bold text-amber-600">200 € / 2 h</p>
                   </div>
                 </div>
               </div>
@@ -328,58 +455,32 @@ export default function SummerSaunaPageClient({
         </div>
       </section>
 
-      {/* Archipelago Section */}
-      <section className="section-padding bg-[#faf9f7]">
-        <div className="container-padding mx-auto max-w-4xl">
+      {/* Ready to book CTA */}
+      <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-[#faf9f7]">
+        <div className="container-padding mx-auto max-w-2xl">
           <AnimatedSection>
-            <div className="rounded-3xl bg-white p-8 md:p-12 lg:p-16">
-              <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-                {isEn ? 'The route' : 'Reitti'}
+            <div className="rounded-2xl border border-stone-200 bg-white p-6 text-center shadow-sm md:p-10">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
+                {isEn ? 'Book your sauna boat' : 'Varaa saunalautta'}
               </p>
-              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-                {archipelagoContent.title}
+              <h2 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl">
+                {readyToBookContent.title}
               </h2>
-              <div className="prose prose-stone mx-auto max-w-none">
-                {archipelagoContent.text.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-base leading-relaxed text-stone-600 md:text-lg">
-                    {paragraph}
-                  </p>
+              <div className="mt-4 text-left text-sm text-stone-600 md:text-base">
+                {readyToBookContent.text.split('\n\n').map((paragraph, index) => (
+                  <p key={index} className="mb-3">{paragraph}</p>
                 ))}
               </div>
+              <a
+                href="#boats"
+                className="mt-6 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
+              >
+                {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}
+              </a>
             </div>
           </AnimatedSection>
         </div>
       </section>
-
-      {/* Why Choose Section */}
-      <section className="section-padding bg-white">
-        <div className="container-padding mx-auto max-w-4xl">
-          <AnimatedSection>
-            <div className="rounded-3xl bg-[#faf9f7] p-8 md:p-12 lg:p-16">
-              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-                {whyChooseContent.title}
-              </h2>
-              <div className="prose prose-stone mx-auto max-w-none">
-                {whyChooseContent.text.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-base leading-relaxed text-stone-600 md:text-lg">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Feature Grid */}
-      <AnimatedSection>
-        <FeatureGrid
-          features={homepageFeatures}
-          title={isEn ? 'Why choose Hyvän Tuulen Sauna?' : 'Miksi valita Hyvän Tuulen Sauna?'}
-          subtitle={isEn ? 'Experiences at sea' : 'Kokemuksia merellä'}
-          columns={4}
-        />
-      </AnimatedSection>
 
       {/* FAQ */}
       <AnimatedSection>
@@ -400,7 +501,7 @@ export default function SummerSaunaPageClient({
         description={isEn
           ? 'The best summer slots fill up quickly. Book a sauna boat now and experience an unforgettable day in the Eastern Helsinki archipelago.'
           : 'Kesän parhaat ajat täyttyvät nopeasti. Varaa saunalautta nyt ja koe unohtumaton päivä Itä-Helsingin saaristossa.'}
-        primaryCta={{ text: isEn ? 'Book Your Cruise' : 'Varaa Risteilysi', href: '#boats' }}
+        primaryCta={{ text: isEn ? 'Book your cruise' : 'Varaa risteilysi', href: '#boats' }}
         secondaryCta={{ text: isEn ? 'Call us' : 'Soita meille', href: 'tel:+358442313546' }}
         variant="dark"
       />

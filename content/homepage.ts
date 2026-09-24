@@ -5,9 +5,9 @@ export type Locale = 'fi' | 'en';
 export const getHomepageHero = (locale: Locale): HeroContent => {
   if (locale === 'en') {
     return {
-      title: 'Sauna Boat Helsinki — sauna experiences, cruises and unforgettable moments',
+      title: 'The most unique sauna in Helsinki',
       subtitle: 'Hyvän Tuulen Sauna',
-      description: 'Sauna boat cruises, bachelor parties, birthdays, public sauna sessions and sauna rituals in the beautiful Eastern Helsinki archipelago.',
+      description: 'Sauna experiences, cruises and unforgettable moments on the water. In the beautiful Eastern Helsinki archipelago.',
       ctaText: 'Book a sauna boat cruise',
       ctaHref: '/saunalauttaristeilyt-helsingissa',
       secondaryCta: {
@@ -29,13 +29,13 @@ export const getHomepageHero = (locale: Locale): HeroContent => {
     };
   }
   return {
-    title: 'Saunalautta Helsingissä — saunomista, risteilyjä ja unohtumattomia hetkiä',
+    title: 'Se uniikein sauna Helsingissä',
     subtitle: 'Hyvän Tuulen Sauna',
-    description: 'Saunalauttaristeilyitä, polttareita, synttäreitä, julkisia saunavuoroja ja saunarituaaleja. Itä-Helsingin upeassa saaristossa.',
+    description: 'Saunomista, risteilyjä ja unohtumattomia hetkiä vesillä. Itä-Helsingin upeassa saaristossa.',
     ctaText: 'Varaa saunalauttaristeily',
     ctaHref: '/saunalauttaristeilyt-helsingissa',
     secondaryCta: {
-      text: 'Varaa Julkinen saunavuoro',
+      text: 'Varaa julkinen saunavuoro',
       href: '/julkinen-sauna',
     },
     image: '/images/gallery-sauna-woman.webp',
@@ -60,14 +60,14 @@ export const getHomepageFeatures = (locale: Locale): Feature[] => {
     return [
       {
         id: 'authentic',
-        title: 'Authentic sauna experience',
+        title: 'Authentic sauna experience in Helsinki',
         description: 'Traditional wood-fired sauna in a genuine maritime environment',
         icon: 'flame',
       },
       {
         id: 'location',
         title: 'In the heart of nature',
-        description: 'Beautiful scenery in the eastern archipelago',
+        description: 'Beautiful scenery in the Eastern Helsinki archipelago, only a stone\'s throw from the city centre',
         icon: 'map-pin',
       },
       {
@@ -93,14 +93,14 @@ export const getHomepageFeatures = (locale: Locale): Feature[] => {
   return [
     {
       id: 'authentic',
-      title: 'Aito saunakokemus',
-      description: 'Perinteinen puulämmitteinen sauna aidossa merellisessä ympäristössä',
+      title: 'Aito saunakokemus Helsingissä',
+      description: 'Mökkimäinen puusauna vain kivenheiton päässä Helsingin keskustasta',
       icon: 'flame',
     },
     {
       id: 'location',
       title: 'Luonnon keskellä',
-      description: 'Upeat maisemat itäisessä saaristossa',
+      description: 'Upeat maisemat Itä-Helsingin saaristossa',
       icon: 'map-pin',
     },
     {
@@ -117,14 +117,57 @@ export const getHomepageFeatures = (locale: Locale): Feature[] => {
     },
     {
       id: 'value',
-      title: 'Hin­ta-laatu-suhde',
-      description: 'Tuhansia risteilyjä Helsingin parhaimpaan hintaan. Vertaamaton vastine rahalle.',
+      title: 'Hinta-laatu-suhde',
+      description: 'Tuhansia saunaristeilyjä Helsingin parhaimpaan hintaan. Vertaamaton vastine rahalle.',
       icon: 'ship',
     },
   ];
 };
 
 export const homepageFeatures = getHomepageFeatures('fi');
+
+export const getExperienceCards = (locale: Locale) => {
+  if (locale === 'en') {
+    return [
+      {
+        id: 'private',
+        title: 'Private sauna',
+        description: 'A private sauna moment for your own group. Sauna boat for private use, parties, bachelor parties, corporate events or relaxed time together.',
+        image: '/images/gallery-aalto-raft.webp',
+        href: '/saunalauttaristeilyt-helsingissa',
+        cta: 'Explore private sauna boat',
+      },
+      {
+        id: 'public',
+        title: 'Public sauna',
+        description: 'Come and enjoy the sauna without a private booking. Public sauna sessions in a maritime environment in Helsinki. Come alone or with a friend to enjoy the löyly.',
+        image: '/images/gallery-sauna-group.webp',
+        href: '/julkinen-sauna',
+        cta: 'See public sauna sessions',
+      },
+    ];
+  }
+  return [
+    {
+      id: 'private',
+      title: 'Yksityinen sauna',
+      description: 'Oma saunahetki omalle porukalle. Saunalautta yksityiseen käyttöön, juhliin, polttareihin, yritystilaisuuksiin tai rentoon yhdessäoloon.',
+      image: '/images/gallery-aalto-raft.webp',
+      href: '/saunalauttaristeilyt-helsingissa',
+      cta: 'Tutustu yksityiseen saunalauttaan',
+    },
+    {
+      id: 'public',
+      title: 'Julkinen sauna',
+      description: 'Tule saunomaan ilman yksityistä varausta. Julkiset saunavuorot merellisessä ympäristössä Helsingissä. Tule yksin tai kaverin kanssa nauttimaan löylyistä.',
+      image: '/images/gallery-sauna-group.webp',
+      href: '/julkinen-sauna',
+      cta: 'Katso julkiset saunavuorot',
+    },
+  ];
+};
+
+export const experienceCards = getExperienceCards('fi');
 
 export const getServiceCards = (locale: Locale) => {
   if (locale === 'en') {
@@ -236,9 +279,10 @@ export const getStoryContent = (locale: Locale) => {
       title: 'Our story',
       quote: 'Hyvän Tuulen Sauna means good wind and good mood. We wish for good winds, but we provide good vibes in any case.',
       paragraphs: [
-        'The mission of Hyvän Tuulen Sauna is to bring relaxation and well-being to people. We strive for excellence in löyly, service, fairness and in making YOU feel as comfortable as possible.',
-        'The story begins at the same time in Tampere and Helsinki, when Captain Kalle and the twins became interested in sauna boats. On the Helsinki side, Onni and Ilmari set up a sauna boat company, while Kalle took up captain\u2019s duties in Tampere. Our paths ran separately until 2022, when Kalle jumped aboard the Helsinki sauna boat crew. The bonds deepened, and in 2023 Kalle and the twins were pushing the sauna boat business forward together. In 2024 we changed our name to Hyvän Tuulen Sauna — and that\u2019s the course we\u2019re keeping!',
-        'We have offered sauna boat cruises in Helsinki for eight years. Creating maritime experiences is like second nature to us! Captain Kalle has driven sauna boats in Tampere and Helsinki, Onni and Ile in Helsinki, on the same waters for eight years now. Tuure is coming for his second summer and the vibe is still great.',
+        'The purpose of Hyvän Tuulen Sauna is to relax you in the sauna, sometimes even spice things up at events, bring communities together on the sauna benches and serve you in the best possible way.',
+        'We strive for excellence in sauna quality, good löyly, fairness and in making YOU feel as comfortable as possible.',
+        'The story begins at the same time in Tampere and Helsinki, when Captain Kalle and the twins became interested in floating saunas. On the Helsinki side, Onni and Ilmari put saunas on the water, while Kalle took up captain\u2019s duties in Tampere. Our paths ran separately until 2022, when Kalle joined the twins\u2019 crew in Helsinki. The bonds deepened, and in 2023 Kalle and the twins were pushing the sauna business forward together. In 2024 we changed our name to Hyvän Tuulen Sauna — and that\u2019s how we roll!',
+        'We have offered sauna experiences in Helsinki for eight years. Creating maritime experiences is like second nature to us! Captain Kalle has driven sauna boats in Tampere and Helsinki, Onni and Ile in Helsinki, on the same waters for eight years now. Tuure is coming for his second summer and the vibe is still great.',
         'The most unique experiences of the year are created here, so —',
         'Welcome to Hyvän Tuulen Sauna.',
       ],
@@ -249,9 +293,10 @@ export const getStoryContent = (locale: Locale) => {
     title: 'Meidän tarina',
     quote: 'Hyvän Tuulen Sauna tarkoittaa hyvää tuulta ja hyvää mieltä. Toivomme hyviä tuulia, mutta tarjoamme hyvää mieltä joka tapauksessa.',
     paragraphs: [
-      'Hyvän Tuulen Saunan missio on tuoda rentoutumista ja hyvää oloa ihmisille. Tavoittelemme erinomaisuutta löylyissä, palveluissa, reiluudessa ja siinä, että SINÄ tunnet olosi mahdollisimman mukavaksi.',
-      'Tarina alkaa samaan aikaan Tampereella ja Helsingissä, kun Kippari Kalle ja kaksoset kiinnostuvat saunalautoista. Helsingin päädyssä Onni ja Ilmari laittavat saunalauttafirman pystyyn ja Kalle käy Tampereella Kipparin hommiin. Tiet olivat erillään vuoteen 2022, jolloin Kalle hyppäsi Helsingin päädyssä saunalautan remmiin. Välit syvenivät, ja vuonna 2023 Kalle ja kaksoset onkin painanut kimpassa saunalauttahommia eteenpäin. 2024 vaihdoimme nimeksi Hyvän Tuulen Sauna, ja sillä mennään eteenpäin!',
-      'Olemme tarjonneet saunalauttaristeilyjä Helsingissä jo kahdeksan vuotta. Merellisten kokemusten tuottaminen on siis meille jo kuin toinen luonne! Kippari Kalle on ajanut saunalauttaa niin Tampereella kuin Helsingissä, Onni ja Ile stadissa, samoilla vesillä jo kahdeksatta vuotta, Tuure tulee toiselle kesälle ja meininki on edelleen mainio.',
+      'Hyvän Tuulen Saunan tarkoituksena on rentouttaa teitä saunan parissa, joskus jopa villitä tilaisuuksissa, tuoda yhteisöjä yhteen saunan lauteilla ja palvella teitä parhaalla mahdollisella tavalla.',
+      'Tavoittelemme erinomaisuutta saunan laadussa, hyvissä löylyissä, reiluudessa ja siinä, että SINÄ tunnet olosi mahdollisimman mukavaksi.',
+      'Tarina alkaa samaan aikaan Tampereella ja Helsingissä, kun Kippari Kalle ja kaksoset kiinnostuvat kelluvista saunoista. Helsingin päädyssä Onni ja Ilmari laittavat saunat vesille, ja Kalle käy Tampereella Kipparin hommiin. Tiet olivat erillään vuoteen 2022, jolloin Kalle hyppäsi Helsingin päädyssä kaksosten remmiin. Välit syvenivät, ja vuonna 2023 Kalle ja kaksoset onkin painanut kimpassa saunojen kanssa eteenpäin. 2024 vaihdoimme nimeksi Hyvän Tuulen Sauna, ja sillä mennään!',
+      'Olemme tarjonneet saunomista Helsingissä jo kahdeksan vuotta. Merellisten kokemusten tuottaminen on siis meille jo kuin toinen luonne! Kippari Kalle on kipparoinut saunoja niin Tampereella kuin Helsingissä, Onni ja Ile stadissa, samoilla vesillä jo kahdeksatta vuotta, Tuure tulee toiselle kesälle ja meininki on edelleen mainio.',
       'Vuoden uniikeimmat kokemukset syntyvät täällä, joten-',
       'Tervetuloa Hyvän Tuulen Saunaan.',
     ],

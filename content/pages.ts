@@ -5,10 +5,10 @@ export type Locale = 'fi' | 'en';
 const isEn = (locale: Locale) => locale === 'en';
 
 export const getSummerPageHero = (locale: Locale): HeroContent => isEn(locale) ? {
-  title: 'Sauna Boat Cruises in Helsinki — Aalto and Virta',
-  subtitle: 'Summer 2026',
-  description: 'Sauna boat cruises in the Eastern Helsinki archipelago. Two unique sauna boats, Aalto and Virta, depart from Kalkkihiekantori in Vuosaari.',
-  ctaText: 'Book Your Cruise',
+  title: 'Sauna boat in Helsinki',
+  subtitle: 'Sauna boat cruises and private sauna in the Eastern Helsinki archipelago',
+  description: 'Sauna boat cruises and private sauna experiences in Helsinki. Two unique sauna boats, Aalto and Virta, offer a private sauna space, sea views and the chance to enjoy Helsinki in a whole new way. Departing from Kalkkihiekantori near Vuosaari.',
+  ctaText: 'Book a sauna boat',
   ctaHref: '#boats',
   image: '/images/aalto-01.webp',
   images: [
@@ -19,10 +19,10 @@ export const getSummerPageHero = (locale: Locale): HeroContent => isEn(locale) ?
     '/images/SAUNAHELSINKI.webp',
   ],
 } : {
-  title: 'Saunalauttaristeilyt Helsingissä — Aalto ja Virta',
-  subtitle: 'Kesä 2026',
-  description: 'Saunalauttaristeilyt Itä-Helsingin saaristossa. Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, lähtevät Kalkkihiekantorilta Vuosaaressa.',
-  ctaText: 'Varaa Risteilysi',
+  title: 'Saunalautta Helsingissä',
+  subtitle: 'Saunalauttaristeilyjä ja yksityistä saunomista Itä-Helsingin saaristossa',
+  description: 'Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, tarjoavat yksityisen saunatilan, merelliset maisemat ja mahdollisuuden nauttia Helsingistä aivan uudella tavalla. Kalkkihiekantorilta Vuosaaren läheltä.',
+  ctaText: 'Varaa saunalautta',
   ctaHref: '#boats',
   image: '/images/aalto-01.webp',
   images: [
@@ -140,58 +140,182 @@ export const thankYouPageContent = {
 };
 
 export const getSummerIntroContent = (locale: Locale) => isEn(locale) ? {
-  title: 'Sauna Boat Cruises in Helsinki',
-  text: `The Hyvän Tuulen Sauna team has been offering sauna boat cruises since 2018. Our team continues to provide these wonderful experiences with solid eight years of experience. On the Virta boat we get to know the nearby Eastern Helsinki archipelago, and on the Aalto boat we float peacefully in a sheltered cove. On the Aalto boat we can also make a spin around the archipelago by motorboat! 🌊💪
+  title: 'Sauna space in Helsinki – your own sauna by the sea',
+  text: `The sauna boat of Hyvän Tuulen Sauna is a private sauna space in Helsinki when you want to spend time with your own group. On the sauna boat, a warm wood-fired sauna, sea views, lounge areas and the possibility to jump straight into the sea come together.
 
-Sauna boat Aalto is perfect for larger groups, while Virta is excellent for smaller crowds. Really big group? Take both!
+A sauna boat is perfect for parties, bachelor parties, birthdays, corporate events, team days and relaxed time together. When the whole sauna boat is reserved for your group, you can sauna and spend time in your own peace.
 
-Perfect maritime entertainment for bachelor parties, birthdays and team days! 🎉`,
+The sauna space is located in the Eastern Helsinki archipelago, just a stone's throw from Helsinki city centre. Here the sauna is not just a space, but part of a maritime experience.
+
+Looking for a sauna space in Helsinki? Get to know Aalto and Virta and choose the right sauna boat for your group.`,
 } : {
-  title: 'Saunalauttaristeilyt Helsingissä',
-  text: `Hyvän Tuulen Saunan tiimi on tarjonnut saunalauttaristeilyjä jo vuodesta 2018. Tiimimme jatkaa vankalla kahdeksan vuoden kokemuksella näiden upeiden kokemusten tarjoamista. Virta-lautalla käymme tutustumassa Itä-Helsingin lähisaaristoon saunalautalla, ja Aalto-lautalla kelluttelemme rauhaisassa poukamassa. Aalto-lautalla pääsemme pyörähtämään saaristossa moottoriveneen voimin! 🌊💪
+  title: 'Saunatila Helsingissä – oma sauna merellä',
+  text: `Hyvän Tuulen Saunan saunalautta on yksityinen saunatila Helsingissä, kun haluat viettää aikaa oman porukan kesken. Saunalautalla yhdistyvät lämmin puusauna, merelliset maisemat, oleskelutilat ja mahdollisuus pulahtaa suoraan mereen.
 
-Saunalautta Aalto on täydellinen isommille seurueille, kun taas Virta-lautta on pienemmälle porukalle loistava. Todella iso ryhmä? Ota molemmat!
+Saunalautta sopii erinomaisesti juhliin, polttareihin, synttäreille, yritystilaisuuksiin, tyky-päiviin ja rentoon yhdessäoloon. Kun koko saunalautta on varattu omalle seurueelle, saatte saunoa ja viettää aikaa omassa rauhassa.
 
-Täydellistä merellistä ajanvietettä niin polttareille, synttäreille kuin tyky-päiville! 🎉`,
+Saunatila sijaitsee Itä-Helsingin saaristossa, vain kivenheiton päässä Helsingin keskustasta. Täällä sauna ei ole vain tila, vaan osa merellistä elämystä.
+
+Etsitkö saunatilaa Helsingistä? Tutustu Aaltoon ja Virtaan ja valitse teidän porukallenne sopiva saunalautta.`,
 };
 
 export const summerIntroContent = getSummerIntroContent('fi');
 
 export const getWhyChooseContent = (locale: Locale) => isEn(locale) ? {
-  title: 'Why Choose a Sauna Boat Cruise in Helsinki?',
-  text: `Renting a sauna boat in Helsinki is a unique way to enjoy the Eastern Helsinki archipelago. Unlike traditional saunas, a sauna boat cruise combines a wood-fired sauna, sea views and the chance to jump straight into the sea – all in one package.
+  title: 'Why choose the Hyvän Tuulen Sauna sauna boat?',
+  text: `Authentic sauna experience — Traditional wood-fired sauna in a genuine maritime environment.
 
-Bachelor parties on a sauna boat are one of the most popular ways to celebrate an upcoming wedding in Helsinki. A sauna boat cruise offers a private and unforgettable experience for up to 25 people when you book both boats. Birthdays, team days and corporate events also work great at sea.
+Private sauna space — The whole sauna boat is at your group's disposal for the duration of the booking.
 
-Sauna boat cruises operate from May to September and depart from Kalkkihiekantori in Vuosaari. Our experienced team has eight years of operating sauna boats in Helsinki, so you can trust that everything will go smoothly.
+Eastern Helsinki archipelago — The sauna experience is combined with Helsinki's sea views and archipelago.
 
-The price for a sauna boat cruise starts from €175 / 2 hours. On weekday daytime the price is €175–200. Minimum booking is 2 hours. The price includes a captain, wood-fired sauna, Weber grill, ice for drinks, toilet and sound system. Own food and drinks are welcome!`,
+Space to celebrate and spend time — Aalto and Virta offer options for both small and larger groups.
+
+Grilling and catering — The deck can be combined with grilling and various catering services.
+
+Eight years of experience — The Hyvän Tuulen Sauna team has offered sauna boat experiences in Helsinki since 2018.`,
 } : {
-  title: 'Miksi valita saunalauttaristeily Helsingissä?',
-  text: `Saunalautan vuokraus Helsingissä on ainutlaatuinen tapa nauttia Itä-Helsingin saaristosta. Toisin kuin perinteisillä saunoilla, saunalauttaristeilyllä yhdistyvät puulämmitteinen sauna, merimaisema ja mahdollisuus pulahtaa suoraan mereen – kaikki yhdessä paketissa.
+  title: 'Miksi valita Hyvän Tuulen Saunan saunalautta?',
+  text: `Aito saunakokemus — Perinteinen puulämmitteinen sauna aidossa merellisessä ympäristössä.
 
-Polttarit saunalautalla ovat yksi suosituimmista tavoista juhlistaa tulevaa häätilaisuutta Helsingissä. Saunalauttaristeily tarjoaa yksityisen ja unohtumattoman kokemuksen, johon mahtuu jopa 25 henkeä kun varaat molemmat lautat. Myös synttärit, tyky-päivät ja yritystilaisuudet onnistuvat loistavasti merellä.
+Yksityinen saunatila — Koko saunalautta on oman porukkasi käytössä varauksen ajan.
 
-Saunalauttaristeilyt toimivat toukokuusta syyskuuhun ja lähtevät Kalkkihiekantorilta Vuosaaresta. Kokeneella tiimillämme on kahdeksan vuoden kokemus saunalauttojen operoinnista Helsingissä, joten voitte luottaa siihen, että kaikki sujuu moitteettomasti.
+Itä-Helsingin saaristo — Saunaelämys yhdistyy Helsingin merimaisemiin ja saaristoon.
 
-Saunalauttaristeilyn hinta alkaen 175 €/2 tuntia. Arkisin aamupäivisin 175–200 €. Minimivaraus on 2 tuntia. Hintaan sisältyy kapteeni, puulämmitteinen sauna, Weber-grilli, jäät juomille, wc ja musiikkijärjestelmä. Omat eväät ja juomat ovat tervetulleita!`,
+Tilaa juhlia ja viettää aikaa — Aalto ja Virta tarjoavat vaihtoehdon sekä pienille että suuremmille seurueille.
+
+Grillaus ja catering — Kannelle voi yhdistää grillauksen ja erilaisia catering-palveluita.
+
+Kahdeksan vuotta kokemusta — Hyvän Tuulen Saunan tiimi on tarjonnut saunalauttaelämyksiä Helsingissä vuodesta 2018.`,
 };
 
 export const whyChooseContent = getWhyChooseContent('fi');
 
 export const getArchipelagoContent = (locale: Locale) => isEn(locale) ? {
-  title: 'Discover the Eastern Helsinki Archipelago',
-  text: `The Eastern Helsinki archipelago is one of the most beautiful parts of Helsinki and the Gulf of Finland, and a sauna boat cruise is an incredible way to explore it. Our cruises depart from Kalkkihiekantori, where the journey begins towards the most scenic corners of the Helsinki archipelago.
+  title: 'Discover the Eastern Helsinki archipelago',
+  text: `A sauna boat takes you to the heart of the Eastern Helsinki archipelago. The journey begins at Kalkkihiekantori, and during the cruise you can enjoy the sea and changing scenery from the sauna benches or the terrace.
 
-From the sauna benches or the terrace you can watch the changing scenery. Depending on the weather, we either cruise around the crown of the archipelago or venture further out to take in the views. On the Aalto boat we move swiftly by motorboat, and you have the opportunity to visit the archipelago under the guidance of our skipper. There is a reason the Helsinki archipelago is considered one of the most beautiful in the world!`,
+With Virta we explore the nearby Eastern Helsinki archipelago, and on Aalto we can combine sauna with a boat ride. On a sauna boat, the maritime environment is part of the whole experience – sauna, sea and togetherness in one package.`,
 } : {
   title: 'Tutustu Itä-Helsingin saaristoon',
-  text: `Itä-Helsingin saaristo on pala Helsingin ja Suomenlahden kauneinta osaa, ja saunalautta sekä saunalauttaristeilyt ovat uskomaton tapa tutustua siihen. Risteilyillämme lähdemme Kalkkihiekantorilta, josta matka alkaa kohti kauneinta Helsingin saaristoa.
+  text: `Saunalautta vie sinut keskelle Itä-Helsingin saaristoa. Matka alkaa Kalkkihiekantorilta, ja risteilyn aikana pääset nauttimaan merestä ja vaihtuvista maisemista saunan lauteilta tai terassilta.
 
-Saunalautalla voit katsoa joko lauteilta tai terassilta vaihtuvaa maisemaa. Kelistä riippuen käymme joko saariston kaulalla tai pidemmällä katsomassa maisemia. Aalto-lautalla liikumme taas vauhdikkaasti veneellä, ja teillä on mahdollisuus käydä vierailemassa saaristossa kipparimme opastuksella. Sille on syy, että Helsingin saaristoa pidetään maailman kauneimpana!`,
+Virran kanssa tutustumme Itä-Helsingin lähisaaristoon ja Aallolla voimme yhdistää saunomiseen myös veneajelua. Saunalautalla merellinen ympäristö on osa koko kokemusta – sauna, meri ja yhdessäolo samassa paketissa.`,
 };
 
 export const archipelagoContent = getArchipelagoContent('fi');
+
+export const getCruiseExperienceContent = (locale: Locale) => isEn(locale) ? {
+  title: 'Sauna boat cruise in Helsinki',
+  text: `A sauna boat cruise combines a sauna experience and a maritime experience in a way that an ordinary sauna space cannot. Between löyly sessions you can enjoy the Helsinki archipelago, changing scenery and the sea.
+
+With Virta we explore the nearby Eastern Helsinki archipelago, and on Aalto we can combine sauna with a boat ride.
+
+The sauna boat cruise departs from Kalkkihiekantori in the Vuosaari area, and the content of the cruise is determined by the day, weather and chosen sauna boat.`,
+} : {
+  title: 'Saunalauttaristeily Helsingissä',
+  text: `Saunalauttaristeily yhdistää saunomisen ja merellisen elämyksen tavalla, johon tavallinen saunatila ei pysty. Löylyjen lomassa pääset nauttimaan Helsingin saaristosta, vaihtuvista maisemista ja merestä.
+
+Virran kanssa tutustumme Itä-Helsingin lähisaaristoon ja Aallolla voimme yhdistää saunomiseen myös veneajelua.
+
+Saunalauttaristeily lähtee Kalkkihiekantorilta Vuosaaren alueelta, ja risteilyn sisältö määräytyy päivän, kelin ja valitun saunalautan mukaan.`,
+};
+
+export const cruiseExperienceContent = getCruiseExperienceContent('fi');
+
+export const getRentalContent = (locale: Locale) => isEn(locale) ? {
+  title: 'Sauna boat rental in Helsinki',
+  text: `When you rent a sauna boat, the whole space is at your group's disposal. You can sauna, relax, grill, dine and enjoy the sea with your own group.
+
+Sauna boat rental is suitable for:
+
+Bachelor parties
+Birthdays
+Team and recreation days
+Corporate events
+Friend groups
+Families
+Parties and evenings out
+
+A sauna boat can be booked for a minimum of two hours, and for a larger group you can book both boats. Together, Aalto and Virta enable an experience for up to 25 people.`,
+} : {
+  title: 'Saunalautan vuokraus Helsingissä',
+  text: `Kun varaat saunalautan, koko tila on teidän käytössänne. Voitte saunoa, oleskella, grillata, ruokailla ja nauttia merestä oman porukan kesken.
+
+Saunalautan vuokraus sopii esimerkiksi:
+
+Polttareihin
+Syntymäpäiville
+Tyky- ja virkistyspäiviin
+Yritystilaisuuksiin
+Kaveriporukoille
+Perheille
+Juhliin ja illanviettoihin
+
+Saunalautan voi varata vähintään kahdeksi tunniksi, ja suuremmalle seurueelle voidaan varata molemmat lautat. Yhdessä Aalto ja Virta mahdollistavat jopa 25 hengen kokonaisuuden.`,
+};
+
+export const rentalContent = getRentalContent('fi');
+
+export const getOccasionContent = (locale: Locale) => isEn(locale) ? {
+  title: 'Sauna boat for bachelor parties, parties and team days',
+  text: `A sauna boat offers a ready-made environment for shared activities and relaxed togetherness. A whole event can be built around the sauna, or you can combine it with dining, grilling, swimming or a boat ride.
+
+For bachelor parties, a sauna boat serves as a private and experiential base for the whole group. For companies and team days, it offers the chance to spend time with colleagues in a completely different environment.
+
+One space, your own group and the Helsinki archipelago around you.`,
+} : {
+  title: 'Saunalautta polttareihin, juhliin ja tyky-päivään',
+  text: `Saunalautta tarjoaa valmiin ympäristön yhteiseen tekemiseen ja rentoon yhdessäoloon. Saunomisen ympärille voi rakentaa koko tilaisuuden tai yhdistää siihen esimerkiksi ruokailun, grillauksen, uimisen tai veneajelun.
+
+Polttareissa saunalautta toimii yksityisenä ja elämyksellisenä tukikohtana koko porukalle. Yrityksille ja tyky-päivään se tarjoaa mahdollisuuden viettää työporukan kanssa aikaa aivan erilaisessa ympäristössä.
+
+Yksi tila, oma porukka ja Helsingin saaristo ympärillä.`,
+};
+
+export const occasionContent = getOccasionContent('fi');
+
+export const getIncludedContent = (locale: Locale) => isEn(locale) ? {
+  title: 'What is included in the sauna boat price?',
+  text: `Sauna boat rental includes basic equipment so you can enjoy the day without unnecessary fuss.
+
+Wood-fired sauna
+Captain
+Toilet
+Weber grill
+Ice for drinks
+Sound system
+
+Own food and drinks are welcome. In addition, various additional services and catering solutions are available.`,
+} : {
+  title: 'Mitä saunalautan hintaan kuuluu?',
+  text: `Saunalautan vuokraukseen kuuluu perusvarustelu, jolla pääsette nauttimaan päivästä ilman turhaa säätämistä.
+
+Puulämmitteinen sauna
+Kapteeni
+WC
+Weber-grilli
+Jäät juomille
+Musiikkijärjestelmä
+
+Omat eväät ja juomat ovat tervetulleita. Lisäksi saatavilla on erilaisia lisäpalveluita ja catering-ratkaisuja.`,
+};
+
+export const includedContent = getIncludedContent('fi');
+
+export const getReadyToBookContent = (locale: Locale) => isEn(locale) ? {
+  title: 'Ready to book a sauna boat in Helsinki?',
+  text: `Choose Aalto or Virta and open the booking window. Minimum booking 2 hours. For a larger group you can book both sauna boats.
+
+Want to pay later or ask about a group booking? Contact us by phone, WhatsApp or email.`,
+} : {
+  title: 'Valmis varaamaan saunalautan Helsingissä?',
+  text: `Valitse Aalto tai Virta ja avaa varausikkuna. Minimivaraus 2 tuntia. Suuremmalle porukalle voit varata molemmat saunalautat.
+
+Haluatko maksaa myöhemmin tai kysyä ryhmävarauksesta? Tiedustele saatavuutta puhelimitse, WhatsAppilla tai sähköpostilla.`,
+};
+
+export const readyToBookContent = getReadyToBookContent('fi');
 
 export const getUseCases = (locale: Locale) => isEn(locale) ? [
   {
