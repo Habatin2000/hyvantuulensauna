@@ -56,6 +56,31 @@ const nextConfig: NextConfig = {
         destination: '/toiminnastamme/',
         permanent: true,
       },
+      // Catch-all for any other legacy ?post= blog URLs: they all rendered
+      // the homepage on the old site, so point them at the most relevant page.
+      // Redirects are evaluated in order, so the specific ones above win.
+      {
+        source: '/',
+        has: [
+          {
+            type: 'query',
+            key: 'post',
+          },
+        ],
+        destination: '/saunalauttaristeilyt-helsingissa/',
+        permanent: true,
+      },
+      {
+        source: '/en',
+        has: [
+          {
+            type: 'query',
+            key: 'post',
+          },
+        ],
+        destination: '/en/sauna-boat-cruises-helsinki/',
+        permanent: true,
+      },
       // Old English slugs (Finnish slugs under /en) → localized English slugs.
       // Destinations carry the trailing slash so the 308 lands in one hop.
       {
