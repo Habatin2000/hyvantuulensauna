@@ -63,6 +63,22 @@ export default function middleware(request: NextRequest) {
     }
   }
 
+  // Legacy blog URLs (?post=...) rendered the homepage on the old site.
+  // next.config query-`has` redirects are unreliable for catch-alls in this
+  // setup (a key-only condition matched requests without the param too),
+  // so the catch-all lives here where the check is explicit. Specific posts
+  // keep their targeted destinations from next.config.ts.
+  if (request.nextUrl.searchParams.has('post')) {
+    const p = pathname;
+    if (p === '' || p === '/' || p === '/en') {
+      const isEn = p === '/en';
+      return NextResponse.redirect(
+        new URL(isEn ? '/en/sauna-boat-cruises-helsinki/' : '/saunalauttaristeilyt-helsingissa/', request.url),
+        308
+      );
+    }
+  }
+
   const response = intlMiddleware(request);
 
   // Add CDN caching headers for page routes to reduce Worker CPU usage
