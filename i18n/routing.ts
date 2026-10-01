@@ -10,6 +10,7 @@ const pathnames: Record<string, string | { en: string }> = {
   '/': '/',
   '/saunalauttaristeilyt-helsingissa': { en: '/sauna-boat-cruises-helsinki' },
   '/julkinen-sauna': { en: '/public-sauna-helsinki' },
+  '/avanto': { en: '/ice-swimming-sauna-helsinki' },
   '/yksityissauna': { en: '/private-sauna-helsinki' },
   '/sijainti': { en: '/location' },
   '/toiminnastamme': { en: '/about' },

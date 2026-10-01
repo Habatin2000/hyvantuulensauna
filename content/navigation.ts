@@ -13,10 +13,10 @@ export const mainNavigation: LocalizedNavItem[] = [
     description: 'Kesän paras saunaelämys merellä Helsingissä',
   },
   {
-    label: 'Tapahtumat',
-    labelKey: 'events',
-    href: '/yksityissauna',
-    description: 'Kesän tapahtumat ja saunarituaalit',
+    label: 'Avanto ja saunatila',
+    labelKey: 'avanto',
+    href: '/avanto',
+    description: 'Avantouinti ja yksityinen saunatila ympäri vuoden',
   },
   {
     label: 'Toiminnastamme',
@@ -58,7 +58,7 @@ export const footerNavigation: {
 } = {
   services: [
     { label: 'Saunalauttaristeilyt', labelKey: 'saunaBoat', href: '/saunalauttaristeilyt-helsingissa' },
-    { label: 'Tapahtumat', labelKey: 'events', href: '/yksityissauna' },
+    { label: 'Avanto ja saunatila', labelKey: 'avanto', href: '/avanto' },
     { label: 'Toiminnastamme', labelKey: 'about', href: '/toiminnastamme' },
     { label: 'Julkinen sauna', labelKey: 'publicSauna', href: '/julkinen-sauna' },
   ],

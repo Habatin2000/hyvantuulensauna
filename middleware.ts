@@ -9,6 +9,7 @@ const KNOWN_SLUGS = [
   'saunalauttaristeilyt-helsingissa',
   'julkinen-sauna',
   'yksityissauna',
+  'avanto',
   'sijainti',
   'toiminnastamme',
   'usein-kysyttya',
