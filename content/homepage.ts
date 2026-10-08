@@ -131,38 +131,54 @@ export const getExperienceCards = (locale: Locale) => {
     return [
       {
         id: 'private',
-        title: 'Private sauna',
+        title: 'Private sauna boat cruises (Aalto & Virta)',
         description: 'A private sauna moment for your own group. Sauna boat for private use, parties, bachelor parties, corporate events or relaxed time together.',
         image: '/images/gallery-aalto-raft.webp',
         href: '/saunalauttaristeilyt-helsingissa',
-        cta: 'Explore private sauna boat',
+        cta: 'Explore sauna boat cruises',
       },
       {
         id: 'public',
-        title: 'Public sauna',
+        title: 'Public sauna sessions',
         description: 'Come and enjoy the sauna without a private booking. Public sauna sessions in a maritime environment in Helsinki. Come alone or with a friend to enjoy the löyly.',
         image: '/images/gallery-sauna-group.webp',
         href: '/julkinen-sauna',
         cta: 'See public sauna sessions',
+      },
+      {
+        id: 'avanto',
+        title: 'Ice swimming & ice hole',
+        description: 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti. Join a public session or book the sauna spot for your own group — open all year round.',
+        image: '/images/gallery-ice-swimming.webp',
+        href: '/avanto',
+        cta: 'Explore ice swimming',
       },
     ];
   }
   return [
     {
       id: 'private',
-      title: 'Yksityinen sauna',
+      title: 'Yksityiset saunalauttaristeilyt (Aalto & Virta)',
       description: 'Oma saunahetki omalle porukalle. Saunalautta yksityiseen käyttöön, juhliin, polttareihin, yritystilaisuuksiin tai rentoon yhdessäoloon.',
       image: '/images/gallery-aalto-raft.webp',
       href: '/saunalauttaristeilyt-helsingissa',
-      cta: 'Tutustu yksityiseen saunalauttaan',
+      cta: 'Tutustu saunalauttaristeilyihin',
     },
     {
       id: 'public',
-      title: 'Julkinen sauna',
+      title: 'Julkiset saunavuorot',
       description: 'Tule saunomaan ilman yksityistä varausta. Julkiset saunavuorot merellisessä ympäristössä Helsingissä. Tule yksin tai kaverin kanssa nauttimaan löylyistä.',
       image: '/images/gallery-sauna-group.webp',
       href: '/julkinen-sauna',
       cta: 'Katso julkiset saunavuorot',
+    },
+    {
+      id: 'avanto',
+      title: 'Talviuinti ja avanto',
+      description: 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
+      image: '/images/gallery-ice-swimming.webp',
+      href: '/avanto',
+      cta: 'Tutustu avantoon',
     },
   ];
 };
@@ -194,7 +210,7 @@ export const getServiceCards = (locale: Locale) => {
         title: 'Events',
         description: 'Hyvän Tuulen Sauna organizes all kinds of events in the summer. Sauna rituals, public cruises and tent saunas!',
         image: '/images/gallery-sauna-steam.webp',
-        href: '/yksityissauna',
+        href: '/saunalauttaristeilyt-helsingissa',
         cta: 'See events',
       },
     ];
@@ -222,7 +238,7 @@ export const getServiceCards = (locale: Locale) => {
       title: 'Tapahtumat',
       description: 'Hyvän Tuulen Sauna järjestää kesällä kaikennäköisiä tapahtumia. Saunarituaaleja, julkisia risteilyitä ja telttasaunoja!',
       image: '/images/gallery-sauna-steam.webp',
-      href: '/yksityissauna',
+      href: '/saunalauttaristeilyt-helsingissa',
       cta: 'Katso tapahtumat',
     },
   ];

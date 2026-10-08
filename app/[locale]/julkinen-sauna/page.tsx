@@ -29,11 +29,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Public Sauna in Helsinki by the Sea | Hyvän Tuulen Sauna'
-      : 'Julkinen sauna Helsingissä meren äärellä | Hyvän Tuulen Sauna',
+      ? 'Public Sauna Helsinki | Open Sessions & Swimming'
+      : 'Julkinen sauna Helsinki | Avoimet saunavuorot ja uinti',
     description: isEn
-      ? 'Come to a public sauna session by the sea in Aurinkolahti! Authentic wood-fired sauna, swimming and great vibes. Book your spot now – Helsinki\'s most unique public sauna experience.'
-      : 'Tule julkiselle saunavuorolle meren äärelle Aurinkolahteen! Aito puulämmitteinen sauna, uinti ja hyvä tunnelma. Varaa paikkasi nyt – Helsingin uniikein julkinen saunaelämys.',
+      ? 'Come enjoy a relaxed public sauna session by the sea in Aurinkolahti. Two wood-fired saunas, a refreshing dip in the sea and a laid-back vibe. Book your ticket!'
+      : 'Tule nauttimaan rennosta julkisesta saunavuorosta meren äärelle Aurinkolahteen. Kaksi puusaunaa, virkistävä pulahdus mereen ja leppoisa tunnelma. Varaa lippusi!',
     alternates: {
       canonical: pageUrl,
       languages: {
@@ -190,10 +190,10 @@ export default async function PublicSaunaPage({
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-              {isEn ? 'How it works' : 'Näin toimii'}
+              {isEn ? 'Public sauna and sauna sessions by the sea' : 'Yleinen sauna ja saunavuorot meren äärellä'}
             </p>
             <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {isEn ? 'Public sauna in Helsinki – how the sauna session works' : 'Julkinen sauna Helsingissä – näin saunavuoro toimii'}
+              {isEn ? 'How a public sauna session works' : 'Näin julkinen saunavuoro toimii'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
               <p>
@@ -226,39 +226,27 @@ export default async function PublicSaunaPage({
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
             <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {isEn ? 'Why come to a public sauna session?' : 'Miksi tulla julkiselle saunavuorolle?'}
+              {isEn ? 'Why come to a Hyvän Tuulen Sauna public session?' : 'Miksi tulla Hyvän Tuulen Saunan yleiselle vuorolle?'}
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  title: isEn ? 'Sauna by the sea' : 'Sauna merellä',
+                  title: isEn ? 'Two authentic wood-fired saunas with sea views' : 'Kaksi aitoa puusaunaa merimaisemilla',
                   text: isEn
-                    ? 'Instead of an ordinary sauna session, here you sauna in the Helsinki archipelago. The terrace opens to a sea view, and between löyly sessions you can take a dip.'
-                    : 'Tavallisen saunavuoron sijaan täällä saunotaan Helsingin saaristossa. Saunan terassilta avautuu merimaisema, ja löylyjen välissä voi pulahtaa uimaan.',
+                    ? 'During the public session you have access to two wood-fired saunas. The terrace opens to a sea view over the Eastern Helsinki archipelago.'
+                    : 'Julkisella vuorolla käytössä on kaksi aitoa puusaunaa. Terassilta avautuu merimaisema Itä-Helsingin saaristoon.',
                 },
                 {
-                  title: isEn ? 'Easy to join' : 'Helppo tulla',
+                  title: isEn ? 'Swimming in the sea and SUP boards in summer' : 'Uinti meressä ja SUP-laudat kesäisin',
                   text: isEn
-                    ? 'You can come alone, as a couple or with a group of friends. Just book your spot for a suitable sauna session and arrive at Kalkkihiekantori.'
-                    : 'Voit tulla yksin, kaksin tai kaveriporukalla. Varaa vain oma paikkasi sopivalta saunavuorolta ja saavu Kalkkihiekantorille.',
+                    ? 'Between löyly sessions you can take a dip in the sea, and in summer SUP boards are part of the experience. In winter, an ice hole awaits.'
+                    : 'Löylyjen välissä voit pulahtaa mereen, ja kesäisin SUP-laudat kuuluvat elämykseen. Talvella odottaa avanto.',
                 },
                 {
-                  title: isEn ? 'Two saunas' : 'Kaksi saunaa',
+                  title: isEn ? 'Affordable and easy sauna without a group booking' : 'Edullinen ja helppo tapa saunoa ilman ryhmävarausta',
                   text: isEn
-                    ? 'During the public session you have access to two saunas, so there is plenty of room for sauna and variety.'
-                    : 'Julkisella vuorolla käytössä on kaksi saunaa, joten tilaa löytyy saunomiseen ja vaihteluun.',
-                },
-                {
-                  title: isEn ? 'Sauna and sea in one experience' : 'Sauna ja meri samassa kokemuksessa',
-                  text: isEn
-                    ? 'In summer swimming and SUP boards are part of the experience. Here sauna is as much about being at sea as enjoying the löyly.'
-                    : 'Kesällä uinti ja SUP-laudat kuuluvat elämykseen. Saunominen on täällä yhtä paljon merellä olemista kuin löylyistä nauttimista.',
-                },
-                {
-                  title: isEn ? 'Reasonable price' : 'Kohtuullinen hinta',
-                  text: isEn
-                    ? 'A public sauna session is an affordable way to experience Hyvän Tuulen Sauna without booking a private sauna boat.'
-                    : 'Julkinen saunavuoro on edullinen tapa päästä kokemaan Hyvän Tuulen Sauna ilman yksityisen saunalautan varaamista.',
+                    ? 'You can come alone, as a couple or with friends — just book your own spot and arrive at Kalkkihiekantori. The most affordable way to experience Hyvän Tuulen Sauna.'
+                    : 'Voit tulla yksin, kaksin tai kaveriporukalla — varaa vain oma paikkasi ja saavu Kalkkihiekantorille. Edullisin tapa päästä kokemaan Hyvän Tuulen Sauna.',
                 },
               ].map((item) => (
                 <div key={item.title} className="rounded-2xl bg-white p-6 shadow-sm">
@@ -279,7 +267,7 @@ export default async function PublicSaunaPage({
               {isEn ? 'Book your spot' : 'Varaa paikkasi'}
             </p>
             <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
-              {isEn ? 'Summer public sauna sessions' : 'Kesän julkiset saunavuorot'}
+              {isEn ? 'Book your spot for upcoming sauna sessions' : 'Varaa paikkasi tuleville saunavuoroille'}
             </h2>
 
             <p className="mt-4 text-stone-600 max-w-2xl mx-auto">
@@ -444,9 +432,9 @@ export default async function PublicSaunaPage({
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12">
-              <h3 className="font-corben mb-6 text-xl font-bold text-stone-900 md:text-2xl">
-                {isEn ? 'Practical instructions for the sauna session' : 'Saunavuoron käytännön ohjeet'}
-              </h3>
+              <h2 className="font-corben mb-6 text-xl font-bold text-stone-900 md:text-2xl">
+                {isEn ? 'Important information for sauna guests (arrival, gear and instructions)' : 'Tärkeää tietoa saunojille (saapuminen, varusteet ja ohjeet)'}
+              </h2>
               <div className="space-y-6 text-base leading-relaxed text-stone-600 md:text-lg">
                 <div>
                   <h4 className="mb-2 font-bold text-stone-900">{isEn ? 'Arrival' : 'Saapuminen'}</h4>

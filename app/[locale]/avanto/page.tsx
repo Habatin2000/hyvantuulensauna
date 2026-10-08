@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Link } from '@/i18n/navigation';
 import HeroSection from '@/components/sections/HeroSection';
 import FAQAccordion from '@/components/sections/FAQAccordion';
 import FinalCTA from '@/components/sections/FinalCTA';
@@ -25,8 +26,8 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Ice Swimming & Sauna in Helsinki | Hyvän Tuulen Sauna'
-      : 'Avanto ja saunatila Helsingissä | Hyvän Tuulen Sauna',
+      ? 'Ice Swimming & Wood-Fired Sauna in Helsinki | Hyvän Tuulen Sauna'
+      : 'Avantouinti ja puulämmitteinen sauna Helsingissä | Hyvän Tuulen Sauna',
     description: isEn
       ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti, Helsinki. Join a public session or book a private sauna spot all year round.'
       : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa, Helsingissä. Tule julkiselle vuorolle tai varaa yksityinen saunatila ympäri vuoden.',
@@ -42,7 +43,7 @@ export async function generateMetadata({
     openGraph: {
       title: isEn
         ? 'Ice Swimming & Sauna in Helsinki | Hyvän Tuulen Sauna'
-        : 'Avanto ja saunatila Helsingissä | Hyvän Tuulen Sauna',
+        : 'Avantouinti ja puulämmitteinen sauna Helsingissä | Hyvän Tuulen Sauna',
       description: isEn
         ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti.'
         : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa.',
@@ -90,7 +91,7 @@ export default async function AvantoPage({
         ],
       }
     : {
-        title: 'Avanto ja saunatila Helsingissä',
+        title: 'Avantouinti ja puulämmitteinen sauna Helsingissä',
         subtitle: 'Talvi Hyvän Tuulen Saunalla',
         description:
           'Avanto ja puulämmitteinen sauna meren äärellä Aurinkolahdessa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
@@ -105,7 +106,7 @@ export default async function AvantoPage({
       };
 
   const serviceSchema = generateServiceSchema(
-    isEn ? 'Ice swimming and sauna in Helsinki' : 'Avanto ja saunatila Helsingissä',
+    isEn ? 'Ice swimming and sauna in Helsinki' : 'Avantouinti ja sauna Helsingissä',
     isEn
       ? 'Ice swimming and wood-fired sauna in a maritime setting in Aurinkolahti, Helsinki. Public sessions and private bookings all year round.'
       : 'Avantouinti ja puulämmitteinen sauna merellisessä ympäristössä Aurinkolahdessa. Julkiset vuorot ja yksityisvaraukset ympäri vuoden.',
@@ -119,7 +120,7 @@ export default async function AvantoPage({
   ]);
 
   const articleSchema = generateArticleSchema(
-    isEn ? 'Ice Swimming & Sauna in Helsinki' : 'Avanto ja saunatila Helsingissä',
+    isEn ? 'Ice Swimming & Sauna in Helsinki' : 'Avantouinti ja puulämmitteinen sauna Helsingissä',
     isEn
       ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti, Helsinki.'
       : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa, Helsingissä.',
@@ -207,7 +208,20 @@ export default async function AvantoPage({
 
       <HeroSection content={hero} variant="page" />
 
-      {/* Intro */}
+      {/* Opening notice */}
+      <AnimatedSection>
+        <section className="bg-amber-50 border-b border-amber-200">
+          <div className="container-padding mx-auto max-w-3xl py-5 text-center">
+            <p className="text-base font-bold uppercase tracking-wide text-amber-900 md:text-lg">
+              {isEn
+                ? 'The sauna and ice hole open in November in Puotila'
+                : 'Sauna ja avanto aukeaa marraskuussa Puotilassa'}
+            </p>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      {/* Avantouinti meillä */}
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-3xl">
           <AnimatedSection>
@@ -215,70 +229,81 @@ export default async function AvantoPage({
               {isEn ? 'Ice swimming in Helsinki' : 'Avantouinti Helsingissä'}
             </p>
             <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {isEn ? 'Ice hole and sauna by the sea' : 'Avanto ja sauna meren äärellä'}
+              {isEn ? 'Ice swimming with us' : 'Avantouinti meillä'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
               <p>
                 {isEn
-                  ? 'Ice swimming at Hyvän Tuulen Sauna is the most authentic way to experience a Finnish winter. The sauna warms you up, the ice hole wakes you up — and the sea air of Aurinkolahti does the rest.'
-                  : 'Avantouinti Hyvän Tuulen Saunalla on aitoin tapa kokea suomalainen talvi. Sauna lämmittää, avanto virkistää — ja Aurinkolahden meri-ilma hoitaa loput.'}
+                  ? 'Ice swimming at Hyvän Tuulen Sauna is the most authentic way to experience a Finnish winter. The sauna warms you up, the ice hole refreshes. Great company and scenery crown the experience.'
+                  : 'Avantouinti Hyvän Tuulen Saunalla on aidoin tapa kokea suomalainen talvi. Sauna lämmittää, avanto virkistää. Mukava seura ja maisemat kruunaavat kokemuksen.'}
               </p>
               <p>
                 {isEn
-                  ? 'You can join a public sauna session or book the whole sauna spot for your own group. Ice swimming is included in the public sessions whenever there is ice — and when there is not, the sea is open for a swim anyway.'
-                  : 'Voit tulla mukaan julkiselle saunavuorolle tai varata koko saunatilan omalle porukalle. Avanto kuuluu julkisiin vuoroihin aina kun jäätä on — ja kun ei ole, meri on avoinna uimiseen silti.'}
+                  ? 'You can join a public session or book the whole spot for your own group. Ice swimming is included in the public sessions whenever there is ice — and when there is not, the sea is open for a swim anyway.'
+                  : 'Voit tulla mukaan julkiselle vuorolle, tai varata koko tilan omalle porukalle. Avanto kuuluu julkisiin vuoroihin aina kun jäätä on — ja kun ei ole, meri on avoinna uimiseen silti.'}
               </p>
               <p className="font-semibold text-stone-800">
                 {isEn
-                  ? 'First-timer? Do not worry — most of our guests try ice swimming for the first time with us.'
-                  : 'Ensikertalainen? Ei hätää — suurin osa vieraistamme kokeilee avantouintia ensimmäistä kertaa meillä.'}
+                  ? 'First-timer? No worries! Many of our guests try ice swimming for the first time with us, and we will guide you through it.'
+                  : 'Ensikertalainen? Ei hätää! Suuri osa vieraistamme kokeilee avantouintia ensimmäistä kertaa meillä, ja ohjeistamme alkuun.'}
               </p>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Why ice swimming */}
-      <section className="section-padding bg-[#faf9f7]">
-        <div className="container-padding mx-auto max-w-6xl">
-          <AnimatedSection>
-            <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {isEn ? 'Why come ice swimming with us?' : 'Miksi tulla avantoon meille?'}
+      {/* Big CTA between sections */}
+      <AnimatedSection>
+        <section className="section-padding bg-[#faf9f7]">
+          <div className="container-padding mx-auto max-w-3xl text-center">
+            <h2 className="font-corben mb-3 text-2xl font-bold text-stone-900 md:text-3xl">
+              {isEn ? 'Ready for a dip?' : 'Valmiina pulahdukseen?'}
             </h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {benefits.map((item) => (
-                <div key={item.title} className="rounded-2xl bg-white p-6 shadow-sm">
-                  <h3 className="mb-2 text-lg font-bold text-stone-900">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-stone-600 md:text-base">{item.text}</p>
-                </div>
-              ))}
+            <p className="mb-8 text-stone-600 md:text-lg">
+              {isEn
+                ? 'Choose a public session or book the whole sauna spot for your group.'
+                : 'Valitse julkinen vuoro tai varaa koko saunatila omalle porukalle.'}
+            </p>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link
+                href="/julkinen-sauna"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[#3b82f6] px-10 py-4 text-base font-bold text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-2xl sm:w-auto"
+              >
+                {isEn ? 'Book a public sauna session' : 'Varaa julkinen saunavuoro'}
+              </Link>
+              <Link
+                href="/saunalauttaristeilyt-helsingissa"
+                className="inline-flex w-full items-center justify-center rounded-full border-2 border-[#3b82f6] bg-white px-10 py-4 text-base font-bold text-[#3b82f6] shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#3b82f6] hover:text-white hover:shadow-lg sm:w-auto"
+              >
+                {isEn ? 'Book a private sauna spot' : 'Varaa yksityinen saunatila'}
+              </Link>
             </div>
-          </AnimatedSection>
-        </div>
-      </section>
+          </div>
+        </section>
+      </AnimatedSection>
 
-      {/* How it works */}
+      {/* Miten mennä avantoon */}
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-[#faf9f7] p-8 md:p-12">
               <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl">
-                {isEn ? 'How a winter session works' : 'Näin talvivuoro toimii'}
+                {isEn ? 'How to join us for ice swimming' : 'Miten tulla meille avantoon'}
               </h2>
               <ol className="space-y-4 text-base leading-relaxed text-stone-600 md:text-lg">
                 {(isEn
                   ? [
-                      'Book a public sauna session online or ask about a private booking.',
-                      'Arrive at Kalkkihiekantori, 00980 Helsinki — the boat takes you to the sauna spot.',
-                      'Heat up in the wood-fired sauna.',
-                      'Take a dip in the ice hole at your own pace — as many times as you like.',
+                      'Book a public sauna session or a private sauna session online.',
+                      'Arrive at Meripellontie 11, 00970 Helsinki.',
+                      'Warm up in the wood-fired sauna or start straight with the ice hole.',
+                      'Take a dip in the ice hole at your own pace, as many times as you like.',
                       'Cool off on the terrace and enjoy the winter archipelago.',
                     ]
                   : [
-                      'Varaa julkinen saunavuoro verkossa tai kysy yksityisvarausta.',
-                      'Saavu osoitteeseen Kalkkihiekantori, 00980 Helsinki — vene vie sinut saunatilalle.',
-                      'Lämmittele puulämmitteisessä saunassa.',
-                      'Pulahda avantoon omaan tahtiin — niin monta kertaa kuin haluat.',
+                      'Varaa julkinen saunavuoro tai yksityinen saunavuoro verkossa.',
+                      'Saavu osoitteeseen Meripellontie 11, 00970 Helsinki.',
+                      'Lämmittele puulämmitteisessä saunassa tai aloita avannolla.',
+                      'Pulahda avantoon omaan tahtiin, niin monta kertaa kuin haluat.',
                       'Vilvoittele terassilla ja nauti talvisesta saaristosta.',
                     ]
                 ).map((step, i) => (
@@ -290,6 +315,89 @@ export default async function AvantoPage({
                   </li>
                 ))}
               </ol>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Avannot Helsingissä */}
+      <section className="section-padding bg-[#faf9f7]">
+        <div className="container-padding mx-auto max-w-3xl">
+          <AnimatedSection>
+            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {isEn ? 'Ice holes in Helsinki' : 'Avannot Helsingissä'}
+            </h2>
+            <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
+              <p>
+                {isEn
+                  ? 'Helsinki has several winter swimming spots, but few offer a real sea ice hole and a hot wood-fired sauna side by side. In Puotila you get both!'
+                  : 'Helsingissä on useita talviuintipaikkoja, mutta harvassa on tarjolla oikean meriavanto ja kuumaa puulämmitteinen sauna vierekkäin. Puotilassa saat molemmat!'}
+              </p>
+              <p>
+                {isEn
+                  ? 'Our ice hole is kept open all winter by the sauna boats off Puotila harbour. The ice hole is opened daily when the sea freezes, and steps and handrails make getting in and out safe.'
+                  : 'Avantomme pidetään auki koko talven Puotilan sataman edustalla saunalauttojen luona. Avantoa avataan päivittäin meren jäätyessä, ja portaat sekä käsijohteet tekevät veteen menosta ja sieltä pois tulosta turvallista.'}
+              </p>
+              <p>
+                {isEn
+                  ? 'If you are comparing ice swimming spots in Helsinki, ask yourself: does the spot have a sauna right next to the ice hole? With us, the answer is always yes — and the löyly is hot.'
+                  : 'Jos vertaat avantouintipaikkoja Helsingissä, kysy itseltäsi: onko paikassa saunaa aivan avannon vieressä? Meillä vastaus on aina kyllä, ja löylyt ovat kuumat.'}
+              </p>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Avantoon meneminen */}
+      <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-3xl">
+          <AnimatedSection>
+            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {isEn ? 'Getting into the ice hole' : 'Avantoon meneminen'}
+            </h2>
+            <ol className="space-y-4 text-base leading-relaxed text-stone-600 md:text-lg">
+              {(isEn
+                ? [
+                    'Be healthy — it is not smart to go into the ice hole with a flu.',
+                    'Warm up or don\'t warm up. The hardcore ones don\'t need a sauna before the ice hole!',
+                    'Cool down. Don\'t go straight from the löyly into the ice hole. Give your body a moment to cool before stepping in.',
+                    'Breathe. Try to even out your breathing. You\'ll catch the enjoyment of the ice hole when you breathe and listen to your body.',
+                    'Calm down. When rising from the ice hole, try to stay calm. That\'s how you enjoy winter and the change in temperature.',
+                  ]
+                : [
+                    'Ole terve — avantoon ei ole fiksua mennä flunssassa.',
+                    'Lämmittele tai ole lämmittelemättä. Kovanahkaiset eivät tarvitse saunaa ennen avantoa!',
+                    'Jäähdyttele. Älä mene suoraan löylystä avantoon. Anna kropalle hetki aikaa jäähtyä ennen avantoon astumista.',
+                    'Hengitä. Pyri tasaamaan hengityksesi. Avannon nautintoon saa kiinni, kun hengität ja kuuntelet kroppaasi.',
+                    'Rauhoitu. Noustessasi avannosta, pyri pysymään rauhallisena. Näin nautit talvesta ja lämpötilan muutoksesta.',
+                  ]
+              ).map((step, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#3b82f6] text-sm font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <span>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Why ice swimming */}
+      <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-6xl">
+          <AnimatedSection>
+            <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              {isEn ? 'Why come ice swimming with us?' : 'Miksi tulla avantoon meille?'}
+            </h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {benefits.map((item) => (
+                <div key={item.title} className="rounded-2xl bg-[#faf9f7] p-6 shadow-sm">
+                  <h3 className="mb-2 text-lg font-bold text-stone-900">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-stone-600 md:text-base">{item.text}</p>
+                </div>
+              ))}
             </div>
           </AnimatedSection>
         </div>

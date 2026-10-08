@@ -12,12 +12,15 @@ interface HeroSectionProps {
   content: HeroContent;
   variant?: 'homepage' | 'page';
   banner?: string;
+  /** Render the visual headline as div instead of h1 (homepage: semantic h1 lives in the intro section). */
+  headlineAs?: 'h1' | 'div';
 }
 
 export default function HeroSection({ 
   content, 
   variant = 'homepage',
-  banner
+  banner,
+  headlineAs = 'h1'
 }: HeroSectionProps) {
   const locale = useLocale();
   const isEn = locale === 'en';
@@ -108,9 +111,20 @@ export default function HeroSection({
             <p className="mb-4 text-sm font-medium uppercase tracking-wider text-amber-400 animate-fade-in-up">
               {content.subtitle}
             </p>
-            <h1 className="font-corben text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100">
-              {content.title}
-            </h1>
+            {headlineAs === 'h1' ? (
+              <h1 className="font-corben text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100">
+                {content.title}
+              </h1>
+            ) : (
+              /* Visual hero headline — intentionally NOT an h1. The semantic h1
+                 lives in the first content section below (SEO/a11y). */
+              <div
+                className="font-corben text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100"
+                aria-label={content.title}
+              >
+                {content.title}
+              </div>
+            )}
             <p className="mt-6 text-base text-stone-200 sm:text-lg md:text-xl leading-relaxed animate-fade-in-up animation-delay-200">
               {content.description}
             </p>

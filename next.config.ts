@@ -69,8 +69,19 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // /yksityissauna merged into the cruises page — keep link equity via 301
+        source: '/yksityissauna',
+        destination: '/saunalauttaristeilyt-helsingissa/',
+        permanent: true,
+      },
+      {
         source: '/en/yksityissauna',
-        destination: '/en/private-sauna-helsinki/',
+        destination: '/en/sauna-boat-cruises-helsinki/',
+        permanent: true,
+      },
+      {
+        source: '/en/private-sauna-helsinki',
+        destination: '/en/sauna-boat-cruises-helsinki/',
         permanent: true,
       },
       {

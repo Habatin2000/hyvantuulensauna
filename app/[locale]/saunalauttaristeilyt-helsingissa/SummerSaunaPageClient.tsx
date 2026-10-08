@@ -15,7 +15,6 @@ import {
   getArchipelagoContent,
   getCruiseExperienceContent,
   getRentalContent,
-  getOccasionContent,
   getIncludedContent,
 } from '@/content/pages';
 import { getBoats } from '@/content/boats';
@@ -51,7 +50,6 @@ export default function SummerSaunaPageClient({
   const archipelagoContent = getArchipelagoContent(locale);
   const cruiseExperienceContent = getCruiseExperienceContent(locale);
   const rentalContent = getRentalContent(locale);
-  const occasionContent = getOccasionContent(locale);
   const includedContent = getIncludedContent(locale);
   const boats = getBoats(locale);
 
@@ -104,15 +102,17 @@ export default function SummerSaunaPageClient({
       {/* Google Reviews */}
       <LazyGoogleReviews />
 
-      {/* Intro: Saunatila Helsingissä */}
-      <section className="section-padding bg-[#faf9f7]">
+      {/* Etsitkö saunatilaa tai yksityissaunaa Helsingissä? */}
+      <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-3xl text-center">
           <AnimatedSection>
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Private sauna space' : 'Yksityinen saunatila'}
             </p>
             <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
-              {summerIntroContent.title}
+              {isEn
+                ? 'Looking for a sauna space or private sauna in Helsinki?'
+                : 'Etsitkö saunatilaa tai yksityissaunaa Helsingissä?'}
             </h2>
             <div className="mt-6 text-left">
               {renderParagraphs(summerIntroContent.text)}
@@ -130,7 +130,7 @@ export default function SummerSaunaPageClient({
                 {isEn ? 'Two unique sauna boats' : 'Kaksi ainutlaatuista saunalauttaa'}
               </p>
               <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
-                {isEn ? 'Aalto and Virta' : 'Aalto ja Virta'}
+                {isEn ? 'Choose the right sauna boat for your group: Aalto or Virta' : 'Valitse ryhmällesi sopiva saunalautta: Aalto tai Virta'}
               </h2>
             </div>
           </AnimatedSection>
@@ -150,11 +150,11 @@ export default function SummerSaunaPageClient({
                     name={boat.name}
                     tagline={boat.id === 'aalto'
                       ? (isEn
-                          ? 'Floating oasis for larger groups'
-                          : 'Kelluva keidas suuremmalle seurueelle')
+                          ? 'Spacious boat for larger groups (anchored)'
+                          : 'Tilava lautta isommille seurueille (ankkuroituna)')
                       : (isEn
-                          ? 'A more intimate sauna experience for smaller groups'
-                          : 'Intiimimpi saunakokemus pienemmälle porukalle')
+                          ? 'Atmospheric cruise boat for smaller groups'
+                          : 'Tunnelmallinen risteilylautta pienemmille ryhmille')
                     }
                     description={mainDescription}
                     itinerary={itineraryText}
@@ -208,7 +208,7 @@ export default function SummerSaunaPageClient({
         </div>
       </section>
 
-      {/* Saunalauttaristeily Helsingissä */}
+      {/* Saunalauttaristeilyn kulku ja palvelut */}
       <section className="section-padding bg-[#faf9f7]">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
@@ -221,11 +221,35 @@ export default function SummerSaunaPageClient({
             <div className="text-left">
               {renderParagraphs(cruiseExperienceContent.text)}
             </div>
+
+            {/* Service subsections as H3s */}
+            <div className="mt-10 space-y-8 text-left">
+              <div>
+                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                  {isEn ? 'Grilling and bringing your own food' : 'Grillaus ja omat eväät'}
+                </h3>
+                <p className="text-base leading-relaxed text-stone-600 md:text-lg">
+                  {isEn
+                    ? 'Both boats have a Weber grill for your use, and ice for cooling drinks is included. Own food and drinks are welcome — you can also order catering from us, such as Restaurant Vilamo burgers cooked on board.'
+                    : 'Molemmilla lautoilla on Weber-grilli käytössänne, ja jäät juomien viilentämiseen kuuluvat hintaan. Omat eväät ja juomat ovat tervetulleita — voit myös tilata meiltä cateringia, esimerkiksi lautalla paistettuja Ravintola Vilamon burgereita.'}
+                </p>
+              </div>
+              <div>
+                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                  {isEn ? 'Departure point: Kalkkihiekantori, Aurinkolahti' : 'Lähtöpaikka: Kalkkihiekantori, Aurinkolahti'}
+                </h3>
+                <p className="text-base leading-relaxed text-stone-600 md:text-lg">
+                  {isEn
+                    ? 'The sauna boat cruise departs from Kalkkihiekantori boat pier in Aurinkolahti, Vuosaari. Easy to reach by metro (Vuosaari station) or by car — 4-hour disc parking in the area.'
+                    : 'Saunalauttaristeily lähtee Kalkkihiekantorin laivalaiturilta Aurinkolahdesta, Vuosaaresta. Paikalle pääsee helposti metrolla (Vuosaaren asema) tai autolla — alueella on 4 tunnin kiekollinen pysäköinti.'}
+                </p>
+              </div>
+            </div>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Saunalautan vuokraus Helsingissä */}
+      {/* Saunalautan vuokraus yksityistilaisuuksiin ja juhliin */}
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
@@ -253,19 +277,29 @@ export default function SummerSaunaPageClient({
                 );
               })}
             </div>
-          </AnimatedSection>
-        </div>
-      </section>
 
-      {/* Saunalautta polttareihin, juhliin ja tyky-päivään */}
-      <section className="section-padding bg-[#faf9f7]">
-        <div className="container-padding mx-auto max-w-4xl">
-          <AnimatedSection>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {occasionContent.title}
-            </h2>
-            <div className="text-left">
-              {renderParagraphs(occasionContent.text)}
+            {/* Occasion subsections as H3s */}
+            <div className="mt-10 space-y-8 text-left">
+              <div>
+                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                  {isEn ? 'Bachelor parties and birthdays on a sauna boat' : 'Polttarit ja syntymäpäivät saunalautalla'}
+                </h3>
+                <p className="text-base leading-relaxed text-stone-600 md:text-lg">
+                  {isEn
+                    ? 'For bachelor parties and birthdays, a sauna boat serves as a private and experiential base for the whole group. A whole event can be built around the sauna, or you can combine it with dining, grilling, swimming or a boat ride.'
+                    : 'Polttareissa ja syntymäpäivillä saunalautta toimii yksityisenä ja elämyksellisenä tukikohtana koko porukalle. Saunomisen ympärille voi rakentaa koko tilaisuuden tai yhdistää siihen esimerkiksi ruokailun, grillauksen, uimisen tai veneajelun.'}
+                </p>
+              </div>
+              <div>
+                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                  {isEn ? 'Corporate events, recreation days and tyky days' : 'Yritystilaisuudet, virkistyspäivät ja tykyt'}
+                </h3>
+                <p className="text-base leading-relaxed text-stone-600 md:text-lg">
+                  {isEn
+                    ? 'For companies and team days, the sauna boat offers the chance to spend time with colleagues in a completely different environment. One space, your own group and the Helsinki archipelago around you.'
+                    : 'Yrityksille ja tyky-päivään saunalautta tarjoaa mahdollisuuden viettää työporukan kanssa aikaa aivan erilaisessa ympäristössä. Yksi tila, oma porukka ja Helsingin saaristo ympärillä.'}
+                </p>
+              </div>
             </div>
           </AnimatedSection>
         </div>
@@ -445,8 +479,8 @@ export default function SummerSaunaPageClient({
         <FAQAccordion
           items={faqItems}
           title={isEn
-            ? 'Frequently asked questions about sauna boat cruises in Helsinki'
-            : 'Usein kysytyt kysymykset saunalauttaristeilyistä Helsingissä'}
+            ? 'Frequently asked questions about renting a sauna boat'
+            : 'Usein kysyttyä saunalautan vuokrauksesta'}
           locale={locale}
         />
       </AnimatedSection>

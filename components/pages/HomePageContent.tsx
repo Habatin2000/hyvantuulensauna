@@ -40,18 +40,24 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
 
   return (
     <>
-      <HeroSection content={homepageHero} variant="homepage" />
+      <HeroSection content={homepageHero} variant="homepage" headlineAs="div" />
       <TrustBar badges={trustBadges} />
 
       {/* Saunominen Helsingissä */}
       <AnimatedSection>
         <section className="section-padding bg-white">
           <div className="container-padding mx-auto max-w-4xl text-center">
+            {/* Semantic H1 — hero headline above is visual only */}
+            <h1 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl mb-6">
+              {isEn
+                ? 'Hyvän Tuulen Sauna – Floating sauna and maritime sauna experiences in Helsinki'
+                : 'Hyvän Tuulen Sauna – Kelluva sauna ja saunaelämyksiä Helsingissä'}
+            </h1>
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Sauna in Helsinki' : 'Saunominen Helsingissä'}
             </p>
             <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
-              {isEn ? 'Sauna experiences in Helsinki all year round' : 'Saunomista Helsingissä ympäri vuoden'}
+              {isEn ? 'Sauna in the Eastern Helsinki archipelago, all year round' : 'Saunomista Itä-Helsingin saaristossa ympäri vuoden'}
             </h2>
             <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
               <p>
@@ -88,10 +94,10 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                 {isEn ? 'Choose your experience' : 'Valitse oma elämyksesi'}
               </p>
               <h2 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl">
-                {isEn ? 'How do you want to sauna?' : 'Miten haluat saunoa?'}
+                {isEn ? 'Choose the right sauna experience for you' : 'Valitse sinulle sopiva saunaelämys'}
               </h2>
             </div>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {experienceCards.map((card) => (
                 <Link
                   key={card.id}
@@ -103,7 +109,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                     alt={card.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent" />
                   <div className="relative z-10 p-6 md:p-8">
@@ -139,7 +145,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
       <AnimatedSection delay={100}>
         <FeatureGrid
           features={homepageFeatures}
-          title={isEn ? "Why choose Hyvän Tuulen Sauna?" : "Miksi valita Hyvän Tuulen Sauna?"}
+          title={isEn ? "Why choose Hyvän Tuulen Sauna in Aurinkolahti?" : "Miksi valita Hyvän Tuulen Sauna Aurinkolahdessa?"}
           subtitle={isEn ? "Experiences at sea" : "Kokemuksia merellä"}
           columns={5}
         />
@@ -173,7 +179,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                     ,{" "}
                     <Link href="/julkinen-sauna" className="text-blue-700 hover:underline">public sauna sessions</Link>
                     {" and "}
-                    <Link href="/yksityissauna" className="text-blue-700 hover:underline">private events</Link>
+                    <Link href="/avanto" className="text-blue-700 hover:underline">ice swimming in winter</Link>
                     {" from Kalkkihiekantori pier in Aurinkolahti."}
                   </>
                 ) : (
@@ -183,7 +189,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                     ,{" "}
                     <Link href="/julkinen-sauna" className="text-blue-700 hover:underline">julkisia saunavuoroja</Link>
                     {" ja "}
-                    <Link href="/yksityissauna" className="text-blue-700 hover:underline">yksityistilaisuuksia</Link>
+                    <Link href="/avanto" className="text-blue-700 hover:underline">avantouintia talvella</Link>
                     {" Kalkkihiekantorin laivalaiturista Aurinkolahdessa."}
                   </>
                 )}
@@ -195,7 +201,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
       <AnimatedSection delay={100}>
         <FAQAccordion
           items={faqItems}
-          title={isEn ? "FAQ" : "Usein kysyttyä"}
+          title={isEn ? "Frequently asked questions about sauna" : "Usein kysyttyä saunomisesta"}
           showAllLink
           locale={locale}
         />

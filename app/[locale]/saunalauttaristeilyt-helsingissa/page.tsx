@@ -21,11 +21,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Sauna Boat in Helsinki | Aalto & Virta | Private Sauna Space'
-      : 'Saunalautta Helsingissä | Aalto ja Virta | Yksityinen saunatila',
+      ? 'Sauna Boat Helsinki | Private Sauna Space & Cruises'
+      : 'Saunalautta Helsinki | Yksityinen saunatila ja risteilyt',
     description: isEn
-      ? 'Rent a sauna boat in Helsinki! Aalto and Virta offer a private sauna space, sea views and unforgettable moments in the Eastern Helsinki archipelago. Departing from Kalkkihiekantori. Bachelor parties, birthdays, team days.'
-      : 'Varaa saunalautta Helsingissä! Aalto ja Virta tarjoavat yksityisen saunatilan, merelliset maisemat ja unohtumattomia hetkiä Itä-Helsingin saaristossa. Lähtö Kalkkihiekantorilta. Polttarit, synttärit, tyky-päivät.',
+      ? 'Rent a sauna boat in Helsinki! Aalto and Virta offer a private sauna space for bachelor parties, corporate events and birthdays in the Eastern Helsinki archipelago. Explore and book.'
+      : 'Vuokraa saunalautta Helsingissä! Aalto ja Virta tarjoavat yksityisen saunatilan polttareihin, yritysjuhliin ja syntymäpäiville Itä-Helsingin saaristossa. Tutustu ja varaa.',
     alternates: {
       canonical: pageUrl,
       languages: {

@@ -8,7 +8,6 @@ const intlMiddleware = createMiddleware(routing);
 const KNOWN_SLUGS = [
   'saunalauttaristeilyt-helsingissa',
   'julkinen-sauna',
-  'yksityissauna',
   'avanto',
   'sijainti',
   'toiminnastamme',
