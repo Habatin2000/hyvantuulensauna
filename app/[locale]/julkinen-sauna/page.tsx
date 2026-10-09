@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
 import HeroSection from '@/components/sections/HeroSection';
 import PublicBookingWidget from '@/components/booking/PublicBookingWidget';
 import SubscriptionPurchase from '@/components/booking/SubscriptionPurchase';
@@ -385,6 +386,15 @@ export default async function PublicSaunaPage({
                     ? 'This is a public sauna in Helsinki, but not a typical one.'
                     : 'Tämä on julkinen sauna Helsingissä, mutta ei aivan tavallinen sellainen.'}
                 </p>
+                <p className="font-semibold text-stone-800">
+                  {isEn ? (
+                    <>In winter, the sea dip becomes ice swimming —{' '}
+                      <Link href="/avanto" className="text-[#3b82f6] hover:underline">read more about our ice hole</Link>.</>
+                  ) : (
+                    <>Talvella pulahdus mereen muuttuu avantouinniksi —{' '}
+                      <Link href="/avanto" className="text-[#3b82f6] hover:underline">lue lisää avannostamme</Link>.</>
+                  )}
+                </p>
               </div>
             </div>
           </AnimatedSection>
@@ -439,9 +449,15 @@ export default async function PublicSaunaPage({
                 <div>
                   <h4 className="mb-2 font-bold text-stone-900">{isEn ? 'Arrival' : 'Saapuminen'}</h4>
                   <p>
-                    {isEn
-                      ? 'Arrive at Kalkkihiekantori, 00980 Helsinki. You only need to be there a few minutes before the session starts. If you know you will be late for the sauna session, let us know in advance.'
-                      : 'Saavu osoitteeseen Kalkkihiekantori 00980 Helsinki. Paikalla ei tarvitse olla kuin muutama minuutti ennen vuoron alkamista. Jos tiedät myöhästyväsi saunavuorolta, ilmoita siitä etukäteen.'}
+                    {isEn ? (
+                      <>Arrive at{' '}
+                        <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantori, 00980 Helsinki</Link>.
+                        You only need to be there a few minutes before the session starts. If you know you will be late for the sauna session, let us know in advance.</>
+                    ) : (
+                      <>Saavu osoitteeseen{' '}
+                        <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantori 00980 Helsinki</Link>.
+                        Paikalla ei tarvitse olla kuin muutama minuutti ennen vuoron alkamista. Jos tiedät myöhästyväsi saunavuorolta, ilmoita siitä etukäteen.</>
+                    )}
                   </p>
                 </div>
                 <div>
@@ -488,6 +504,17 @@ export default async function PublicSaunaPage({
                   >
                     {isEn ? 'Explore private sauna boats →' : 'Tutustu yksityisiin saunalautoihin →'}
                   </a>
+                </div>
+                <div className="rounded-2xl bg-white p-6 md:col-span-2">
+                  <h3 className="mb-2 font-bold text-stone-900">{isEn ? 'Winter swimming and ice hole' : 'Talviuinti ja avanto'}</h3>
+                  <p className="text-stone-600">
+                    {isEn
+                      ? 'Visiting in winter? Our ice hole in Puotila is open all winter — combine ice swimming with a hot wood-fired sauna.'
+                      : 'Tuletko talvella? Avantomme Puotilassa on auki koko talven — yhdistä avantouinti kuumaan puusaunaan.'}
+                  </p>
+                  <Link href="/avanto" className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline">
+                    {isEn ? 'Explore ice swimming →' : 'Tutustu avantouintiin →'}
+                  </Link>
                 </div>
               </div>
             </div>

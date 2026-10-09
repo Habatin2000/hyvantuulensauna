@@ -49,6 +49,17 @@ export default function FAQAccordion({
               </AccordionTrigger>
               <AccordionContent className="pb-5 text-stone-600 leading-relaxed">
                 {item.answer}
+                {item.linkHref && item.linkText && (
+                  <>
+                    {' '}
+                    <Link
+                      href={item.linkHref}
+                      className="font-medium text-[#3b82f6] hover:underline"
+                    >
+                      {item.linkText} →
+                    </Link>
+                  </>
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}

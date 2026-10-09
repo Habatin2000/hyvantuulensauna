@@ -9,6 +9,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'departure',
     question: 'Where do the sauna boats depart from in Helsinki?',
     answer: 'The sauna boats depart from Kalkkihiekantori in Vuosaari. The exact address is Kalkkihiekantori, 00980 Helsinki. The location is easily accessible by metro (Vuosaari station) or by car – there is 4-hour disc parking in the area. Kalkkihiekantori is located on the shore of Aurinkolahti, and it is a short walk to the departure point.',
+    linkHref: '/sijainti',
+    linkText: 'See arrival instructions',
     category: 'summer',
   },
   {
@@ -39,6 +41,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'price',
     question: 'How much does it cost to rent a sauna boat in Helsinki?',
     answer: 'The price for a sauna boat cruise starts from €175 / 2 hours. On weekday daytime the price is €175–200. Minimum booking is 2 hours. The price includes the sauna boat with captain, wood-fired sauna, Weber grill, ice for drinks, toilet and sound system. The price is the same for both boats.',
+    linkHref: '/saunalauttaristeilyt-helsingissa',
+    linkText: 'See sauna boat prices and availability',
     category: 'summer',
   },
   {
@@ -58,6 +62,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'where-located',
     question: 'Where is your sauna located?',
     answer: 'Our sauna boats depart from Kalkkihiekantori in Vuosaari, address Kalkkihiekantori, 00980 Helsinki. The location is easily accessible by metro (Vuosaari station) or by car.',
+    linkHref: '/sijainti',
+    linkText: 'See the location on the map',
     category: 'general',
   },
   {
@@ -90,6 +96,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'public-when',
     question: 'When are the public sauna sessions?',
     answer: 'Public sauna sessions are held every Sunday 10-16. There are also sessions on varying weekdays – we update the calendar here every Monday!',
+    linkHref: '/julkinen-sauna',
+    linkText: 'Book a public sauna session',
     category: 'public',
   },
   {
@@ -102,6 +110,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'public-capacity',
     question: 'How many people fit in a public session?',
     answer: '17 people',
+    linkHref: '/avanto',
+    linkText: 'Ice swimming in winter',
     category: 'public',
   },
   // Avanto (ice swimming)
@@ -160,6 +170,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'departure',
     question: 'Mistä saunalautat lähtevät liikenteeseen Helsingissä?',
     answer: 'Saunalautat lähtevät Kalkkihiekantorilta Vuosaaresta. Tarkka osoite on Kalkkihiekantori, 00980 Helsinki. Paikalle pääsee helposti metrolla (Vuosaaren asema) tai autolla – alueella on 4 tunnin kiekollinen pysäköinti. Kalkkihiekantori sijaitsee Aurinkolahden rannassa, ja sieltä on lyhyt kävelymatka lähtöpaikalle.',
+    linkHref: '/sijainti',
+    linkText: 'Katso saapumisohjeet',
     category: 'summer',
   },
   {
@@ -184,6 +196,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'wc',
     question: 'Onko saunalautoilla wc?',
     answer: 'Kyllä, molemmilla saunalautoilla (Aalto ja Virta) on oma wc. Lisäksi Aalto-lautalla on erillinen pukuhuone, joten vaihtaminen käy kätevästi.',
+    linkHref: '/saunalauttaristeilyt-helsingissa',
+    linkText: 'Katso saunalauttojen hinnat ja saatavuus',
     category: 'summer',
   },
   {
@@ -203,6 +217,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'what-is',
     question: 'Mikä on Hyvän Tuulen Sauna?',
     answer: 'Hyvän Tuulen Sauna on merellinen saunaelämys Helsingissä. Tarjoamme saunomismahdollisuuksia perinteisissä saunalautoissamme Aallossa ja Virrassa. Kesäisin toimimme kelluvina saunoina merellä, ja talvisin tarjoamme myös avantouintimahdollisuuksia.',
+    linkHref: '/sijainti',
+    linkText: 'Katso sijainti kartalla',
     category: 'general',
   },
   {
@@ -234,6 +250,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'private-events',
     question: 'Sopivatko saunat yritystilaisuuksiin?',
     answer: 'Kyllä! Saunamme ovat erinomaisia yritystilaisuuksiin, tiimipäiviin ja asiakastapahtumiin. Tarjoamme myös lisäpalveluja, kuten cateringin ja ohjelmaa. Ota yhteyttä, niin suunnitellaan yhdessä täydellinen tilaisuus.',
+    linkHref: '/julkinen-sauna',
+    linkText: 'Varaa julkinen saunavuoro',
     category: 'private',
   },
   // Public
@@ -247,6 +265,8 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     id: 'public-price',
     question: 'Paljonko julkisen saunan hinta on?',
     answer: 'Julkinen saunavuoro maksaa 15€, ja vuoro kestää kaksi tuntia. Opiskelijat ja eläkeläiset 12.5€!',
+    linkHref: '/avanto',
+    linkText: 'Talvella pääset avantouintiin',
     category: 'public',
   },
   {

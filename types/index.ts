@@ -73,6 +73,9 @@ export interface FAQItem {
   question: string;
   answer: string;
   category: 'general' | 'summer' | 'private' | 'public' | 'avanto' | 'practical';
+  /** Optional contextual internal link rendered after the answer (internal-link SEO). */
+  linkHref?: string;
+  linkText?: string;
 }
 
 // Gallery types

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Link } from '@/i18n/navigation';
 import HeroSection from '@/components/sections/HeroSection';
 import SquareGallery from '@/components/sections/SquareGallery';
 import BoatCard from '@/components/sections/BoatCard';
@@ -239,9 +240,15 @@ export default function SummerSaunaPageClient({
                   {isEn ? 'Departure point: Kalkkihiekantori, Aurinkolahti' : 'Lähtöpaikka: Kalkkihiekantori, Aurinkolahti'}
                 </h3>
                 <p className="text-base leading-relaxed text-stone-600 md:text-lg">
-                  {isEn
-                    ? 'The sauna boat cruise departs from Kalkkihiekantori boat pier in Aurinkolahti, Vuosaari. Easy to reach by metro (Vuosaari station) or by car — 4-hour disc parking in the area.'
-                    : 'Saunalauttaristeily lähtee Kalkkihiekantorin laivalaiturilta Aurinkolahdesta, Vuosaaresta. Paikalle pääsee helposti metrolla (Vuosaaren asema) tai autolla — alueella on 4 tunnin kiekollinen pysäköinti.'}
+                  {isEn ? (
+                    <>The sauna boat cruise departs from{' '}
+                      <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantori boat pier</Link>{' '}
+                      in Aurinkolahti, Vuosaari. Easy to reach by metro (Vuosaari station) or by car — 4-hour disc parking in the area.</>
+                  ) : (
+                    <>Saunalauttaristeily lähtee{' '}
+                      <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantorin laivalaiturilta</Link>{' '}
+                      Aurinkolahdesta, Vuosaaresta. Paikalle pääsee helposti metrolla (Vuosaaren asema) tai autolla — alueella on 4 tunnin kiekollinen pysäköinti.</>
+                  )}
                 </p>
               </div>
             </div>
@@ -364,6 +371,38 @@ export default function SummerSaunaPageClient({
               </h2>
               <div className="text-left">
                 {renderParagraphs(archipelagoContent.text)}
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Cross-links to other experiences (internal-link SEO) */}
+      <section className="section-padding bg-white">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-2xl bg-[#faf9f7] p-6">
+                <h3 className="mb-2 font-bold text-stone-900">{isEn ? 'Public sauna sessions' : 'Julkiset saunavuorot'}</h3>
+                <p className="text-sm leading-relaxed text-stone-600 md:text-base">
+                  {isEn
+                    ? 'Sauna without booking a whole boat? Join an open public session by the sea — one spot is enough.'
+                    : 'Saunomaan ilman koko lautan varausta? Tule avoimelle julkiselle saunavuorolle meren äärelle — yksi paikka riittää.'}
+                </p>
+                <Link href="/julkinen-sauna" className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline">
+                  {isEn ? 'See public sauna sessions →' : 'Katso julkiset saunavuorot →'}
+                </Link>
+              </div>
+              <div className="rounded-2xl bg-[#faf9f7] p-6">
+                <h3 className="mb-2 font-bold text-stone-900">{isEn ? 'Winter swimming and ice hole' : 'Talviuinti ja avanto'}</h3>
+                <p className="text-sm leading-relaxed text-stone-600 md:text-base">
+                  {isEn
+                    ? 'In winter our sauna boats rest and the ice hole in Puotila opens. Combine ice swimming with a hot wood-fired sauna.'
+                    : 'Talvella saunalautat lepäävät ja Puotilan avanto aukeaa. Yhdistä avantouinti kuumaan puusaunaan.'}
+                </p>
+                <Link href="/avanto" className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline">
+                  {isEn ? 'Explore ice swimming →' : 'Tutustu avantouintiin →'}
+                </Link>
               </div>
             </div>
           </AnimatedSection>
