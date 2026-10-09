@@ -20,10 +20,10 @@ export async function generateMetadata({
   const pageUrl = `${SITE_URL}${isEn ? '/en/about' : '/toiminnastamme'}`;
 
   return {
-    title: isEn ? 'About Us' : 'Toiminnastamme',
+    title: isEn ? 'Our Story' : 'Meidän tarinamme',
     description: isEn
-      ? 'Discover the story of Hyvän Tuulen Sauna. We have offered sauna boat cruises and sauna experiences in Helsinki since 2018. Top sauna experiences with 8 years of experience.'
-      : 'Tutustu Hyvän Tuulen Saunan tarinaan. Olemme tarjonneet saunalauttaristeilyjä ja saunaelämyksiä Helsingissä jo vuodesta 2018. 8 vuoden kokemuksella huippusaunaelämyksiä.',
+      ? "Discover the story of Hyvän Tuulen Sauna. We've offered sauna boat cruises and sauna experiences in Helsinki since 2018. Learn more about us."
+      : 'Tutustu Hyvän Tuulen Saunan tarinaan. Olemme tarjonneet saunalauttaristeilyjä ja saunaelämyksiä Helsingissä vuodesta 2018. Lue lisää toiminnastamme.',
     alternates: {
       canonical: pageUrl,
       languages: {

@@ -26,11 +26,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Ice Swimming & Wood-Fired Sauna in Helsinki'
-      : 'Avantouinti ja puulämmitteinen sauna Helsingissä',
+      ? 'Ice Swimming & Wood-Fired Sauna'
+      : 'Avantouinti ja sauna Helsingissä',
     description: isEn
-      ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti, Helsinki. Join a public session or book a private sauna spot all year round.'
-      : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa, Helsingissä. Tule julkiselle vuorolle tai varaa yksityinen saunatila ympäri vuoden.',
+      ? "Try ice swimming and warm up in a wood-fired sauna in Helsinki's Aurinkolahti. Join a public session or book a private sauna for your group."
+      : 'Koe avantouinti ja puusaunan lämpö Helsingin Aurinkolahdessa. Tule yleiselle saunavuorolle tai varaa yksityinen sauna omalle porukallesi.',
     alternates: {
       canonical: pageUrl,
       languages: {

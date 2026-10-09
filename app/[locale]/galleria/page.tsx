@@ -22,11 +22,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Gallery – Sauna Photos from Helsinki'
-      : 'Galleria – saunakuvia Helsingistä',
+      ? 'Sauna & Boat Cruise Gallery'
+      : 'Kuvia saunasta ja saunalauttaristeilyistä',
     description: isEn
-      ? 'Take a peek at our sauna experiences through pictures. Sauna boats Aalto and Virta, summer sunsets, winter ice swimming and atmospheric sauna moments.'
-      : 'Kurkista saunaelämyksiimme kuvien välityksellä. Saunalautat Aalto ja Virta, kesän auringonlaskut, talven avantouinnit ja tunnelmalliset saunomishetket.',
+      ? 'Explore Hyvän Tuulen Sauna in photos: Aalto and Virta sauna boats, summer sunsets and winter ice swimming. Get inspired for your own sauna experience.'
+      : 'Tutustu Hyvän Tuulen Saunaan kuvissa: saunalautat Aalto ja Virta, kesäiset auringonlaskut ja talven avantouinnit. Löydä inspiraatiota omaan saunahetkeesi.',
     alternates: {
       canonical: pageUrl,
       languages: {

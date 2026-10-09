@@ -29,11 +29,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Public Sauna Helsinki | Open Sessions by the Sea'
-      : 'Julkinen ja yleinen sauna Helsinki',
+      ? 'Public Sauna in Helsinki'
+      : 'Yleinen sauna Helsingissä',
     description: isEn
-      ? 'Come enjoy a relaxed public sauna session by the sea in Aurinkolahti. Two wood-fired saunas, a refreshing dip in the sea and a laid-back vibe. Book your ticket!'
-      : 'Tule nauttimaan rennosta julkisesta saunavuorosta meren äärelle Aurinkolahteen. Kaksi puusaunaa, virkistävä pulahdus mereen ja leppoisa tunnelma. Varaa lippusi!',
+      ? "Enjoy a public sauna session in Helsinki's Aurinkolahti. Two wood-fired saunas, a refreshing sea dip and a relaxed atmosphere. View sessions and book!"
+      : 'Nauti yleisestä saunavuorosta Helsingin Aurinkolahdessa. Kaksi puusaunaa, virkistävä pulahdus mereen ja rento tunnelma. Katso saunavuorot ja varaa!',
     alternates: {
       canonical: pageUrl,
       languages: {

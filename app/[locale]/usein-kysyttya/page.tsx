@@ -20,11 +20,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'FAQ – Sauna and Sauna Boats'
-      : 'Usein kysyttyä – sauna ja saunalautat',
+      ? 'Sauna & Boat Cruise FAQ'
+      : 'Usein kysyttyä saunasta ja risteilyistä',
     description: isEn
-      ? 'Answers to the most common questions about sauna boat cruises, the public sauna and bookings. Find information on prices, opening hours and practices.'
-      : 'Vastaukset yleisimpiin kysymyksiin saunalauttaristeilyistä, julkisesta saunasta ja varauksista. Löydä tietoa hinnoista, aukioloajoista ja käytännöistä.',
+      ? 'What should you bring to the sauna, and how do you book a cruise? Find answers about public sauna sessions, private cruises, prices and bookings.'
+      : 'Mitä mukaan saunaan ja miten saunalautta varataan? Löydä vastaukset yleisiin kysymyksiin saunavuoroista, risteilyistä, hinnoista ja varauksista.',
     alternates: {
       canonical: pageUrl,
       languages: {

@@ -21,11 +21,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Location in Aurinkolahti, Helsinki'
-      : 'Sijainti Aurinkolahdessa, Helsinki',
+      ? 'Sauna in Aurinkolahti, Helsinki'
+      : 'Sauna Helsingin Aurinkolahdessa',
     description: isEn
-      ? 'Come visit us at Kalkkihiekantori in Aurinkolahti! Our sauna is located by the sea and is easily accessible by public transport. See detailed arrival instructions.'
-      : 'Tule käymään Kalkkihiekantorille Aurinkolahteen! Saunamme sijaitsee meren rannalla, helposti saavutettavissa julkisilla. Katso tarkat saapumisohjeet.',
+      ? 'Find Hyvän Tuulen Sauna at Kalkkihiekantori in Aurinkolahti, Helsinki. See our location and directions, and plan your visit by public transport.'
+      : 'Löydä Hyvän Tuulen Sauna Helsingin Aurinkolahdesta, Kalkkihiekantorilta. Katso sijainti ja saapumisohjeet sekä suunnittele matkasi meren äärelle.',
     alternates: {
       canonical: pageUrl,
       languages: {
