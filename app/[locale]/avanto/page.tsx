@@ -6,7 +6,7 @@ import FinalCTA from '@/components/sections/FinalCTA';
 import AnimatedSection from '@/components/AnimatedSection';
 import SquareGallery from '@/components/sections/SquareGallery';
 import { getFAQsByCategory } from '@/content/faq';
-import { generateServiceSchema, generateBreadcrumbSchema, generateArticleSchema, generateHowToSchema } from '../schema';
+import { generateServiceSchema, generateBreadcrumbSchema, generateArticleSchema, generateHowToSchema, generateFAQSchema } from '../schema';
 import { SITE_URL } from '@/lib/site';
 import type { HeroContent } from '@/types';
 import type { Locale } from '@/content/pages';
@@ -26,8 +26,8 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Ice Swimming & Wood-Fired Sauna in Helsinki | Hyvän Tuulen Sauna'
-      : 'Avantouinti ja puulämmitteinen sauna Helsingissä | Hyvän Tuulen Sauna',
+      ? 'Ice Swimming & Wood-Fired Sauna in Helsinki'
+      : 'Avantouinti ja puulämmitteinen sauna Helsingissä',
     description: isEn
       ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti, Helsinki. Join a public session or book a private sauna spot all year round.'
       : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa, Helsingissä. Tule julkiselle vuorolle tai varaa yksityinen saunatila ympäri vuoden.',
@@ -73,7 +73,7 @@ export default async function AvantoPage({
   const isEn = safeLocale === 'en';
   const pageUrl = `${SITE_URL}${isEn ? '/en/ice-swimming-sauna-helsinki' : '/avanto'}`;
 
-  const faqItems = getFAQsByCategory('general', safeLocale);
+  const faqItems = getFAQsByCategory('avanto', safeLocale);
 
   const hero: HeroContent = isEn
     ? {
@@ -202,7 +202,13 @@ export default async function AvantoPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([serviceSchema, breadcrumbSchema, articleSchema, howToSchema]),
+          __html: JSON.stringify([
+            serviceSchema,
+            breadcrumbSchema,
+            articleSchema,
+            howToSchema,
+            generateFAQSchema(faqItems.map(item => ({ question: item.question, answer: item.answer }))),
+          ]),
         }}
       />
 
@@ -389,7 +395,7 @@ export default async function AvantoPage({
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
             <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {isEn ? 'Why come ice swimming with us?' : 'Miksi tulla avantoon meille?'}
+              {isEn ? 'Why come winter swimming with us?' : 'Miksi tulla talviuintiin ja avantoon meille?'}
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {benefits.map((item) => (
@@ -421,7 +427,7 @@ export default async function AvantoPage({
       {/* FAQ */}
       <FAQAccordion
         items={faqItems}
-        title={isEn ? 'Frequently asked questions' : 'Usein kysyttyä'}
+        title={isEn ? 'Frequently asked questions about ice swimming' : 'Usein kysyttyä avantouinnista'}
         locale={safeLocale}
       />
 

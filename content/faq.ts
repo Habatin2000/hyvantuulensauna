@@ -104,6 +104,31 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     answer: '17 people',
     category: 'public',
   },
+  // Avanto (ice swimming)
+  {
+    id: 'avanto-safe',
+    question: 'Is ice swimming safe for first-timers?',
+    answer: 'Yes, when done sensibly. Warm up first, enter calmly, breathe steadily and get out before you feel too cold. Our skippers guide first-timers through the first dip. Do not go ice swimming when sick or with a flu.',
+    category: 'avanto',
+  },
+  {
+    id: 'avanto-what-to-bring',
+    question: 'What should I bring for ice swimming?',
+    answer: 'Bring a towel, swimwear and warm clothes for after the dip. Sandals or neoprene shoes make the dock easier on your feet. A woolly hat keeps your head warm while your body is in the water.',
+    category: 'avanto',
+  },
+  {
+    id: 'avanto-how-long',
+    question: 'How long should I stay in the ice hole?',
+    answer: 'The first dip can be just a few seconds. Listen to your body — there is no need to stay in long. Many do several short dips with sauna breaks in between.',
+    category: 'avanto',
+  },
+  {
+    id: 'avanto-when',
+    question: 'When is the ice hole open?',
+    answer: 'The sauna and ice hole open in November in Puotila and run through the winter season whenever there is ice. When the sea is not frozen, the sea is still open for a dip.',
+    category: 'avanto',
+  },
   // Practical
   {
     id: 'parking',
@@ -230,6 +255,31 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     answer: '17hlö',
     category: 'public',
   },
+  // Avanto
+  {
+    id: 'avanto-safe',
+    question: 'Onko avantouinti turvallista ensikertalaiselle?',
+    answer: 'Kyllä, kun sen tekee järkevästi. Lämmittele ensin, mene veteen rauhallisesti, hengitä tasaisesti ja nouse pois ennen kuin palelet liikaa. Kipparimme ohjeistavat ensikertalaiset ensimmäiseen pulahdukseen. Älä mene avantoon sairaana tai flunssassa.',
+    category: 'avanto',
+  },
+  {
+    id: 'avanto-what-to-bring',
+    question: 'Mitä avantouintiin pitää ottaa mukaan?',
+    answer: 'Ota mukaan pyyhe, uima-asu ja lämpimät vaatteet pulahduksen jälkeen. Sandaalit tai neopreenikengät helpottavat laiturilla kulkemista. Pipo pitää pään lämpimänä, kun keho on vedessä.',
+    category: 'avanto',
+  },
+  {
+    id: 'avanto-how-long',
+    question: 'Kuinka kauan avannossa kannattaa olla?',
+    answer: 'Ensimmäinen pulahdus voi olla vain muutaman sekunnin mittainen. Kuuntele kehoasi — vedessä ei tarvitse olla pitkään. Monet tekevät useita lyhyitä pulahduksia saunomisen lomassa.',
+    category: 'avanto',
+  },
+  {
+    id: 'avanto-when',
+    question: 'Milloin avanto on auki?',
+    answer: 'Sauna ja avanto aukeavat marraskuussa Puotilassa ja toimivat talvikauden ajan aina kun jäätä on. Kun meri ei ole jäässä, meri on silti avoinna pulahdukselle.',
+    category: 'avanto',
+  },
   // Practical
   {
     id: 'parking',
@@ -272,12 +322,14 @@ export const getFaqCategories = (locale: Locale = 'fi') => isEn(locale) ? [
   { id: 'summer', label: 'Sauna Boat Cruises' },
   { id: 'private', label: 'Private Sauna' },
   { id: 'public', label: 'Public Sauna' },
+  { id: 'avanto', label: 'Ice Swimming' },
   { id: 'practical', label: 'Practical' },
 ] : [
   { id: 'general', label: 'Yleistä' },
   { id: 'summer', label: 'Saunalauttaristeilyt' },
   { id: 'private', label: 'Yksityissauna' },
   { id: 'public', label: 'Julkinen sauna' },
+  { id: 'avanto', label: 'Avantouinti' },
   { id: 'practical', label: 'Käytännön asiat' },
 ];
 

@@ -29,8 +29,8 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Public Sauna Helsinki | Open Sessions & Swimming'
-      : 'Julkinen sauna Helsinki | Avoimet saunavuorot ja uinti',
+      ? 'Public Sauna Helsinki | Open Sessions by the Sea'
+      : 'Julkinen ja yleinen sauna Helsinki',
     description: isEn
       ? 'Come enjoy a relaxed public sauna session by the sea in Aurinkolahti. Two wood-fired saunas, a refreshing dip in the sea and a laid-back vibe. Book your ticket!'
       : 'Tule nauttimaan rennosta julkisesta saunavuorosta meren äärelle Aurinkolahteen. Kaksi puusaunaa, virkistävä pulahdus mereen ja leppoisa tunnelma. Varaa lippusi!',
@@ -193,7 +193,7 @@ export default async function PublicSaunaPage({
               {isEn ? 'Public sauna and sauna sessions by the sea' : 'Yleinen sauna ja saunavuorot meren äärellä'}
             </p>
             <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
-              {isEn ? 'How a public sauna session works' : 'Näin julkinen saunavuoro toimii'}
+              {isEn ? 'Public sauna and open sauna sessions by the sea – how it works' : 'Yleinen sauna ja julkiset saunavuorot meren äärellä – näin se toimii'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
               <p>
@@ -214,7 +214,7 @@ export default async function PublicSaunaPage({
               <p className="font-semibold text-stone-800">
                 {isEn
                   ? 'The public sauna is for you if you want to get to the sauna easily in Helsinki without booking your own sauna space.'
-                  : 'Julkinen sauna on tarkoitettu sinulle, joka haluat helposti saunaan Helsingissä ilman oman saunatilan varaamista.'}
+                  : 'Meidän yleinen saunavuoro on tarkoitettu sinulle, joka haluat helposti saunaan Helsingissä ilman oman saunatilan varaamista.'}
               </p>
             </div>
           </AnimatedSection>
@@ -234,7 +234,7 @@ export default async function PublicSaunaPage({
                   title: isEn ? 'Two authentic wood-fired saunas with sea views' : 'Kaksi aitoa puusaunaa merimaisemilla',
                   text: isEn
                     ? 'During the public session you have access to two wood-fired saunas. The terrace opens to a sea view over the Eastern Helsinki archipelago.'
-                    : 'Julkisella vuorolla käytössä on kaksi aitoa puusaunaa. Terassilta avautuu merimaisema Itä-Helsingin saaristoon.',
+                    : 'Yleisillä vuorolla käytössä on kaksi aitoa puusaunaa. Terassilta avautuu merimaisema Itä-Helsingin saaristoon.',
                 },
                 {
                   title: isEn ? 'Swimming in the sea and SUP boards in summer' : 'Uinti meressä ja SUP-laudat kesäisin',

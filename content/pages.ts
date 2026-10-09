@@ -154,7 +154,7 @@ Looking for a sauna space in Helsinki? Get to know Aalto and Virta and choose th
 
 Saunalautta sopii erinomaisesti juhliin, polttareihin, synttäreille, yritystilaisuuksiin, tyky-päiviin ja rentoon yhdessäoloon. Kun koko saunalautta on varattu omalle seurueelle, saatte saunoa ja viettää aikaa omassa rauhassa.
 
-Saunatila sijaitsee Itä-Helsingin saaristossa, vain kivenheiton päässä Helsingin keskustasta. Täällä sauna ei ole vain tila, vaan osa merellistä elämystä.
+Saunalautat sijaitsee Itä-Helsingin saaristossa, vain kivenheiton päässä Helsingin keskustasta. Täällä sauna ei ole vain tila, vaan osa merellistä elämystä.
 
 Etsitkö saunatilaa Helsingistä? Tutustu Aaltoon ja Virtaan ja valitse teidän porukallenne sopiva saunalautta.`,
 };
@@ -214,7 +214,7 @@ With Virta we explore the nearby Eastern Helsinki archipelago, and on Aalto we c
 The sauna boat cruise departs from Kalkkihiekantori in the Vuosaari area, and the content of the cruise is determined by the day, weather and chosen sauna boat.`,
 } : {
   title: 'Saunalauttaristeilyn kulku ja palvelut',
-  text: `Saunalauttaristeily yhdistää saunomisen ja merellisen elämyksen tavalla, johon tavallinen saunatila ei pysty. Löylyjen lomassa pääset nauttimaan Helsingin saaristosta, vaihtuvista maisemista ja merestä.
+  text: `Saunalauttaristeily yhdistää saunomisen ja merellisen elämyksen tavalla, johon tavallinen saunatila ei pysty. Helsingin saunalautta tarjoaa löylyjen lomassa Helsingin saariston, vaihtuvat maisemat ja meren.
 
 Virran kanssa tutustumme Itä-Helsingin lähisaaristoon ja Aallolla voimme yhdistää saunomiseen myös veneajelua.
 

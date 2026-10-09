@@ -72,7 +72,7 @@ export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: 'general' | 'summer' | 'private' | 'public' | 'practical';
+  category: 'general' | 'summer' | 'private' | 'public' | 'avanto' | 'practical';
 }
 
 // Gallery types

@@ -45,6 +45,13 @@ export default function HeroSection({
     ? (isEn ? 'Play slideshow' : 'Toista kuvakaruselli')
     : (isEn ? 'Pause slideshow' : 'Keskeytä kuvakaruselli');
 
+  // Meaningful alt for every carousel image: derive from filename, localized.
+  const imageAlt = (img: string, index: number) => {
+    if (index === 0) return content.title;
+    const name = img.split('/').pop()?.replace(/\.(webp|jpg|jpeg|png)$/i, '').replace(/[-_]/g, ' ') || `image ${index + 1}`;
+    return isEn ? `${name} – Hyvän Tuulen Sauna` : `${name} – Hyvän Tuulen Sauna`;
+  };
+
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
   };
@@ -77,7 +84,7 @@ export default function HeroSection({
                   {isMounted && (
                     <Image
                       src={img}
-                      alt={index === 0 ? content.title : ''}
+                      alt={imageAlt(img, index)}
                       fill
                       priority={index === 0}
                       className="object-cover [image-rendering:-webkit-optimize-contrast]"
@@ -252,7 +259,7 @@ export default function HeroSection({
                 {isMounted && (
                   <Image
                     src={img}
-                    alt={index === 0 ? content.title : ''}
+                    alt={imageAlt(img, index)}
                     fill
                     priority={index === 0}
                     className="object-cover [image-rendering:-webkit-optimize-contrast]"

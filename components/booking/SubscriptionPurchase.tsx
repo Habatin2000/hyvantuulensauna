@@ -39,7 +39,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
 
   const texts = {
     title: isEn ? 'Sauna cards' : 'Sarjakortit',
-    subtitle: isEn ? 'Save when you visit more often' : 'Säästä käydessäsi useammin',
+    subtitle: isEn ? 'Cheaper access to the public sauna' : 'Yleiseen saunaan edullisemmin',
     modalTitle: isEn ? 'Buy a sauna card' : 'Osta sarjakortti',
     modalDescription: isEn
       ? 'Choose a card and fill in your details. You will be redirected to a secure Stripe checkout.'

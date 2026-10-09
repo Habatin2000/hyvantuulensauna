@@ -175,7 +175,7 @@ export const getExperienceCards = (locale: Locale) => {
     {
       id: 'avanto',
       title: 'Talviuinti ja avanto',
-      description: 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
+      description: 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
       image: '/images/gallery-ice-swimming.webp',
       href: '/avanto',
       cta: 'Tutustu avantoon',
