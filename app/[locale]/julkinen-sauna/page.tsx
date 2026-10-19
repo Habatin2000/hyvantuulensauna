@@ -184,6 +184,7 @@ export default async function PublicSaunaPage({
       <HeroSection
         content={publicPageHero}
         variant="page"
+        banner={isEn ? 'ON A BREAK ❤️ — Sessions return in November' : 'HUOLTOTAUOLLA ❤️ — Vuoroja taas marraskuussa'}
       />
 
       {/* Julkinen sauna Helsingissä – näin saunavuoro toimii */}
