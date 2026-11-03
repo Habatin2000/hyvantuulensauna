@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
+import { ArrowRight } from 'lucide-react';
 import HeroSection from '@/components/sections/HeroSection';
 import FAQAccordion from '@/components/sections/FAQAccordion';
 import FinalCTA from '@/components/sections/FinalCTA';
@@ -251,46 +253,67 @@ export default async function AvantoPage({
           <div className="grid gap-6 md:grid-cols-2">
             {/* Yksityinen avantosauna */}
             <AnimatedSection delay={150}>
-              <div className="flex h-full flex-col rounded-3xl bg-white p-6 shadow-md md:p-8">
-                <h3 className="font-corben text-xl font-bold text-stone-900 md:text-2xl">
-                  {isEn ? 'Private sauna rental' : 'Yksityinen avantosauna'}
-                </h3>
-                <p className="mt-3 flex-1 text-base leading-relaxed text-stone-600 md:text-lg">
-                  {isEn
-                    ? 'Rent the whole sauna for your own use! Aalto sauna fits ten people, Virta sauna six. You can rent either one or both! The calendar opens from the button!'
-                    : 'Vuokraa koko sauna omaan käyttöösi! Aalto-saunalle mahtuu mukaan kymmenen henkeä, Virta-saunalle taas kuusi. Voit vuokrata joko jomman kumman tai molemmat käyttöösi! Kalenteri aukeaa napista!'}
-                </p>
-                <a
-                  href={isEn
-                    ? 'https://wa.me/358442313546?text=Hi!%20I%20would%20like%20to%20rent%20an%20ice%20sauna%20(Aalto%20or%20Virta).'
-                    : 'https://wa.me/358442313546?text=Moi!%20Haluaisin%20vuokrata%20avantosaunan%20(Aalto%20tai%20Virta).'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-4 text-base font-bold uppercase tracking-wide text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
-                >
-                  {isEn ? 'Book here' : 'Varaa tästä'}
-                </a>
+              <div className="group relative flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl bg-stone-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                <Image
+                  src="/images/saunaboat-winter-sun.webp"
+                  alt={isEn ? 'Sauna boat in the winter sun' : 'Saunalautta talvisessa auringossa'}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent" />
+                <div className="relative z-10 p-6 md:p-8">
+                  <h3 className="font-corben text-2xl font-bold text-white md:text-3xl">
+                    {isEn ? 'Private sauna rental' : 'Yksityinen avantosauna'}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-stone-100 md:text-base">
+                    {isEn
+                      ? 'Rent the whole sauna for your own use! Aalto sauna fits ten people, Virta sauna six. You can rent either one or both!'
+                      : 'Vuokraa koko sauna omaan käyttöösi! Aalto-saunalle mahtuu mukaan kymmenen henkeä, Virta-saunalle taas kuusi. Voit vuokrata joko jomman kumman tai molemmat käyttöösi!'}
+                  </p>
+                  <a
+                    href={isEn
+                      ? 'https://wa.me/358442313546?text=Hi!%20I%20would%20like%20to%20rent%20an%20ice%20sauna%20(Aalto%20or%20Virta).'
+                      : 'https://wa.me/358442313546?text=Moi!%20Haluaisin%20vuokrata%20avantosaunan%20(Aalto%20tai%20Virta).'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
+                  >
+                    {isEn ? 'Book here' : 'Varaa tästä'}
+                  </a>
+                </div>
               </div>
             </AnimatedSection>
 
             {/* Talviuintia ohjatusti */}
             <AnimatedSection delay={250}>
-              <div className="flex h-full flex-col rounded-3xl bg-white p-6 shadow-md md:p-8">
-                <h3 className="font-corben text-xl font-bold text-stone-900 md:text-2xl">
-                  {isEn ? 'Guided winter swimming' : 'Talviuintia ohjatusti'}
-                </h3>
-                <p className="mt-3 flex-1 text-base leading-relaxed text-stone-600 md:text-lg">
-                  {isEn
-                    ? 'On our public sessions we go through the basics of winter swimming. The saunas are hot, the ice hole is open and spots are limited. This way we make sure everyone fits comfortably. The session lasts two hours.'
-                    : 'Julkisilla vuoroillamme käymme läpi talviuinnin perusteet. Saunat ovat kuumana, avanto on auki ja paikkoja on rajoitetusti. Täten pidämme huolen siitä, että kaikki mahtuvat paikalle mukavasti. Vuoro kestää kaksi tuntia.'}
-                </p>
-                <Link
-                  href="/julkinen-sauna"
-                  className="mt-6 inline-flex items-center justify-center rounded-full border-2 border-[#3b82f6] bg-white px-8 py-4 text-base font-bold uppercase tracking-wide text-[#3b82f6] shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#3b82f6] hover:text-white hover:shadow-lg"
-                >
-                  {isEn ? 'To the public sauna page' : 'Julkisen saunan sivulle'}
-                </Link>
-              </div>
+              <Link
+                href="/julkinen-sauna"
+                className="group relative flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl bg-stone-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
+                <Image
+                  src="/images/gallery-ice-swimming.webp"
+                  alt={isEn ? 'Ice swimming in Helsinki' : 'Avantouinti Helsingissä'}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent" />
+                <div className="relative z-10 p-6 md:p-8">
+                  <h3 className="font-corben text-2xl font-bold text-white md:text-3xl">
+                    {isEn ? 'Guided winter swimming' : 'Talviuintia ohjatusti'}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-stone-100 md:text-base">
+                    {isEn
+                      ? 'On our public sessions we go through the basics of winter swimming. The saunas are hot, the ice hole is open and spots are limited. The session lasts two hours.'
+                      : 'Julkisilla vuoroillamme käymme läpi talviuinnin perusteet. Saunat ovat kuumana, avanto on auki ja paikkoja on rajoitetusti. Vuoro kestää kaksi tuntia.'}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-amber-400">
+                    {isEn ? 'To the public sauna page' : 'Julkisen saunan sivulle'}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </Link>
             </AnimatedSection>
           </div>
         </div>
