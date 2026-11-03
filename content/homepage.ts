@@ -5,13 +5,13 @@ export type Locale = 'fi' | 'en';
 export const getHomepageHero = (locale: Locale): HeroContent => {
   if (locale === 'en') {
     return {
-      title: 'The most unique sauna in Helsinki',
+      title: 'The floating sauna in Helsinki',
       subtitle: 'Hyvän Tuulen Sauna',
-      description: 'Sauna experiences, cruises and unforgettable moments on the water. In the beautiful Eastern Helsinki archipelago.',
-      ctaText: 'Book a sauna boat cruise',
-      ctaHref: '/saunalauttaristeilyt-helsingissa',
+      description: 'In winter, winter swimming and sauna. In summer, cruises and unforgettable moments on the water. In the beautiful Eastern Helsinki archipelago.',
+      ctaText: 'Book a private session',
+      ctaHref: '/avanto#talvisaunat',
       secondaryCta: {
-        text: 'Book a public sauna session',
+        text: 'Book a public session',
         href: '/julkinen-sauna',
       },
       image: '/images/gallery-sauna-woman.webp',
@@ -31,11 +31,11 @@ export const getHomepageHero = (locale: Locale): HeroContent => {
   return {
     title: 'Se Kelluva Sauna Helsingissä',
     subtitle: 'Hyvän Tuulen Sauna',
-    description: 'Saunomista, risteilyjä ja unohtumattomia hetkiä vesillä. Itä-Helsingin upeassa saaristossa.',
-    ctaText: 'Varaa saunalauttaristeily',
-    ctaHref: '/saunalauttaristeilyt-helsingissa',
+    description: 'Talvella talviuintia ja saunomista. Kesällä risteilyjä ja upeita hetkiä vesillä. Itä-Helsingin kauniissa saaristossa.',
+    ctaText: 'Varaa yksityinen vuoro',
+    ctaHref: '/avanto#talvisaunat',
     secondaryCta: {
-      text: 'Varaa julkinen saunavuoro',
+      text: 'Varaa yleinen vuoro',
       href: '/julkinen-sauna',
     },
     image: '/images/gallery-sauna-woman.webp',
@@ -130,12 +130,12 @@ export const getExperienceCards = (locale: Locale) => {
   if (locale === 'en') {
     return [
       {
-        id: 'private',
-        title: 'Private sauna boat cruises (Aalto & Virta)',
-        description: 'A private sauna moment for your own group. Sauna boat for private use, parties, bachelor parties, corporate events or relaxed time together.',
-        image: '/images/gallery-aalto-raft.webp',
-        href: '/saunalauttaristeilyt-helsingissa',
-        cta: 'Explore sauna boat cruises',
+        id: 'avanto',
+        title: 'Winter swimming & sauna',
+        description: 'Ice swimming and a wood-fired sauna by the sea in Puotila. Join a public session or book the sauna spot for your own group — open all year round.',
+        image: '/images/gallery-ice-swimming.webp',
+        href: '/avanto',
+        cta: 'Explore ice swimming',
       },
       {
         id: 'public',
@@ -146,23 +146,23 @@ export const getExperienceCards = (locale: Locale) => {
         cta: 'See public sauna sessions',
       },
       {
-        id: 'avanto',
-        title: 'Ice swimming & ice hole',
-        description: 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti. Join a public session or book the sauna spot for your own group — open all year round.',
-        image: '/images/gallery-ice-swimming.webp',
-        href: '/avanto',
-        cta: 'Explore ice swimming',
+        id: 'private',
+        title: 'Private sauna boat cruises (Aalto & Virta)',
+        description: 'A private sauna moment for your own group. Sauna boat for private use, parties, bachelor parties, corporate events or relaxed time together.',
+        image: '/images/gallery-aalto-raft.webp',
+        href: '/saunalauttaristeilyt-helsingissa',
+        cta: 'Explore sauna boat cruises',
       },
     ];
   }
   return [
     {
-      id: 'private',
-      title: 'Yksityiset saunalauttaristeilyt (Aalto & Virta)',
-      description: 'Oma saunahetki omalle porukalle. Saunalautta yksityiseen käyttöön, juhliin, polttareihin, yritystilaisuuksiin tai rentoon yhdessäoloon.',
-      image: '/images/gallery-aalto-raft.webp',
-      href: '/saunalauttaristeilyt-helsingissa',
-      cta: 'Tutustu saunalauttaristeilyihin',
+      id: 'avanto',
+      title: 'Talviuinti ja sauna',
+      description: 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
+      image: '/images/gallery-ice-swimming.webp',
+      href: '/avanto',
+      cta: 'Tutustu avantoon',
     },
     {
       id: 'public',
@@ -173,12 +173,12 @@ export const getExperienceCards = (locale: Locale) => {
       cta: 'Katso julkiset saunavuorot',
     },
     {
-      id: 'avanto',
-      title: 'Talviuinti ja avanto',
-      description: 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
-      image: '/images/gallery-ice-swimming.webp',
-      href: '/avanto',
-      cta: 'Tutustu avantoon',
+      id: 'private',
+      title: 'Yksityiset saunalauttaristeilyt (Aalto & Virta)',
+      description: 'Oma saunahetki omalle porukalle. Saunalautta yksityiseen käyttöön, juhliin, polttareihin, yritystilaisuuksiin tai rentoon yhdessäoloon.',
+      image: '/images/gallery-aalto-raft.webp',
+      href: '/saunalauttaristeilyt-helsingissa',
+      cta: 'Tutustu saunalauttaristeilyihin',
     },
   ];
 };
@@ -249,16 +249,16 @@ export const serviceCards = getServiceCards('fi');
 export const getTrustBadges = (locale: Locale) => {
   if (locale === 'en') {
     return [
-      { id: 'years', value: '8+', label: 'Years in operation', icon: 'calendar' },
+      { id: 'years', value: '9+', label: 'Years in operation', icon: 'calendar' },
       { id: 'guests', value: '10 000+', label: 'Happy sauna guests', icon: 'users' },
-      { id: 'rating', value: '5.0', label: 'Average on Google', icon: 'star' },
+      { id: 'rating', value: '4.9', label: 'Average on Google', icon: 'star' },
       { id: 'location', value: 'Helsinki', label: 'Aurinkolahti', icon: 'map-pin' },
     ];
   }
   return [
-    { id: 'years', value: '8+', label: 'Vuotta toimintaa', icon: 'calendar' },
+    { id: 'years', value: '9+', label: 'Vuotta toimintaa', icon: 'calendar' },
     { id: 'guests', value: '10 000+', label: 'Tyytyväistä saunojaa', icon: 'users' },
-    { id: 'rating', value: '5.0', label: 'Keskiarvo Googlessa', icon: 'star' },
+    { id: 'rating', value: '4.9', label: 'Keskiarvo Googlessa', icon: 'star' },
     { id: 'location', value: 'Helsinki', label: 'Aurinkolahti', icon: 'map-pin' },
   ];
 };

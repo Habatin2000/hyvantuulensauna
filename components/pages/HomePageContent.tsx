@@ -50,14 +50,14 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
             {/* Semantic H1 — hero headline above is visual only */}
             <h1 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl mb-6">
               {isEn
-                ? 'Hyvän Tuulen Sauna – Floating sauna and maritime sauna experiences in Helsinki'
-                : 'Hyvän Tuulen Sauna – Kelluva sauna ja saunaelämyksiä Helsingissä'}
+                ? 'Hyvän Tuulen Sauna – Floating sauna boats and winter swimming. Experiences in Helsinki.'
+                : 'Hyvän Tuulen Sauna – Kelluvat saunalautat ja talviuintia. Elämyksellisiä kokemuksia Helsingissä.'}
             </h1>
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Sauna in Helsinki' : 'Saunominen Helsingissä'}
             </p>
             <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
-              {isEn ? 'Sauna in the Eastern Helsinki archipelago, all year round' : 'Saunomista Itä-Helsingin saaristossa ympäri vuoden'}
+              {isEn ? 'Sauna and swimming in the Helsinki archipelago, all year round' : 'Saunomista ja uimista Helsingin saaristossa ympäri vuoden'}
             </h2>
             <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
               <p>
