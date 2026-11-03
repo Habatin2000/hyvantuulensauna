@@ -1,7 +1,6 @@
 'use client';
 
 import { Minus, Plus, ChevronLeft, ChevronRight, Info, Clock } from 'lucide-react';
-import { calculateFriendOfferTotal } from '@/lib/pricing';
 
 interface TimeSlot {
   startTime: string;
@@ -79,9 +78,9 @@ export default function Step2SelectSlotAndTickets({
   const totalQuantity = tickets.reduce((sum, t) => sum + t.quantity, 0);
   const getTicketPrice = (ticketID: string) =>
     availableTickets.find(at => at.id === ticketID)?.price || 0;
-  const { total: totalPrice, originalTotal, savings } = calculateFriendOfferTotal(
-    tickets,
-    getTicketPrice
+  const totalPrice = tickets.reduce(
+    (sum, t) => sum + getTicketPrice(t.ticketID) * t.quantity,
+    0
   );
 
   const formatTime = (hour: number) => `${String(hour).padStart(2, '0')}:00`;
@@ -191,19 +190,9 @@ export default function Step2SelectSlotAndTickets({
           <div className="flex items-center justify-between">
             <span className="text-sm text-stone-600">Yhteensä ({totalQuantity} lippua)</span>
             <div className="text-right">
-              {savings > 0 && (
-                <span className="mr-2 text-sm text-stone-400 line-through">
-                  {originalTotal.toFixed(2)}€
-                </span>
-              )}
               <span className="text-lg font-bold">{totalPrice.toFixed(2)}€</span>
             </div>
           </div>
-          {savings > 0 && (
-            <p className="mt-1 text-right text-xs font-medium text-amber-600">
-              Säästät {savings.toFixed(2)}€ kaveritarjouksella
-            </p>
-          )}
         </div>
       )}
 

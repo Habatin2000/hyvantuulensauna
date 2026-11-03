@@ -1,7 +1,6 @@
 'use client';
 
 import { Calendar, Clock, Ticket, User, CreditCard, AlertCircle, ChevronLeft, Loader2 } from 'lucide-react';
-import { calculateFriendOfferTotal } from '@/lib/pricing';
 
 interface TicketType {
   id: string;
@@ -61,9 +60,9 @@ export default function Step4Confirm({
     return ticket?.price || 0;
   };
 
-  const { total: totalPrice, originalTotal, savings } = calculateFriendOfferTotal(
-    tickets,
-    getTicketPrice
+  const totalPrice = tickets.reduce(
+    (sum, t) => sum + getTicketPrice(t.ticketID) * t.quantity,
+    0
   );
 
   return (
@@ -135,40 +134,18 @@ export default function Step4Confirm({
             <div className="mt-1 space-y-1">
               {tickets.map((t, i) => {
                 const price = getTicketPrice(t.ticketID);
-                const freeQty = Math.floor(t.quantity / 3);
-                const lineTotal = price * (t.quantity - freeQty);
-                const lineOriginal = price * t.quantity;
+                const lineTotal = price * t.quantity;
                 return (
                   <p key={i} className="text-sm text-stone-700">
                     {t.quantity}x {t.name} — {lineTotal.toFixed(2)}€
                     <span className="text-stone-400"> ({price.toFixed(2)}€/kpl)</span>
-                    {freeQty > 0 && (
-                      <span className="ml-1 text-xs font-medium text-amber-600">
-                        ({freeQty}x ilmainen kaveritarjouksella)
-                      </span>
-                    )}
-                    {freeQty > 0 && (
-                      <span className="ml-1 text-xs text-stone-400 line-through">
-                        {lineOriginal.toFixed(2)}€
-                      </span>
-                    )}
                   </p>
                 );
               })}
             </div>
             <p className="mt-2 font-semibold text-stone-900">
               Yhteensä: {totalPrice.toFixed(2)}€
-              {savings > 0 && (
-                <span className="ml-2 text-sm font-normal text-stone-400 line-through">
-                  {originalTotal.toFixed(2)}€
-                </span>
-              )}
             </p>
-            {savings > 0 && (
-              <p className="text-xs font-medium text-amber-600">
-                Säästät {savings.toFixed(2)}€ kaveritarjouksella
-              </p>
-            )}
             <p className="text-xs text-stone-500">Maksu tapahtuu varauksen yhteydessä</p>
           </div>
         </div>

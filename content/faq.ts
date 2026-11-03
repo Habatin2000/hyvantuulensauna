@@ -95,7 +95,7 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
   {
     id: 'public-when',
     question: 'When are the public sauna sessions?',
-    answer: 'Public sauna sessions are held every Sunday 10-16. There are also sessions on varying weekdays – we update the calendar here every Monday!',
+    answer: 'Public sauna sessions are organized in winter from Monday to Thursday and on Saturdays and Sundays. See up-to-date days and free spots in the booking calendar!',
     linkHref: '/julkinen-sauna',
     linkText: 'Book a public sauna session',
     category: 'public',
@@ -258,7 +258,7 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
   {
     id: 'public-when',
     question: 'Milloin julkiset saunavuorot ovat?',
-    answer: 'Julkiset saunavuorot järjestetään joka sunnuntai 10-16. Vuoroja on vaihtelevasti viikolla, päivitämme tänne kalenteria joka maanantai!',
+    answer: 'Yleisiä saunavuoroja järjestetään talvella maanantaista torstaihin sekä lauantaisin ja sunnuntaisin. Ajantasaiset päivät ja vapaat paikat näet varauskalenterista!',
     category: 'public',
   },
   {

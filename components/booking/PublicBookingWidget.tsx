@@ -5,7 +5,6 @@ import { Info } from 'lucide-react';
 import { useServiceInfo, useAvailability, useBooking, useMonthAvailability } from '@/hooks/useBookla';
 import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
 import { trackSchedule, trackInitiateCheckout, trackAddPaymentInfo, trackPurchase } from '@/lib/meta';
-import { calculateFriendOfferTotal } from '@/lib/pricing';
 import BookingStepIndicator from './BookingStepIndicator';
 import PublicSaunaCalendar from './PublicSaunaCalendar';
 import Step2SelectSlotAndTickets from './Step2SelectSlotAndTickets';
@@ -140,7 +139,7 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
   const getBooklaPrice = (ticketID: string) =>
     info?.tickets?.find((ti: TicketType) => ti.id === ticketID)?.price || 0;
 
-  const bookingValue = calculateFriendOfferTotal(tickets, getBooklaPrice).total;
+  const bookingValue = tickets.reduce((sum, t) => sum + getBooklaPrice(t.ticketID) * t.quantity, 0);
 
   const handleBook = async () => {
     if (!selectedSlot || tickets.length === 0) return;

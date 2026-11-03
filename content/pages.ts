@@ -57,14 +57,14 @@ export const privatePageHero = getPrivatePageHero('fi');
 export const getPublicPageHero = (locale: Locale): HeroContent => isEn(locale) ? {
   title: 'Public sauna in Helsinki – a low-threshold sauna session at sea',
   subtitle: 'Helsinki\'s most unique sauna session on a sauna boat',
-  description: 'Come enjoy a relaxed public sauna session by the sea in Aurinkolahti. Two wood-fired saunas, a refreshing dip in the sea and a laid-back vibe.',
+  description: 'Come enjoy a relaxed public sauna session by the sea in Puotila. Two wood-fired saunas, winter swimming, an ice hole and a laid-back vibe.',
   ctaText: 'Book your spot',
   ctaHref: '#booking',
   image: '/images/public-sauna-hero.webp',
 } : {
-  title: 'Julkinen sauna Helsingissä – matalan kynnyksen saunavuoro merellä',
+  title: 'Yleinen sauna Helsingissä – matalan kynnyksen saunavuoro merellä',
   subtitle: 'Helsingin uniikein saunavuoro saunalautalla',
-  description: 'Tule nauttimaan rennosta julkisesta saunavuorosta meren äärelle Aurinkolahteen. Kaksi puusaunaa, virkistävä pulahdus mereen ja leppoisa tunnelma.',
+  description: 'Tule nauttimaan rennosta julkisesta saunavuorosta meren äärelle Puotilaan. Kaksi puusaunaa, talviuintia, avanto ja leppoisa tunnelma.',
   ctaText: 'Varaa paikkasi',
   ctaHref: '#varaus',
   image: '/images/public-sauna-hero.webp',
