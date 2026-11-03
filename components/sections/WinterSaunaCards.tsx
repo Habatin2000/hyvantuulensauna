@@ -12,26 +12,21 @@ import type { Locale } from '@/content/pages';
 const AALTO_RESOURCE_ID = '3dd71bee-f303-463e-ad78-e05b4faa2234';
 const VIRTA_RESOURCE_ID = '3bffeff6-4ef4-4865-a99b-370b956e355e';
 
+// Winter-only images (summer boat shots removed). No per-sauna winter photos
+// exist, so both cards share the same set with a different lead image.
 const AALTO_IMAGES = [
   '/images/saunaboat-winter-sun.webp',
-  '/images/aalto-12.webp',
-  '/images/gallery-aalto-sohva.webp',
-  '/images/gallery-aalto-raft.webp',
-  '/images/aalto-11.webp',
-  '/images/aalto-09.webp',
-  '/images/aalto-08.webp',
-  '/images/aalto-07.webp',
+  '/images/gallery-winter-dock.webp',
+  '/images/gallery-ice-swimming.webp',
+  '/images/gallery-avanto-woman.webp',
+  '/images/gallery-winter-sunset.webp',
 ];
-
 const VIRTA_IMAGES = [
+  '/images/gallery-winter-sunset.webp',
   '/images/saunaboat-winter-sun.webp',
-  '/images/virta-01.webp',
-  '/images/gallery-virta-deck.webp',
-  '/images/virta-06.webp',
-  '/images/virta-02.webp',
-  '/images/virta-03.webp',
-  '/images/virta-04.webp',
-  '/images/virta-07.webp',
+  '/images/gallery-avanto-woman.webp',
+  '/images/gallery-ice-swimming.webp',
+  '/images/gallery-winter-dock.webp',
 ];
 
 interface WinterSaunaCardsProps {
