@@ -10,13 +10,13 @@ export const getSummerPageHero = (locale: Locale): HeroContent => isEn(locale) ?
   description: 'Sauna boat cruises and private sauna experiences in Helsinki. Two unique sauna boats, Aalto and Virta, offer a private sauna space, sea views and the chance to enjoy Helsinki in a whole new way. Departing from Kalkkihiekantori near Vuosaari.',
   ctaText: 'Book a sauna boat',
   ctaHref: '#boats',
-  image: '/images/aalto-01.webp',
+  image: '/images/saunaboat-winter-sun.webp',
   images: [
-    '/images/aalto-01.webp',
-    '/images/virta-01.webp',
-    '/images/gallery-sauna-woman.webp',
-    '/images/seasauna.webp',
-    '/images/SAUNAHELSINKI.webp',
+    '/images/saunaboat-winter-sun.webp',
+    '/images/gallery-ice-swimming.webp',
+    '/images/gallery-winter-sunset.webp',
+    '/images/gallery-winter-dock.webp',
+    '/images/gallery-avanto-woman.webp',
   ],
 } : {
   title: 'Saunalautta Helsinki – Yksityinen saunatila ja risteilyt merellä',
@@ -24,13 +24,13 @@ export const getSummerPageHero = (locale: Locale): HeroContent => isEn(locale) ?
   description: 'Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, tarjoavat yksityisen saunatilan, merelliset maisemat ja mahdollisuuden nauttia Helsingistä aivan uudella tavalla. Kalkkihiekantorilta Vuosaaren läheltä.',
   ctaText: 'Varaa saunalautta',
   ctaHref: '#boats',
-  image: '/images/aalto-01.webp',
+  image: '/images/saunaboat-winter-sun.webp',
   images: [
-    '/images/aalto-01.webp',
-    '/images/virta-01.webp',
-    '/images/gallery-sauna-woman.webp',
-    '/images/seasauna.webp',
-    '/images/SAUNAHELSINKI.webp',
+    '/images/saunaboat-winter-sun.webp',
+    '/images/gallery-ice-swimming.webp',
+    '/images/gallery-winter-sunset.webp',
+    '/images/gallery-winter-dock.webp',
+    '/images/gallery-avanto-woman.webp',
   ],
 };
 
@@ -60,14 +60,14 @@ export const getPublicPageHero = (locale: Locale): HeroContent => isEn(locale) ?
   description: 'Come enjoy a relaxed public sauna session by the sea in Puotila. Two wood-fired saunas, winter swimming, an ice hole and a laid-back vibe.',
   ctaText: 'Book your spot',
   ctaHref: '#booking',
-  image: '/images/public-sauna-hero.webp',
+  image: '/images/gallery-ice-swimming.webp',
 } : {
   title: 'Yleinen sauna Helsingissä – matalan kynnyksen saunavuoro merellä',
   subtitle: 'Helsingin uniikein saunavuoro saunalautalla',
   description: 'Tule nauttimaan rennosta julkisesta saunavuorosta meren äärelle Puotilaan. Kaksi puusaunaa, talviuintia, avanto ja leppoisa tunnelma.',
   ctaText: 'Varaa paikkasi',
   ctaHref: '#varaus',
-  image: '/images/public-sauna-hero.webp',
+  image: '/images/gallery-ice-swimming.webp',
 };
 
 export const publicPageHero = getPublicPageHero('fi');
@@ -78,14 +78,14 @@ export const getLocationPageHero = (locale: Locale): HeroContent => isEn(locale)
   description: 'In winter we are easily accessible at Meripellontie in Puotila. Welcome to enjoy a sauna experience by the sea.',
   ctaText: 'See Route',
   ctaHref: '#map',
-  image: '/images/gallery-sea-view.webp',
+  image: '/images/gallery-winter-dock.webp',
 } : {
   title: 'Sijainti',
   subtitle: 'Tule käymään',
   description: 'Talvikaudella olemme helposti saavutettavissa Meripellontiellä Puotilassa. Tervetuloa nauttimaan saunaelämyksestä meren äärellä.',
   ctaText: 'Katso reitti',
   ctaHref: '#kartta',
-  image: '/images/gallery-sea-view.webp',
+  image: '/images/gallery-winter-dock.webp',
 };
 
 export const locationPageHero = getLocationPageHero('fi');
@@ -96,14 +96,14 @@ export const getGalleryPageHero = (locale: Locale): HeroContent => isEn(locale) 
   description: 'Take a peek at our sauna experiences through pictures. Summer sunsets, winter ice swimming and everything in between.',
   ctaText: 'Explore Services',
   ctaHref: '/saunalauttaristeilyt-helsingissa',
-  image: '/images/gallery-raft-sunset.webp',
+  image: '/images/gallery-winter-sunset.webp',
 } : {
   title: 'Galleria',
   subtitle: 'Tunnelmia',
   description: 'Kurkista saunaelämyksiimme kuvien välityksellä. Kesän auringonlaskut, talven avantouinnit ja kaikki siltä väliltä.',
   ctaText: 'Tutustu palveluihin',
   ctaHref: '/saunalauttaristeilyt-helsingissa',
-  image: '/images/gallery-raft-sunset.webp',
+  image: '/images/gallery-winter-sunset.webp',
 };
 
 export const galleryPageHero = getGalleryPageHero('fi');
