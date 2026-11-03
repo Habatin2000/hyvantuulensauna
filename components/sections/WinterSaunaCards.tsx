@@ -43,8 +43,8 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
   );
 
   const t = {
-    eyebrow: isEn ? 'Two sauna boats on the ice' : 'Kaksi saunalauttaa jäällä',
-    title: isEn ? 'Aalto and Virta – winter saunas' : 'Aalto ja Virta – talvisaunat',
+    eyebrow: isEn ? 'Two private sauna boats on the ice' : 'Kaksi yksityistä saunalauttaa jäällä',
+    title: isEn ? 'Aalto and Virta – private winter saunas' : 'Aalto ja Virta – yksityiset talvisaunat',
     aalto: {
       tagline: isEn ? 'Spacious sauna for larger groups' : 'Tilava sauna isommalle porukalle',
       description: isEn
