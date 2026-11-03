@@ -32,8 +32,8 @@ export async function generateMetadata({
       ? 'Ice Swimming & Wood-Fired Sauna'
       : 'Avantouinti ja sauna Helsingissä',
     description: isEn
-      ? "Try ice swimming and warm up in a wood-fired sauna in Helsinki's Aurinkolahti. Join a public session or book a private sauna for your group."
-      : 'Koe avantouinti ja puusaunan lämpö Helsingin Aurinkolahdessa. Tule yleiselle saunavuorolle tai varaa yksityinen sauna omalle porukallesi.',
+      ? "Try ice swimming and warm up in a wood-fired sauna by the sea in Puotila, Helsinki. Join a public session or book a private sauna for your group."
+      : 'Koe avantouinti ja puusaunan lämpö meren äärellä Puotilassa, Helsingissä. Tule yleiselle saunavuorolle tai varaa yksityinen sauna omalle porukallesi.',
     alternates: {
       canonical: pageUrl,
       languages: {
@@ -48,8 +48,8 @@ export async function generateMetadata({
         ? 'Ice Swimming & Sauna in Helsinki | Hyvän Tuulen Sauna'
         : 'Avantouinti ja puulämmitteinen sauna Helsingissä | Hyvän Tuulen Sauna',
       description: isEn
-        ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti.'
-        : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa.',
+        ? 'Ice swimming and a wood-fired sauna by the sea in Puotila.'
+        : 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa.',
       url: pageUrl,
       locale: isEn ? 'en_US' : 'fi_FI',
       images: [
@@ -83,7 +83,7 @@ export default async function AvantoPage({
         title: 'Ice swimming & sauna in Helsinki',
         subtitle: 'Winter at Hyvän Tuulen Sauna',
         description:
-          'A hole in the ice and a wood-fired sauna by the sea in Aurinkolahti. Join a public session or book the sauna spot for your own group — open all year round.',
+          'A hole in the ice and a wood-fired sauna by the sea in Puotila. Join a public session or book the sauna spot for your own group — open all year round.',
         ctaText: 'Book a public session',
         ctaHref: '/julkinen-sauna',
         secondaryCta: {
@@ -101,7 +101,7 @@ export default async function AvantoPage({
         title: 'Avantouinti ja puulämmitteinen sauna Helsingissä',
         subtitle: 'Talvi Hyvän Tuulen Saunalla',
         description:
-          'Avanto ja puulämmitteinen sauna meren äärellä Aurinkolahdessa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
+          'Avanto ja puulämmitteinen sauna meren äärellä Puotilassa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
         ctaText: 'Varaa julkinen vuoro',
         ctaHref: '/julkinen-sauna',
         secondaryCta: {
@@ -119,8 +119,8 @@ export default async function AvantoPage({
   const serviceSchema = generateServiceSchema(
     isEn ? 'Ice swimming and sauna in Helsinki' : 'Avantouinti ja sauna Helsingissä',
     isEn
-      ? 'Ice swimming and wood-fired sauna in a maritime setting in Aurinkolahti, Helsinki. Public sessions and private bookings all year round.'
-      : 'Avantouinti ja puulämmitteinen sauna merellisessä ympäristössä Aurinkolahdessa. Julkiset vuorot ja yksityisvaraukset ympäri vuoden.',
+      ? 'Ice swimming and wood-fired sauna in a maritime setting in Puotila, Helsinki. Public sessions and private bookings all year round.'
+      : 'Avantouinti ja puulämmitteinen sauna merellisessä ympäristössä Puotilassa. Julkiset vuorot ja yksityisvaraukset ympäri vuoden.',
     pageUrl,
     PAGE_IMAGE
   );
@@ -133,8 +133,8 @@ export default async function AvantoPage({
   const articleSchema = generateArticleSchema(
     isEn ? 'Ice Swimming & Sauna in Helsinki' : 'Avantouinti ja puulämmitteinen sauna Helsingissä',
     isEn
-      ? 'Ice swimming and a wood-fired sauna by the sea in Aurinkolahti, Helsinki.'
-      : 'Avantouinti ja puulämmitteinen sauna meren äärellä Aurinkolahdessa, Helsingissä.',
+      ? 'Ice swimming and a wood-fired sauna by the sea in Puotila, Helsinki.'
+      : 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa, Helsingissä.',
     pageUrl,
     PAGE_IMAGE,
     DATE_PUBLISHED,
@@ -415,7 +415,7 @@ export default async function AvantoPage({
             { id: '3', src: '/images/gallery-winter-sunset.webp', alt: isEn ? 'Winter evening at the sauna' : 'Talvi-ilta saunalla' },
             { id: '4', src: '/images/saunaboat-winter-sun.webp', alt: isEn ? 'Sauna boat in winter sun' : 'Saunalautta talvisessa auringossa' },
             { id: '5', src: '/images/gallery-avanto-woman.webp', alt: isEn ? 'Ice swimmer at Hyvän Tuulen Sauna' : 'Avantouija Hyvän Tuulen Saunalla' },
-            { id: '6', src: '/images/gallery-winter-dock.webp', alt: isEn ? 'Winter dock at Aurinkolahti' : 'Talvinen laituri Aurinkolahdessa' },
+            { id: '6', src: '/images/gallery-winter-dock.webp', alt: isEn ? 'Winter dock in Puotila' : 'Talvinen laituri Puotilassa' },
           ]}
           title={isEn ? 'Winter moments' : 'Talvisia hetkiä'}
         />
