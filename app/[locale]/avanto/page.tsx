@@ -10,6 +10,7 @@ import SquareGallery from '@/components/sections/SquareGallery';
 import { getFAQsByCategory } from '@/content/faq';
 import { generateServiceSchema, generateBreadcrumbSchema, generateArticleSchema, generateHowToSchema, generateFAQSchema } from '../schema';
 import { SITE_URL } from '@/lib/site';
+import WinterSaunaCards from '@/components/sections/WinterSaunaCards';
 import type { HeroContent } from '@/types';
 import type { Locale } from '@/content/pages';
 
@@ -214,8 +215,13 @@ export default async function AvantoPage({
         </div>
       </section>
 
+      {/* Virta & Aalto -kortit (talvi) */}
+      <section id="talvisaunat" className="scroll-mt-24">
+        <WinterSaunaCards locale={safeLocale} />
+      </section>
+
       {/* Sektio 2: Palvelumme */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
             <div className="mb-10 text-center md:mb-12">
@@ -272,11 +278,7 @@ export default async function AvantoPage({
                       : 'Vuokraa koko sauna omaan käyttöösi! Aalto-saunalle mahtuu mukaan kymmenen henkeä, Virta-saunalle taas kuusi. Voit vuokrata joko jomman kumman tai molemmat käyttöösi!'}
                   </p>
                   <a
-                    href={isEn
-                      ? 'https://wa.me/358442313546?text=Hi!%20I%20would%20like%20to%20rent%20an%20ice%20sauna%20(Aalto%20or%20Virta).'
-                      : 'https://wa.me/358442313546?text=Moi!%20Haluaisin%20vuokrata%20avantosaunan%20(Aalto%20tai%20Virta).'}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#talvisaunat"
                     className="mt-5 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
                   >
                     {isEn ? 'Book here' : 'Varaa tästä'}
@@ -320,7 +322,7 @@ export default async function AvantoPage({
       </section>
 
       {/* Sektio 3: Tietoa avantouinnista */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-[#faf9f7]">
         <div className="container-padding mx-auto max-w-5xl">
           <AnimatedSection>
             <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
@@ -358,7 +360,7 @@ export default async function AvantoPage({
       </section>
 
       {/* Sektio 4: Saapuminen meille */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12">
