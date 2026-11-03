@@ -84,8 +84,12 @@ export default async function AvantoPage({
         subtitle: 'Winter at Hyvän Tuulen Sauna',
         description:
           'A hole in the ice and a wood-fired sauna by the sea in Aurinkolahti. Join a public session or book the sauna spot for your own group — open all year round.',
-        ctaText: 'Book a sauna session',
+        ctaText: 'Book a public session',
         ctaHref: '/julkinen-sauna',
+        secondaryCta: {
+          text: 'Book a private session',
+          href: '#talvisaunat',
+        },
         image: '/images/gallery-ice-swimming.webp',
         images: [
           '/images/gallery-ice-swimming.webp',
@@ -98,8 +102,12 @@ export default async function AvantoPage({
         subtitle: 'Talvi Hyvän Tuulen Saunalla',
         description:
           'Avanto ja puulämmitteinen sauna meren äärellä Aurinkolahdessa. Tule julkiselle vuorolle tai varaa saunatila omalle porukalle — toimintaa ympäri vuoden.',
-        ctaText: 'Varaa saunavuoro',
+        ctaText: 'Varaa julkinen vuoro',
         ctaHref: '/julkinen-sauna',
+        secondaryCta: {
+          text: 'Varaa yksityinen vuoro',
+          href: '#talvisaunat',
+        },
         image: '/images/gallery-ice-swimming.webp',
         images: [
           '/images/gallery-ice-swimming.webp',

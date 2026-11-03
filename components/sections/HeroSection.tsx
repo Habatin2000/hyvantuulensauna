@@ -310,7 +310,7 @@ export default function HeroSection({
           <p className="mt-3 text-base text-stone-100">
             {content.description}
           </p>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link href={content.ctaHref}>
               <Button 
                 size="lg" 
@@ -320,6 +320,16 @@ export default function HeroSection({
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
+            {content.secondaryCta && (
+              <Link href={content.secondaryCta.href}>
+                <Button 
+                  size="lg" 
+                  className="bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-stone-900 transition-all duration-300 text-base px-8 font-semibold shadow-lg"
+                >
+                  {content.secondaryCta.text}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

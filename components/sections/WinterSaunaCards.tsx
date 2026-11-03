@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
 import { ArrowRight } from 'lucide-react';
 import BoatCard from '@/components/sections/BoatCard';
 import WinterSaunaBookingShell from '@/components/booking/WinterSaunaBookingShell';
@@ -71,12 +72,42 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
       idealFor: isEn ? ['Small groups', 'Families', 'Friend groups'] : ['Pienet porukat', 'Perheet', 'Kaveriporukat'],
     },
     bookNow: isEn ? 'Book now' : 'Varaa nyt',
+    publicCta: {
+      title: isEn
+        ? 'Public winter swimming and sauna sessions'
+        : 'Julkiset talviuinti- ja saunavuorot',
+      text: isEn
+        ? 'Want to join a guided session instead? On our public sessions the saunas are hot, the ice hole is open and we go through the basics of winter swimming. Spots are limited — book yours!'
+        : 'Haluatko mukaan ohjatulle vuorolle? Julkisilla vuoroillamme saunat ovat kuumana, avanto on auki ja käymme läpi talviuinnin perusteet. Paikkoja on rajoitetusti — varaapa omasi!',
+      button: isEn ? 'Book a public session' : 'Varaa julkinen vuoro',
+    },
   };
 
   return (
     <>
       <section className="section-padding bg-[#faf9f7]">
         <div className="container-padding mx-auto max-w-7xl">
+          {/* Public session CTA above the sauna cards */}
+          <AnimatedSection>
+            <div className="mb-12 flex flex-col items-center justify-between gap-6 rounded-3xl bg-[#3b82f6] p-6 md:flex-row md:p-10">
+              <div className="text-center md:text-left">
+                <h2 className="font-corben text-2xl font-bold text-white md:text-3xl">
+                  {t.publicCta.title}
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-blue-100 md:text-base">
+                  {t.publicCta.text}
+                </p>
+              </div>
+              <Link
+                href="/julkinen-sauna"
+                className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-8 py-4 text-base font-bold text-[#3b82f6] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                {t.publicCta.button}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
+          </AnimatedSection>
+
           <AnimatedSection>
             <div className="mb-12 text-center md:mb-16">
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
