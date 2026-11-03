@@ -207,16 +207,6 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
 
   return (
     <div ref={widgetRef} className="relative mx-auto max-w-4xl min-h-[500px]">
-      {/* Friend offer corner badge */}
-      <div className="absolute -top-4 -right-4 z-10 rotate-3 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 px-4 py-2 text-center text-xs font-bold text-white shadow-xl shadow-amber-500/30 md:-top-5 md:-right-5 md:px-5 md:py-2.5 md:text-sm">
-        <span className="block leading-tight">
-          {isEn ? 'Friend offer:' : 'Kaveritarjous:'}
-        </span>
-        <span className="block leading-tight">
-          {isEn ? '3 for 2 ❤️' : 'kolme kahden hinnalla ❤️'}
-        </span>
-      </div>
-
       {showTitle && (
         <div className="mb-6 text-center">
           <h2 className="text-xl font-bold text-stone-900">{isEn ? 'Book a public sauna session' : 'Varaa paikka julkiselta vuorolta'}</h2>
