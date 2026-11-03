@@ -8,7 +8,7 @@ import LocationTracker from '@/components/analytics/LocationTracker';
 import { SITE_URL } from '@/lib/site';
 import type { Locale } from '@/content/pages';
 
-const DATE_MODIFIED = '2026-04-14';
+const DATE_MODIFIED = '2026-11-03';
 
 export async function generateMetadata({
   params,
@@ -21,11 +21,11 @@ export async function generateMetadata({
 
   return {
     title: isEn
-      ? 'Sauna in Aurinkolahti, Helsinki'
-      : 'Sauna Helsingin Aurinkolahdessa',
+      ? 'Sauna in Puotila, Helsinki'
+      : 'Sauna Helsingin Puotilassa',
     description: isEn
-      ? 'Find Hyvän Tuulen Sauna at Kalkkihiekantori in Aurinkolahti, Helsinki. See our location and directions, and plan your visit by public transport.'
-      : 'Löydä Hyvän Tuulen Sauna Helsingin Aurinkolahdesta, Kalkkihiekantorilta. Katso sijainti ja saapumisohjeet sekä suunnittele matkasi meren äärelle.',
+      ? 'Find Hyvän Tuulen Sauna at Meripellontie 11C in Puotila, Helsinki. See our location and directions, and plan your visit by public transport.'
+      : 'Löydä Hyvän Tuulen Sauna Helsingin Puotilasta, Meripellontie 11C. Katso sijainti ja saapumisohjeet sekä suunnittele matkasi meren äärelle.',
     alternates: {
       canonical: pageUrl,
       languages: {
@@ -40,8 +40,8 @@ export async function generateMetadata({
         ? 'Location | Hyvän Tuulen Sauna'
         : 'Sijainti | Hyvän Tuulen Sauna',
       description: isEn
-        ? 'Come visit us at Kalkkihiekantori in Aurinkolahti! A sauna by the sea.'
-        : 'Tule käymään Kalkkihiekantorille Aurinkolahteen! Meren rannalla sijaitseva sauna.',
+        ? 'Come visit us at Meripellontie in Puotila! A sauna by the sea.'
+        : 'Tule käymään Meripellontielle Puotilaan! Meren rannalla sijaitseva sauna.',
       url: pageUrl,
       locale: isEn ? 'en_US' : 'fi_FI',
       images: [
@@ -50,8 +50,8 @@ export async function generateMetadata({
           width: 1200,
           height: 630,
           alt: isEn
-            ? 'Hyvän Tuulen Sauna location in Aurinkolahti'
-            : 'Hyvän Tuulen Saunan sijainti Aurinkolahdessa',
+            ? 'Hyvän Tuulen Sauna location in Puotila'
+            : 'Hyvän Tuulen Saunan sijainti Puotilassa',
         },
       ],
     },
@@ -77,16 +77,16 @@ export default async function LocationPage({
   const howToSchema = generateHowToSchema(
     isEn ? 'Getting to Hyvän Tuulen Sauna' : 'Saapuminen Hyvän Tuulen Saunalle',
     isEn
-      ? 'Instructions for reaching the Kalkkihiekantori boat pier in Aurinkolahti by public transport and by car.'
-      : 'Ohjeet julkisilla liikennevälineillä ja autolla Kalkkihiekantorin laivalaiturille Aurinkolahteen.',
+      ? 'Instructions for reaching the Meripellontie pier in Puotila by public transport and by car.'
+      : 'Ohjeet julkisilla liikennevälineillä ja autolla Meripellontien laiturille Puotilaan.',
     isEn ? [
-      { name: 'Metro', text: 'Go to Vuosaari metro station. Walk to the Kalkkihiekantori boat pier in about 10 minutes.' },
-      { name: 'Bus', text: 'Take bus 560 or 78 and get off at the Kalkkihiekantori stop. The pier is near the stop.' },
-      { name: 'Car', text: 'Free parking at Kalkkihiekantori. Arrive 10 minutes before your booking.' }
+      { name: 'Metro', text: 'Go to Rastila metro station. Walk along Meripellontie to the pier in about 15 minutes.' },
+      { name: 'Bus', text: 'Several buses stop right by Meripellontie in Puotila. Get off at the Meripellontie stop.' },
+      { name: 'Car', text: 'Plenty of 4-hour disc parking along Meripellontie. Arrive a few minutes before your session.' }
     ] : [
-      { name: 'Metro', text: 'Mene metroasemalle Vuosaari. Kävele Kalkkihiekantorin laivalaiturille noin 10 minuuttia.' },
-      { name: 'Bussi', text: 'Ota bussi 560 tai 78 ja jää pois Kalkkihiekantorin pysäkillä. Laituri on pysäkin lähellä.' },
-      { name: 'Auto', text: 'Ilmainen pysäköinti Kalkkihiekantorilla. Saavu 10 min ennen varausta.' }
+      { name: 'Metro', text: 'Mene metroasemalle Rastila. Kävele Meripellontietä pitkin laiturille noin 15 minuuttia.' },
+      { name: 'Bussi', text: 'Useat bussit pysähtyvät aivan Meripellontien viereen Puotilassa. Jää pois Meripellontien pysäkillä.' },
+      { name: 'Auto', text: 'Meripellontien varrella on paljon 4 tunnin kiekkopaikkoja. Saavu paikalle muutama minuutti ennen vuoroasi.' }
     ]
   );
 
@@ -95,23 +95,23 @@ export default async function LocationPage({
     '@type': 'LocalBusiness',
     '@id': `${SITE_URL}/#location`,
     name: isEn
-      ? 'Hyvän Tuulen Sauna – Kalkkihiekantori Boat Pier'
-      : 'Hyvän Tuulen Sauna – Kalkkihiekantorin Laivalaituri',
+      ? 'Hyvän Tuulen Sauna – Meripellontie Pier'
+      : 'Hyvän Tuulen Sauna – Meripellontien laituri',
     description: isEn
-      ? 'Departure point for the sauna boats and location of the public sauna in Aurinkolahti, Helsinki.'
-      : 'Saunalauttojen lähtöpaikka ja julkisen saunan sijainti Aurinkolahdessa, Helsingissä.',
+      ? 'Winter sauna location and ice hole at Meripellontie in Puotila, Helsinki. In summer the sauna boats depart from Kalkkihiekantori in Aurinkolahti.'
+      : 'Talvisaunojen ja avannon sijainti Meripellontiellä Puotilassa, Helsingissä. Kesällä saunalautat lähtevät Kalkkihiekantorilta Aurinkolahdesta.',
     url: pageUrl,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Kalkkihiekantori',
+      streetAddress: 'Meripellontie 11C',
       addressLocality: 'Helsinki',
-      postalCode: '00980',
+      postalCode: '00970',
       addressCountry: 'FI'
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 60.198930,
-      longitude: 25.141096
+      latitude: 60.2078110,
+      longitude: 25.1059710
     }
   };
 
@@ -138,15 +138,13 @@ export default async function LocationPage({
             <p className="text-stone-700 leading-relaxed">
               {isEn ? (
                 <>
-                  <strong className="text-stone-900">Hyvän Tuulen Sauna is located at the Kalkkihiekantori boat pier in Aurinkolahti, Helsinki.</strong>{' '}
-                  Arrive by metro to Vuosaari (10 min walk) or by buses 560 and 78. Free parking at the square. This is where the <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruises</Link> and
-                  <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline"> public sauna sessions</Link> depart from.
+                  <strong className="text-stone-900">In winter, Hyvän Tuulen Sauna is located at Meripellontie 11C in Puotila, Helsinki.</strong>{' '}
+                  Arrive by metro to Rastila (15 min walk) or by bus, which stops right by Meripellontie. There is plenty of 4-hour disc parking along the street. This is where the <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline">public sauna sessions</Link>, the <Link href="/avanto" className="text-[#3b82f6] hover:underline">ice hole</Link> and the <Link href="/avanto" className="text-[#3b82f6] hover:underline">private winter saunas</Link> are. In summer the sauna boat cruises depart from Kalkkihiekantori in Aurinkolahti.
                 </>
               ) : (
                 <>
-                  <strong className="text-stone-900">Hyvän Tuulen Sauna sijaitsee Kalkkihiekantorin laivalaiturissa Aurinkolahdessa, Helsingissä.</strong>{' '}
-                  Saavu metrolla Vuosaareen (kävely 10 min) tai busseilla 560 ja 78. Ilmainen pysäköinti torilla. Täältä lähtevät <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">saunalauttaristeilyt</Link> ja
-                  <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline"> julkiset saunavuorot</Link>.
+                  <strong className="text-stone-900">Talvella Hyvän Tuulen Sauna sijaitsee osoitteessa Meripellontie 11C Puotilassa, Helsingissä.</strong>{' '}
+                  Saavu metrolla Rastilaan (kävely 15 min) tai bussilla, joka pysähtyy aivan Meripellontien viereen. Kadun varrella on paljon 4 tunnin kiekkopaikkoja. Täällä sijaitsevat <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline">yleiset saunavuorot</Link>, <Link href="/avanto" className="text-[#3b82f6] hover:underline">avanto</Link> ja <Link href="/avanto" className="text-[#3b82f6] hover:underline">yksityiset talvisaunat</Link>. Kesällä saunalauttaristeilyt lähtevät Kalkkihiekantorilta Aurinkolahdesta.
                 </>
               )}
             </p>
@@ -160,9 +158,12 @@ export default async function LocationPage({
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="rounded-xl bg-stone-50 p-6">
               <MapPin className="h-8 w-8 text-[#3b82f6] mb-4" />
-              <h3 className="font-semibold text-stone-900 mb-2">{isEn ? 'Address' : 'Osoite'}</h3>
-              <p className="text-stone-600">Kalkkihiekantori</p>
-              <p className="text-stone-600">00980 Helsinki</p>
+              <h3 className="font-semibold text-stone-900 mb-2">{isEn ? 'Address (winter season)' : 'Osoite (talvikausi)'}</h3>
+              <p className="text-stone-600">Meripellontie 11C</p>
+              <p className="text-stone-600">00970 Helsinki</p>
+              <p className="mt-2 text-xs text-stone-500">
+                {isEn ? 'Summer: Kalkkihiekantori, 00980 Helsinki' : 'Kesällä: Kalkkihiekantori, 00980 Helsinki'}
+              </p>
             </div>
             <div className="rounded-xl bg-stone-50 p-6">
               <Phone className="h-8 w-8 text-[#3b82f6] mb-4" />
@@ -202,7 +203,7 @@ export default async function LocationPage({
 
           <div className="rounded-2xl overflow-hidden shadow-lg aspect-video bg-stone-200">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1983.0!2d25.1411!3d60.1989!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sKalkkihiekantorin%20Laivalaituri!5e0!3m2!1sfi!2sfi!4v1"
+              src="https://www.google.com/maps?q=Meripellontie%2011C%2C%2000970%20Helsinki&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -219,15 +220,13 @@ export default async function LocationPage({
               <ul className="space-y-3 text-stone-600">
                 {isEn ? (
                   <>
-                    <li>• Metro: Vuosaari, approx. 10 min walk</li>
-                    <li>• Bus: 560, 78 – Kalkkihiekantori stop</li>
-                    <li>• Tram: 11 (summer season)</li>
+                    <li>• Metro: Rastila, about 15 min walk along Meripellontie</li>
+                    <li>• Bus: several buses stop right by Meripellontie in Puotila</li>
                   </>
                 ) : (
                   <>
-                    <li>• Metro: Vuosaari, kävely n. 10 min</li>
-                    <li>• Bussi: 560, 78 - pysäkki Kalkkihiekantori</li>
-                    <li>• Raitiovaunu: 11 (kesäkaudella)</li>
+                    <li>• Metro: Rastila, kävely n. 15 min Meripellontietä pitkin</li>
+                    <li>• Bussi: useat bussit pysähtyvät aivan Meripellontien viereen Puotilassa</li>
                   </>
                 )}
               </ul>
@@ -237,13 +236,13 @@ export default async function LocationPage({
               <ul className="space-y-3 text-stone-600">
                 {isEn ? (
                   <>
-                    <li>• Free parking at Kalkkihiekantori</li>
-                    <li>• Please arrive 10 minutes before your booking</li>
+                    <li>• Plenty of 4-hour disc parking along Meripellontie</li>
+                    <li>• Please arrive a few minutes before your session starts</li>
                   </>
                 ) : (
                   <>
-                    <li>• Ilmainen pysäköinti Kalkkihiekantorilla</li>
-                    <li>• Saavuthan paikalle 10 min ennen varaustasi</li>
+                    <li>• Meripellontien varrella on paljon 4 tunnin kiekkopaikkoja</li>
+                    <li>• Saavuthan paikalle muutama minuutti ennen vuorosi alkua</li>
                   </>
                 )}
               </ul>

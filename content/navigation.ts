@@ -70,7 +70,7 @@ export const footerNavigation: {
   contact: {
     email: 'info@hyvantuulensauna.fi',
     phone: '+358 442313546',
-    address: 'Kalkkihiekantori, 00980 Helsinki',
+    address: 'Meripellontie 11C, 00970 Helsinki',
   },
   social: {
     instagram: 'https://instagram.com/hyvantuulensauna',

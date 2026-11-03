@@ -17,15 +17,15 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   "foundingDate": "2018",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Kalkkihiekantori",
+    "streetAddress": "Meripellontie 11C",
     "addressLocality": "Helsinki",
-    "postalCode": "00980",
+    "postalCode": "00970",
     "addressCountry": "FI"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 60.1989759,
-    "longitude": 25.1407083
+    "latitude": 60.2078110,
+    "longitude": 25.1059710
   },
   "hasMap": "https://maps.app.goo.gl/VtS6aSXd3hxFEPxH6",
   "openingHoursSpecification": [
@@ -206,15 +206,15 @@ export const generateEventSchema = (name: string, description: string, url: stri
     "name": location,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Kalkkihiekantori",
+      "streetAddress": "Meripellontie 11C",
       "addressLocality": "Helsinki",
-      "postalCode": "00980",
+      "postalCode": "00970",
       "addressCountry": "FI"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 60.198930,
-      "longitude": 25.141096
+      "latitude": 60.2078110,
+      "longitude": 25.1059710
     }
   },
   "organizer": {

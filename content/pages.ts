@@ -75,14 +75,14 @@ export const publicPageHero = getPublicPageHero('fi');
 export const getLocationPageHero = (locale: Locale): HeroContent => isEn(locale) ? {
   title: 'Location',
   subtitle: 'Come Visit Us',
-  description: 'We are easily accessible at Kalkkihiekantori in Aurinkolahti. Welcome to enjoy a sauna experience by the sea.',
+  description: 'In winter we are easily accessible at Meripellontie in Puotila. Welcome to enjoy a sauna experience by the sea.',
   ctaText: 'See Route',
   ctaHref: '#map',
   image: '/images/gallery-sea-view.webp',
 } : {
   title: 'Sijainti',
   subtitle: 'Tule käymään',
-  description: 'Olemme helposti saavutettavissa Kalkkihiekantorilla Aurinkolahdessa. Tervetuloa nauttimaan saunaelämyksestä meren äärellä.',
+  description: 'Talvikaudella olemme helposti saavutettavissa Meripellontiellä Puotilassa. Tervetuloa nauttimaan saunaelämyksestä meren äärellä.',
   ctaText: 'Katso reitti',
   ctaHref: '#kartta',
   image: '/images/gallery-sea-view.webp',
