@@ -122,6 +122,7 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
                   </div>
                 }
                 idealFor={t.aalto.idealFor}
+                compact
                 onBookClick={() =>
                   setBookingResource({ id: AALTO_RESOURCE_ID, name: isEn ? 'Sauna boat Aalto' : 'Aalto-sauna' })
                 }
@@ -162,6 +163,7 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
                 }
                 idealFor={t.virta.idealFor}
                 imageOffset="center 80%"
+                compact
                 onBookClick={() =>
                   setBookingResource({ id: VIRTA_RESOURCE_ID, name: isEn ? 'Sauna boat Virta' : 'Virta-sauna' })
                 }
