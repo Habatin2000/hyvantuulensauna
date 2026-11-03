@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
-import { ArrowRight } from 'lucide-react';
 import HeroSection from '@/components/sections/HeroSection';
 import FAQAccordion from '@/components/sections/FAQAccordion';
 import FinalCTA from '@/components/sections/FinalCTA';
@@ -228,109 +226,9 @@ export default async function AvantoPage({
         <WinterSaunaCards locale={safeLocale} />
       </section>
 
-      {/* Sektio 2: Palvelumme */}
+
+      {/* Tietoa avantouinnista */}
       <section className="section-padding bg-white">
-        <div className="container-padding mx-auto max-w-6xl">
-          <AnimatedSection>
-            <div className="mb-10 text-center md:mb-12">
-              <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
-                {isEn ? 'Services' : 'Palvelut'}
-              </p>
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
-                {isEn ? 'Our services' : 'Palvelumme'}
-              </h2>
-            </div>
-          </AnimatedSection>
-
-          {/* Hinnasto */}
-          <AnimatedSection delay={80}>
-            <div className="mb-10 flex flex-wrap items-stretch justify-center gap-4">
-              <div className="rounded-2xl border border-stone-200 bg-white px-8 py-5 text-center shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-500">
-                  {isEn ? 'Sauna boat Virta' : 'Virta-sauna'}
-                </p>
-                <p className="mt-1 text-3xl font-extrabold text-[#3b82f6]">
-                  120 € <span className="text-base font-medium text-stone-500">/ 2 h</span>
-                </p>
-              </div>
-              <div className="rounded-2xl border border-stone-200 bg-white px-8 py-5 text-center shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-stone-500">
-                  {isEn ? 'Sauna boat Aalto' : 'Aalto-sauna'}
-                </p>
-                <p className="mt-1 text-3xl font-extrabold text-[#3b82f6]">
-                  140 € <span className="text-base font-medium text-stone-500">/ 2 h</span>
-                </p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Yksityinen avantosauna */}
-            <AnimatedSection delay={150}>
-              <div className="group relative flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl bg-stone-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <Image
-                  src="/images/saunaboat-winter-sun.webp"
-                  alt={isEn ? 'Sauna boat in the winter sun' : 'Saunalautta talvisessa auringossa'}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent" />
-                <div className="relative z-10 p-6 md:p-8">
-                  <h3 className="font-corben text-2xl font-bold text-white md:text-3xl">
-                    {isEn ? 'Private sauna rental' : 'Yksityinen avantosauna'}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-stone-100 md:text-base">
-                    {isEn
-                      ? 'Rent the whole sauna for your own use! Aalto sauna fits ten people, Virta sauna six. You can rent either one or both!'
-                      : 'Vuokraa koko sauna omaan käyttöösi! Aalto-saunalle mahtuu mukaan kymmenen henkeä, Virta-saunalle taas kuusi. Voit vuokrata joko jomman kumman tai molemmat käyttöösi!'}
-                  </p>
-                  <a
-                    href="#talvisaunat"
-                    className="mt-5 inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
-                  >
-                    {isEn ? 'Book here' : 'Varaa tästä'}
-                  </a>
-                </div>
-              </div>
-            </AnimatedSection>
-
-            {/* Talviuintia ohjatusti */}
-            <AnimatedSection delay={250}>
-              <Link
-                href="/julkinen-sauna"
-                className="group relative flex min-h-[420px] flex-col justify-end overflow-hidden rounded-3xl bg-stone-900 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                <Image
-                  src="/images/gallery-ice-swimming.webp"
-                  alt={isEn ? 'Ice swimming in Helsinki' : 'Avantouinti Helsingissä'}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent" />
-                <div className="relative z-10 p-6 md:p-8">
-                  <h3 className="font-corben text-2xl font-bold text-white md:text-3xl">
-                    {isEn ? 'Guided winter swimming' : 'Talviuintia ohjatusti'}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-stone-100 md:text-base">
-                    {isEn
-                      ? 'On our public sessions we go through the basics of winter swimming. The saunas are hot, the ice hole is open and spots are limited. The session lasts two hours.'
-                      : 'Julkisilla vuoroillamme käymme läpi talviuinnin perusteet. Saunat ovat kuumana, avanto on auki ja paikkoja on rajoitetusti. Vuoro kestää kaksi tuntia.'}
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-amber-400">
-                    {isEn ? 'To the public sauna page' : 'Julkisen saunan sivulle'}
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </Link>
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* Sektio 3: Tietoa avantouinnista */}
-      <section className="section-padding bg-[#faf9f7]">
         <div className="container-padding mx-auto max-w-5xl">
           <AnimatedSection>
             <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
@@ -367,8 +265,8 @@ export default async function AvantoPage({
         </div>
       </section>
 
-      {/* Sektio 4: Saapuminen meille */}
-      <section className="section-padding bg-white">
+      {/* Saapuminen meille */}
+      <section className="section-padding bg-[#faf9f7]">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12">
