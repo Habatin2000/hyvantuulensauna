@@ -208,13 +208,12 @@ export default async function AvantoPage({
               </p>
               <p>
                 {isEn
-                  ? 'You can join a public session or book the whole spot for your own group. Ice swimming is included in the public sessions whenever there is ice — and when there is not, the sea is open for a swim anyway.'
-                  : 'Voit tulla mukaan julkiselle vuorolle, tai varata koko tilan omalle porukalle. Avanto kuuluu julkisiin vuoroihin aina kun jäätä on — ja kun ei ole, meri on avoinna uimiseen silti.'}
-              </p>
-              <p className="font-semibold text-stone-800">
-                {isEn
-                  ? 'First-timer? No worries! Many of our guests try ice swimming for the first time with us, and we will guide you through it.'
-                  : 'Ensikertalainen? Ei hätää! Suuri osa vieraistamme kokeilee avantouintia ensimmäistä kertaa meillä, ja ohjeistamme alkuun.'}
+                  ? 'By booking the whole sauna boat you make sure the place is all yours. Christmas parties, birthdays or team recreation days? We have hosted plenty! There is a pizzeria next door with good and affordable pizzas for the sauna. Big group? Book both saunas! In that case, call us.'
+                  : 'Varaamalla koko lautan itsellesi varmistat sen, että paikalle on vaan sun oma porukka. Pikkujoulut, synttärit tai virkkarit? Näitä meillä on ollut paljon! Naapurissa on pizzeria, josta saa hyvät ja edulliset pizzat saunalle. Iso porukka? Varaa molemmat saunat! Soita tällöin'}{' '}
+                <a href="tel:+358442313546" className="font-semibold text-[#3b82f6] hover:underline">
+                  044 231 3546
+                </a>
+                .
               </p>
             </div>
           </AnimatedSection>
