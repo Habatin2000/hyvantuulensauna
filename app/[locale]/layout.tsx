@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Quicksand, Fraunces, Pacifico } from "next/font/google";
+import { Quicksand, Corben, Pacifico } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -19,10 +19,10 @@ const quicksand = Quicksand({
   weight: ["400", "500", "600", "700"],
 });
 
-const fraunces = Fraunces({
+const corben = Corben({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600"],
+  weight: ["400", "700"],
 });
 
 const pacifico = Pacifico({
@@ -202,7 +202,7 @@ export default async function LocaleLayout({
         {/* End Meta Pixel Code */}
       </head>
       <body
-        className={`${quicksand.variable} ${fraunces.variable} ${pacifico.variable} theme-avanto font-sans antialiased min-h-screen flex flex-col`}
+        className={`${quicksand.variable} ${corben.variable} ${pacifico.variable} theme-avanto font-sans antialiased min-h-screen flex flex-col`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <SiteHeader />

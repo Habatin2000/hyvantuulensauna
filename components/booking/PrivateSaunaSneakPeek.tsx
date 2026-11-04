@@ -7,10 +7,6 @@ import { CalendarDays } from 'lucide-react';
 const AALTO_RESOURCE_ID = '3dd71bee-f303-463e-ad78-e05b4faa2234';
 const VIRTA_RESOURCE_ID = '3bffeff6-4ef4-4865-a99b-370b956e355e';
 
-interface PrivateSaunaSneakPeekProps {
-  onBook: (resource: { id: string; name: string }) => void;
-}
-
 const TIME_ZONE = 'Europe/Helsinki';
 
 function formatHelsinki(d: Date): string {
@@ -34,7 +30,7 @@ const WEEKDAYS_EN = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
 const WEEKS = 6;
 
-export default function PrivateSaunaSneakPeek({ onBook }: PrivateSaunaSneakPeekProps) {
+export default function PrivateSaunaSneakPeek() {
   const locale = useLocale();
   const isEn = locale === 'en';
   const weekdays = isEn ? WEEKDAYS_EN : WEEKDAYS_FI;
@@ -92,22 +88,6 @@ export default function PrivateSaunaSneakPeek({ onBook }: PrivateSaunaSneakPeekP
   const lastDay = days[days.length - 1];
   const rangeLabel = `${Number(firstDay.slice(8, 10))}.${Number(firstDay.slice(5, 7))}.–${Number(lastDay.slice(8, 10))}.${Number(lastDay.slice(5, 7))}.`;
 
-  const aaltoName = isEn ? 'Sauna boat Aalto' : 'Aalto-sauna';
-  const virtaName = isEn ? 'Sauna boat Virta' : 'Virta-sauna';
-
-  function handleDayClick(iso: string) {
-    if (iso < today) return;
-    const aaltoFree = aaltoSet.has(iso);
-    const virtaFree = virtaSet.has(iso);
-    if (!aaltoFree && !virtaFree) return;
-    // Prefer the sauna that is free on the clicked day; default to Aalto
-    if (aaltoFree) {
-      onBook({ id: AALTO_RESOURCE_ID, name: aaltoName });
-    } else {
-      onBook({ id: VIRTA_RESOURCE_ID, name: virtaName });
-    }
-  }
-
   if (failed) {
     return (
       <div className="rounded-2xl border border-stone-200 bg-white p-6 text-center text-sm text-stone-500">
@@ -129,8 +109,8 @@ export default function PrivateSaunaSneakPeek({ onBook }: PrivateSaunaSneakPeekP
             </h3>
             <p className="text-sm text-stone-500">
               {isEn
-                ? `Private sauna availability ${rangeLabel} — click a day to book`
-                : `Yksityissaunojen saatavuus ${rangeLabel} — klikkaa päivää varataksesi`}
+                ? `Private sauna availability ${rangeLabel}`
+                : `Yksityissaunojen saatavuus ${rangeLabel}`}
             </p>
           </div>
         </div>
@@ -186,18 +166,15 @@ export default function PrivateSaunaSneakPeek({ onBook }: PrivateSaunaSneakPeekP
                       : undefined;
 
               return (
-                <button
+                <div
                   key={iso}
-                  type="button"
-                  disabled={isPast || !free}
-                  onClick={() => handleDayClick(iso)}
                   title={title}
-                  className={`flex h-11 flex-col items-center justify-center rounded-lg text-xs transition-colors md:h-12 ${
+                  className={`flex h-11 flex-col items-center justify-center rounded-lg text-xs md:h-12 ${
                     isPast
-                      ? 'cursor-default text-stone-300'
+                      ? 'text-stone-300'
                       : free
-                        ? 'bg-stone-100 font-semibold text-stone-900 ring-1 ring-transparent hover:bg-stone-200 hover:ring-lake focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lake'
-                        : 'cursor-default text-stone-400'
+                        ? 'bg-stone-100 font-semibold text-stone-900'
+                        : 'text-stone-400'
                   } ${isToday ? 'ring-2 ring-lake' : ''}`}
                 >
                   <span>{Number(iso.slice(8, 10))}</span>
@@ -207,7 +184,7 @@ export default function PrivateSaunaSneakPeek({ onBook }: PrivateSaunaSneakPeekP
                       <span className={`h-1.5 w-1.5 rounded-full ${virtaFree ? 'bg-ember' : 'bg-transparent'}`} />
                     </span>
                   )}
-                </button>
+                </div>
               );
             })}
           </div>
@@ -216,8 +193,8 @@ export default function PrivateSaunaSneakPeek({ onBook }: PrivateSaunaSneakPeekP
 
       <p className="mt-4 text-center text-xs text-stone-400">
         {isEn
-          ? 'The calendar shows days with at least one free two-hour slot. Booking opens in the booking calendar.'
-          : 'Kalenteri näyttää päivät, jolloin on vapaana vähintään yksi kahden tunnin vuoro. Varaus avautuu varauskalenteriin.'}
+          ? 'The calendar shows days with at least one free two-hour slot. Book via the buttons on the sauna cards above.'
+          : 'Kalenteri näyttää päivät, jolloin on vapaana vähintään yksi kahden tunnin vuoro. Varaa ylempänä olevien saunakorttien painikkeista.'}
       </p>
     </div>
   );

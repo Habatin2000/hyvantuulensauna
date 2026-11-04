@@ -204,7 +204,7 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
           </div>
 
           <AnimatedSection delay={300} className="mt-10">
-            <PrivateSaunaSneakPeek onBook={(resource) => setBookingResource(resource)} />
+            <PrivateSaunaSneakPeek />
           </AnimatedSection>
         </div>
       </section>
