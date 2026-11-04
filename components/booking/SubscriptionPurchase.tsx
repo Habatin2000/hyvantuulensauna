@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Loader2, X, Sparkles, User, Mail, Phone, ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
+import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { getAttribution } from '@/lib/attribution';
 import { trackLead, trackInitiateCheckout, trackAddPaymentInfo, trackPurchase } from '@/lib/meta';
 
 interface SubscriptionPurchaseProps {
@@ -114,6 +115,11 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
           email: form.email.trim().toLowerCase(),
           phone: form.phone.trim(),
           subscriptionId: product.id,
+          attribution: {
+            ...getAttribution(),
+            itemName: product[locale].name,
+            value: product.price,
+          },
         }),
       });
 
@@ -124,26 +130,16 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
       }
 
       const subTxId = data.clientId || `${selected}-card-` + Date.now();
-      trackBookingCompleted({
-        value: product.price,
-        currency: 'EUR',
-        transaction_id: subTxId,
-        items: [
-          {
-            item_id: product.id,
-            item_name: product[locale].name,
-            price: product.price,
-            quantity: 1,
-          },
-        ],
-      });
-      trackAdsPurchase({ value: product.price, currency: 'EUR', transaction_id: subTxId });
+      // Always paid via Stripe: the Bookla webhook fires the GA4 purchase and
+      // the Google Ads conversion once payment is confirmed (same tx id
+      // dedupes if it ever fires twice). Here we only mark checkout intent.
+      trackBookingStarted({ value: product.price, currency: 'EUR' });
       trackPurchase({
         content_ids: [product.id],
         content_name: product[locale].name,
         currency: 'EUR',
         value: product.price,
-        transaction_id: data.clientId || `${selected}-card-` + Date.now(),
+        transaction_id: subTxId,
         num_items: 1,
       });
 

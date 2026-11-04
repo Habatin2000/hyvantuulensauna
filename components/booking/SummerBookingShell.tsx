@@ -21,6 +21,7 @@ import SummerCalendar from './SummerCalendar';
 import BoatSelector, { BoatOption } from './BoatSelector';
 import SlotList, { TimeSlot } from './SlotList';
 import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
+import { getAttribution } from '@/lib/attribution';
 import { trackInitiateCheckout, trackAddPaymentInfo, trackPurchase, trackSchedule } from '@/lib/meta';
 import { getBoats } from '@/content/boats';
 import type { Locale } from '@/content/pages';
@@ -396,6 +397,11 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
             phone: customerInfo.phone,
           },
           spots: 1,
+          attribution: {
+            ...getAttribution(),
+            itemName: `Saunalauttaristeily – ${getBoats(locale).find((b) => b.id === selectedBoatId)?.name ?? selectedBoatId}`,
+            value: selectedSlot.price ? selectedSlot.price.amount / 100 : 0,
+          },
         }),
       });
 
@@ -412,20 +418,26 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
         ? (getBoats(locale).find((b) => b.id === selectedBoatId)?.name ?? selectedBoatId)
         : 'Saunalautta';
       const txId = data.bookingId || 'summer-' + Date.now();
-      trackBookingCompleted({
-        value: bookingValue,
-        currency: 'EUR',
-        transaction_id: txId,
-        items: [
-          {
-            item_id: selectedBoatId || 'sauna-boat',
-            item_name: `Saunalauttaristeily – ${boatName}`,
-            price: bookingValue,
-            quantity: 1,
-          },
-        ],
-      });
-      trackAdsPurchase({ value: bookingValue, currency: 'EUR', transaction_id: txId });
+      if (data.requiresPayment) {
+        // Paid booking: Bookla webhook fires purchase + Ads conversion after
+        // Stripe payment is confirmed.
+        trackBookingStarted({ value: bookingValue, currency: 'EUR' });
+      } else {
+        trackBookingCompleted({
+          value: bookingValue,
+          currency: 'EUR',
+          transaction_id: txId,
+          items: [
+            {
+              item_id: selectedBoatId || 'sauna-boat',
+              item_name: `Saunalauttaristeily – ${boatName}`,
+              price: bookingValue,
+              quantity: 1,
+            },
+          ],
+        });
+        trackAdsPurchase({ value: bookingValue, currency: 'EUR', transaction_id: txId });
+      }
       trackPurchase({
         content_ids: [selectedBoatId],
         content_name: 'Saunalauttaristeily',

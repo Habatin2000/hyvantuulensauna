@@ -131,6 +131,7 @@ export function useBooking() {
     // the code is never sent from or to the browser.
     useMembership?: boolean;
     resourceId?: string;
+    attribution?: { gclid?: string; gaClientId?: string; itemName?: string; value?: number };
   }) => {
     setIsLoading(true);
     setError(null);

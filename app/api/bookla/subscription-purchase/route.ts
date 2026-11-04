@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { email, firstName, lastName, phone, subscriptionId } = body;
+    const { email, firstName, lastName, phone, subscriptionId, attribution } = body;
 
     if (!email || !firstName || !lastName) {
       return NextResponse.json(
@@ -58,12 +58,18 @@ export async function POST(request: NextRequest) {
 
     // 2. Purchase the subscription, Bearer token identifies the client
     const purchaseUrl = `${BOOKLA_BASE_URL}/companies/${COMPANY_ID}/plugins/subscription/client/purchases`;
-    const purchaseBody: { items: { subscriptionID: string }[]; metaData?: { phone: string } } = {
+    const purchaseBody: { items: { subscriptionID: string }[]; metaData?: Record<string, unknown> } = {
       items: [{ subscriptionID: selectedId }],
     };
 
-    if (phone) {
-      purchaseBody.metaData = { phone: String(phone).trim() };
+    const subMeta: Record<string, unknown> = {};
+    if (phone) subMeta.phone = String(phone).trim();
+    if (attribution?.gclid) subMeta.gclid = String(attribution.gclid);
+    if (attribution?.gaClientId) subMeta.gacid = String(attribution.gaClientId);
+    if (typeof attribution?.value === 'number') subMeta.anvalue = attribution.value;
+    if (attribution?.itemName) subMeta.anitem = String(attribution.itemName);
+    if (Object.keys(subMeta).length > 0) {
+      purchaseBody.metaData = subMeta;
     }
 
     // Don't log the full body — metaData may contain the customer's phone.

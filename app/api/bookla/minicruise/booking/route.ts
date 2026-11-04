@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { serviceId, resourceId, startTime, duration, client, spots } = body;
+    const { serviceId, resourceId, startTime, duration, client, spots, attribution } = body;
 
     if (!serviceId || !resourceId || !startTime || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
@@ -35,6 +35,16 @@ export async function POST(request: NextRequest) {
       lastName: client.lastName,
     });
 
+    // metaData travels with the booking and is echoed back in the Bookla
+    // webhook payload — this is how the server-side conversion recovers the
+    // ad click id (gclid), GA4 client id and the exact item/value.
+    const metaData: Record<string, unknown> = {};
+    if (client.phone) metaData.phone = client.phone;
+    if (attribution?.gclid) metaData.gclid = String(attribution.gclid);
+    if (attribution?.gaClientId) metaData.gacid = String(attribution.gaClientId);
+    if (typeof attribution?.value === 'number') metaData.anvalue = attribution.value;
+    if (attribution?.itemName) metaData.anitem = String(attribution.itemName);
+
     const result = await booklaClientBooking({
       baseUrl: BOOKLA_BASE_URL,
       accessToken: auth.accessToken,
@@ -44,7 +54,7 @@ export async function POST(request: NextRequest) {
       startTime,
       duration: duration || 'PT1H30M',
       spots: spots || 1,
-      metaData: client.phone ? { phone: client.phone } : undefined,
+      metaData: Object.keys(metaData).length > 0 ? metaData : undefined,
     });
 
     if (!result.ok) {

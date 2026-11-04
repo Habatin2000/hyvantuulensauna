@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { startTime, tickets, client, useMembership, resourceId: bodyResourceId } = body;
+    const { startTime, tickets, client, useMembership, resourceId: bodyResourceId, attribution } = body;
 
     if (!startTime || !tickets || !client?.email || !client?.firstName || !client?.lastName) {
       return NextResponse.json(
@@ -132,6 +132,16 @@ export async function POST(request: NextRequest) {
     // validated code is required for member pricing. The validate pre-check
     // above guards eligibility; the paymentURL safety net below catches the
     // Bookla validate/redeem inconsistency (validate says yes, engine says no).
+    // metaData travels with the booking and is echoed back in the Bookla
+    // webhook payload — this is how the server-side conversion recovers the
+    // ad click id (gclid), GA4 client id and the exact item/value.
+    const metaData: Record<string, unknown> = {};
+    if (client.phone) metaData.phone = client.phone;
+    if (attribution?.gclid) metaData.gclid = String(attribution.gclid);
+    if (attribution?.gaClientId) metaData.gacid = String(attribution.gaClientId);
+    if (typeof attribution?.value === 'number') metaData.anvalue = attribution.value;
+    if (attribution?.itemName) metaData.anitem = String(attribution.itemName);
+
     const result = await booklaClientBooking({
       baseUrl: BOOKLA_BASE_URL,
       accessToken: auth.accessToken,
@@ -142,7 +152,7 @@ export async function POST(request: NextRequest) {
       duration: 'PT2H',
       spots: totalSpots,
       tickets: ticketsMap,
-      metaData: client.phone ? { phone: client.phone } : undefined,
+      metaData: Object.keys(metaData).length > 0 ? metaData : undefined,
       code: subscriptionCode,
     });
 

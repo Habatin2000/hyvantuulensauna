@@ -17,6 +17,7 @@ import SummerCalendar from './SummerCalendar';
 import { boats as boatContent } from '@/content/boats';
 import type { Locale } from '@/content/pages';
 import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
+import { getAttribution } from '@/lib/attribution';
 import { trackInitiateCheckout, trackAddPaymentInfo, trackPurchase, trackSchedule } from '@/lib/meta';
 
 const MINI_CRUISE_SERVICE_ID = '533f08d0-c5ab-4358-a300-6d87295a2a26';
@@ -328,7 +329,12 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
             lastName: customerInfo.lastName,
             phone: customerInfo.phone
           },
-          spots: 1
+          spots: 1,
+          attribution: {
+            ...getAttribution(),
+            itemName: 'Miniristeily (yksityinen 1,5 h)',
+            value: selectedSlot?.price ? selectedSlot.price.amount / 100 : 120,
+          },
         }),
       });
       
@@ -342,20 +348,26 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
 
       const value = selectedSlot?.price ? selectedSlot.price.amount / 100 : 120;
       const txId = data.bookingId || 'minicruise-' + Date.now();
-      trackBookingCompleted({
-        value,
-        currency: 'EUR',
-        transaction_id: txId,
-        items: [
-          {
-            item_id: selectedBoat || 'minicruise',
-            item_name: 'Miniristeily (yksityinen 1,5 h)',
-            price: value,
-            quantity: 1,
-          },
-        ],
-      });
-      trackAdsPurchase({ value, currency: 'EUR', transaction_id: txId });
+      if (data.requiresPayment) {
+        // Paid booking: Bookla webhook fires purchase + Ads conversion after
+        // Stripe payment is confirmed.
+        trackBookingStarted({ value, currency: 'EUR' });
+      } else {
+        trackBookingCompleted({
+          value,
+          currency: 'EUR',
+          transaction_id: txId,
+          items: [
+            {
+              item_id: selectedBoat || 'minicruise',
+              item_name: 'Miniristeily (yksityinen 1,5 h)',
+              price: value,
+              quantity: 1,
+            },
+          ],
+        });
+        trackAdsPurchase({ value, currency: 'EUR', transaction_id: txId });
+      }
       trackPurchase({
         content_ids: selectedBoat ? [selectedBoat] : undefined,
         content_name: 'Miniristeily',

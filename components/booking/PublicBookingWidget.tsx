@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { Info } from 'lucide-react';
 import { useServiceInfo, useAvailability, useBooking, useMonthAvailability } from '@/hooks/useBookla';
 import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
+import { getAttribution } from '@/lib/attribution';
 import { trackSchedule, trackInitiateCheckout, trackAddPaymentInfo, trackPurchase } from '@/lib/meta';
 import BookingStepIndicator from './BookingStepIndicator';
 import PublicSaunaCalendar from './PublicSaunaCalendar';
@@ -154,23 +155,34 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
       client: customerInfo,
       useMembership: membership?.useMembership === true,
       resourceId: selectedSlot.resourceId,
+      attribution: {
+        ...getAttribution(),
+        itemName: tickets.map((t) => t.name).join(', ') || 'Julkinen saunavuoro',
+        value: bookingValue,
+      },
     });
 
     if (result.success) {
       const value = bookingValue;
       const txId = result.bookingId || 'public-' + Date.now();
-      trackBookingCompleted({
-        value,
-        currency: 'EUR',
-        transaction_id: txId,
-        items: tickets.map((t) => ({
-          item_id: t.ticketID,
-          item_name: t.name,
-          price: getBooklaPrice(t.ticketID),
-          quantity: t.quantity,
-        })),
-      });
-      trackAdsPurchase({ value, currency: 'EUR', transaction_id: txId });
+      if (result.requiresPayment) {
+        // Paid booking: Bookla webhook fires purchase + Ads conversion after
+        // Stripe payment is confirmed.
+        trackBookingStarted({ value, currency: 'EUR' });
+      } else {
+        trackBookingCompleted({
+          value,
+          currency: 'EUR',
+          transaction_id: txId,
+          items: tickets.map((t) => ({
+            item_id: t.ticketID,
+            item_name: t.name,
+            price: getBooklaPrice(t.ticketID),
+            quantity: t.quantity,
+          })),
+        });
+        trackAdsPurchase({ value, currency: 'EUR', transaction_id: txId });
+      }
       trackPurchase({
         content_name: 'Julkinen saunavuoro',
         currency: 'EUR',

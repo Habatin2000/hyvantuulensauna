@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { trackPageView, trackViewContent } from '@/lib/meta';
+import { captureAttribution } from '@/lib/attribution';
 
 /**
  * RouteTracker — explicit GA4 page_view for Next.js App Router.
@@ -25,6 +26,8 @@ export default function RouteTracker() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    captureAttribution();
 
     const sendPageView = () => {
       if (!window.gtag) {
