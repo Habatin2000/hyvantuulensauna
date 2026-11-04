@@ -210,8 +210,14 @@ export async function POST(request: NextRequest) {
   const rawBody = await request.text();
 
   // Debug: log exactly what Bookla/Convoy sends so auth issues are visible.
+  let eventType: unknown = null;
+  try {
+    eventType = (JSON.parse(rawBody) as Record<string, unknown>).type ?? null;
+  } catch {
+    /* logged below via bodyPreview */
+  }
   console.log('[BOOKLA-WEBHOOK] incoming:', {
-    eventType: payload.type ?? null,
+    eventType,
     hasKeyParam: request.nextUrl.searchParams.has('key'),
     userAgent: request.headers.get('user-agent'),
     convoySignature: request.headers.get('x-convoy-signature'),
