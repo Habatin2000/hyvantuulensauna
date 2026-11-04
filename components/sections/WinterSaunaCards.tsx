@@ -201,14 +201,6 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
               />
             </AnimatedSection>
           </div>
-
-          <AnimatedSection delay={300}>
-            <p className="mt-8 text-center text-sm text-stone-600">
-              {isEn
-                ? 'Not sure which sauna to pick? Book via the calendar and choose later — or ask us on WhatsApp.'
-                : 'Etkö ole varma kumpi sauna sopii? Varaa kalenterista ja valitse myöhemmin — tai kysy meiltä WhatsAppissa.'}
-            </p>
-          </AnimatedSection>
         </div>
       </section>
 

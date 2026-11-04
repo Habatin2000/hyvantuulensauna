@@ -25,12 +25,6 @@ export const mainNavigation: LocalizedNavItem[] = [
     description: 'Juhlat ja virkistyspäivät omalla saunalautalla',
   },
   {
-    label: 'Toiminnastamme',
-    labelKey: 'about',
-    href: '/toiminnastamme',
-    description: 'Lue meistä ja toiminnastamme',
-  },
-  {
     label: 'Julkinen sauna',
     labelKey: 'publicSauna',
     href: '/julkinen-sauna',
