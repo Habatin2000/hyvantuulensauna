@@ -5,9 +5,10 @@
  * They are safe to call from any client component — each helper guards
  * against SSR and missing window.gtag.
  *
- * NOTE: Google Ads conversion events (components/analytics/GoogleConversion.tsx)
- * are intentionally kept separate. GA4 purchase / begin_checkout and Ads
- * conversion events serve different reporting purposes and can fire side by side.
+ * NOTE: Google Ads purchase conversions go through trackAdsPurchase() below
+ * and are fired by the booking flows with the real booking value. They are
+ * intentionally kept separate from GA4 purchase events — the two serve
+ * different reporting purposes and can fire side by side.
  */
 
 declare global {
@@ -66,6 +67,32 @@ export function trackBookingCompleted(params: {
     send_to: "G-2LE9R6N8P5",
     ...params,
   });
+}
+
+/* ------------------------------------------------------------------ */
+/* Google Ads conversion (value-optimized bidding)                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Sends a purchase conversion to Google Ads (AW- tag) and the Google Tag
+ * container with the REAL booking value and a transaction id for
+ * deduplication. Fire this exactly where trackBookingCompleted fires —
+ * never on a generic thank-you page with a hardcoded value.
+ */
+export function trackAdsPurchase(params: {
+  value: number;
+  currency?: string;
+  transaction_id: string;
+}) {
+  const gtag = getGtag();
+  if (!gtag) return;
+  const payload = {
+    value: params.value,
+    currency: params.currency ?? "EUR",
+    transaction_id: params.transaction_id,
+  };
+  gtag("event", "conversion", { send_to: "AW-17838327897", ...payload });
+  gtag("event", "conversion", { send_to: "GT-PBNGTFCX", ...payload });
 }
 
 /* ------------------------------------------------------------------ */

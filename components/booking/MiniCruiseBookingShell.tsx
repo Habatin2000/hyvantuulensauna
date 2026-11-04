@@ -16,7 +16,7 @@ import {
 import SummerCalendar from './SummerCalendar';
 import { boats as boatContent } from '@/content/boats';
 import type { Locale } from '@/content/pages';
-import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
 import { trackInitiateCheckout, trackAddPaymentInfo, trackPurchase, trackSchedule } from '@/lib/meta';
 
 const MINI_CRUISE_SERVICE_ID = '533f08d0-c5ab-4358-a300-6d87295a2a26';
@@ -341,17 +341,27 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
       setBookingResult(data);
 
       const value = selectedSlot?.price ? selectedSlot.price.amount / 100 : 120;
+      const txId = data.bookingId || 'minicruise-' + Date.now();
       trackBookingCompleted({
         value,
         currency: 'EUR',
-        transaction_id: data.bookingId || 'minicruise-' + Date.now(),
+        transaction_id: txId,
+        items: [
+          {
+            item_id: selectedBoat || 'minicruise',
+            item_name: 'Miniristeily (yksityinen 1,5 h)',
+            price: value,
+            quantity: 1,
+          },
+        ],
       });
+      trackAdsPurchase({ value, currency: 'EUR', transaction_id: txId });
       trackPurchase({
         content_ids: selectedBoat ? [selectedBoat] : undefined,
         content_name: 'Miniristeily',
         currency: 'EUR',
         value,
-        transaction_id: data.bookingId || 'minicruise-' + Date.now(),
+        transaction_id: txId,
         num_items: 1,
       });
 

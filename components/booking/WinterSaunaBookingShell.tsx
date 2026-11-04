@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import SummerCalendar from './SummerCalendar';
 import type { Locale } from '@/content/pages';
-import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
 import { trackInitiateCheckout, trackAddPaymentInfo, trackPurchase, trackSchedule } from '@/lib/meta';
 
 export const WINTER_SERVICE_ID = '8ecd1d49-ae5b-4c56-a62d-2cffb2314143';
@@ -262,17 +262,35 @@ export default function WinterSaunaBookingShell({
       setBookingResult(data);
 
       const value = selectedSlot?.price ? selectedSlot.price.amount / 100 : 0;
+      const saunaName =
+        selectedSauna === AALTO_ID
+          ? isEn
+            ? 'Sauna boat Aalto (private, 2 h)'
+            : 'Aalto-sauna (yksityinen, 2 h)'
+          : isEn
+            ? 'Sauna boat Virta (private, 2 h)'
+            : 'Virta-sauna (yksityinen, 2 h)';
+      const txId = data.bookingId || 'winter-' + Date.now();
       trackBookingCompleted({
         value,
         currency: 'EUR',
-        transaction_id: data.bookingId || 'winter-' + Date.now(),
+        transaction_id: txId,
+        items: [
+          {
+            item_id: selectedSauna || 'winter-sauna',
+            item_name: saunaName,
+            price: value,
+            quantity: 1,
+          },
+        ],
       });
+      trackAdsPurchase({ value, currency: 'EUR', transaction_id: txId });
       trackPurchase({
         content_ids: [selectedSauna],
         content_name: 'Yksityinen avantosauna',
         currency: 'EUR',
         value,
-        transaction_id: data.bookingId || 'winter-' + Date.now(),
+        transaction_id: txId,
         num_items: 1,
       });
 

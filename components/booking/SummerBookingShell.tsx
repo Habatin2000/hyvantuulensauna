@@ -20,7 +20,7 @@ import {
 import SummerCalendar from './SummerCalendar';
 import BoatSelector, { BoatOption } from './BoatSelector';
 import SlotList, { TimeSlot } from './SlotList';
-import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
 import { trackInitiateCheckout, trackAddPaymentInfo, trackPurchase, trackSchedule } from '@/lib/meta';
 import { getBoats } from '@/content/boats';
 import type { Locale } from '@/content/pages';
@@ -407,17 +407,31 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
       setBookingResult(data);
       setStepIndex(4); // success view
 
+      const bookingValue = selectedSlot.price ? selectedSlot.price.amount / 100 : 0;
+      const boatName = selectedBoatId
+        ? (getBoats(locale).find((b) => b.id === selectedBoatId)?.name ?? selectedBoatId)
+        : 'Saunalautta';
+      const txId = data.bookingId || 'summer-' + Date.now();
       trackBookingCompleted({
-        value: selectedSlot.price ? selectedSlot.price.amount / 100 : 0,
+        value: bookingValue,
         currency: 'EUR',
-        transaction_id: data.bookingId || 'summer-' + Date.now(),
+        transaction_id: txId,
+        items: [
+          {
+            item_id: selectedBoatId || 'sauna-boat',
+            item_name: `Saunalauttaristeily – ${boatName}`,
+            price: bookingValue,
+            quantity: 1,
+          },
+        ],
       });
+      trackAdsPurchase({ value: bookingValue, currency: 'EUR', transaction_id: txId });
       trackPurchase({
         content_ids: [selectedBoatId],
         content_name: 'Saunalauttaristeily',
         currency: 'EUR',
-        value: selectedSlot.price ? selectedSlot.price.amount / 100 : 0,
-        transaction_id: data.bookingId || 'summer-' + Date.now(),
+        value: bookingValue,
+        transaction_id: txId,
         num_items: 1,
       });
 

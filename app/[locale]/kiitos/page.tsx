@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Check } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { thankYouPageContent } from '@/content/pages';
-import GoogleConversion from '@/components/analytics/GoogleConversion';
 import { SITE_URL } from '@/lib/site';
 import type { Locale } from '@/content/pages';
 
@@ -42,7 +41,9 @@ export default async function ThankYouPage({
 
   return (
     <section className="section-padding bg-stone-50 min-h-[60vh] flex items-center">
-      <GoogleConversion value={1.0} currency="EUR" />
+      {/* Conversions are fired by the booking flows themselves
+          (lib/analytics.ts trackAdsPurchase) with the real value — no
+          hardcoded thank-you-page conversion here, to avoid duplicates. */}
       <div className="container-padding mx-auto max-w-2xl">
         <div className="text-center">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">

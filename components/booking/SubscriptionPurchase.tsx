@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Loader2, X, Sparkles, User, Mail, Phone, ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { trackBookingStarted, trackBookingCompleted } from '@/lib/analytics';
+import { trackBookingStarted, trackBookingCompleted, trackAdsPurchase } from '@/lib/analytics';
 import { trackLead, trackInitiateCheckout, trackAddPaymentInfo, trackPurchase } from '@/lib/meta';
 
 interface SubscriptionPurchaseProps {
@@ -123,10 +123,11 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
         throw new Error(data.error || texts.errorNoPaymentUrl);
       }
 
+      const subTxId = data.clientId || `${selected}-card-` + Date.now();
       trackBookingCompleted({
         value: product.price,
         currency: 'EUR',
-        transaction_id: data.clientId || `${selected}-card-` + Date.now(),
+        transaction_id: subTxId,
         items: [
           {
             item_id: product.id,
@@ -136,6 +137,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
           },
         ],
       });
+      trackAdsPurchase({ value: product.price, currency: 'EUR', transaction_id: subTxId });
       trackPurchase({
         content_ids: [product.id],
         content_name: product[locale].name,
