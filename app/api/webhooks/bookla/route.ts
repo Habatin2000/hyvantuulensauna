@@ -57,12 +57,14 @@ function str(v: unknown): string {
   return typeof v === 'string' ? v : v != null ? String(v) : '';
 }
 
-/** Bookla's webhook payload shape isn't in the public spec — extract defensively. */
+/** Bookla webhook envelope: { id, data: <object>, type, createdAt }. */
 function normalize(payload: Record<string, unknown>): NormalizedEvent {
   const booking =
     payload.booking && typeof payload.booking === 'object'
       ? (payload.booking as Record<string, unknown>)
-      : payload;
+      : payload.data && typeof payload.data === 'object'
+        ? (payload.data as Record<string, unknown>)
+        : payload;
   const payment =
     booking.payment && typeof booking.payment === 'object'
       ? (booking.payment as Record<string, unknown>)
@@ -209,6 +211,7 @@ export async function POST(request: NextRequest) {
 
   // Debug: log exactly what Bookla/Convoy sends so auth issues are visible.
   console.log('[BOOKLA-WEBHOOK] incoming:', {
+    eventType: payload.type ?? null,
     hasKeyParam: request.nextUrl.searchParams.has('key'),
     userAgent: request.headers.get('user-agent'),
     convoySignature: request.headers.get('x-convoy-signature'),
