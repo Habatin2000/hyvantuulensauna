@@ -306,6 +306,12 @@ export default function SummerSaunaPageClient({
                     ? 'For companies and team days, the sauna boat offers the chance to spend time with colleagues in a completely different environment. One space, your own group and the Helsinki archipelago around you.'
                     : 'Yrityksille ja tyky-päivään saunalautta tarjoaa mahdollisuuden viettää työporukan kanssa aikaa aivan erilaisessa ympäristössä. Yksi tila, oma porukka ja Helsingin saaristo ympärillä.'}
                 </p>
+                <Link
+                  href="/polttarit-yritystilaisuudet"
+                  className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline"
+                >
+                  {isEn ? 'Read more about parties and corporate events →' : 'Lue lisää polttareista ja yritystilaisuuksista →'}
+                </Link>
               </div>
             </div>
           </AnimatedSection>

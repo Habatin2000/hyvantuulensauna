@@ -11,6 +11,7 @@ const pages: Array<{ path: string; enPath: string; changeFrequency: ChangeFreque
   { path: '/saunalauttaristeilyt-helsingissa', enPath: '/sauna-boat-cruises-helsinki', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/julkinen-sauna', enPath: '/public-sauna-helsinki', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/avanto', enPath: '/ice-swimming-sauna-helsinki', changeFrequency: 'weekly', priority: 0.8 },
+  { path: '/polttarit-yritystilaisuudet', enPath: '/bachelor-parties-corporate-events-helsinki', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/toiminnastamme', enPath: '/about', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/sijainti', enPath: '/location', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/usein-kysyttya', enPath: '/faq', changeFrequency: 'monthly', priority: 0.6 },

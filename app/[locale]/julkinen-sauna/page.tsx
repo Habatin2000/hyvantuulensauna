@@ -320,10 +320,10 @@ export default async function PublicSaunaPage({
                   </p>
                 </div>
                 <Link
-                  href="/avanto"
+                  href="/polttarit-yritystilaisuudet"
                   className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#3b82f6] px-8 py-4 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
                 >
-                  {isEn ? 'Explore winter saunas' : 'Tutustu talvisaunoihin'}
+                  {isEn ? 'Parties and corporate events' : 'Polttarit ja yritystilaisuudet'}
                 </Link>
               </div>
             </AnimatedSection>
@@ -461,8 +461,8 @@ export default async function PublicSaunaPage({
                   <h4 className="mb-2 font-bold text-stone-900">{isEn ? 'Arrival' : 'Saapuminen'}</h4>
                   <p>
                     {isEn
-                      ? 'Arrive at Meripellontie 11, 00970 Helsinki. You only need to be there a few minutes before the session starts. If you know you will be late for the sauna session, let us know in advance.'
-                      : 'Saavu osoitteeseen Meripellontie 11, 00970 Helsinki. Paikalla ei tarvitse olla kuin muutama minuutti ennen vuoron alkamista. Jos tiedät myöhästyväsi saunavuorolta, ilmoita siitä etukäteen.'}
+                      ? 'Arrive at Meripellontie 11C, 00970 Helsinki. You only need to be there a few minutes before the session starts. If you know you will be late for the sauna session, let us know in advance.'
+                      : 'Saavu osoitteeseen Meripellontie 11C, 00970 Helsinki. Paikalla ei tarvitse olla kuin muutama minuutti ennen vuoron alkamista. Jos tiedät myöhästyväsi saunavuorolta, ilmoita siitä etukäteen.'}
                   </p>
                 </div>
                 <div>

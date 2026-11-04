@@ -11,6 +11,7 @@ const pathnames: Record<string, string | { en: string }> = {
   '/saunalauttaristeilyt-helsingissa': { en: '/sauna-boat-cruises-helsinki' },
   '/julkinen-sauna': { en: '/public-sauna-helsinki' },
   '/avanto': { en: '/ice-swimming-sauna-helsinki' },
+  '/polttarit-yritystilaisuudet': { en: '/bachelor-parties-corporate-events-helsinki' },
   '/sijainti': { en: '/location' },
   '/toiminnastamme': { en: '/about' },
   '/usein-kysyttya': { en: '/faq' },

@@ -114,6 +114,29 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     linkText: 'Ice swimming in winter',
     category: 'public',
   },
+  // Occasions (parties & corporate)
+  {
+    id: 'occasions-capacity',
+    question: 'How many people fit in a bachelor party or corporate event?',
+    answer: 'In winter the sauna boats serve as private winter saunas: Aalto fits 10 people and Virta 6. In summer you can book both boats for up to 25 people. Big group? Call us at 044 231 3546 and we will arrange it.',
+    category: 'occasions',
+    linkHref: '/avanto',
+    linkText: 'See the winter saunas',
+  },
+  {
+    id: 'occasions-food',
+    question: 'Can we bring our own drinks and food to a party?',
+    answer: 'Yes! Own food and drinks are welcome on private bookings. We also offer catering, such as Restaurant Vilamo burgers cooked on board, and there is a pizzeria next to the Puotila pier.',
+    category: 'occasions',
+  },
+  {
+    id: 'occasions-book',
+    question: 'How do I book a private event?',
+    answer: 'The easiest way is to book a private winter sauna session online. For bigger groups or special wishes, call us at 044 231 3546 or send a WhatsApp message.',
+    category: 'occasions',
+    linkHref: '/avanto',
+    linkText: 'Book a private winter sauna',
+  },
   // Avanto (ice swimming)
   {
     id: 'avanto-safe',
@@ -275,6 +298,29 @@ export const getFaqItems = (locale: Locale = 'fi'): FAQItem[] => isEn(locale) ? 
     answer: '17hlö',
     category: 'public',
   },
+  // Occasions (juhlat & yritykset)
+  {
+    id: 'occasions-capacity',
+    question: 'Kuinka monta henkeä mahtuu polttareihin tai yritystilaisuuteen?',
+    answer: 'Talvella saunalautat toimivat yksityisinä talvisaunoina: Aaltoon mahtuu 10 ja Virtaan 6 henkeä. Kesällä molemmat lauta yhdessä sopivat jopa 25 hengelle. Iso porukka? Soita 044 231 3546 niin järjestetään!',
+    category: 'occasions',
+    linkHref: '/avanto',
+    linkText: 'Katso talvisaunat',
+  },
+  {
+    id: 'occasions-food',
+    question: 'Saako juhliin tuoda omat juomat ja ruoat?',
+    answer: 'Kyllä! Yksityisvarauksissa omat eväät ja juomat ovat tervetulleita. Tarjoamme myös cateringia, esimerkiksi Ravintola Vilamon lautalla paistettuja burgereita, ja Puotilan laiturin vieressä on pizzeria.',
+    category: 'occasions',
+  },
+  {
+    id: 'occasions-book',
+    question: 'Miten varaan yksityistilaisuuden?',
+    answer: 'Helpoin tapa on varata yksityinen talvisaunavuoro verkossa. Isommille porukoille tai erikoistoiveille soita 044 231 3546 tai laita WhatsApp-viesti.',
+    category: 'occasions',
+    linkHref: '/avanto',
+    linkText: 'Varaa yksityinen talvisauna',
+  },
   // Avanto
   {
     id: 'avanto-safe',
@@ -343,6 +389,7 @@ export const getFaqCategories = (locale: Locale = 'fi') => isEn(locale) ? [
   { id: 'private', label: 'Private Sauna' },
   { id: 'public', label: 'Public Sauna' },
   { id: 'avanto', label: 'Ice Swimming' },
+  { id: 'occasions', label: 'Parties & Corporate' },
   { id: 'practical', label: 'Practical' },
 ] : [
   { id: 'general', label: 'Yleistä' },
@@ -350,6 +397,7 @@ export const getFaqCategories = (locale: Locale = 'fi') => isEn(locale) ? [
   { id: 'private', label: 'Yksityissauna' },
   { id: 'public', label: 'Julkinen sauna' },
   { id: 'avanto', label: 'Avantouinti' },
+  { id: 'occasions', label: 'Juhlat & yritykset' },
   { id: 'practical', label: 'Käytännön asiat' },
 ];
 

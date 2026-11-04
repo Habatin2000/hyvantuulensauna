@@ -72,7 +72,7 @@ export interface FAQItem {
   id: string;
   question: string;
   answer: string;
-  category: 'general' | 'summer' | 'private' | 'public' | 'avanto' | 'practical';
+  category: 'general' | 'summer' | 'private' | 'public' | 'avanto' | 'occasions' | 'practical';
   /** Optional contextual internal link rendered after the answer (internal-link SEO). */
   linkHref?: string;
   linkText?: string;
