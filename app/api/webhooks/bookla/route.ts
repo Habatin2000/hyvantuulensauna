@@ -149,6 +149,7 @@ async function sendConversion(evt: NormalizedEvent): Promise<void> {
   // (purchase must be marked as a key event and imported in Google Ads —
   // see setup instructions). No separate Ads API call is made here.
   console.log('[BOOKLA-WEBHOOK] Conversion sent:', {
+    ga4Status: res.status,
     bookingId: evt.bookingId,
     status: evt.status,
     paymentStatus: evt.paymentStatus,
