@@ -3,20 +3,22 @@ import { NextRequest, NextResponse } from 'next/server';
 /**
  * Bookla → Google offline conversion webhook.
  *
- * Bookla POSTs booking events here (configured in the Bookla dashboard).
- * When a booking reaches a confirmed/paid state, we fire:
- *   1. a GA4 `purchase` event via the Measurement Protocol (deduped against
- *      any client-side event by transaction_id), and
- *   2. the Google Ads conversion to AW-17838327897 with the real value —
- *      only ever for actually paid bookings, so bidding optimizes on
- *      revenue, not on booking intent.
+ * Bookla delivers webhooks via Convoy (x-convoy-signature: t=...,v1=...).
+ * Auth accepts EITHER:
+ *   - ?key=<BOOKLA_WEBHOOK_SECRET> query param, OR
+ *   - a valid Convoy HMAC-SHA256 signature computed with the same secret
+ *     (set Bookla's webhook signing secret to the same value in their UI).
+ *
+ * When a booking reaches a confirmed/paid state, we fire a GA4 `purchase`
+ * via the Measurement Protocol (deduped by transaction_id). Google Ads picks
+ * it up through the linked GA4 property.
  *
  * Attribution chain: the booking flow stored gclid + GA4 client id + item
  * name + value in the booking's Bookla metaData; the webhook payload echoes
  * them back. No server-side storage needed.
  *
  * Setup:
- *   - BOOKLA_WEBHOOK_SECRET (optional but recommended): shared key in ?key=
+ *   - BOOKLA_WEBHOOK_SECRET: shared key (?key= or Convoy signing secret)
  *   - GA4_API_SECRET: GA4 → Admin → Data streams → Web → Measurement Protocol
  */
 
@@ -154,16 +156,83 @@ async function sendConversion(evt: NormalizedEvent): Promise<void> {
   });
 }
 
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+async function hmacSha256Hex(secret: string, message: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/**
+ * Verify a Convoy webhook signature header: "t=<unix>,v1=<hex hmac>".
+ * Convoy signs "<timestamp>.<raw body>" with the endpoint secret.
+ */
+async function verifyConvoySignature(
+  header: string,
+  rawBody: string,
+  secret: string
+): Promise<boolean> {
+  const parts: Record<string, string> = {};
+  for (const kv of header.split(',')) {
+    const idx = kv.indexOf('=');
+    if (idx > 0) parts[kv.slice(0, idx).trim()] = kv.slice(idx + 1).trim();
+  }
+  const t = parts.t;
+  const v1 = parts.v1;
+  if (!t || !v1) return false;
+
+  // Convoy scheme: HMAC("<t>.<body>"); fallback: HMAC(body)
+  for (const candidate of [`${t}.${rawBody}`, rawBody]) {
+    const hex = await hmacSha256Hex(secret, candidate);
+    if (timingSafeEqual(hex, v1)) return true;
+  }
+  return false;
+}
+
 export async function POST(request: NextRequest) {
   const secret = process.env.BOOKLA_WEBHOOK_SECRET;
-  const key = request.nextUrl.searchParams.get('key');
-  if (secret && key !== secret) {
+  const rawBody = await request.text();
+
+  // Debug: log exactly what Bookla/Convoy sends so auth issues are visible.
+  console.log('[BOOKLA-WEBHOOK] incoming:', {
+    hasKeyParam: request.nextUrl.searchParams.has('key'),
+    userAgent: request.headers.get('user-agent'),
+    convoySignature: request.headers.get('x-convoy-signature'),
+    convoyMsgId: request.headers.get('x-convoy-msg-id'),
+    bodyPreview: rawBody.slice(0, 200),
+  });
+
+  let authorized = true;
+  if (secret) {
+    const key = request.nextUrl.searchParams.get('key');
+    const convoySig = request.headers.get('x-convoy-signature');
+    authorized =
+      (key !== null && key === secret) ||
+      (convoySig != null && (await verifyConvoySignature(convoySig, rawBody, secret)));
+  }
+
+  if (!authorized) {
+    console.log('[BOOKLA-WEBHOOK] 401 — key param and Convoy signature both failed');
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
 
   let payload: Record<string, unknown>;
   try {
-    payload = await request.json();
+    payload = JSON.parse(rawBody);
   } catch {
     return NextResponse.json({ received: false, error: 'invalid json' }, { status: 400 });
   }
