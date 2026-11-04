@@ -19,6 +19,12 @@ export const mainNavigation: LocalizedNavItem[] = [
     description: 'Avantouinti ja yksityinen saunatila ympäri vuoden',
   },
   {
+    label: 'Polttarit ja yritystilaisuudet',
+    labelKey: 'occasions',
+    href: '/polttarit-yritystilaisuudet',
+    description: 'Juhlat ja virkistyspäivät omalla saunalautalla',
+  },
+  {
     label: 'Toiminnastamme',
     labelKey: 'about',
     href: '/toiminnastamme',
@@ -59,8 +65,9 @@ export const footerNavigation: {
   services: [
     { label: 'Saunalauttaristeilyt', labelKey: 'saunaBoat', href: '/saunalauttaristeilyt-helsingissa' },
     { label: 'Avanto ja saunatila', labelKey: 'avanto', href: '/avanto' },
-    { label: 'Toiminnastamme', labelKey: 'about', href: '/toiminnastamme' },
+    { label: 'Polttarit ja yritystilaisuudet', labelKey: 'occasions', href: '/polttarit-yritystilaisuudet' },
     { label: 'Julkinen sauna', labelKey: 'publicSauna', href: '/julkinen-sauna' },
+    { label: 'Toiminnastamme', labelKey: 'about', href: '/toiminnastamme' },
   ],
   info: [
     { label: 'Sijainti', labelKey: 'location', href: '/sijainti' },
