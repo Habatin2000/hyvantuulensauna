@@ -40,7 +40,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
 
   return (
     <>
-      <HeroSection content={homepageHero} variant="homepage" headlineAs="div" />
+      <HeroSection content={homepageHero} variant="homepage" headlineAs="div" banner={isEn ? 'Early bird offers — valid until Nov 15' : 'Early bird -tarjoukset — voimassa 15.11. asti'} />
       <TrustBar badges={trustBadges} />
 
       {/* Saunominen Helsingissä */}
@@ -48,7 +48,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
         <section className="section-padding bg-white">
           <div className="container-padding mx-auto max-w-4xl text-center">
             {/* Semantic H1 — hero headline above is visual only */}
-            <h1 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl mb-6">
+            <h1 className="font-display text-2xl font-bold text-stone-900 md:text-3xl mb-6">
               {isEn
                 ? 'Hyvän Tuulen Sauna – Floating sauna boats and winter swimming. Experiences in Helsinki.'
                 : 'Hyvän Tuulen Sauna – Kelluvat saunalautat ja talviuintia. Elämyksellisiä kokemuksia Helsingissä.'}
@@ -56,7 +56,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Sauna in Helsinki' : 'Saunominen Helsingissä'}
             </p>
-            <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+            <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
               {isEn ? 'Sauna and swimming in the Helsinki archipelago, all year round' : 'Saunomista ja uimista Helsingin saaristossa ympäri vuoden'}
             </h2>
             <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
@@ -87,13 +87,13 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
 
       {/* Valitse oma elämyksesi */}
       <AnimatedSection delay={100}>
-        <section className="section-padding bg-[#faf9f7]">
+        <section className="section-padding bg-background">
           <div className="container-padding mx-auto max-w-6xl">
             <div className="mb-10 text-center md:mb-12">
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-700">
                 {isEn ? 'Choose your experience' : 'Valitse oma elämyksesi'}
               </p>
-              <h2 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl">
+              <h2 className="font-display text-2xl font-bold text-stone-900 md:text-3xl">
                 {isEn ? 'Choose the right sauna experience for you' : 'Valitse sinulle sopiva saunaelämys'}
               </h2>
             </div>
@@ -113,7 +113,7 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-900/90 via-stone-900/40 to-transparent" />
                   <div className="relative z-10 p-6 md:p-8">
-                    <h3 className="font-corben text-2xl font-bold text-white md:text-3xl">
+                    <h3 className="font-display text-2xl font-bold text-white md:text-3xl">
                       {card.title}
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-stone-100 md:text-base">

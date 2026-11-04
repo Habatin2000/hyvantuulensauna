@@ -64,7 +64,7 @@ export default async function ThankYouPage({
             <ul className="space-y-3 text-stone-600">
               {content.nextSteps.map((step, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="text-[#3b82f6] font-bold">{index + 1}.</span>
+                  <span className="text-lake font-bold">{index + 1}.</span>
                   <span>{step}</span>
                 </li>
               ))}
@@ -81,14 +81,14 @@ export default async function ThankYouPage({
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href={`tel:${content.contact.phone.replace(/\s/g, '')}`}
-                className="text-[#3b82f6] hover:underline"
+                className="text-lake hover:underline"
               >
                 {content.contact.phone}
               </a>
               <span className="text-stone-400">|</span>
               <a
                 href={`mailto:${content.contact.email}`}
-                className="text-[#3b82f6] hover:underline"
+                className="text-lake hover:underline"
               >
                 {content.contact.email}
               </a>
@@ -97,7 +97,7 @@ export default async function ThankYouPage({
 
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb]"
+            className="inline-flex items-center gap-2 rounded-lg bg-lake px-6 py-3 font-medium text-white hover:bg-lake-deep"
           >
             {isEn ? 'Return to homepage' : 'Palaa etusivulle'}
           </Link>

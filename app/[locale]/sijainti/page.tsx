@@ -139,12 +139,12 @@ export default async function LocationPage({
               {isEn ? (
                 <>
                   <strong className="text-stone-900">In winter, Hyvän Tuulen Sauna is located at Meripellontie 11C in Puotila, Helsinki.</strong>{' '}
-                  Arrive by metro to Rastila (15 min walk) or by bus, which stops right by Meripellontie. There is plenty of 4-hour disc parking along the street. This is where the <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline">public sauna sessions</Link>, the <Link href="/avanto" className="text-[#3b82f6] hover:underline">ice hole</Link> and the <Link href="/avanto" className="text-[#3b82f6] hover:underline">private winter saunas</Link> are. In summer the sauna boat cruises depart from Kalkkihiekantori in Aurinkolahti.
+                  Arrive by metro to Rastila (15 min walk) or by bus, which stops right by Meripellontie. There is plenty of 4-hour disc parking along the street. This is where the <Link href="/julkinen-sauna" className="text-lake hover:underline">public sauna sessions</Link>, the <Link href="/avanto" className="text-lake hover:underline">ice hole</Link> and the <Link href="/avanto" className="text-lake hover:underline">private winter saunas</Link> are. In summer the sauna boat cruises depart from Kalkkihiekantori in Aurinkolahti.
                 </>
               ) : (
                 <>
                   <strong className="text-stone-900">Talvella Hyvän Tuulen Sauna sijaitsee osoitteessa Meripellontie 11C Puotilassa, Helsingissä.</strong>{' '}
-                  Saavu metrolla Rastilaan (kävely 15 min) tai bussilla, joka pysähtyy aivan Meripellontien viereen. Kadun varrella on paljon 4 tunnin kiekkopaikkoja. Täällä sijaitsevat <Link href="/julkinen-sauna" className="text-[#3b82f6] hover:underline">yleiset saunavuorot</Link>, <Link href="/avanto" className="text-[#3b82f6] hover:underline">avanto</Link> ja <Link href="/avanto" className="text-[#3b82f6] hover:underline">yksityiset talvisaunat</Link>. Kesällä saunalauttaristeilyt lähtevät Kalkkihiekantorilta Aurinkolahdesta.
+                  Saavu metrolla Rastilaan (kävely 15 min) tai bussilla, joka pysähtyy aivan Meripellontien viereen. Kadun varrella on paljon 4 tunnin kiekkopaikkoja. Täällä sijaitsevat <Link href="/julkinen-sauna" className="text-lake hover:underline">yleiset saunavuorot</Link>, <Link href="/avanto" className="text-lake hover:underline">avanto</Link> ja <Link href="/avanto" className="text-lake hover:underline">yksityiset talvisaunat</Link>. Kesällä saunalauttaristeilyt lähtevät Kalkkihiekantorilta Aurinkolahdesta.
                 </>
               )}
             </p>
@@ -157,7 +157,7 @@ export default async function LocationPage({
         <div className="container-padding mx-auto max-w-7xl">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="rounded-xl bg-stone-50 p-6">
-              <MapPin className="h-8 w-8 text-[#3b82f6] mb-4" />
+              <MapPin className="h-8 w-8 text-lake mb-4" />
               <h3 className="font-semibold text-stone-900 mb-2">{isEn ? 'Address (winter season)' : 'Osoite (talvikausi)'}</h3>
               <p className="text-stone-600">Meripellontie 11C</p>
               <p className="text-stone-600">00970 Helsinki</p>
@@ -166,21 +166,21 @@ export default async function LocationPage({
               </p>
             </div>
             <div className="rounded-xl bg-stone-50 p-6">
-              <Phone className="h-8 w-8 text-[#3b82f6] mb-4" />
+              <Phone className="h-8 w-8 text-lake mb-4" />
               <h3 className="font-semibold text-stone-900 mb-2">{isEn ? 'Phone' : 'Puhelin'}</h3>
-              <a href="tel:+358442313546" className="text-[#3b82f6] hover:underline">
+              <a href="tel:+358442313546" className="text-lake hover:underline">
                 +358 44 231 3546
               </a>
             </div>
             <div className="rounded-xl bg-stone-50 p-6">
-              <Mail className="h-8 w-8 text-[#3b82f6] mb-4" />
+              <Mail className="h-8 w-8 text-lake mb-4" />
               <h3 className="font-semibold text-stone-900 mb-2">{isEn ? 'Email' : 'Sähköposti'}</h3>
-              <a href="mailto:info@hyvantuulensauna.fi" className="text-[#3b82f6] hover:underline">
+              <a href="mailto:info@hyvantuulensauna.fi" className="text-lake hover:underline">
                 info@hyvantuulensauna.fi
               </a>
             </div>
             <div className="rounded-xl bg-stone-50 p-6">
-              <Clock className="h-8 w-8 text-[#3b82f6] mb-4" />
+              <Clock className="h-8 w-8 text-lake mb-4" />
               <h3 className="font-semibold text-stone-900 mb-2">{isEn ? 'Opening hours' : 'Aukiolo'}</h3>
               <p className="text-stone-600">{isEn ? 'By appointment' : 'Varauksen mukaan'}</p>
               <p className="text-stone-600">{isEn ? 'See calendar' : 'Katso kalenteri'}</p>

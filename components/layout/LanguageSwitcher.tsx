@@ -30,7 +30,7 @@ export default function LanguageSwitcher() {
             aria-label={loc.ariaLabel}
             className={`px-2 py-1 text-xs font-semibold rounded-md transition-colors ${
               isActive
-                ? 'bg-white text-[#3b82f6] shadow-sm'
+                ? 'bg-white text-lake shadow-sm'
                 : 'text-stone-500 hover:text-stone-700'
             }`}
             aria-current={isActive ? 'page' : undefined}

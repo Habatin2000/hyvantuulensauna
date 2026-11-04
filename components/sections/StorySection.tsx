@@ -18,19 +18,19 @@ export default function StorySection({ title, quote, paragraphs, image }: StoryS
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
             Tutustu meihin
           </p>
-          <h2 className="font-corben text-2xl font-bold text-stone-900 md:text-3xl">
+          <h2 className="font-display text-2xl font-bold text-stone-900 md:text-3xl">
             {title}
           </h2>
           
           {/* Quote with decorative elements */}
           <div className="mt-6 relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-5xl text-[#3b82f6]/20 font-serif">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-5xl text-lake/20 font-serif">
               &ldquo;
             </div>
             <blockquote className="relative text-lg md:text-xl text-stone-700 font-medium leading-relaxed italic">
               {quote}
             </blockquote>
-            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-5xl text-[#3b82f6]/20 font-serif rotate-180">
+            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-5xl text-lake/20 font-serif rotate-180">
               &rdquo;
             </div>
           </div>

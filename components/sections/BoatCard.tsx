@@ -165,19 +165,19 @@ export default function BoatCard({
           {/* Specs */}
           <div className={`flex flex-wrap ${compact ? 'mb-3 gap-3' : 'mb-6 gap-4 md:gap-6'}`}>
             <div className="flex items-center gap-2">
-              <Users className={`text-[#3b82f6] ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
+              <Users className={`text-lake ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
               <span className={`font-medium text-stone-700 ${compact ? 'text-[10px]' : 'text-xs md:text-sm'}`}>{specs.maxPeople}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Flame className={`text-[#3b82f6] ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
+              <Flame className={`text-lake ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
               <span className={`font-medium text-stone-700 ${compact ? 'text-[10px]' : 'text-xs md:text-sm'}`}>{specs.kiuas}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Ruler className={`text-[#3b82f6] ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
+              <Ruler className={`text-lake ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
               <span className={`font-medium text-stone-700 ${compact ? 'text-[10px]' : 'text-xs md:text-sm'}`}>{specs.length}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Utensils className={`text-[#3b82f6] ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
+              <Utensils className={`text-lake ${compact ? 'h-3.5 w-3.5' : 'h-4 w-4'}`} />
               <span className={`font-medium text-stone-700 ${compact ? 'text-[10px]' : 'text-xs md:text-sm'}`}>{specs.grill}</span>
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function BoatCard({
             </div>
             <Button
               onClick={onBookClick}
-              className={`w-full bg-[#3b82f6] text-white font-bold shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg sm:w-auto ${compact ? 'rounded-full px-4 py-1.5 text-xs' : 'rounded-full px-6 py-3 text-sm'}`}
+              className={`w-full bg-lake text-white font-bold shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-lake-deep hover:shadow-lg sm:w-auto ${compact ? 'rounded-full px-4 py-1.5 text-xs' : 'rounded-full px-6 py-3 text-sm'}`}
             >
               {isEn ? 'Book now' : 'Varaa nyt'}
             </Button>

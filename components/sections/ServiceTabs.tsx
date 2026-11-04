@@ -76,13 +76,13 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
   const itineraryMarker = isEn ? '\n\nItinerary\n\n' : '\n\nMatkasuunnitelma\n\n';
 
   return (
-    <section className="section-padding bg-[#faf9f7]">
+    <section className="section-padding bg-background">
       <div className="container-padding mx-auto max-w-7xl">
         <div className="mb-6 text-center">
           <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.25em] text-amber-700">
             {isEn ? 'Choose your sauna experience' : 'Valitse oma saunaelämyksesi'}
           </p>
-          <h2 className="font-corben text-xl font-bold text-stone-900 md:text-2xl">
+          <h2 className="font-display text-xl font-bold text-stone-900 md:text-2xl">
             {isEn ? 'Book directly' : 'Varaa suoraan'}
           </h2>
         </div>
@@ -109,7 +109,7 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
                 onKeyDown={(e) => handleTabKeyDown(e, index)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-[#3b82f6] to-[#2563eb] text-white shadow-lg shadow-[#3b82f6]/25'
+                    ? 'bg-gradient-to-r from-lake to-lake-deep text-white shadow-lg shadow-lake/25'
                     : 'text-stone-600 hover:text-stone-900 hover:bg-white/50'
                 }`}
               >
@@ -242,7 +242,7 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-900/30 to-transparent" />
-                  <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-[#3b82f6] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg">
+                  <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-lake px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg">
                     {isEn ? 'New' : 'Uutuus'}
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
                   <h3 className="text-xl font-bold text-stone-900 mb-1.5">
                     {isEn ? 'Mini Cruise' : 'Miniristeily'}
                   </h3>
-                  <p className="text-xs text-[#3b82f6] font-semibold mb-2">
+                  <p className="text-xs text-lake font-semibold mb-2">
                     {isEn ? 'Sundays • 4:15 PM and 6:15 PM' : 'Sunnuntaisin • Klo 16.15 ja 18.15'}
                   </p>
                   <p className="text-stone-600 mb-3 text-sm leading-relaxed">
@@ -264,12 +264,12 @@ export default function ServiceTabs({ locale = 'fi' }: ServiceTabsProps) {
                       : <>Miniristeily ei sisällä <strong>Jäitä</strong>, <strong>Grillin käyttöä</strong> tai <strong>kaiutinta</strong>. Omia eväitä saa ottaa.</>}
                   </p>
                   <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-2xl font-bold text-[#3b82f6]">120€</span>
+                    <span className="text-2xl font-bold text-lake">120€</span>
                     <span className="text-sm text-stone-500">/ 2h</span>
                   </div>
                   <button
                     onClick={() => setShowMiniCruiseBooking(true)}
-                    className="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] text-white font-semibold rounded-xl shadow-lg shadow-[#3b82f6]/25 hover:shadow-xl hover:shadow-[#3b82f6]/30 hover:-translate-y-0.5 transition-all text-sm w-fit"
+                    className="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-lake to-lake-deep text-white font-semibold rounded-xl shadow-lg shadow-lake/25 hover:shadow-xl hover:shadow-lake/30 hover:-translate-y-0.5 transition-all text-sm w-fit"
                   >
                     {isEn ? 'Book mini cruise' : 'Varaa miniristeily'}
                   </button>

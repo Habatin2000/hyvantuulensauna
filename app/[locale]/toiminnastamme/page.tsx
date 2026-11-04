@@ -110,7 +110,7 @@ export default async function AboutPage({
       />
 
       {/* Hero */}
-      <section className="section-padding bg-[#3b82f6]">
+      <section className="section-padding bg-lake">
         <div className="container-padding mx-auto max-w-4xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {storyContent.title}
@@ -134,7 +134,7 @@ export default async function AboutPage({
                   <strong className="text-stone-900">Hyvän Tuulen Sauna has offered sauna boat cruises in Helsinki since 2018.</strong>{' '}
                   With eight years of experience, we provide maritime sauna experiences in the Eastern Helsinki archipelago.
                   Our skippers Kalle, Onni, Ile and Tuure make sure every{' '}
-                  <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">sauna boat cruise</Link> is safe and unforgettable.
+                  <Link href="/saunalauttaristeilyt-helsingissa" className="text-lake hover:underline">sauna boat cruise</Link> is safe and unforgettable.
                   Our work is built on authenticity, closeness to the sea and community.
                 </>
               ) : (
@@ -142,7 +142,7 @@ export default async function AboutPage({
                   <strong className="text-stone-900">Hyvän Tuulen Sauna on tarjonnut saunalauttaristeilyjä Helsingissä jo vuodesta 2018.</strong>{' '}
                   Kahdeksan vuoden kokemuksella tuotamme merellisiä saunaelämyksiä Itä-Helsingin saaristossa.
                   Tiimimme kipparit Kalle, Onni, Ile ja Tuure varmistavat, että jokainen{' '}
-                  <Link href="/saunalauttaristeilyt-helsingissa" className="text-[#3b82f6] hover:underline">saunalauttaristeily</Link> on turvallinen ja unohtumaton.
+                  <Link href="/saunalauttaristeilyt-helsingissa" className="text-lake hover:underline">saunalauttaristeily</Link> on turvallinen ja unohtumaton.
                   Toimintamme perustuu aitouteen, meren läheisyyteen ja yhteisöllisyyteen.
                 </>
               )}
@@ -159,7 +159,7 @@ export default async function AboutPage({
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {isEn ? 'Story' : 'Tarina'}
               </p>
-              <h2 className="font-corben text-3xl font-bold text-stone-900 mb-8 md:text-4xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 mb-8 md:text-4xl">
                 {isEn ? 'Our story' : 'Meidän tarinamme'}
               </h2>
               <div className="space-y-6 text-lg text-stone-600 leading-relaxed">
@@ -187,7 +187,7 @@ export default async function AboutPage({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {trustBadges.map((badge) => (
               <div key={badge.id} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-[#3b82f6] mb-2">
+                <div className="text-4xl md:text-5xl font-bold text-lake mb-2">
                   {badge.value}
                 </div>
                 <div className="text-stone-600">{badge.label}</div>
@@ -204,13 +204,13 @@ export default async function AboutPage({
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Values' : 'Arvot'}
             </p>
-            <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+            <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
               {isEn ? 'Our values' : 'Arvomme'}
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#3b82f6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-lake/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🔥</span>
               </div>
               <h3 className="text-xl font-bold text-stone-900 mb-2">{isEn ? 'Authenticity' : 'Aitous'}</h3>
@@ -221,7 +221,7 @@ export default async function AboutPage({
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#3b82f6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-lake/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🌊</span>
               </div>
               <h3 className="text-xl font-bold text-stone-900 mb-2">{isEn ? 'Sea' : 'Meri'}</h3>
@@ -232,7 +232,7 @@ export default async function AboutPage({
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-[#3b82f6]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-lake/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">🤝</span>
               </div>
               <h3 className="text-xl font-bold text-stone-900 mb-2">{isEn ? 'Community' : 'Yhteisö'}</h3>

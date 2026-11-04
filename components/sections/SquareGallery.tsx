@@ -106,7 +106,7 @@ export default function SquareGallery({ images, title }: SquareGalleryProps) {
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? 'bg-[#3b82f6] w-6' : 'bg-stone-300 w-2 hover:bg-stone-400'
+                    index === currentIndex ? 'bg-lake w-6' : 'bg-stone-300 w-2 hover:bg-stone-400'
                   }`}
                   aria-label={isEn ? `Go to image ${index + 1}` : `Siirry kuvaan ${index + 1}`}
                 />

@@ -154,7 +154,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
   };
 
   const inputClass =
-    'w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]';
+    'w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake';
 
   const ProductOption = ({ productKey }: { productKey: ProductKey }) => {
     const product = PRODUCTS[productKey];
@@ -167,17 +167,17 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
         onClick={() => setSelected(productKey)}
         className={`relative flex flex-col items-start rounded-xl border p-4 text-left transition-all ${
           isSelected
-            ? 'border-[#3b82f6] bg-[#3b82f6]/5 ring-1 ring-[#3b82f6]'
+            ? 'border-lake bg-lake/5 ring-1 ring-lake'
             : 'border-stone-200 bg-white hover:border-stone-300'
         }`}
       >
         {isSelected && (
-          <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-[#3b82f6] text-white">
+          <span className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-lake text-white">
             <Check className="h-3 w-3" />
           </span>
         )}
         <span className="text-sm font-medium text-stone-600">{labels.name}</span>
-        <span className="mt-1 text-2xl font-extrabold text-[#3b82f6]">{product.price} €</span>
+        <span className="mt-1 text-2xl font-extrabold text-lake">{product.price} €</span>
         <span className="mt-1 text-xs text-stone-500">{labels.perSession}</span>
       </button>
     );
@@ -185,9 +185,9 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
 
   return (
     <div>
-      <Card className="overflow-hidden border-[#3b82f6]/20 bg-gradient-to-br from-[#3b82f6]/5 to-white">
+      <Card className="overflow-hidden border-lake/20 bg-gradient-to-br from-lake/5 to-white">
         <CardHeader className="pb-2">
-          <div className="flex items-center gap-2 text-[#3b82f6]">
+          <div className="flex items-center gap-2 text-lake">
             <Sparkles className="h-4 w-4" />
             <span className="text-xs font-semibold uppercase tracking-wider">
               {isEn ? 'Season passes' : 'Kausikortit'}
@@ -206,12 +206,12 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                   key={key}
                   type="button"
                   onClick={() => openModal(key)}
-                  className="group relative flex flex-col items-start rounded-xl border border-stone-200 bg-white p-4 text-left transition-all hover:border-[#3b82f6]/50 hover:shadow-sm"
+                  className="group relative flex flex-col items-start rounded-xl border border-stone-200 bg-white p-4 text-left transition-all hover:border-lake/50 hover:shadow-sm"
                 >
                   <span className="text-sm font-medium text-stone-600">{labels.name}</span>
-                  <span className="mt-1 text-2xl font-extrabold text-[#3b82f6]">{product.price} €</span>
+                  <span className="mt-1 text-2xl font-extrabold text-lake">{product.price} €</span>
                   <span className="mt-1 text-xs text-stone-500">{labels.perSession}</span>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#3b82f6]">
+                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-lake">
                     {labels.cta}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
@@ -334,7 +334,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full gap-2 bg-[#3b82f6] text-white hover:bg-[#2563eb] disabled:opacity-70"
+                  className="w-full gap-2 bg-lake text-white hover:bg-lake-deep disabled:opacity-70"
                 >
                   {isSubmitting ? (
                     <span className="contents">

@@ -86,7 +86,7 @@ export default function SummerSaunaPageClient({
     });
 
   return (
-    <>
+    <div className="theme-summer">
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -110,7 +110,7 @@ export default function SummerSaunaPageClient({
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Private sauna space' : 'Yksityinen saunatila'}
             </p>
-            <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
+            <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
               {isEn
                 ? 'Looking for a sauna space or private sauna in Helsinki?'
                 : 'Etsitkö saunatilaa tai yksityissaunaa Helsingissä?'}
@@ -130,7 +130,7 @@ export default function SummerSaunaPageClient({
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {isEn ? 'Two unique sauna boats' : 'Kaksi ainutlaatuista saunalauttaa'}
               </p>
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
                 {isEn ? 'Choose the right sauna boat for your group: Aalto or Virta' : 'Valitse ryhmällesi sopiva saunalautta: Aalto tai Virta'}
               </h2>
             </div>
@@ -200,7 +200,7 @@ export default function SummerSaunaPageClient({
             <div className="mt-12 text-center">
               <a
                 href="#lisapalvelut"
-                className="inline-flex items-center justify-center rounded-full border-2 border-[#3b82f6] bg-white px-8 py-3 text-sm font-bold text-[#3b82f6] shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#3b82f6] hover:text-white hover:shadow-lg"
+                className="inline-flex items-center justify-center rounded-full border-2 border-lake bg-white px-8 py-3 text-sm font-bold text-lake shadow-md transition-all hover:-translate-y-0.5 hover:bg-lake hover:text-white hover:shadow-lg"
               >
                 {isEn ? 'Explore additional services' : 'Tutustu lisäpalveluihin'}
               </a>
@@ -210,13 +210,13 @@ export default function SummerSaunaPageClient({
       </section>
 
       {/* Saunalauttaristeilyn kulku ja palvelut */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Cruise' : 'Risteily'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {cruiseExperienceContent.title}
             </h2>
             <div className="text-left">
@@ -226,7 +226,7 @@ export default function SummerSaunaPageClient({
             {/* Service subsections as H3s */}
             <div className="mt-10 space-y-8 text-left">
               <div>
-                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                <h3 className="font-display mb-3 text-xl font-bold text-stone-900 md:text-2xl">
                   {isEn ? 'Grilling and bringing your own food' : 'Grillaus ja omat eväät'}
                 </h3>
                 <p className="text-base leading-relaxed text-stone-600 md:text-lg">
@@ -236,17 +236,17 @@ export default function SummerSaunaPageClient({
                 </p>
               </div>
               <div>
-                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                <h3 className="font-display mb-3 text-xl font-bold text-stone-900 md:text-2xl">
                   {isEn ? 'Departure point: Kalkkihiekantori, Aurinkolahti' : 'Lähtöpaikka: Kalkkihiekantori, Aurinkolahti'}
                 </h3>
                 <p className="text-base leading-relaxed text-stone-600 md:text-lg">
                   {isEn ? (
                     <>The sauna boat cruise departs from{' '}
-                      <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantori boat pier</Link>{' '}
+                      <Link href="/sijainti" className="text-lake hover:underline">Kalkkihiekantori boat pier</Link>{' '}
                       in Aurinkolahti, Vuosaari. Easy to reach by metro (Vuosaari station) or by car — 4-hour disc parking in the area.</>
                   ) : (
                     <>Saunalauttaristeily lähtee{' '}
-                      <Link href="/sijainti" className="text-[#3b82f6] hover:underline">Kalkkihiekantorin laivalaiturilta</Link>{' '}
+                      <Link href="/sijainti" className="text-lake hover:underline">Kalkkihiekantorin laivalaiturilta</Link>{' '}
                       Aurinkolahdesta, Vuosaaresta. Paikalle pääsee helposti metrolla (Vuosaaren asema) tai autolla — alueella on 4 tunnin kiekollinen pysäköinti.</>
                   )}
                 </p>
@@ -263,7 +263,7 @@ export default function SummerSaunaPageClient({
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Rental' : 'Vuokraus'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {rentalContent.title}
             </h2>
             <div className="text-left">
@@ -288,7 +288,7 @@ export default function SummerSaunaPageClient({
             {/* Occasion subsections as H3s */}
             <div className="mt-10 space-y-8 text-left">
               <div>
-                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                <h3 className="font-display mb-3 text-xl font-bold text-stone-900 md:text-2xl">
                   {isEn ? 'Bachelor parties and birthdays on a sauna boat' : 'Polttarit ja syntymäpäivät saunalautalla'}
                 </h3>
                 <p className="text-base leading-relaxed text-stone-600 md:text-lg">
@@ -298,7 +298,7 @@ export default function SummerSaunaPageClient({
                 </p>
               </div>
               <div>
-                <h3 className="font-corben mb-3 text-xl font-bold text-stone-900 md:text-2xl">
+                <h3 className="font-display mb-3 text-xl font-bold text-stone-900 md:text-2xl">
                   {isEn ? 'Corporate events, recreation days and tyky days' : 'Yritystilaisuudet, virkistyspäivät ja tykyt'}
                 </h3>
                 <p className="text-base leading-relaxed text-stone-600 md:text-lg">
@@ -308,7 +308,7 @@ export default function SummerSaunaPageClient({
                 </p>
                 <Link
                   href="/polttarit-yritystilaisuudet"
-                  className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline"
+                  className="mt-3 inline-block text-sm font-bold text-lake hover:underline"
                 >
                   {isEn ? 'Read more about parties and corporate events →' : 'Lue lisää polttareista ja yritystilaisuuksista →'}
                 </Link>
@@ -322,7 +322,7 @@ export default function SummerSaunaPageClient({
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {includedContent.title}
             </h2>
             <div className="text-left">
@@ -333,7 +333,7 @@ export default function SummerSaunaPageClient({
                     <ul key={index} className="mb-6 grid list-none gap-3 sm:grid-cols-2">
                       {items.map((item, i) => (
                         <li key={i} className="flex items-center gap-2 text-stone-700 md:text-lg">
-                          <span className="text-[#3b82f6]">✓</span>
+                          <span className="text-lake">✓</span>
                           {item}
                         </li>
                       ))}
@@ -365,14 +365,14 @@ export default function SummerSaunaPageClient({
       </AnimatedSection>
 
       {/* Archipelago Section */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12 lg:p-16">
               <p className="mb-4 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {isEn ? 'The route' : 'Reitti'}
               </p>
-              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+              <h2 className="font-display mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
                 {archipelagoContent.title}
               </h2>
               <div className="text-left">
@@ -388,25 +388,25 @@ export default function SummerSaunaPageClient({
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-2xl bg-[#faf9f7] p-6">
+              <div className="rounded-2xl bg-background p-6">
                 <h3 className="mb-2 font-bold text-stone-900">{isEn ? 'Public sauna sessions' : 'Julkiset saunavuorot'}</h3>
                 <p className="text-sm leading-relaxed text-stone-600 md:text-base">
                   {isEn
                     ? 'Sauna without booking a whole boat? Join an open public session by the sea — one spot is enough.'
                     : 'Saunomaan ilman koko lautan varausta? Tule avoimelle julkiselle saunavuorolle meren äärelle — yksi paikka riittää.'}
                 </p>
-                <Link href="/julkinen-sauna" className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline">
+                <Link href="/julkinen-sauna" className="mt-3 inline-block text-sm font-bold text-lake hover:underline">
                   {isEn ? 'See public sauna sessions →' : 'Katso julkiset saunavuorot →'}
                 </Link>
               </div>
-              <div className="rounded-2xl bg-[#faf9f7] p-6">
+              <div className="rounded-2xl bg-background p-6">
                 <h3 className="mb-2 font-bold text-stone-900">{isEn ? 'Winter swimming and ice hole' : 'Talviuinti ja avanto'}</h3>
                 <p className="text-sm leading-relaxed text-stone-600 md:text-base">
                   {isEn
                     ? 'In winter our sauna boats rest and the ice hole in Puotila opens. Combine ice swimming with a hot wood-fired sauna.'
                     : 'Talvella saunalautat lepäävät ja Puotilan avanto aukeaa. Yhdistä avantouinti kuumaan puusaunaan.'}
                 </p>
-                <Link href="/avanto" className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline">
+                <Link href="/avanto" className="mt-3 inline-block text-sm font-bold text-lake hover:underline">
                   {isEn ? 'Explore ice swimming →' : 'Tutustu avantouintiin →'}
                 </Link>
               </div>
@@ -423,7 +423,7 @@ export default function SummerSaunaPageClient({
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {isEn ? 'Extras' : 'Lisää elämyksiä'}
               </p>
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
                 {isEn ? 'Additional services' : 'Lisäpalvelut'}
               </h2>
             </div>
@@ -432,7 +432,7 @@ export default function SummerSaunaPageClient({
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Catering */}
             <AnimatedSection delay={100}>
-              <div className="h-full rounded-3xl border border-stone-100 bg-[#faf9f7] p-6 md:p-8">
+              <div className="h-full rounded-3xl border border-stone-100 bg-background p-6 md:p-8">
                 <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-stone-900">
                   {isEn ? 'Catering' : 'Catering'}
                 </h3>
@@ -469,7 +469,7 @@ export default function SummerSaunaPageClient({
 
             {/* Activities */}
             <AnimatedSection delay={200}>
-              <div className="h-full rounded-3xl border border-stone-100 bg-[#faf9f7] p-6 md:p-8">
+              <div className="h-full rounded-3xl border border-stone-100 bg-background p-6 md:p-8">
                 <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-stone-900">
                   {isEn ? 'Activities' : 'Aktiviteetit'}
                 </h3>
@@ -496,9 +496,9 @@ export default function SummerSaunaPageClient({
                 {isEn
                   ? 'Contact us for additional services: '
                   : 'Ota lisäpalveluista yhteyttä '}
-                <a href="tel:+358442313546" className="font-bold text-[#3b82f6] hover:underline">0442313546</a>
+                <a href="tel:+358442313546" className="font-bold text-lake hover:underline">0442313546</a>
                 {isEn ? ' or ' : ' tai sähköpostilla '}
-                <a href="mailto:info@hyvantuulensauna.fi" className="font-bold text-[#3b82f6] hover:underline">info@hyvantuulensauna.fi</a>
+                <a href="mailto:info@hyvantuulensauna.fi" className="font-bold text-lake hover:underline">info@hyvantuulensauna.fi</a>
               </p>
             </div>
           </AnimatedSection>
@@ -506,12 +506,12 @@ export default function SummerSaunaPageClient({
       </section>
 
       {/* Ready to book CTA */}
-      <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-[#faf9f7]">
+      <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-2xl text-center">
           <AnimatedSection>
             <a
               href="#boats"
-              className="inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-10 py-4 text-base font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-lg"
+              className="inline-flex items-center justify-center rounded-full bg-lake px-10 py-4 text-base font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-lake-deep hover:shadow-lg"
             >
               {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}
             </a>
@@ -557,6 +557,6 @@ export default function SummerSaunaPageClient({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

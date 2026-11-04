@@ -357,7 +357,7 @@ export default function WinterSaunaBookingShell({
               <div key={label} className="flex items-center">
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${
-                    isCompleted || isCurrent ? 'bg-[#3b82f6] text-white' : 'bg-stone-200 text-stone-500'
+                    isCompleted || isCurrent ? 'bg-lake text-white' : 'bg-stone-200 text-stone-500'
                   }`}
                 >
                   {isCompleted ? <Check className="h-4 w-4" /> : initialResourceId ? stepNumber - 1 : stepNumber}
@@ -394,7 +394,7 @@ export default function WinterSaunaBookingShell({
                     setSelectedSlot(null);
                   }}
                   className={`flex items-center justify-between rounded-xl border p-4 text-left transition-all ${
-                    selectedSauna === sauna.id ? 'border-[#3b82f6] bg-[#3b82f6]/5' : 'border-stone-200 hover:border-stone-300'
+                    selectedSauna === sauna.id ? 'border-lake bg-lake/5' : 'border-stone-200 hover:border-stone-300'
                   }`}
                 >
                   <div>
@@ -403,7 +403,7 @@ export default function WinterSaunaBookingShell({
                       {t.saunaCapacity[sauna.key]} · {t.saunaPrice[sauna.key]} · {t.includesIceHole}
                     </p>
                   </div>
-                  {selectedSauna === sauna.id && <Check className="h-5 w-5 text-[#3b82f6]" />}
+                  {selectedSauna === sauna.id && <Check className="h-5 w-5 text-lake" />}
                 </button>
               ))}
             </div>
@@ -449,7 +449,7 @@ export default function WinterSaunaBookingShell({
                     setSelectedDate(null);
                     setSelectedSlot(null);
                   }}
-                  className="text-sm text-[#3b82f6] hover:underline"
+                  className="text-sm text-lake hover:underline"
                 >
                   {t.changeDay}
                 </button>
@@ -470,7 +470,7 @@ export default function WinterSaunaBookingShell({
                         setSelectedDate(null);
                         setSelectedSlot(null);
                       }}
-                      className="mt-3 text-sm text-[#3b82f6] hover:underline"
+                      className="mt-3 text-sm text-lake hover:underline"
                     >
                       {t.chooseAnotherDay}
                     </button>
@@ -490,13 +490,13 @@ export default function WinterSaunaBookingShell({
                         }}
                         className={`rounded-lg border p-4 text-left transition-all ${
                           selectedSlot?.startTime === slot.startTime
-                            ? 'border-[#3b82f6] bg-[#3b82f6]/5'
+                            ? 'border-lake bg-lake/5'
                             : 'border-stone-200 hover:border-stone-300'
                         }`}
                       >
                         <p
                           className={`text-lg font-semibold ${
-                            selectedSlot?.startTime === slot.startTime ? 'text-[#3b82f6]' : 'text-stone-900'
+                            selectedSlot?.startTime === slot.startTime ? 'text-lake' : 'text-stone-900'
                           }`}
                         >
                           {formatTime(slot.startTime)}
@@ -505,7 +505,7 @@ export default function WinterSaunaBookingShell({
                           {slot.price?.comparedAmount ? (
                             <>
                               <span className="mr-1 line-through opacity-70">{formatPrice(slot.price.comparedAmount)}</span>
-                              <span className="font-semibold text-[#3b82f6]">{formatPrice(slot.price.amount)}</span>
+                              <span className="font-semibold text-lake">{formatPrice(slot.price.amount)}</span>
                             </>
                           ) : (
                             formatPrice(slot.price?.amount)
@@ -538,7 +538,7 @@ export default function WinterSaunaBookingShell({
                     type="text"
                     value={customerInfo.firstName}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, firstName: e.target.value })}
-                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                   />
                 </div>
               </div>
@@ -553,7 +553,7 @@ export default function WinterSaunaBookingShell({
                     type="text"
                     value={customerInfo.lastName}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, lastName: e.target.value })}
-                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                   />
                 </div>
               </div>
@@ -569,7 +569,7 @@ export default function WinterSaunaBookingShell({
                   type="email"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
-                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                 />
               </div>
             </div>
@@ -584,7 +584,7 @@ export default function WinterSaunaBookingShell({
                   type="tel"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
-                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                 />
               </div>
             </div>
@@ -681,7 +681,7 @@ export default function WinterSaunaBookingShell({
           <Button
             onClick={handleNext}
             disabled={!isStepValid() || isSubmitting}
-            className="bg-[#3b82f6] text-white hover:bg-[#2563eb]"
+            className="bg-lake text-white hover:bg-lake-deep"
           >
             {isSubmitting ? (
               <>

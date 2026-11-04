@@ -61,7 +61,7 @@ export default function FeatureGrid({
               </p>
             )}
             {title && (
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
                 {title}
               </h2>
             )}
@@ -74,9 +74,9 @@ export default function FeatureGrid({
             return (
               <div
                 key={feature.id}
-                className="flex flex-col items-center rounded-2xl bg-[#faf9f7] p-6 text-center md:items-start md:text-left"
+                className="flex flex-col items-center rounded-2xl bg-background p-6 text-center md:items-start md:text-left"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#3b82f6]/10 text-[#3b82f6]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-lake/10 text-lake">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-3 text-base font-semibold text-stone-900">

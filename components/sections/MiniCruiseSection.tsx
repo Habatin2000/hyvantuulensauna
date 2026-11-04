@@ -29,7 +29,7 @@ export default function MiniCruiseSection({ locale }: MiniCruiseSectionProps) {
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-stone-900/40 to-transparent" />
-              <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-[#3b82f6] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg">
+              <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-lake px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg">
                 {isEn ? 'New' : 'Uutuus'}
               </div>
             </div>
@@ -37,7 +37,7 @@ export default function MiniCruiseSection({ locale }: MiniCruiseSectionProps) {
               <h3 className="text-xl font-bold text-stone-900 mb-1.5">
                 {isEn ? 'Mini Cruise' : 'Miniristeily'}
               </h3>
-              <p className="text-xs text-[#3b82f6] font-semibold mb-3">
+              <p className="text-xs text-lake font-semibold mb-3">
                 {isEn
                   ? 'Thursdays and Sundays • Starting at 4:30 PM'
                   : 'Torstaisin ja sunnuntaisin • Aloitus klo 16.30'}
@@ -53,12 +53,12 @@ export default function MiniCruiseSection({ locale }: MiniCruiseSectionProps) {
                   : <>Miniristeily ei sisällä <strong>Jäitä</strong>, <strong>Grillin käyttöä</strong> tai <strong>kaiutinta</strong>. Omia eväitä saa ottaa.</>}
               </p>
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-2xl font-bold text-[#3b82f6]">120€</span>
+                <span className="text-2xl font-bold text-lake">120€</span>
                 <span className="text-sm text-stone-500">/ 1.5h</span>
               </div>
               <button
                 onClick={() => setShowMiniCruiseBooking(true)}
-                className="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] text-white font-semibold rounded-xl shadow-lg shadow-[#3b82f6]/25 hover:shadow-xl hover:shadow-[#3b82f6]/30 hover:-translate-y-0.5 transition-all text-sm"
+                className="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-lake to-lake-deep text-white font-semibold rounded-xl shadow-lg shadow-lake/25 hover:shadow-xl hover:shadow-lake/30 hover:-translate-y-0.5 transition-all text-sm"
               >
                 {isEn ? 'Book mini cruise' : 'Varaa miniristeily'}
               </button>

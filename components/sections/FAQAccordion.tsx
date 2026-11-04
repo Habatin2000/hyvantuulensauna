@@ -34,7 +34,7 @@ export default function FAQAccordion({
               </p>
             )}
             {title && (
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
                 {title}
               </h2>
             )}
@@ -44,7 +44,7 @@ export default function FAQAccordion({
         <Accordion className="w-full">
           {items.map((item) => (
             <AccordionItem key={item.id} value={item.id} className="border-b border-stone-200">
-              <AccordionTrigger className="py-5 text-left text-base font-medium text-stone-900 hover:text-[#3b82f6] hover:no-underline md:text-lg">
+              <AccordionTrigger className="py-5 text-left text-base font-medium text-stone-900 hover:text-lake hover:no-underline md:text-lg">
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className="pb-5 text-stone-600 leading-relaxed">
@@ -54,7 +54,7 @@ export default function FAQAccordion({
                     {' '}
                     <Link
                       href={item.linkHref}
-                      className="font-medium text-[#3b82f6] hover:underline"
+                      className="font-medium text-lake hover:underline"
                     >
                       {item.linkText} →
                     </Link>
@@ -69,7 +69,7 @@ export default function FAQAccordion({
           <div className="mt-8 text-center">
             <Link 
               href="/usein-kysyttya" 
-              className="text-sm font-medium text-[#3b82f6] hover:underline"
+              className="text-sm font-medium text-lake hover:underline"
             >
               {locale === 'en'
                 ? 'See all frequently asked questions →'

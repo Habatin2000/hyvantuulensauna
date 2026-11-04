@@ -48,7 +48,7 @@ export default function GoogleReviews() {
               {isEn ? 'Customer reviews' : 'Asiakasarvostelut'}
             </span>
           </div>
-          <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+          <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
             {isEn ? 'What our customers say' : 'Mitä asiakkaamme sanovat'}
           </h2>
           <p className="mt-3 text-stone-600">
@@ -66,7 +66,7 @@ export default function GoogleReviews() {
             href="https://maps.google.com/?cid=756504557143769353"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#3b82f6] px-6 py-3 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-2xl"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-lake px-6 py-3 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:bg-lake-deep hover:shadow-2xl"
           >
             <Star className="h-4 w-4 fill-white" />
             {isEn ? 'Write a review on Google' : 'Jätä arvostelu Googleen'}
@@ -89,7 +89,7 @@ export default function GoogleReviews() {
       {/* Custom styles for Featurable widget */}
       <style jsx global>{`
         .featurable-carousel {
-          --featurable-primary: #3b82f6;
+          --featurable-primary: var(--lake);
         }
         .featurable-carousel .featurable-review-card {
           background: white;

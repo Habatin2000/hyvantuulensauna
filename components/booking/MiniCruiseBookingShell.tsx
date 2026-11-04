@@ -433,7 +433,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
               <div key={label} className="flex items-center">
                 <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${
                   isCompleted || isCurrent
-                    ? 'bg-[#3b82f6] text-white' 
+                    ? 'bg-lake text-white' 
                     : 'bg-stone-200 text-stone-500'
                 }`}>
                   {isCompleted ? <Check className="h-4 w-4" /> : stepNumber}
@@ -476,13 +476,13 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                   }}
                   className={`flex items-center justify-between rounded-xl border p-4 text-left transition-all ${
                     selectedBoat === boat.id 
-                      ? 'border-[#3b82f6] bg-[#3b82f6]/5' 
+                      ? 'border-lake bg-lake/5' 
                       : 'border-stone-200 hover:border-stone-300'
                   }`}
                 >
                   <div className="flex items-center gap-4">
                     <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${
-                      selectedBoat === boat.id ? 'bg-[#3b82f6] text-white' : 'bg-stone-100 text-stone-600'
+                      selectedBoat === boat.id ? 'bg-lake text-white' : 'bg-stone-100 text-stone-600'
                     }`}>
                       <Ship className="h-6 w-6" />
                     </div>
@@ -491,7 +491,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                       <p className="text-sm text-stone-600">{t.capacity(boat.contentId)}</p>
                     </div>
                   </div>
-                  {selectedBoat === boat.id && <Check className="h-5 w-5 text-[#3b82f6]" />}
+                  {selectedBoat === boat.id && <Check className="h-5 w-5 text-lake" />}
                 </button>
               ))}
             </div>
@@ -558,7 +558,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                     setSelectedDate(null);
                     setSelectedSlot(null);
                   }}
-                  className="text-sm text-[#3b82f6] hover:underline"
+                  className="text-sm text-lake hover:underline"
                 >
                   {t.changeDay}
                 </button>
@@ -579,7 +579,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                         setSelectedDate(null);
                         setSelectedSlot(null);
                       }}
-                      className="mt-3 text-sm text-[#3b82f6] hover:underline"
+                      className="mt-3 text-sm text-lake hover:underline"
                     >
                       {t.chooseAnotherDay}
                     </button>
@@ -599,12 +599,12 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                         }}
                         className={`rounded-lg border p-4 text-left transition-all ${
                           selectedSlot?.startTime === slot.startTime 
-                            ? 'border-[#3b82f6] bg-[#3b82f6]/5' 
+                            ? 'border-lake bg-lake/5' 
                             : 'border-stone-200 hover:border-stone-300'
                         }`}
                       >
                         <p className={`text-lg font-semibold ${
-                          selectedSlot?.startTime === slot.startTime ? 'text-[#3b82f6]' : 'text-stone-900'
+                          selectedSlot?.startTime === slot.startTime ? 'text-lake' : 'text-stone-900'
                         }`}>
                           {formatTime(slot.startTime)}
                         </p>
@@ -639,7 +639,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                     type="text"
                     value={customerInfo.firstName}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, firstName: e.target.value })}
-                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                     placeholder={t.firstNamePlaceholder}
                   />
                 </div>
@@ -655,7 +655,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                     type="text"
                     value={customerInfo.lastName}
                     onChange={(e) => setCustomerInfo({ ...customerInfo, lastName: e.target.value })}
-                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                    className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                     placeholder={t.lastNamePlaceholder}
                   />
                 </div>
@@ -673,7 +673,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                   type="email"
                   value={customerInfo.email}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
-                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                   placeholder={t.emailPlaceholder}
                 />
               </div>
@@ -690,7 +690,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                   type="tel"
                   value={customerInfo.phone}
                   onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
-                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+                  className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
                   placeholder="+358 40 123 4567"
                 />
               </div>
@@ -782,7 +782,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
           <Button 
             onClick={handleNext}
             disabled={!isStepValid() || isSubmitting}
-            className="bg-[#3b82f6] hover:bg-[#2563eb] text-white"
+            className="bg-ember hover:bg-ember-dark text-white"
           >
             {isSubmitting ? (
               <>

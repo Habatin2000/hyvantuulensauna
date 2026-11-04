@@ -24,7 +24,7 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const locale = useLocale();
   const isEn = locale === 'en';
-  const ctaClasses = 'bg-[#3b82f6] hover:bg-[#2563eb] text-white';
+  const ctaClasses = 'bg-ember hover:bg-ember-dark text-white';
 
   const heroImages = content.images && content.images.length > 0
     ? content.images
@@ -119,14 +119,14 @@ export default function HeroSection({
               {content.subtitle}
             </p>
             {headlineAs === 'h1' ? (
-              <h1 className="font-corben text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100">
+              <h1 className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100">
                 {content.title}
               </h1>
             ) : (
               /* Visual hero headline — intentionally NOT an h1. The semantic h1
                  lives in the first content section below (SEO/a11y). */
               <div
-                className="font-corben text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100"
+                className="font-display text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem] animate-fade-in-up animation-delay-100"
                 aria-label={content.title}
               >
                 {content.title}
@@ -304,7 +304,7 @@ export default function HeroSection({
           <p className="mb-4 text-sm font-medium uppercase tracking-wider text-amber-400">
             {content.subtitle}
           </p>
-          <h1 className="font-corben text-3xl font-bold text-white sm:text-4xl md:text-[2.5rem]">
+          <h1 className="font-display text-3xl font-bold text-white sm:text-4xl md:text-[2.5rem]">
             {content.title}
             </h1>
           <p className="mt-3 text-base text-stone-100">

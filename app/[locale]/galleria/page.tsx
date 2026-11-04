@@ -159,7 +159,7 @@ export default async function GalleryPage({
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb]"
+              className="inline-flex items-center gap-2 rounded-lg bg-lake px-6 py-3 font-medium text-white hover:bg-lake-deep"
             >
               {isEn ? 'Book a sauna boat' : 'Varaa saunalautta'}
             </Link>

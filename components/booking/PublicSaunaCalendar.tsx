@@ -148,7 +148,7 @@ export default function PublicSaunaCalendar({
   const getDayStyles = (status: string) => {
     switch (status) {
       case 'selected':
-        return 'bg-[#3b82f6] text-white ring-2 ring-[#3b82f6] ring-offset-2';
+        return 'bg-lake text-white ring-2 ring-lake ring-offset-2';
       // Underline / strikethrough are the non-color cues for availability
       case 'available':
         return 'bg-green-500 text-white hover:bg-green-600 font-medium underline underline-offset-2 cursor-pointer';
@@ -217,7 +217,7 @@ export default function PublicSaunaCalendar({
           {/* Loading indicator */}
           {isLoading && (
             <div className="flex items-center justify-center py-3 mb-2">
-              <Loader2 className="h-5 w-5 animate-spin text-[#3b82f6]" />
+              <Loader2 className="h-5 w-5 animate-spin text-lake" />
               <span className="ml-2 text-xs text-stone-600">Haetaan aikoja...</span>
             </div>
           )}
@@ -270,7 +270,7 @@ export default function PublicSaunaCalendar({
               <span>Loppuunmyyty</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-[#3b82f6]"></div>
+              <div className="h-2.5 w-2.5 rounded bg-lake"></div>
               <span>Valittu</span>
             </div>
           </div>

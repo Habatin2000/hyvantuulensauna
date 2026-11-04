@@ -218,7 +218,7 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
 
       {isLoadingInfo ? (
         <div className="rounded-xl border border-stone-200 bg-white p-8 text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#3b82f6] border-t-transparent mx-auto" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-lake border-t-transparent mx-auto" />
           <p className="mt-4 text-stone-600">Ladataan tietoja...</p>
         </div>
       ) : bookingSuccess ? (
@@ -287,7 +287,7 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
             </button>
             <button
               onClick={handleProceedToPayment}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-lake px-6 py-3 font-medium text-white hover:bg-lake-deep"
             >
               Jatka maksuun
             </button>

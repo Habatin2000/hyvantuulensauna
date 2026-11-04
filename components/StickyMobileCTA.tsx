@@ -38,7 +38,7 @@ export default function StickyMobileCTA() {
           </Link>
           <Link
             href={{ pathname: '/julkinen-sauna', hash: locale === 'en' ? 'booking' : 'varaus' }}
-            className="flex-1 rounded-xl bg-[#3b82f6] px-3 py-2.5 text-center text-xs font-semibold text-white shadow-lg shadow-[#3b82f6]/30 transition-all hover:bg-[#2563eb] hover:scale-[1.02] active:scale-[0.98]"
+            className="flex-1 rounded-xl bg-lake px-3 py-2.5 text-center text-xs font-semibold text-white shadow-lg shadow-lake/30 transition-all hover:bg-lake-deep hover:scale-[1.02] active:scale-[0.98]"
           >
             {t('public')}
           </Link>

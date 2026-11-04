@@ -174,7 +174,7 @@ export default function Step3PersonalInfo({
               onChange={(e) => setLocalInfo({ ...localInfo, firstName: e.target.value })}
               aria-invalid={!!errors.firstName}
               aria-describedby={errors.firstName ? 'step3-first-name-error' : undefined}
-              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
               placeholder={t.firstNamePlaceholder}
             />
           </div>
@@ -197,7 +197,7 @@ export default function Step3PersonalInfo({
               onChange={(e) => setLocalInfo({ ...localInfo, lastName: e.target.value })}
               aria-invalid={!!errors.lastName}
               aria-describedby={errors.lastName ? 'step3-last-name-error' : undefined}
-              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
               placeholder={t.lastNamePlaceholder}
             />
           </div>
@@ -220,7 +220,7 @@ export default function Step3PersonalInfo({
               onChange={(e) => setLocalInfo({ ...localInfo, email: e.target.value })}
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'step3-email-error' : undefined}
-              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
               placeholder={t.emailPlaceholder}
             />
           </div>
@@ -278,7 +278,7 @@ export default function Step3PersonalInfo({
               type="tel"
               value={localInfo.phone}
               onChange={(e) => setLocalInfo({ ...localInfo, phone: e.target.value })}
-              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-[#3b82f6] focus:outline-none focus:ring-1 focus:ring-[#3b82f6]"
+              className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-lake focus:outline-none focus:ring-1 focus:ring-lake"
               placeholder="+358 40 123 4567"
             />
           </div>
@@ -297,7 +297,7 @@ export default function Step3PersonalInfo({
         <button
           onClick={handleNext}
           disabled={!isFormValid}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:bg-stone-300"
+          className="inline-flex items-center gap-2 rounded-lg bg-lake px-5 py-2.5 text-sm font-medium text-white hover:bg-lake-deep disabled:cursor-not-allowed disabled:bg-stone-300"
         >
           {t.continue}
           <ChevronRight className="h-3.5 w-3.5" />

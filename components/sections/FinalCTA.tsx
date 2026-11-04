@@ -32,7 +32,7 @@ export default function FinalCTA({
   const isEn = useLocale() === 'en';
 
   return (
-    <section className={`section-padding ${isDark ? 'bg-[#2563eb]' : 'bg-stone-100'}`}>
+    <section className={`section-padding ${isDark ? 'bg-lake-deep' : 'bg-stone-100'}`}>
       <div className="container-padding mx-auto max-w-4xl text-center">
         <h2 className={`text-3xl font-bold md:text-4xl ${isDark ? 'text-white' : 'text-stone-900'}`}>
           {title}
@@ -46,8 +46,8 @@ export default function FinalCTA({
             <Button 
               size="lg" 
               className={`font-bold shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 ${isDark 
-                ? 'bg-white text-[#3b82f6] hover:bg-stone-100' 
-                : 'bg-[#3b82f6] text-white hover:bg-[#2563eb]'
+                ? 'bg-white text-lake hover:bg-stone-100' 
+                : 'bg-lake text-white hover:bg-lake-deep'
               }`}
             >
               {primaryCta.text}
@@ -60,8 +60,8 @@ export default function FinalCTA({
               <Button 
                 size="lg" 
                 className={`font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ${isDark 
-                  ? 'bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-[#3b82f6]' 
-                  : 'bg-white border-2 border-stone-200 text-stone-700 hover:border-[#3b82f6] hover:text-[#3b82f6]'
+                  ? 'bg-white/10 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-lake' 
+                  : 'bg-white border-2 border-stone-200 text-stone-700 hover:border-lake hover:text-lake'
                 }`}
               >
                 <Phone className="mr-2 h-5 w-5" />

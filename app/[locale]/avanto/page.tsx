@@ -175,7 +175,7 @@ export default async function AvantoPage({
         }}
       />
 
-      <HeroSection content={hero} variant="page" />
+      <HeroSection content={hero} variant="page" banner={isEn ? 'Early bird offers — valid until Nov 15' : 'Early bird -tarjoukset — voimassa 15.11. asti'} />
 
       {/* Opening notice */}
       <AnimatedSection>
@@ -197,7 +197,7 @@ export default async function AvantoPage({
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Ice swimming in Helsinki' : 'Avantouinti Helsingissä'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Ice swimming with us' : 'Avantouinti meillä'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
@@ -210,7 +210,7 @@ export default async function AvantoPage({
                 {isEn
                   ? 'By booking the whole sauna boat you make sure the place is all yours. Christmas parties, birthdays or team recreation days? We have hosted plenty! There is a pizzeria next door with good and affordable pizzas for the sauna. Big group? Book both saunas! In that case, call us.'
                   : 'Varaamalla koko lautan itsellesi varmistat sen, että paikalle on vaan sun oma porukka. Pikkujoulut, synttärit tai virkkarit? Näitä meillä on ollut paljon! Naapurissa on pizzeria, josta saa hyvät ja edulliset pizzat saunalle. Iso porukka? Varaa molemmat saunat! Soita tällöin'}{' '}
-                <a href="tel:+358442313546" className="font-semibold text-[#3b82f6] hover:underline">
+                <a href="tel:+358442313546" className="font-semibold text-lake hover:underline">
                   044 231 3546
                 </a>
                 .
@@ -230,7 +230,7 @@ export default async function AvantoPage({
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-5xl">
           <AnimatedSection>
-            <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'About ice swimming' : 'Tietoa avantouinnista'}
             </h2>
             <div className="grid gap-6 md:grid-cols-3">
@@ -254,7 +254,7 @@ export default async function AvantoPage({
                     : 'Uiminen kylmässä vedessä on haastavaa. Tämä on asia, joka helpottuu harjoittamalla.',
                 },
               ].map((item) => (
-                <div key={item.title} className="rounded-2xl bg-[#faf9f7] p-6 shadow-sm">
+                <div key={item.title} className="rounded-2xl bg-background p-6 shadow-sm">
                   <h3 className="mb-2 text-lg font-bold text-stone-900">{item.title}</h3>
                   <p className="text-sm leading-relaxed text-stone-600 md:text-base">{item.text}</p>
                 </div>
@@ -265,11 +265,11 @@ export default async function AvantoPage({
       </section>
 
       {/* Saapuminen meille */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12">
-              <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl">
+              <h2 className="font-display mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl">
                 {isEn ? 'Getting to us' : 'Saapuminen meille'}
               </h2>
               <div className="space-y-6 text-base leading-relaxed text-stone-600 md:text-lg">
@@ -297,6 +297,19 @@ export default async function AvantoPage({
                       : 'Meripellontielle tulee bussi aivan viereen, metrolta Rastilasta ei ole myöskään pitkä matka (15 min kävellen).'}
                   </p>
                 </div>
+              </div>
+
+              <div className="mt-8 overflow-hidden rounded-2xl shadow-lg aspect-video bg-stone-200">
+                <iframe
+                  src="https://www.google.com/maps?q=Meripellontie%2011C%2C%2000970%20Helsinki&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title={isEn ? 'Hyvän Tuulen Sauna location' : 'Hyvän Tuulen Saunan sijainti'}
+                />
               </div>
             </div>
           </AnimatedSection>

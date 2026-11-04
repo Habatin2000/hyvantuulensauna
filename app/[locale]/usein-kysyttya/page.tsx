@@ -91,7 +91,7 @@ export default async function FAQPage({
       />
 
       {/* Hero */}
-      <section className="section-padding bg-[#3b82f6]">
+      <section className="section-padding bg-lake">
         <div className="container-padding mx-auto max-w-4xl text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             {isEn ? 'Frequently asked questions' : 'Usein kysyttyä'}
@@ -132,7 +132,7 @@ export default async function FAQPage({
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="tel:+358442313546"
-              className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-6 py-3 font-medium text-white hover:bg-[#2563eb]"
+              className="inline-flex items-center gap-2 rounded-lg bg-lake px-6 py-3 font-medium text-white hover:bg-lake-deep"
             >
               {isEn ? 'Call us' : 'Soita meille'}
             </a>

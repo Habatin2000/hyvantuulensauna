@@ -19,7 +19,7 @@ interface GalleryPreviewProps {
 
 export default function GalleryPreview({ images, title, subtitle, locale = 'fi' }: GalleryPreviewProps) {
   return (
-    <section className="section-padding bg-[#faf9f7]">
+    <section className="section-padding bg-background">
       <div className="container-padding mx-auto max-w-7xl">
         {(title || subtitle) && (
           <div className="mb-12 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
@@ -30,13 +30,13 @@ export default function GalleryPreview({ images, title, subtitle, locale = 'fi' 
                 </p>
               )}
               {title && (
-                <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+                <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
                   {title}
                 </h2>
               )}
             </div>
             <Link href="/galleria">
-              <Button variant="outline" className="border-stone-300 hover:bg-[#3b82f6] hover:text-white hover:border-[#3b82f6] transition-all">
+              <Button variant="outline" className="border-stone-300 hover:bg-lake hover:text-white hover:border-lake transition-all">
                 {locale === 'en' ? 'See all photos' : 'Katso kaikki kuvat'}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>

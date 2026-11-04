@@ -22,7 +22,7 @@ export default function BoatComparisonCards({
         {(title || subtitle) && (
           <div className="mb-12 text-center">
             {subtitle && (
-              <p className="mb-2 text-sm font-medium uppercase tracking-wider text-[#3b82f6]">
+              <p className="mb-2 text-sm font-medium uppercase tracking-wider text-lake">
                 {subtitle}
               </p>
             )}
@@ -56,11 +56,11 @@ export default function BoatComparisonCards({
                 {/* Specs */}
                 <div className="mb-4 flex gap-6 text-base text-stone-600">
                   <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-[#3b82f6]" />
+                    <Users className="h-4 w-4 text-lake" />
                     <span>{boat.capacity.min}-{boat.capacity.max} hlö</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-[#3b82f6]" />
+                    <Clock className="h-4 w-4 text-lake" />
                     <span>alk. {boat.pricing.basePrice}€/{boat.pricing.unit}</span>
                   </div>
                 </div>
@@ -74,7 +74,7 @@ export default function BoatComparisonCards({
                 <div className="mb-6 space-y-2">
                   {boat.features.slice(0, 4).map((feature) => (
                     <div key={feature} className="flex items-center gap-2 text-base text-stone-700">
-                      <Check className="h-4 w-4 text-[#3b82f6]" />
+                      <Check className="h-4 w-4 text-lake" />
                       {feature}
                     </div>
                   ))}
@@ -99,7 +99,7 @@ export default function BoatComparisonCards({
 
                 {/* CTA */}
                 <Link href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }} className="block">
-                  <Button size="lg" className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white">
+                  <Button size="lg" className="w-full bg-ember hover:bg-ember-dark text-white">
                     Varaa {boat.name}
                   </Button>
                 </Link>

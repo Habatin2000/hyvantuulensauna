@@ -88,7 +88,7 @@ export default function Step2SelectSlotAndTickets({
   return (
     <div className="space-y-4">
       {/* Date info */}
-      <div className="rounded-lg bg-[#3b82f6]/5 p-2.5">
+      <div className="rounded-lg bg-lake/5 p-2.5">
         <p className="text-sm font-medium text-stone-900">{formatDate(selectedDate)}</p>
       </div>
 
@@ -103,14 +103,14 @@ export default function Step2SelectSlotAndTickets({
               disabled={slot.spotsAvailable === 0}
               className={`rounded-lg border p-3 text-center transition-all ${
                 selectedSlot?.startTime === slot.startTime
-                  ? 'border-[#3b82f6] bg-[#3b82f6]/5'
+                  ? 'border-lake bg-lake/5'
                   : slot.spotsAvailable === 0
                     ? 'border-stone-200 bg-stone-100 opacity-50 cursor-not-allowed'
                     : 'border-stone-200 hover:border-stone-300 bg-white'
               }`}
             >
               <div className="flex items-center justify-center gap-2">
-                <Clock className="h-3.5 w-3.5 text-[#3b82f6]" />
+                <Clock className="h-3.5 w-3.5 text-lake" />
                 <span className="text-sm font-semibold text-stone-900">
                   {formatTime(slot.startHour)} - {formatTime(slot.endHour)}
                 </span>
@@ -208,7 +208,7 @@ export default function Step2SelectSlotAndTickets({
         <button
           onClick={onNext}
           disabled={!selectedSlot || totalQuantity === 0}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:bg-stone-300"
+          className="inline-flex items-center gap-2 rounded-lg bg-lake px-5 py-2.5 text-sm font-medium text-white hover:bg-lake-deep disabled:cursor-not-allowed disabled:bg-stone-300"
         >
           Jatka
           <ChevronRight className="h-3.5 w-3.5" />

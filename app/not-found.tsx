@@ -13,7 +13,7 @@ export default function NotFound() {
             <br />
             Unfortunately, the page you were looking for could not be found.
           </p>
-          <Link href="/" className="text-[#3b82f6] hover:underline font-medium">
+          <Link href="/" className="text-lake hover:underline font-medium">
             Palaa etusivulle / Return to homepage
           </Link>
         </div>

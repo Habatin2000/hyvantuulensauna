@@ -9,7 +9,32 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-quicksand), system-ui, sans-serif;
   --font-mono: monospace;
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-display);
+  /* Scoped brand colors — warm values by default, Avanto winter theme overrides
+     under .theme-avanto (see below). This keeps the summer cruises page on the
+     original warm palette via .theme-summer while everything else goes arctic. */
+  --color-lake: var(--lake);
+  --color-lake-deep: var(--lake-deep);
+  --color-ember: var(--ember);
+  --color-ember-dark: var(--ember-dark);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-mute: var(--mute);
+  --color-frost: var(--frost);
+  --color-coldstone: var(--coldstone);
+  /* Neutral scale is remapped per theme the same way */
+  --color-stone-50: var(--stone-50);
+  --color-stone-100: var(--stone-100);
+  --color-stone-200: var(--stone-200);
+  --color-stone-300: var(--stone-300);
+  --color-stone-400: var(--stone-400);
+  --color-stone-500: var(--stone-500);
+  --color-stone-600: var(--stone-600);
+  --color-stone-700: var(--stone-700);
+  --color-stone-800: var(--stone-800);
+  --color-stone-900: var(--stone-900);
+  --color-stone-950: var(--stone-950);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -59,7 +84,7 @@
 }
 
 :root {
-  /* Warm stone-based palette */
+  /* Warm stone-based palette (default / summer) */
   --background: #faf9f7;
   --foreground: #1c1917;
   --card: #ffffff;
@@ -92,6 +117,142 @@
   --sidebar-accent-foreground: #44403c;
   --sidebar-border: #e7e5e4;
   --sidebar-ring: #3b82f6;
+  /* Scoped brand colors — warm defaults */
+  --lake: #3b82f6;
+  --lake-deep: #2563eb;
+  --ember: #3b82f6;
+  --ember-dark: #2563eb;
+  --canvas: #faf9f7;
+  --surface: #f5f1eb;
+  --ink: #1c1917;
+  --mute: #78716c;
+  --frost: #e8e2d9;
+  --coldstone: #e7e5e4;
+  /* Warm neutrals (default Tailwind stone) */
+  --stone-50: #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
+  --stone-900: #1c1917;
+  --stone-950: #0c0a09;
+}
+
+/* Avanto — arctic winter theme (moodboard):
+   Glacier canvas, Arctic Night ink, Deep Lake primary, Ember CTA heat. */
+.theme-avanto {
+  --background: #F3F6F8;
+  --foreground: #101820;
+  --card: #FFFFFF;
+  --card-foreground: #101820;
+  --popover: #FFFFFF;
+  --popover-foreground: #101820;
+  --primary: #23517C;
+  --primary-foreground: #FFFFFF;
+  --secondary: #DEE9F1;
+  --secondary-foreground: #23517C;
+  --muted: #DEE9F1;
+  --muted-foreground: #5D6D79;
+  --accent: #EAF1F7;
+  --accent-foreground: #23517C;
+  --border: #D3DEE6;
+  --input: #D3DEE6;
+  --ring: #23517C;
+  --chart-1: #23517C;
+  --chart-2: #D97E36;
+  --chart-3: #5D6D79;
+  --chart-4: #A9C6DC;
+  --chart-5: #101820;
+  --sidebar: #F3F6F8;
+  --sidebar-foreground: #101820;
+  --sidebar-primary: #23517C;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #DEE9F1;
+  --sidebar-accent-foreground: #23517C;
+  --sidebar-border: #D3DEE6;
+  --sidebar-ring: #23517C;
+  --lake: #23517C;
+  --lake-deep: #1A3E60;
+  --ember: #D97E36;
+  --ember-dark: #B95F1E;
+  --canvas: #F3F6F8;
+  --surface: #DEE9F1;
+  --ink: #101820;
+  --mute: #5D6D79;
+  --frost: #A9C6DC;
+  --coldstone: #D3DEE6;
+  /* Arctic neutrals */
+  --stone-50: #F7FAFC;
+  --stone-100: #EDF3F8;
+  --stone-200: #D3DEE6;
+  --stone-300: #B9C9D6;
+  --stone-400: #8AA0B0;
+  --stone-500: #5D6D79;
+  --stone-600: #4A5A66;
+  --stone-700: #3A4750;
+  --stone-800: #232E36;
+  --stone-900: #101820;
+  --stone-950: #0B1116;
+}
+
+/* Summer cruises page opts back into the warm palette even though the
+   arctic theme is applied at the body level. */
+.theme-summer {
+  --background: #faf9f7;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f1eb;
+  --secondary-foreground: #44403c;
+  --muted: #f5f5f4;
+  --muted-foreground: #78716c;
+  --accent: #fef3c7;
+  --accent-foreground: #92400e;
+  --border: #e7e5e4;
+  --input: #e7e5e4;
+  --ring: #3b82f6;
+  --chart-1: #3b82f6;
+  --chart-2: #d97706;
+  --chart-3: #78716c;
+  --chart-4: #e8e2d9;
+  --chart-5: #1c1917;
+  --sidebar: #faf9f7;
+  --sidebar-foreground: #1c1917;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f5f1eb;
+  --sidebar-accent-foreground: #44403c;
+  --sidebar-border: #e7e5e4;
+  --sidebar-ring: #3b82f6;
+  --lake: #3b82f6;
+  --lake-deep: #2563eb;
+  --ember: #3b82f6;
+  --ember-dark: #2563eb;
+  --canvas: #faf9f7;
+  --surface: #f5f1eb;
+  --ink: #1c1917;
+  --mute: #78716c;
+  --frost: #e8e2d9;
+  --coldstone: #e7e5e4;
+  --stone-50: #fafaf9;
+  --stone-100: #f5f5f4;
+  --stone-200: #e7e5e4;
+  --stone-300: #d6d3d1;
+  --stone-400: #a8a29e;
+  --stone-500: #78716c;
+  --stone-600: #57534e;
+  --stone-700: #44403c;
+  --stone-800: #292524;
+  --stone-900: #1c1917;
+  --stone-950: #0c0a09;
 }
 
 @layer base {
@@ -110,8 +271,8 @@
 }
 
 /* Custom font classes */
-.font-corben {
-  font-family: var(--font-corben), serif;
+.font-display {
+  font-family: var(--font-display), serif;
 }
 
 .font-pacifico {
@@ -132,15 +293,15 @@
   }
   
   .gradient-ocean {
-    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    background: linear-gradient(135deg, var(--lake) 0%, var(--frost) 100%);
   }
   
   .gradient-sand {
-    background: linear-gradient(180deg, #faf9f7 0%, #f5f1eb 100%);
+    background: linear-gradient(180deg, var(--canvas) 0%, var(--surface) 100%);
   }
   
   .gradient-hero {
-    background: linear-gradient(180deg, rgba(13, 115, 119, 0.9) 0%, rgba(9, 87, 89, 0.95) 100%);
+    background: linear-gradient(180deg, rgba(35, 81, 124, 0.88) 0%, rgba(16, 24, 32, 0.92) 100%);
   }
   
   .section-padding {

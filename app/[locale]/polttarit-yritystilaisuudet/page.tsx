@@ -195,7 +195,7 @@ export default async function OccasionsPage({
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Winter season' : 'Talvikausi'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Private winter saunas in Puotila' : 'Yksityiset talvisaunat Puotilassa'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
@@ -212,16 +212,16 @@ export default async function OccasionsPage({
               <p className="font-semibold text-stone-800">
                 {isEn ? (
                   <>Big group? Book both saunas or call{' '}
-                    <a href="tel:+358442313546" className="text-[#3b82f6] hover:underline">044 231 3546</a> and we will tailor a package.</>
+                    <a href="tel:+358442313546" className="text-lake hover:underline">044 231 3546</a> and we will tailor a package.</>
                 ) : (
                   <>Iso porukka? Varaa molemmat saunat tai soita{' '}
-                    <a href="tel:+358442313546" className="text-[#3b82f6] hover:underline">044 231 3546</a> — räätälöidään sopiva paketti.</>
+                    <a href="tel:+358442313546" className="text-lake hover:underline">044 231 3546</a> — räätälöidään sopiva paketti.</>
                 )}
               </p>
               <div className="pt-2">
                 <Link
                   href="/avanto"
-                  className="inline-flex items-center justify-center rounded-full bg-[#3b82f6] px-8 py-3.5 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
+                  className="inline-flex items-center justify-center rounded-full bg-lake px-8 py-3.5 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-lake-deep hover:shadow-xl"
                 >
                   {isEn ? 'Book a private winter sauna' : 'Varaa yksityinen talvisauna'}
                 </Link>
@@ -232,13 +232,13 @@ export default async function OccasionsPage({
       </section>
 
       {/* Summer season */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Summer season' : 'Kesäkausi'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Sauna boat cruises in the archipelago' : 'Saunalauttaristeilyt saaristossa'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
@@ -255,7 +255,7 @@ export default async function OccasionsPage({
               <div className="pt-2">
                 <Link
                   href="/saunalauttaristeilyt-helsingissa"
-                  className="inline-flex items-center justify-center rounded-full border-2 border-[#3b82f6] bg-white px-8 py-3.5 text-base font-bold text-[#3b82f6] shadow-md transition-all hover:-translate-y-0.5 hover:bg-[#3b82f6] hover:text-white hover:shadow-lg"
+                  className="inline-flex items-center justify-center rounded-full border-2 border-lake bg-white px-8 py-3.5 text-base font-bold text-lake shadow-md transition-all hover:-translate-y-0.5 hover:bg-lake hover:text-white hover:shadow-lg"
                 >
                   {isEn ? 'Explore sauna boat cruises' : 'Tutustu saunalauttaristeilyihin'}
                 </Link>
@@ -269,12 +269,12 @@ export default async function OccasionsPage({
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
-            <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Why celebrate with us?' : 'Miksi juhlia meillä?'}
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {whyCards.map((item) => (
-                <div key={item.title} className="rounded-2xl bg-[#faf9f7] p-6 shadow-sm">
+                <div key={item.title} className="rounded-2xl bg-background p-6 shadow-sm">
                   <h3 className="mb-2 text-lg font-bold text-stone-900">{item.title}</h3>
                   <p className="text-sm leading-relaxed text-stone-600 md:text-base">{item.text}</p>
                 </div>
@@ -285,17 +285,17 @@ export default async function OccasionsPage({
       </section>
 
       {/* Included */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12">
-              <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl">
+              <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl">
                 {isEn ? 'What is included?' : 'Mitä hintaan kuuluu?'}
               </h2>
               <ul className="grid gap-3 sm:grid-cols-2">
                 {includedItems.map((item) => (
                   <li key={item} className="flex items-center gap-2 text-stone-700 md:text-lg">
-                    <span className="text-[#3b82f6]">✓</span>
+                    <span className="text-lake">✓</span>
                     {item}
                   </li>
                 ))}

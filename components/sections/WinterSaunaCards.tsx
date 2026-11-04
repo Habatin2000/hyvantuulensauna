@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation';
 import { ArrowRight } from 'lucide-react';
 import BoatCard from '@/components/sections/BoatCard';
 import WinterSaunaBookingShell from '@/components/booking/WinterSaunaBookingShell';
+import PrivateSaunaSneakPeek from '@/components/booking/PrivateSaunaSneakPeek';
 import AnimatedSection from '@/components/AnimatedSection';
 import { useModalA11y } from '@/hooks/useModalA11y';
 import type { Locale } from '@/content/pages';
@@ -85,13 +86,13 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
 
   return (
     <>
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-7xl">
           {/* Public session CTA above the sauna cards */}
           <AnimatedSection>
-            <div className="mb-12 flex flex-col items-center justify-between gap-6 rounded-3xl bg-[#3b82f6] p-6 md:flex-row md:p-10">
+            <div className="mb-12 flex flex-col items-center justify-between gap-6 rounded-3xl bg-lake p-6 md:flex-row md:p-10">
               <div className="text-center md:text-left">
-                <h2 className="font-corben text-2xl font-bold text-white md:text-3xl">
+                <h2 className="font-display text-2xl font-bold text-white md:text-3xl">
                   {t.publicCta.title}
                 </h2>
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed text-blue-100 md:text-base">
@@ -100,7 +101,7 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
               </div>
               <Link
                 href="/julkinen-sauna"
-                className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-8 py-4 text-base font-bold text-[#3b82f6] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                className="inline-flex shrink-0 items-center justify-center rounded-full bg-white px-8 py-4 text-base font-bold text-lake shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
               >
                 {t.publicCta.button}
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -113,7 +114,7 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {t.eyebrow}
               </p>
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl lg:text-5xl">
                 {t.title}
               </h2>
             </div>
@@ -201,6 +202,10 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
               />
             </AnimatedSection>
           </div>
+
+          <AnimatedSection delay={300} className="mt-10">
+            <PrivateSaunaSneakPeek onBook={(resource) => setBookingResource(resource)} />
+          </AnimatedSection>
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Quicksand, Corben, Pacifico } from "next/font/google";
+import { Quicksand, Fraunces, Pacifico } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -19,10 +19,10 @@ const quicksand = Quicksand({
   weight: ["400", "500", "600", "700"],
 });
 
-const corben = Corben({
-  variable: "--font-corben",
+const fraunces = Fraunces({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["500", "600"],
 });
 
 const pacifico = Pacifico({
@@ -106,7 +106,7 @@ export async function generateMetadata({
   };
 }
 
-export const viewport: Viewport = { themeColor: '#3b82f6' };
+export const viewport: Viewport = { themeColor: '#F3F6F8' };
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -202,7 +202,7 @@ export default async function LocaleLayout({
         {/* End Meta Pixel Code */}
       </head>
       <body
-        className={`${quicksand.variable} ${corben.variable} ${pacifico.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className={`${quicksand.variable} ${fraunces.variable} ${pacifico.variable} theme-avanto font-sans antialiased min-h-screen flex flex-col`}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <SiteHeader />

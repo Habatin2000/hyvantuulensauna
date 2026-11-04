@@ -181,6 +181,7 @@ export default async function PublicSaunaPage({
       <HeroSection
         content={publicPageHero}
         variant="page"
+        banner={isEn ? 'Early bird offers — valid until Nov 15' : 'Early bird -tarjoukset — voimassa 15.11. asti'}
       />
 
       {/* Section 1: Ohjattu talviuinti ja sauna meren äärellä Puotilassa */}
@@ -190,7 +191,7 @@ export default async function PublicSaunaPage({
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Public sauna and sauna sessions by the sea' : 'Yleinen sauna ja saunavuorot meren äärellä'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Guided winter swimming and sauna by the sea in Puotila' : 'Ohjattu talviuinti ja sauna meren äärellä Puotilassa'}
             </h2>
             <div className="space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
@@ -225,13 +226,13 @@ export default async function PublicSaunaPage({
       </section>
 
       {/* Section 2: Booking calendar (raised one position) */}
-      <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-[#faf9f7]">
+      <section id={isEn ? 'booking' : 'varaus'} className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-7xl">
           <div className="mb-12 text-center">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Book your spot' : 'Varaa paikkasi'}
             </p>
-            <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+            <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
               {isEn ? 'Book your spot for upcoming sauna sessions' : 'Varaa paikkasi tuleville saunavuoroille'}
             </h2>
 
@@ -256,11 +257,11 @@ export default async function PublicSaunaPage({
           {/* Small pricing above calendar */}
           <div className="mb-8 flex flex-wrap justify-center gap-4">
             <div className="rounded-xl bg-white border border-stone-200 px-5 py-3 text-center">
-              <span className="text-lg font-bold text-[#3b82f6]">15€</span>
+              <span className="text-lg font-bold text-lake">15€</span>
               <span className="text-sm text-stone-500 ml-1">/ 2h</span>
             </div>
             <div className="rounded-xl bg-white border border-stone-200 px-5 py-3 text-center">
-              <span className="text-lg font-bold text-[#3b82f6]">12.5€</span>
+              <span className="text-lg font-bold text-lake">12.5€</span>
               <span className="text-sm text-stone-500 ml-1">
                 {isEn ? '/ 2h students & seniors' : '/ 2h opiskelijat & eläkeläiset'}
               </span>
@@ -269,8 +270,8 @@ export default async function PublicSaunaPage({
 
           {/* Kids pricing info */}
           <div className="mb-4 max-w-xl mx-auto">
-            <div className="rounded-xl bg-[#3b82f6]/5 border border-[#3b82f6]/20 p-4 text-center">
-              <p className="text-sm font-medium text-[#3b82f6]">
+            <div className="rounded-xl bg-lake/5 border border-lake/20 p-4 text-center">
+              <p className="text-sm font-medium text-lake">
                 {isEn
                   ? 'Kids coming along? Children get student pricing <3! (under 15)'
                   : 'Lapset mukaan? Lapset opiskelijahinnalla <3! (alle 15v)'}
@@ -310,7 +311,7 @@ export default async function PublicSaunaPage({
             <AnimatedSection>
               <div className="flex flex-col items-center justify-between gap-6 rounded-3xl bg-white p-6 shadow-sm md:flex-row md:p-10">
                 <div className="text-center md:text-left">
-                  <h3 className="font-corben text-xl font-bold text-stone-900 md:text-2xl">
+                  <h3 className="font-display text-xl font-bold text-stone-900 md:text-2xl">
                     {isEn ? 'Want privacy? Book a sauna boat for your own use!' : 'Yksityisyyttä vailla? Varaa saunalautta omaan käyttöösi!'}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-stone-600 md:text-base">
@@ -321,7 +322,7 @@ export default async function PublicSaunaPage({
                 </div>
                 <Link
                   href="/polttarit-yritystilaisuudet"
-                  className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#3b82f6] px-8 py-4 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-[#2563eb] hover:shadow-xl"
+                  className="inline-flex shrink-0 items-center justify-center rounded-full bg-lake px-8 py-4 text-base font-bold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:bg-lake-deep hover:shadow-xl"
                 >
                   {isEn ? 'Parties and corporate events' : 'Polttarit ja yritystilaisuudet'}
                 </Link>
@@ -335,7 +336,7 @@ export default async function PublicSaunaPage({
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
-            <h2 className="font-corben mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-8 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Why come to a Hyvän Tuulen Sauna public session?' : 'Miksi tulla Hyvän Tuulen Saunan yleiselle vuorolle?'}
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -359,7 +360,7 @@ export default async function PublicSaunaPage({
                     : 'Voit tulla yksin, kaksin tai kaveriporukalla — varaa vain oma paikkasi ja saavu Meripellontielle. Edullisin tapa päästä kokemaan Hyvän Tuulen Sauna.',
                 },
               ].map((item) => (
-                <div key={item.title} className="rounded-2xl bg-[#faf9f7] p-6 shadow-sm">
+                <div key={item.title} className="rounded-2xl bg-background p-6 shadow-sm">
                   <h3 className="mb-2 text-lg font-bold text-stone-900">{item.title}</h3>
                   <p className="text-sm leading-relaxed text-stone-600 md:text-base">{item.text}</p>
                 </div>
@@ -370,13 +371,13 @@ export default async function PublicSaunaPage({
       </section>
 
       {/* Section 4: Avanto ja saunavuorot Helsingissä */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
               {isEn ? 'Sessions' : 'Vuorot'}
             </p>
-            <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+            <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
               {isEn ? 'Ice hole and sauna sessions in Helsinki' : 'Avanto ja saunavuorot Helsingissä'}
             </h2>
             <p className="mb-8 text-center text-stone-600 md:text-lg">
@@ -388,7 +389,7 @@ export default async function PublicSaunaPage({
 
           <AnimatedSection delay={100}>
             <div className="rounded-3xl bg-white p-8 md:p-12">
-              <h3 className="font-corben mb-4 text-xl font-bold text-stone-900 md:text-2xl">
+              <h3 className="font-display mb-4 text-xl font-bold text-stone-900 md:text-2xl">
                 {isEn ? 'A large ice hole right next to the sauna' : 'Iso avanto aivan saunan vieressä'}
               </h3>
               <div className="space-y-4 text-base leading-relaxed text-stone-600 md:text-lg">
@@ -400,10 +401,10 @@ export default async function PublicSaunaPage({
                 <p className="font-semibold text-stone-800">
                   {isEn ? (
                     <>Read more about ice swimming —{' '}
-                      <Link href="/avanto" className="text-[#3b82f6] hover:underline">visit the ice swimming page</Link>.</>
+                      <Link href="/avanto" className="text-lake hover:underline">visit the ice swimming page</Link>.</>
                   ) : (
                     <>Lue lisää avantouinnista —{' '}
-                      <Link href="/avanto" className="text-[#3b82f6] hover:underline">siirry avantouintisivulle</Link>.</>
+                      <Link href="/avanto" className="text-lake hover:underline">siirry avantouintisivulle</Link>.</>
                   )}
                 </p>
               </div>
@@ -417,27 +418,27 @@ export default async function PublicSaunaPage({
         <div className="container-padding mx-auto max-w-6xl">
           <AnimatedSection>
             <div className="grid gap-8 lg:grid-cols-2">
-              <div className="rounded-2xl bg-[#faf9f7] p-8">
+              <div className="rounded-2xl bg-background p-8">
                 <h3 className="text-xl font-bold text-stone-900 mb-4">
                   {isEn ? 'What to bring?' : 'Mitä mukaan?'}
                 </h3>
                 <ul className="space-y-3 text-stone-600">
                   {bringItems.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="text-[#3b82f6]">✓</span>
+                      <span className="text-lake">✓</span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="rounded-2xl bg-[#faf9f7] p-8">
+              <div className="rounded-2xl bg-background p-8">
                 <h3 className="text-xl font-bold text-stone-900 mb-4">
                   {isEn ? 'Included in the price' : 'Sisältyy hintaan'}
                 </h3>
                 <ul className="space-y-3 text-stone-600">
                   {includedItems.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="text-[#3b82f6]">✓</span>
+                      <span className="text-lake">✓</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -449,11 +450,11 @@ export default async function PublicSaunaPage({
       </section>
 
       {/* Practical instructions */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
             <div className="rounded-3xl bg-white p-8 md:p-12">
-              <h2 className="font-corben mb-6 text-xl font-bold text-stone-900 md:text-2xl">
+              <h2 className="font-display mb-6 text-xl font-bold text-stone-900 md:text-2xl">
                 {isEn ? 'Important information for sauna guests (arrival, gear and instructions)' : 'Tärkeää tietoa saunojille (saapuminen, varusteet ja ohjeet)'}
               </h2>
               <div className="space-y-6 text-base leading-relaxed text-stone-600 md:text-lg">
@@ -483,8 +484,8 @@ export default async function PublicSaunaPage({
       <section className="section-padding bg-white">
         <div className="container-padding mx-auto max-w-4xl">
           <AnimatedSection>
-            <div className="rounded-3xl bg-[#faf9f7] p-8 md:p-12">
-              <h2 className="font-corben mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl">
+            <div className="rounded-3xl bg-background p-8 md:p-12">
+              <h2 className="font-display mb-6 text-center text-2xl font-bold text-stone-900 md:text-3xl">
                 {isEn ? 'Public session or your own winter sauna?' : 'Yleinen vuoro vai oma talvisauna?'}
               </h2>
               <div className="grid gap-6 md:grid-cols-2">
@@ -505,7 +506,7 @@ export default async function PublicSaunaPage({
                   </p>
                   <Link
                     href="/avanto"
-                    className="mt-3 inline-block text-sm font-bold text-[#3b82f6] hover:underline"
+                    className="mt-3 inline-block text-sm font-bold text-lake hover:underline"
                   >
                     {isEn ? 'Explore private winter saunas →' : 'Tutustu yksityisiin talvisaunoihin →'}
                   </Link>
@@ -517,14 +518,14 @@ export default async function PublicSaunaPage({
       </section>
 
       {/* Gallery */}
-      <section className="section-padding bg-[#faf9f7]">
+      <section className="section-padding bg-background">
         <div className="container-padding mx-auto max-w-7xl">
           <AnimatedSection>
             <div className="mb-10 text-center">
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
                 {isEn ? 'Gallery' : 'Galleria'}
               </p>
-              <h2 className="font-corben text-3xl font-bold text-stone-900 md:text-4xl">
+              <h2 className="font-display text-3xl font-bold text-stone-900 md:text-4xl">
                 {isEn ? 'Winter moments' : 'Talvisia hetkiä'}
               </h2>
             </div>

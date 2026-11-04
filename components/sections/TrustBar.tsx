@@ -94,7 +94,7 @@ export default function TrustBar({ badges }: TrustBarProps) {
               }`}
               style={{ transitionDelay: `${index * 120}ms` }}
             >
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[#3b82f6]/10 text-[#3b82f6]">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-lake/10 text-lake">
                 {badge.icon && iconMap[badge.icon] ? iconMap[badge.icon] : null}
               </div>
               <p className="text-3xl font-bold text-stone-900 md:text-4xl">

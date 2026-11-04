@@ -31,9 +31,9 @@ export default function BookingStepIndicator({
               <div 
                 className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-medium transition-colors ${
                   isCompleted 
-                    ? 'bg-[#3b82f6] text-white' 
+                    ? 'bg-lake text-white' 
                     : isCurrent 
-                      ? 'bg-[#3b82f6] text-white' 
+                      ? 'bg-lake text-white' 
                       : 'bg-stone-200 text-stone-500'
                 }`}
               >

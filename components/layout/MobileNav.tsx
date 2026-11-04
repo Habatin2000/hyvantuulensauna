@@ -56,7 +56,7 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
         <div className="flex h-full flex-col">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-stone-200 p-4">
-            <span id="mobile-nav-title" className="font-pacifico text-xl text-[#3b82f6]">Hyvän Tuulen Sauna</span>
+            <span id="mobile-nav-title" className="font-pacifico text-xl text-lake">Hyvän Tuulen Sauna</span>
             <div className="flex items-center gap-1">
               <LanguageSwitcher />
               <Button variant="ghost" size="icon" onClick={onClose} aria-label={t('closeMenu')}>
@@ -73,7 +73,7 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
-                  className="block rounded-lg px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-stone-100 hover:text-[#3b82f6]"
+                  className="block rounded-lg px-4 py-3 text-base font-medium text-stone-700 transition-colors hover:bg-stone-100 hover:text-lake"
                 >
                   {t(item.labelKey)}
                 </Link>
@@ -83,7 +83,7 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
             {/* CTA */}
             <div className="mt-6 px-4">
               <Link href={{ pathname: '/saunalauttaristeilyt-helsingissa', hash: 'boats' }} onClick={onClose}>
-                <Button className="w-full bg-[#3b82f6] hover:bg-[#2563eb] text-white">
+                <Button className="w-full bg-ember hover:bg-ember-dark text-white">
                   {t('bookNow')}
                 </Button>
               </Link>
@@ -97,18 +97,18 @@ export default function MobileNav({ open, onClose }: MobileNavProps) {
                   href={`tel:${footerNavigation.contact.phone}`}
                   className="flex items-center gap-3 text-sm text-stone-600"
                 >
-                  <Phone className="h-4 w-4 text-[#3b82f6]" />
+                  <Phone className="h-4 w-4 text-lake" />
                   {footerNavigation.contact.phone}
                 </a>
                 <a 
                   href={`mailto:${footerNavigation.contact.email}`}
                   className="flex items-center gap-3 text-sm text-stone-600"
                 >
-                  <Mail className="h-4 w-4 text-[#3b82f6]" />
+                  <Mail className="h-4 w-4 text-lake" />
                   {footerNavigation.contact.email}
                 </a>
                 <div className="flex items-start gap-3 text-sm text-stone-600">
-                  <MapPin className="h-4 w-4 text-[#3b82f6] shrink-0 mt-0.5" />
+                  <MapPin className="h-4 w-4 text-lake shrink-0 mt-0.5" />
                   {footerNavigation.contact.address}
                 </div>
               </div>

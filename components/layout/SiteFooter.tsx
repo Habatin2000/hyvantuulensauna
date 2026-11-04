@@ -13,7 +13,7 @@ export default function SiteFooter() {
   const locale = useLocale();
 
   return (
-    <footer className="border-t border-[#163d3d] bg-[#1e40af]">
+    <footer className="border-t border-black/20 bg-ink">
       <div className="container-padding mx-auto max-w-7xl py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

@@ -153,7 +153,7 @@ export default function SummerCalendar({
   const getDayStyles = (status: string) => {
     switch (status) {
       case 'selected':
-        return 'bg-[#3b82f6] text-white ring-2 ring-[#3b82f6] ring-offset-2';
+        return 'bg-lake text-white ring-2 ring-lake ring-offset-2';
       // Underline styles are the non-color cues for availability status
       case 'available':
         return 'bg-green-500 text-white hover:bg-green-600 font-medium underline underline-offset-2'; // Vihreä = vapaa
@@ -192,7 +192,7 @@ export default function SummerCalendar({
   if (!mounted) {
     return (
       <div className="rounded-xl border border-stone-200 bg-white p-3 w-full flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-[#3b82f6]" />
+        <Loader2 className="h-6 w-6 animate-spin text-lake" />
         <span className="ml-2 text-sm text-stone-600">Ladataan kalenteria...</span>
       </div>
     );
@@ -237,7 +237,7 @@ export default function SummerCalendar({
       {/* Loading indicator */}
       {isLoading && (
         <div className="flex items-center justify-center py-4 mb-2">
-          <Loader2 className="h-6 w-6 animate-spin text-[#3b82f6]" />
+          <Loader2 className="h-6 w-6 animate-spin text-lake" />
           <span className="ml-2 text-sm text-stone-600">Haetaan aikoja...</span>
         </div>
       )}
@@ -290,7 +290,7 @@ export default function SummerCalendar({
           <span>Osittain varattu</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="h-2.5 w-2.5 rounded bg-[#3b82f6]"></div>
+          <div className="h-2.5 w-2.5 rounded bg-lake"></div>
           <span>Valittu</span>
         </div>
       </div>

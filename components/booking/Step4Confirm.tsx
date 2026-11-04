@@ -73,7 +73,7 @@ export default function Step4Confirm({
       <div className="rounded-xl border border-stone-200 bg-white p-3 space-y-2.5">
         {/* Date */}
         <div className="flex items-start gap-2.5">
-          <Calendar className="h-4 w-4 text-[#3b82f6]" />
+          <Calendar className="h-4 w-4 text-lake" />
           <div>
             <p className="text-sm text-stone-500">Päivämäärä</p>
             <p className="font-medium text-stone-900">{formatDate(selectedDate)}</p>
@@ -82,7 +82,7 @@ export default function Step4Confirm({
 
         {/* Time */}
         <div className="flex items-start gap-2.5">
-          <Clock className="h-4 w-4 text-[#3b82f6]" />
+          <Clock className="h-4 w-4 text-lake" />
           <div>
             <p className="text-sm text-stone-500">Aika</p>
             <p className="font-medium text-stone-900">
@@ -93,7 +93,7 @@ export default function Step4Confirm({
 
         {/* Tickets */}
         <div className="flex items-start gap-2.5">
-          <Ticket className="h-4 w-4 text-[#3b82f6]" />
+          <Ticket className="h-4 w-4 text-lake" />
           <div>
             <p className="text-sm text-stone-500">Liput ({totalQuantity})</p>
             <div className="space-y-1">
@@ -113,7 +113,7 @@ export default function Step4Confirm({
 
         {/* Customer */}
         <div className="flex items-start gap-2.5">
-          <User className="h-4 w-4 text-[#3b82f6]" />
+          <User className="h-4 w-4 text-lake" />
           <div>
             <p className="text-sm text-stone-500">Varaaja</p>
             <p className="font-medium text-stone-900">
@@ -128,7 +128,7 @@ export default function Step4Confirm({
 
         {/* Price */}
         <div className="flex items-start gap-2.5">
-          <CreditCard className="h-4 w-4 text-[#3b82f6]" />
+          <CreditCard className="h-4 w-4 text-lake" />
           <div className="flex-1">
             <p className="text-sm text-stone-500">Maksu</p>
             <div className="mt-1 space-y-1">
@@ -152,9 +152,9 @@ export default function Step4Confirm({
       </div>
 
       {/* Info Box */}
-      <div className="rounded-lg bg-[#3b82f6]/5 p-3">
+      <div className="rounded-lg bg-lake/5 p-3">
         <div className="flex gap-2.5">
-          <AlertCircle className="h-4 w-4 shrink-0 text-[#3b82f6]" />
+          <AlertCircle className="h-4 w-4 shrink-0 text-lake" />
           <div>
             <p className="font-medium text-stone-900">Tärkeää muistaa</p>
             <ul className="mt-1 space-y-1 text-sm text-stone-600">
@@ -188,7 +188,7 @@ export default function Step4Confirm({
         <button
           onClick={onBook}
           disabled={isBooking}
-          className="inline-flex items-center gap-2 rounded-lg bg-[#3b82f6] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#2563eb] disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-lg bg-lake px-5 py-2.5 text-sm font-medium text-white hover:bg-lake-deep disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isBooking ? (
             <>
