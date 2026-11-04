@@ -13,11 +13,13 @@
 
 const GCLID_KEY = 'hts_gclid';
 const GACID_KEY = 'hts_gacid';
+const GASID_KEY = 'hts_gasid';
 const GA4_ID = 'G-2LE9R6N8P5';
 
 export interface Attribution {
   gclid?: string;
   gaClientId?: string;
+  gaSessionId?: string;
 }
 
 export function captureAttribution(): void {
@@ -30,16 +32,32 @@ export function captureAttribution(): void {
       localStorage.setItem(GCLID_KEY, clickId);
     }
 
-    if (!localStorage.getItem(GACID_KEY) && typeof window.gtag === 'function') {
-      window.gtag('get', GA4_ID, 'client_id', (clientId: unknown) => {
-        if (typeof clientId === 'string' && clientId) {
-          try {
-            localStorage.setItem(GACID_KEY, clientId);
-          } catch {
-            /* storage unavailable */
+    if (typeof window.gtag === 'function') {
+      // GA4 client_id + session_id — both are needed so the server-side
+      // webhook conversion attaches to the visitor's original session and
+      // traffic source instead of starting a detached one.
+      if (!localStorage.getItem(GACID_KEY)) {
+        window.gtag('get', GA4_ID, 'client_id', (clientId: unknown) => {
+          if (typeof clientId === 'string' && clientId) {
+            try {
+              localStorage.setItem(GACID_KEY, clientId);
+            } catch {
+              /* storage unavailable */
+            }
           }
-        }
-      });
+        });
+      }
+      if (!localStorage.getItem(GASID_KEY)) {
+        window.gtag('get', GA4_ID, 'session_id', (sessionId: unknown) => {
+          if (typeof sessionId === 'string' && sessionId) {
+            try {
+              localStorage.setItem(GASID_KEY, sessionId);
+            } catch {
+              /* storage unavailable */
+            }
+          }
+        });
+      }
     }
   } catch {
     /* storage unavailable */
@@ -52,6 +70,7 @@ export function getAttribution(): Attribution {
     return {
       gclid: localStorage.getItem(GCLID_KEY) || undefined,
       gaClientId: localStorage.getItem(GACID_KEY) || undefined,
+      gaSessionId: localStorage.getItem(GASID_KEY) || undefined,
     };
   } catch {
     return {};

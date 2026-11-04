@@ -139,6 +139,7 @@ export async function POST(request: NextRequest) {
     if (client.phone) metaData.phone = client.phone;
     if (attribution?.gclid) metaData.gclid = String(attribution.gclid);
     if (attribution?.gaClientId) metaData.gacid = String(attribution.gaClientId);
+    if (attribution?.gaSessionId) metaData.gasid = String(attribution.gaSessionId);
     if (typeof attribution?.value === 'number') metaData.anvalue = attribution.value;
     if (attribution?.itemName) metaData.anitem = String(attribution.itemName);
 

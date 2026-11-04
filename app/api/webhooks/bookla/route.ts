@@ -110,6 +110,7 @@ async function sendConversion(evt: NormalizedEvent): Promise<void> {
   const value = Number.isFinite(valueFromMeta) && valueFromMeta > 0 ? valueFromMeta : (evt.payloadPrice ?? 0);
   const itemName = str(meta.anitem) || 'Varaus';
   const gclid = str(meta.gclid) || undefined;
+  const sessionId = str(meta.gasid) || undefined;
   const clientId = str(meta.gacid) || `bookla_${evt.bookingId}`;
 
   const eventParams: Record<string, unknown> = {
@@ -124,6 +125,10 @@ async function sendConversion(evt: NormalizedEvent): Promise<void> {
         quantity: 1,
       },
     ],
+    // Required for the event to count as engaged + attach to the original
+    // session (traffic source) instead of a detached one.
+    engagement_time_msec: 100,
+    ...(sessionId && { session_id: sessionId }),
     page_title: 'Kiitos varauksestasi',
     page_location: `${SITE_URL}/kiitos${gclid ? `?gclid=${encodeURIComponent(gclid)}` : ''}`,
   };
@@ -156,6 +161,7 @@ async function sendConversion(evt: NormalizedEvent): Promise<void> {
     value,
     itemName,
     hasGclid: Boolean(gclid),
+    hasSession: Boolean(sessionId),
   });
 }
 

@@ -66,6 +66,7 @@ export async function POST(request: NextRequest) {
     if (phone) subMeta.phone = String(phone).trim();
     if (attribution?.gclid) subMeta.gclid = String(attribution.gclid);
     if (attribution?.gaClientId) subMeta.gacid = String(attribution.gaClientId);
+    if (attribution?.gaSessionId) subMeta.gasid = String(attribution.gaSessionId);
     if (typeof attribution?.value === 'number') subMeta.anvalue = attribution.value;
     if (attribution?.itemName) subMeta.anitem = String(attribution.itemName);
     if (Object.keys(subMeta).length > 0) {
