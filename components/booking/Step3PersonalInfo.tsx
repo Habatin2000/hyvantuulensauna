@@ -31,6 +31,8 @@ interface Step3PersonalInfoProps {
   onNext: () => void;
   onBack: () => void;
   locale?: 'fi' | 'en';
+  marketingConsent?: boolean;
+  onMarketingConsentChange?: (value: boolean) => void;
 }
 
 export default function Step3PersonalInfo({
@@ -40,6 +42,8 @@ export default function Step3PersonalInfo({
   onNext,
   onBack,
   locale = 'fi',
+  marketingConsent = false,
+  onMarketingConsentChange,
 }: Step3PersonalInfoProps) {
   const isEn = locale === 'en';
   const t = {
@@ -48,6 +52,9 @@ export default function Step3PersonalInfo({
     lastName: isEn ? 'Last name' : 'Sukunimi',
     email: isEn ? 'Email' : 'Sähköposti',
     phone: isEn ? 'Phone number' : 'Puhelinnumero',
+    marketingConsent: isEn
+      ? 'I want to receive offers and news from Hyvän Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
+      : 'Haluan saada Hyvän Tuulen Saunan tarjouksia ja uutisia sähköpostiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
     firstNamePlaceholder: isEn ? 'John' : 'Matti',
     lastNamePlaceholder: isEn ? 'Doe' : 'Meikäläinen',
     emailPlaceholder: isEn ? 'john@example.com' : 'matti@example.com',
@@ -283,6 +290,16 @@ export default function Step3PersonalInfo({
             />
           </div>
         </div>
+        <label className="flex cursor-pointer items-start gap-2.5 md:col-span-2">
+          <input
+            id="step3-marketing-consent"
+            type="checkbox"
+            checked={marketingConsent}
+            onChange={(e) => onMarketingConsentChange?.(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 text-lake focus:ring-lake"
+          />
+          <span className="text-xs leading-relaxed text-stone-600">{t.marketingConsent}</span>
+        </label>
       </div>
 
       {/* Navigation */}

@@ -43,6 +43,7 @@ export async function POST(request: NextRequest) {
     if (attribution?.gclid) metaData.gclid = String(attribution.gclid);
     if (attribution?.gaClientId) metaData.gacid = String(attribution.gaClientId);
     if (attribution?.gaSessionId) metaData.gasid = String(attribution.gaSessionId);
+    if (body.marketingConsent === true) metaData.mkconsent = true;
     if (typeof attribution?.value === 'number') metaData.anvalue = attribution.value;
     if (attribution?.itemName) metaData.anitem = String(attribution.itemName);
 

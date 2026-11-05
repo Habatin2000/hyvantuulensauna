@@ -36,6 +36,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<ProductKey>('10x');
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '' });
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -55,6 +56,9 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
     lastName: isEn ? 'Last name' : 'Sukunimi',
     email: isEn ? 'Email' : 'Sähköposti',
     phone: isEn ? 'Phone number' : 'Puhelinnumero',
+    marketingConsent: isEn
+      ? 'I want to receive offers and news from Hyvän Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
+      : 'Haluan saada Hyvän Tuulen Saunan tarjouksia ja uutisia sähköpostiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
     required: isEn ? 'Required' : 'Pakollinen',
     invalidEmail: isEn ? 'Please check the email address' : 'Tarkista sähköpostiosoite',
     submit: isEn ? 'Continue to payment' : 'Jatka maksuun',
@@ -117,6 +121,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
           email: form.email.trim().toLowerCase(),
           phone: form.phone.trim(),
           subscriptionId: product.id,
+          marketingConsent,
           attribution: {
             ...getAttribution(),
             itemName: product[locale].name,
@@ -332,6 +337,17 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                     />
                   </div>
                 </div>
+
+                <label className="flex cursor-pointer items-start gap-2.5">
+                  <input
+                    type="checkbox"
+                    checked={marketingConsent}
+                    onChange={(e) => setMarketingConsent(e.target.checked)}
+                    disabled={isSubmitting}
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 text-lake focus:ring-lake"
+                  />
+                  <span className="text-xs leading-relaxed text-stone-600">{texts.marketingConsent}</span>
+                </label>
 
                 {submitError && (
                   <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">

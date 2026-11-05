@@ -67,6 +67,7 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
     email: '',
     phone: '',
   });
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [membership, setMembership] = useState<MembershipInfo | null>(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [paymentURL, setPaymentURL] = useState<string | null>(null);
@@ -155,6 +156,7 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
       client: customerInfo,
       useMembership: membership?.useMembership === true,
       resourceId: selectedSlot.resourceId,
+      marketingConsent,
       attribution: {
         ...getAttribution(),
         itemName: tickets.map((t) => t.name).join(', ') || 'Julkinen saunavuoro',
@@ -371,6 +373,8 @@ export default function PublicBookingWidget({ showTitle = true, locale = 'fi' }:
                 onUpdateInfo={setCustomerInfo}
                 onMembershipCheck={setMembership}
                 locale={locale}
+                marketingConsent={marketingConsent}
+                onMarketingConsentChange={setMarketingConsent}
                 onNext={() => {
                   trackAddPaymentInfo({ content_name: 'Julkinen saunavuoro' });
                   setStep(4);

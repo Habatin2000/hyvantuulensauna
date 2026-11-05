@@ -123,6 +123,9 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
     lastName: isEn ? 'Last name' : 'Sukunimi',
     email: isEn ? 'Email' : 'Sähköposti',
     phone: isEn ? 'Phone' : 'Puhelinnumero',
+    marketingConsent: isEn
+      ? 'I want to receive offers and news from Hyv\u00e4n Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
+      : 'Haluan saada Hyv\u00e4n Tuulen Saunan tarjouksia ja uutisia s\u00e4hk\u00f6postiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
     summary: isEn ? 'Booking summary' : 'Varausyhteenveto',
     boat: isEn ? 'Boat' : 'Vene',
     date: isEn ? 'Date' : 'Päivämäärä',
@@ -196,6 +199,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
     email: '',
     phone: '',
   });
+  const [marketingConsent, setMarketingConsent] = useState(false);
 
   // Pre-select boat when opening from a specific boat card CTA
   useEffect(() => {
@@ -397,6 +401,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
             phone: customerInfo.phone,
           },
           spots: 1,
+          marketingConsent,
           attribution: {
             ...getAttribution(),
             itemName: `Saunalauttaristeily – ${getBoats(locale).find((b) => b.id === selectedBoatId)?.name ?? selectedBoatId}`,
@@ -757,6 +762,17 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                       />
                     </div>
                   </div>
+
+                  <label className="flex cursor-pointer items-start gap-2.5">
+                    <input
+                      id="summer-marketing-consent"
+                      type="checkbox"
+                      checked={marketingConsent}
+                      onChange={(e) => setMarketingConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 text-lake focus:ring-lake"
+                    />
+                    <span className="text-xs leading-relaxed text-stone-600">{t.marketingConsent}</span>
+                  </label>
 
                   <div className="rounded-xl border border-stone-200 bg-stone-50 p-3">
                     <p className="text-xs font-medium text-stone-700">{t.extrasTitle}</p>

@@ -90,6 +90,9 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
     lastName: isEn ? 'Last name' : 'Sukunimi',
     email: isEn ? 'Email' : 'Sähköposti',
     phone: isEn ? 'Phone number' : 'Puhelinnumero',
+    marketingConsent: isEn
+      ? 'I want to receive offers and news from Hyv\u00e4n Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
+      : 'Haluan saada Hyv\u00e4n Tuulen Saunan tarjouksia ja uutisia s\u00e4hk\u00f6postiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
     firstNamePlaceholder: isEn ? 'John' : 'Matti',
     lastNamePlaceholder: isEn ? 'Doe' : 'Meikäläinen',
     emailPlaceholder: isEn ? 'john@example.com' : 'matti@example.com',
@@ -134,6 +137,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
     email: '',
     phone: ''
   });
+  const [marketingConsent, setMarketingConsent] = useState(false);
   
   // API states
   const [availableDates, setAvailableDates] = useState<string[]>([]);
@@ -717,6 +721,16 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                 />
               </div>
             </div>
+            <label className="flex cursor-pointer items-start gap-2.5 md:col-span-2">
+              <input
+                id="mini-marketing-consent"
+                type="checkbox"
+                checked={marketingConsent}
+                onChange={(e) => setMarketingConsent(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 text-lake focus:ring-lake"
+              />
+              <span className="text-xs leading-relaxed text-stone-600">{t.marketingConsent}</span>
+            </label>
           </div>
         </div>
       )}
