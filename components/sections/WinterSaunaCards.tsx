@@ -6,7 +6,6 @@ import { Link } from '@/i18n/navigation';
 import { ArrowRight } from 'lucide-react';
 import BoatCard from '@/components/sections/BoatCard';
 import WinterSaunaBookingShell from '@/components/booking/WinterSaunaBookingShell';
-import PrivateSaunaSneakPeek from '@/components/booking/PrivateSaunaSneakPeek';
 import AnimatedSection from '@/components/AnimatedSection';
 import { useModalA11y } from '@/hooks/useModalA11y';
 import type { Locale } from '@/content/pages';
@@ -210,10 +209,6 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
               />
             </AnimatedSection>
           </div>
-
-          <AnimatedSection delay={300} className="mt-10">
-            <PrivateSaunaSneakPeek />
-          </AnimatedSection>
         </div>
       </section>
 
