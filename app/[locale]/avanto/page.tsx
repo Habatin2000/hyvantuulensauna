@@ -114,14 +114,37 @@ export default async function AvantoPage({
         ],
       };
 
-  const serviceSchema = generateServiceSchema(
+  const serviceSchema = {
+    ...generateServiceSchema(
     isEn ? 'Ice swimming and sauna in Helsinki' : 'Avantouinti ja sauna Helsingissä',
     isEn
       ? 'Ice swimming and wood-fired sauna in a maritime setting in Puotila, Helsinki. Public sessions and private bookings all year round.'
       : 'Avantouinti ja puulämmitteinen sauna merellisessä ympäristössä Puotilassa. Julkiset vuorot ja yksityisvaraukset ympäri vuoden.',
     pageUrl,
     PAGE_IMAGE
-  );
+    ),
+    // Early bird prices — keep in sync with the pricing section and the cards.
+    offers: [
+      {
+        '@type': 'Offer',
+        name: isEn ? 'Sauna boat Aalto — private session 2 h' : 'Aalto-sauna — yksityinen vuoro 2 h',
+        price: '109',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil: '2026-11-15',
+        url: pageUrl,
+      },
+      {
+        '@type': 'Offer',
+        name: isEn ? 'Sauna boat Virta — private session 2 h' : 'Virta-sauna — yksityinen vuoro 2 h',
+        price: '89',
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil: '2026-11-15',
+        url: pageUrl,
+      },
+    ],
+  };
 
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: isEn ? 'Home' : 'Etusivu', url: `${SITE_URL}${isEn ? '/en' : ''}` },
@@ -223,6 +246,84 @@ export default async function AvantoPage({
       {/* Virta & Aalto -kortit (talvi) */}
       <section id="talvisaunat" className="scroll-mt-24">
         <WinterSaunaCards locale={safeLocale} />
+      </section>
+
+      {/* Hinnoittelu */}
+      <section className="section-padding bg-background">
+        <div className="container-padding mx-auto max-w-4xl">
+          <AnimatedSection>
+            <div className="mb-3 text-center">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-amber-600">
+                {isEn ? 'Pricing' : 'Hinnoittelu'}
+              </p>
+              <h2 className="font-display text-2xl font-bold text-stone-900 md:text-3xl lg:text-4xl">
+                {isEn
+                  ? 'Honest pricing — good löyly at a fair price'
+                  : 'Saunan ja avannon hinnoittelu Helsingissä'}
+              </h2>
+            </div>
+            <p className="mx-auto mb-10 max-w-2xl text-center text-base leading-relaxed text-stone-600 md:text-lg">
+              {isEn
+                ? 'Our goal is to keep sauna what it is in our values: easy to reach, reasonably priced, and high quality. We don\'t do exclusive, premium-priced experiences like many operators in Helsinki. We want to stay relaxed, easy and warm — a place you can come back to again and again.'
+                : 'Reilu hinta, hyvät löyly. Meidän tavoitteemme on pitää saunominen sellaisena kuin se meidän arvomaailmassamme on: helposti saavutettava, kohtuuhintainen ja laadukas. Emme tuota eksklusiivista, premium-hintaista palvelua kuten monet Helsingin hintavertailun toimijoista. Haluamme pysyä rentona, helppona ja lämpimänä palveluna — sellaisena, jonne voi tulla uudelleen ja uudelleen ilman, että lompakko huutaa.'}
+            </p>
+
+            <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm">
+              <table className="w-full text-left text-sm md:text-base">
+                <thead>
+                  <tr className="border-b border-stone-200 bg-stone-100">
+                    <th className="px-4 py-3 font-bold text-stone-900 md:px-6">{isEn ? 'Sauna' : 'Sauna'}</th>
+                    <th className="px-4 py-3 font-bold text-stone-900 md:px-6">{isEn ? 'Price' : 'Hinta'}</th>
+                    <th className="px-4 py-3 font-bold text-stone-900 md:px-6">{isEn ? 'For whom' : 'Kenelle'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-stone-100">
+                    <td className="px-4 py-3 font-semibold text-stone-900 md:px-6">Aalto (max 10 {isEn ? 'people' : 'hlö'})</td>
+                    <td className="px-4 py-3 text-stone-700 md:px-6">{isEn ? 'from' : 'alk.'} 140 € / 2 h</td>
+                    <td className="px-4 py-3 text-stone-600 md:px-6">{isEn ? 'Bigger groups, team days' : 'Isommat porukat, tyky-päivät'}</td>
+                  </tr>
+                  <tr className="border-b border-stone-100">
+                    <td className="px-4 py-3 font-semibold text-stone-900 md:px-6">Virta (max 6 {isEn ? 'people' : 'hlö'})</td>
+                    <td className="px-4 py-3 text-stone-700 md:px-6">{isEn ? 'from' : 'alk.'} 120 € / 2 h</td>
+                    <td className="px-4 py-3 text-stone-600 md:px-6">{isEn ? 'Small groups, families' : 'Pienet porukat, perheet'}</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 font-semibold text-stone-900 md:px-6">{isEn ? 'Both rafts' : 'Molemmat lautat'}</td>
+                    <td className="px-4 py-3 text-stone-700 md:px-6">{isEn ? 'ask for an offer' : 'kysy tarjous'}</td>
+                    <td className="px-4 py-3 text-stone-600 md:px-6">{isEn ? 'Christmas parties and big events' : 'Pikkujoulut ja isot tilaisuudet'}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p className="mt-6 text-center text-sm leading-relaxed text-stone-600 md:text-base">
+              {isEn
+                ? 'The price always includes: wood-fired sauna, a big ice hole, changing room, WC and terrace. No hidden costs — you see the price before booking.'
+                : 'Hintaan sisältyy aina: puulämmitteinen sauna, iso avanto, pukuhuone, WC ja terassi. Ei piilokuluja — näet hinnan ennen varausta.'}
+            </p>
+            <p className="mt-3 text-center text-sm leading-relaxed text-stone-600 md:text-base">
+              {isEn
+                ? 'Tip: the neighbouring pizzeria serves good and affordable pizzas straight to the sauna.'
+                : 'Vinkki: naapurin pizzeriasta saat hyvät ja edulliset pizzat suoraan saunalle.'}
+            </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href="#talvisaunat"
+                className="inline-flex items-center justify-center rounded-full bg-lake px-8 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-lake-deep hover:shadow-lg"
+              >
+                {isEn ? 'Book a private session' : 'Varaa yksityinen vuoro'}
+              </a>
+              <a
+                href="tel:+358442313546"
+                className="inline-flex items-center justify-center rounded-full border-2 border-lake px-8 py-3.5 text-sm font-bold text-lake transition-all hover:-translate-y-0.5 hover:bg-lake/5"
+              >
+                {isEn ? 'Call us: +358 442313546' : 'Soita meille: 044 231 3546'}
+              </a>
+            </div>
+          </AnimatedSection>
+        </div>
       </section>
 
 
