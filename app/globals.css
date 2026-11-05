@@ -143,7 +143,7 @@
 }
 
 /* Avanto — arctic winter theme (moodboard):
-   Glacier canvas, Arctic Night ink, Deep Lake primary, Ember CTA heat. */
+   Glacier canvas, Arctic Night ink, original brand blue, Ember CTA heat. */
 .theme-avanto {
   --background: #F3F6F8;
   --foreground: #101820;
@@ -151,7 +151,7 @@
   --card-foreground: #101820;
   --popover: #FFFFFF;
   --popover-foreground: #101820;
-  --primary: #23517C;
+  --primary: #3b82f6;
   --primary-foreground: #FFFFFF;
   --secondary: #DEE9F1;
   --secondary-foreground: #23517C;
@@ -161,22 +161,22 @@
   --accent-foreground: #23517C;
   --border: #D3DEE6;
   --input: #D3DEE6;
-  --ring: #23517C;
-  --chart-1: #23517C;
+  --ring: #3b82f6;
+  --chart-1: #3b82f6;
   --chart-2: #D97E36;
   --chart-3: #5D6D79;
   --chart-4: #A9C6DC;
   --chart-5: #101820;
   --sidebar: #F3F6F8;
   --sidebar-foreground: #101820;
-  --sidebar-primary: #23517C;
+  --sidebar-primary: #3b82f6;
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #DEE9F1;
   --sidebar-accent-foreground: #23517C;
   --sidebar-border: #D3DEE6;
-  --sidebar-ring: #23517C;
-  --lake: #23517C;
-  --lake-deep: #1A3E60;
+  --sidebar-ring: #3b82f6;
+  --lake: #3b82f6;
+  --lake-deep: #2563eb;
   --ember: #D97E36;
   --ember-dark: #B95F1E;
   --canvas: #F3F6F8;
