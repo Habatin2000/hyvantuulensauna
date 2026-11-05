@@ -15,15 +15,17 @@ interface SubscriptionPurchaseProps {
 const PRODUCTS = {
   '5x': {
     id: 'ca646e7f-4a9c-4c5c-af59-b9538c49ecb3',
-    price: 55,
-    fi: { name: '5 x saunavuoroa', perSession: '11 € / vuoro', cta: 'Osta 5 x -kortti' },
-    en: { name: '5 x sauna sessions', perSession: '11 € / session', cta: 'Buy 5 x card' },
+    price: 45,
+    originalPrice: 55,
+    fi: { name: '5 x saunavuoroa', perSession: '9 € / vuoro', cta: 'Osta 5 x -kortti' },
+    en: { name: '5 x sauna sessions', perSession: '9 € / session', cta: 'Buy 5 x card' },
   },
   '10x': {
     id: '74e4fe83-5aa6-46e7-8248-9b39d5451a3a',
-    price: 90,
-    fi: { name: '10 x saunavuoroa', perSession: '9 € / vuoro', cta: 'Osta 10 x -kortti' },
-    en: { name: '10 x sauna sessions', perSession: '9 € / session', cta: 'Buy 10 x card' },
+    price: 70,
+    originalPrice: 90,
+    fi: { name: '10 x saunavuoroa', perSession: '7 € / vuoro', cta: 'Osta 10 x -kortti' },
+    en: { name: '10 x sauna sessions', perSession: '7 € / session', cta: 'Buy 10 x card' },
   },
 };
 
@@ -175,7 +177,11 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
           </span>
         )}
         <span className="text-sm font-medium text-stone-600">{labels.name}</span>
-        <span className="mt-1 text-2xl font-extrabold text-lake">{product.price} €</span>
+        <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-ember">Early bird</span>
+        <span className="mt-1 text-2xl font-extrabold text-lake">
+          {product.price} €{' '}
+          <span className="ml-1 text-sm font-medium text-stone-400 line-through">{product.originalPrice} €</span>
+        </span>
         <span className="mt-1 text-xs text-stone-500">{labels.perSession}</span>
       </button>
     );
@@ -207,7 +213,11 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                   className="group relative flex flex-col items-start rounded-xl border border-stone-200 bg-white p-4 text-left transition-all hover:border-lake/50 hover:shadow-sm"
                 >
                   <span className="text-sm font-medium text-stone-600">{labels.name}</span>
-                  <span className="mt-1 text-2xl font-extrabold text-lake">{product.price} €</span>
+                  <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-ember">Early bird</span>
+                  <span className="mt-1 text-2xl font-extrabold text-lake">
+                    {product.price} €{' '}
+                    <span className="ml-1 text-sm font-medium text-stone-400 line-through">{product.originalPrice} €</span>
+                  </span>
                   <span className="mt-1 text-xs text-stone-500">{labels.perSession}</span>
                   <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-lake">
                     {labels.cta}
