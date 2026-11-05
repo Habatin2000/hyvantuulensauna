@@ -149,7 +149,11 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
                 pricing={{ basePrice: 140, currency: 'EUR', unit: '2h' }}
                 pricingLabel={
                   <div className="leading-tight">
-                    <p className="text-lg font-bold text-stone-900">{t.aalto.priceLabel}</p>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-ember">Early bird</p>
+                    <p className="text-lg font-bold text-stone-900">
+                      109 €{' '}
+                      <span className="ml-1 text-sm font-medium text-stone-400 line-through">140 €</span>
+                    </p>
                     <p className="text-xs text-stone-500">{t.aalto.priceNote}</p>
                   </div>
                 }
@@ -189,7 +193,11 @@ export default function WinterSaunaCards({ locale }: WinterSaunaCardsProps) {
                 pricing={{ basePrice: 120, currency: 'EUR', unit: '2h' }}
                 pricingLabel={
                   <div className="leading-tight">
-                    <p className="text-lg font-bold text-stone-900">{t.virta.priceLabel}</p>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-ember">Early bird</p>
+                    <p className="text-lg font-bold text-stone-900">
+                      89 €{' '}
+                      <span className="ml-1 text-sm font-medium text-stone-400 line-through">120 €</span>
+                    </p>
                     <p className="text-xs text-stone-500">{t.virta.priceNote}</p>
                   </div>
                 }
