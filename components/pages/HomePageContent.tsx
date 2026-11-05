@@ -62,13 +62,13 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
             <div className="mt-6 space-y-4 text-left text-base leading-relaxed text-stone-600 md:text-lg">
               <p>
                 {isEn
-                  ? 'Hyvän Tuulen Sauna offers sauna experiences in Helsinki all year round. For us, a sauna is not just a place to throw löyly, but a complete experience that combines a warm wood-fired sauna, maritime scenery, swimming and spending time together.'
-                  : 'Hyvän Tuulen Sauna tarjoaa saunomista Helsingissä ympäri vuoden. Meille sauna ei ole vain paikka, jossa käydään löylyissä, vaan kokonaisuus, jossa yhdistyvät lämmin puusauna, merelliset maisemat, uiminen ja yhdessäolo.'}
+                  ? 'Hyvän Tuulen Sauna offers sauna and swimming in Helsinki all year round. For us, a sauna is not just a place to throw löyly — it is a special space. Community, health, enjoyment, friends and hobbies are at the heart of everything we do.'
+                  : 'Hyvän Tuulen Sauna tarjoaa saunomista ja uintia Helsingissä ympäri vuoden. Meille sauna ei ole vain paikka, jossa käydään löylyissä, vaan erityinen tila. Yhteisöllisyys, terveys, nautinto, ystävät ja harrastaminen ovat meillä toiminnan keskiössä.'}
               </p>
               <p>
                 {isEn
                   ? 'In the Eastern Helsinki archipelago you can sauna in the middle of nature, just a stone\'s throw from Helsinki city centre. You can come and enjoy a public sauna session or book a sauna for private use for your own group.'
-                  : 'Itä-Helsingin saaristossa pääset saunomaan luonnon keskellä, vain kivenheiton päässä Helsingin keskustasta. Voit tulla nauttimaan julkisesta saunavuorosta tai varata saunan yksityiseen käyttöön omalle porukallesi.'}
+                  : 'Itä-Helsingin saaristossa pääset saunomaan luonnon keskellä, vain kivenheiton päässä Helsingin keskustasta. Voit tulla nauttimaan yleisestä saunavuorosta tai varata saunan yksityiseen käyttöön omalle porukallesi.'}
               </p>
               <p>
                 {isEn
