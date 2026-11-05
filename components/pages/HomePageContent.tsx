@@ -47,8 +47,9 @@ export default function HomePageContent({ locale }: HomePageContentProps) {
       <AnimatedSection>
         <section className="section-padding bg-white">
           <div className="container-padding mx-auto max-w-4xl text-center">
-            {/* Semantic H1 — hero headline above is visual only */}
-            <h1 className="font-display text-2xl font-bold text-stone-900 md:text-3xl mb-6">
+            {/* Semantic H1 — visually hidden (hero headline above carries the visual weight),
+                kept for SEO and screen readers */}
+            <h1 className="sr-only">
               {isEn
                 ? 'Hyvän Tuulen Sauna – Floating sauna boats and winter swimming. Experiences in Helsinki.'
                 : 'Hyvän Tuulen Sauna – Kelluvat saunalautat ja talviuintia. Elämyksellisiä kokemuksia Helsingissä.'}
