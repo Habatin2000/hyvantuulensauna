@@ -1,0 +1,942 @@
+.vibe-saunalauttaristeilyt-page {
+  --cruise-ink: #102c3f;
+  --cruise-ink-soft: #183d55;
+  --cruise-lake: #0b3eb7;
+  --cruise-lake-deep: #092f8a;
+  --cruise-sand: #fbbf24;
+  --cruise-ember: #d97e36;
+  --cruise-paper: #f3f6f8;
+  --cruise-white: #ffffff;
+  --cruise-copy: #425563;
+  --cruise-rule: #ccd8df;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--cruise-paper);
+  color: var(--cruise-ink);
+  font-family: var(--vibe-font-body), Georgia, serif;
+}
+
+.vibe-saunalauttaristeilyt-page h1,
+.vibe-saunalauttaristeilyt-page h2,
+.vibe-saunalauttaristeilyt-page h3 {
+  text-wrap: balance;
+}
+
+.vibe-saunalauttaristeilyt-page a {
+  text-decoration: none;
+}
+
+.vibe-saunalauttaristeilyt-page a:focus-visible {
+  outline: 3px solid var(--cruise-ember);
+  outline-offset: 6px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-eyebrow {
+  margin-bottom: 24px;
+  color: var(--cruise-sand);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  min-height: calc(100svh - var(--vibe-header-height));
+  background: var(--cruise-ink);
+  color: var(--cruise-white);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 96px clamp(40px, 5vw, 88px) 96px max(var(--vibe-gutter), calc((100vw - var(--vibe-width)) / 2 + var(--vibe-gutter)));
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero h1 {
+  max-width: 720px;
+  color: var(--cruise-white);
+  font-size: clamp(3.4rem, 5.8vw, 6.1rem);
+  line-height: 1.02;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-text {
+  max-width: 570px;
+  margin-top: 32px;
+  color: rgb(255 255 255 / 82%);
+  font-size: clamp(1rem, 1.25vw, 1.16rem);
+  line-height: 1.75;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 22px;
+  background: var(--cruise-sand);
+  color: var(--cruise-ink);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 3px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-button:hover {
+  background: #ffd45e;
+  transform: translateY(-2px);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 0;
+  color: var(--cruise-white);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--cruise-sand);
+  transition: color 180ms ease;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-text-link:hover {
+  color: var(--cruise-sand);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-location {
+  margin-top: 48px;
+  color: rgb(255 255 255 / 62%);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.8;
+  text-transform: uppercase;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-visual {
+  position: relative;
+  min-height: 700px;
+  margin: 52px var(--vibe-gutter) 52px 0;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--cruise-ink-soft);
+  border-radius: 280px 280px 12px 12px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 58%, rgb(16 44 63 / 38%));
+  pointer-events: none;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-image img {
+  object-position: center 58%;
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-visual:hover .cruise-hero-image img {
+  transform: scale(1.025);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-aside {
+  position: absolute;
+  top: 28px;
+  right: 22px;
+  z-index: 2;
+  color: var(--cruise-white);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-price {
+  position: absolute;
+  bottom: 46px;
+  left: -54px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: min(330px, 82%);
+  padding: 25px 28px;
+  background: var(--cruise-paper);
+  color: var(--cruise-ink);
+  border-left: 4px solid var(--cruise-ember);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-price > span {
+  color: #526571;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-price strong {
+  margin-top: 8px;
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-hero-price small {
+  margin-top: 7px;
+  color: #526571;
+  font-size: 0.78rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boats {
+  max-width: var(--vibe-width);
+  margin: 0 auto;
+  padding: 140px var(--vibe-gutter) 132px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-section-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  gap: 0 72px;
+  align-items: end;
+  margin-bottom: 94px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-section-intro .cruise-eyebrow {
+  grid-column: 1 / -1;
+  color: #765619;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-section-intro h2 {
+  max-width: 690px;
+  color: var(--cruise-ink);
+  font-size: clamp(2.6rem, 4.6vw, 4.7rem);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-section-intro > p:last-child {
+  max-width: 520px;
+  padding-bottom: 5px;
+  color: var(--cruise-copy);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-aalto {
+  grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+  gap: clamp(42px, 6vw, 90px);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-virta {
+  grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(42px, 7vw, 108px);
+  margin-top: 128px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-photo {
+  position: relative;
+  min-width: 0;
+  height: 540px;
+  overflow: hidden;
+  background: #dce6eb;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-aalto .cruise-boat-photo {
+  border-radius: 260px 260px 10px 10px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo {
+  height: 620px;
+  border-radius: 10px 10px 280px 280px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-photo img {
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat:hover .cruise-boat-photo img {
+  transform: scale(1.025);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo img {
+  object-position: center 62%;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-copy {
+  position: relative;
+  min-width: 0;
+  padding: 36px 0;
+  border-top: 1px solid var(--cruise-rule);
+  border-bottom: 1px solid var(--cruise-rule);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-number {
+  display: block;
+  color: #79591d;
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-name {
+  margin-top: 30px;
+  color: var(--cruise-lake-deep);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: clamp(3.4rem, 5.2vw, 5.4rem);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-copy h3 {
+  max-width: 430px;
+  margin-top: 26px;
+  color: var(--cruise-ink);
+  font-size: clamp(1.65rem, 2.5vw, 2.35rem);
+  line-height: 1.12;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-boat-copy > p:not(.cruise-boat-name) {
+  max-width: 440px;
+  margin-top: 20px;
+  color: var(--cruise-copy);
+  font-size: 0.95rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-capacity {
+  display: inline-block;
+  margin-top: 25px;
+  padding-top: 12px;
+  color: var(--cruise-ink);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-top: 2px solid var(--cruise-ember);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-provisions {
+  display: grid;
+  grid-template-columns: 50px minmax(250px, 0.85fr) minmax(300px, 1.15fr);
+  gap: 28px;
+  align-items: start;
+  margin-top: 126px;
+  padding: 36px 0;
+  border-top: 1px solid var(--cruise-rule);
+  border-bottom: 1px solid var(--cruise-rule);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-provisions h3 {
+  max-width: 440px;
+  font-size: clamp(1.5rem, 2.3vw, 2.1rem);
+  line-height: 1.18;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-provisions > p {
+  max-width: 520px;
+  color: var(--cruise-copy);
+  font-size: 0.95rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  background: var(--cruise-ink);
+  color: var(--cruise-white);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-gallery {
+  position: relative;
+  min-height: 790px;
+  overflow: hidden;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-sea {
+  position: absolute;
+  inset: 0 15% 0 0;
+  overflow: hidden;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-sea::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgb(16 44 63 / 45%));
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-food {
+  position: absolute;
+  right: 0;
+  bottom: 90px;
+  z-index: 2;
+  width: 43%;
+  height: 270px;
+  overflow: hidden;
+  border: 9px solid var(--cruise-ink);
+  border-radius: 140px 140px 0 0;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-gallery > p {
+  position: absolute;
+  bottom: 32px;
+  left: var(--vibe-gutter);
+  z-index: 3;
+  color: rgb(255 255 255 / 84%);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 100px max(var(--vibe-gutter), calc((100vw - var(--vibe-width)) / 2 + var(--vibe-gutter))) 100px clamp(48px, 6vw, 92px);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy h2 {
+  max-width: 570px;
+  color: var(--cruise-white);
+  font-size: clamp(2.7rem, 4.4vw, 4.5rem);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy ol {
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy li {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 18px;
+  padding: 25px 0;
+  border-top: 1px solid rgb(255 255 255 / 18%);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy li > span {
+  padding-top: 5px;
+  color: var(--cruise-sand);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.72rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy h3 {
+  color: var(--cruise-sand);
+  font-size: 1.55rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-copy li p {
+  max-width: 480px;
+  margin-top: 8px;
+  color: rgb(255 255 255 / 76%);
+  font-size: 0.91rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 14px;
+  min-height: 44px;
+  margin-top: 30px;
+  padding: 7px 0;
+  color: var(--cruise-sand);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.86rem;
+  border-bottom: 1px solid var(--cruise-sand);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-link svg,
+.vibe-saunalauttaristeilyt-page .cruise-pricing-link svg,
+.vibe-saunalauttaristeilyt-page .cruise-next-main svg {
+  flex: 0 0 auto;
+  transition: transform 180ms ease;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-journey-link:hover svg,
+.vibe-saunalauttaristeilyt-page .cruise-pricing-link:hover svg {
+  transform: translate(3px, -2px);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(60px, 9vw, 140px);
+  max-width: var(--vibe-width);
+  margin: 0 auto;
+  padding: 138px var(--vibe-gutter) 144px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing-heading .cruise-eyebrow {
+  color: #765619;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing-heading h2 {
+  max-width: 520px;
+  font-size: clamp(2.6rem, 4.2vw, 4.3rem);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-from-price {
+  margin-top: 42px;
+  color: var(--cruise-lake-deep);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing-heading > span {
+  display: block;
+  max-width: 360px;
+  margin-top: 16px;
+  color: var(--cruise-copy);
+  font-size: 0.88rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing-detail {
+  min-width: 0;
+  padding-top: 38px;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-price-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--cruise-rule);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-price-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  padding: 27px 0;
+  border-top: 1px solid var(--cruise-rule);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-price-list h3 {
+  font-family: var(--vibe-font-body), sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.45;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-price-list li p {
+  margin-top: 5px;
+  color: var(--cruise-copy);
+  font-size: 0.78rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-price-list strong {
+  max-width: 210px;
+  color: var(--cruise-ink);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 1.08rem;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-price-note {
+  max-width: 540px;
+  margin-top: 24px;
+  color: var(--cruise-copy);
+  font-size: 0.83rem;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  margin-top: 30px;
+  padding: 12px 18px;
+  background: var(--cruise-lake-deep);
+  color: var(--cruise-white);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 3px;
+  transition: background 180ms ease;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-pricing-link:hover {
+  background: #174bb5;
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next {
+  padding: 112px max(var(--vibe-gutter), calc((100vw - var(--vibe-width)) / 2 + var(--vibe-gutter))) 108px;
+  background: var(--cruise-lake-deep);
+  color: var(--cruise-white);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next h2 {
+  max-width: 970px;
+  color: var(--cruise-white);
+  font-size: clamp(3.2rem, 6vw, 6.2rem);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next > p:not(.cruise-eyebrow) {
+  max-width: 610px;
+  margin-top: 28px;
+  color: rgb(255 255 255 / 84%);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  max-width: 1120px;
+  margin-top: 56px;
+  padding: 25px 0;
+  color: var(--cruise-white);
+  font-family: var(--vibe-font-display), sans-serif;
+  font-size: clamp(1.35rem, 2.5vw, 2.15rem);
+  line-height: 1.25;
+  border-top: 1px solid rgb(255 255 255 / 52%);
+  border-bottom: 1px solid rgb(255 255 255 / 52%);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next-main svg {
+  width: clamp(28px, 3vw, 42px);
+  height: clamp(28px, 3vw, 42px);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next-main:hover svg {
+  transform: translate(5px, -5px);
+}
+
+.vibe-saunalauttaristeilyt-page .cruise-next-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-top: 28px;
+  padding: 7px 0;
+  color: var(--cruise-white);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-bottom: 1px solid rgb(255 255 255 / 64%);
+}
+
+@media (max-width: 1100px) {
+  .vibe-saunalauttaristeilyt-page .cruise-hero-copy {
+    padding-right: 42px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-visual {
+    min-height: 650px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-image {
+    border-radius: 220px 220px 10px 10px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-aalto,
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta {
+    gap: 44px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-photo {
+    height: 460px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo {
+    height: 530px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-copy {
+    padding-left: 48px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-pricing {
+    gap: 64px;
+  }
+}
+
+@media (max-width: 860px) {
+  .vibe-saunalauttaristeilyt-page .cruise-section-intro {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-section-intro .cruise-eyebrow {
+    margin-bottom: 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-aalto {
+    grid-template-columns: minmax(0, 1fr) minmax(250px, 0.85fr);
+    gap: 32px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta {
+    grid-template-columns: minmax(250px, 0.85fr) minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-provisions {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-provisions > p {
+    grid-column: 2;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-copy {
+    padding: 80px 36px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-pricing {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-pricing-detail {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .vibe-saunalauttaristeilyt-page .cruise-hero {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-copy {
+    padding: 74px var(--vibe-gutter) 58px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero h1 {
+    font-size: clamp(3rem, 12vw, 4.8rem);
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-text {
+    margin-top: 26px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-location {
+    margin-top: 34px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-visual {
+    min-height: 590px;
+    margin: 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-image {
+    border-radius: 190px 190px 0 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-aside {
+    top: 24px;
+    right: 18px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-price {
+    bottom: 28px;
+    left: var(--vibe-gutter);
+    width: calc(100% - var(--vibe-gutter) * 2);
+    max-width: 360px;
+    padding: 21px 23px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boats {
+    padding: 92px var(--vibe-gutter) 96px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-section-intro {
+    margin-bottom: 58px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-section-intro h2 {
+    font-size: 2.8rem;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-aalto,
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta {
+    margin-top: 82px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo {
+    order: -1;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-photo,
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo {
+    width: 100%;
+    height: 460px;
+    border-radius: 150px 150px 8px 8px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo {
+    height: 500px;
+    border-radius: 8px 8px 180px 180px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-copy {
+    width: 100%;
+    padding: 28px 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-name {
+    margin-top: 24px;
+    font-size: 3.8rem;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-copy h3 {
+    margin-top: 22px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-provisions {
+    gap: 20px;
+    margin-top: 84px;
+    padding: 30px 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-gallery {
+    min-height: 540px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-sea {
+    right: 10%;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-food {
+    bottom: 70px;
+    width: 45%;
+    height: 200px;
+    border-width: 7px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-copy {
+    padding: 76px var(--vibe-gutter) 82px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-copy h2 {
+    font-size: 2.85rem;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-pricing {
+    padding: 92px var(--vibe-gutter) 100px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-pricing-heading h2 {
+    font-size: 2.8rem;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-from-price {
+    margin-top: 32px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-price-list li {
+    grid-template-columns: 1fr;
+    gap: 13px;
+    padding: 24px 0;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-price-list strong {
+    max-width: none;
+    text-align: left;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-next {
+    padding: 88px var(--vibe-gutter) 84px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-next h2 {
+    font-size: clamp(3rem, 12vw, 4.4rem);
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-next-main {
+    align-items: flex-end;
+    margin-top: 42px;
+    padding: 22px 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .vibe-saunalauttaristeilyt-page .cruise-hero h1 {
+    font-size: 2.85rem;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-hero-visual {
+    min-height: 530px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-boat-photo,
+  .vibe-saunalauttaristeilyt-page .cruise-boat-virta .cruise-boat-photo {
+    height: 400px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-gallery {
+    min-height: 470px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-journey-food {
+    height: 170px;
+  }
+
+  .vibe-saunalauttaristeilyt-page .cruise-next-main {
+    gap: 16px;
+    font-size: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vibe-saunalauttaristeilyt-page *,
+  .vibe-saunalauttaristeilyt-page *::before,
+  .vibe-saunalauttaristeilyt-page *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -98,6 +98,7 @@ export const config = {
   // - /api (API routes)
   // - /_next (Next.js internals)
   // - /_vercel (Vercel internals)
+  // - /vibe (standalone design preview, deliberately outside the live i18n shell)
   // - all root files inside /public (e.g. /favicon.ico)
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  matcher: ['/((?!api|_next|_vercel|vibe(?:/.*)?|.*\\..*).*)'],
 };

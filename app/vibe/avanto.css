@@ -1,0 +1,1045 @@
+.vibe-avanto-page {
+  --avanto-navy: #101820;
+  --avanto-navy-deep: #0a1118;
+  --avanto-lake: #101820;
+  --avanto-ember: #d97e36;
+  --avanto-sand: #fbbf24;
+  --avanto-paper: #f3f6f8;
+  --avanto-mist: #e6eef4;
+  --avanto-line: #cad7e0;
+  --avanto-copy: #4a5a66;
+  --avanto-gutter: clamp(22px, 4vw, 64px);
+  background: var(--avanto-paper);
+  color: #101820;
+}
+
+.vibe-avanto-page a {
+  text-decoration: none;
+}
+
+.vibe-avanto-page :focus-visible {
+  outline: 3px solid var(--avanto-sand);
+  outline-offset: 5px;
+}
+
+.vibe-avanto-page .vibe-avanto-eyebrow {
+  color: var(--avanto-sand);
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.vibe-avanto-page .vibe-avanto-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  min-height: calc(100svh - var(--vibe-header-height, 88px));
+  overflow: hidden;
+  background: var(--avanto-navy);
+  color: var(--avanto-paper);
+}
+
+.vibe-avanto-page .vibe-avanto-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 96px 54px 82px max(var(--avanto-gutter), calc((100vw - 1320px) / 2 + var(--avanto-gutter)));
+}
+
+.vibe-avanto-page .vibe-avanto-hero h1 {
+  max-width: 760px;
+  margin-top: 28px;
+  color: #f7fafc;
+  font-size: clamp(3.2rem, 5.25vw, 5.75rem);
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-text {
+  max-width: 590px;
+  margin-top: 32px;
+  color: #d3dee6;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.75;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 26px;
+  margin-top: 38px;
+}
+
+.vibe-avanto-page .vibe-avanto-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 15px 22px;
+  background: var(--avanto-ember);
+  color: #101820;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.4;
+  border-radius: 3px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.vibe-avanto-page .vibe-avanto-button:hover {
+  background: var(--avanto-sand);
+  transform: translateY(-2px);
+}
+
+.vibe-avanto-page .vibe-avanto-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 7px;
+  color: #f7fafc;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--avanto-sand);
+  transition: color 180ms ease;
+}
+
+.vibe-avanto-page .vibe-avanto-text-link:hover {
+  color: var(--avanto-sand);
+}
+
+.vibe-avanto-page .vibe-avanto-hero-footnote {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 52px;
+  color: #b7c7d2;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-footnote span {
+  padding-right: 16px;
+  color: var(--avanto-sand);
+  border-right: 1px solid #526577;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-visual {
+  position: relative;
+  min-height: 680px;
+  margin: 48px 48px 48px 0;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-image {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #d3dee6;
+  border-radius: 290px 24px 24px 24px;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-image::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgb(16 35 52 / 42%));
+  content: "";
+}
+
+.vibe-avanto-page .vibe-avanto-hero-image img {
+  object-position: 50% 58%;
+  transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.vibe-avanto-page .vibe-avanto-hero-visual:hover .vibe-avanto-hero-image img {
+  transform: scale(1.025);
+}
+
+.vibe-avanto-page .vibe-avanto-hero-caption {
+  position: absolute;
+  top: 32px;
+  right: 26px;
+  z-index: 1;
+  color: #172f43;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-caption span {
+  color: #8a4a20;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-stamp {
+  position: absolute;
+  right: -18px;
+  bottom: 34px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  background: #f7fafc;
+  color: var(--avanto-navy);
+  box-shadow: 0 16px 42px rgb(16 35 52 / 18%);
+}
+
+.vibe-avanto-page .vibe-avanto-hero-stamp span:first-child {
+  color: #9b4e1d;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 1.55rem;
+}
+
+.vibe-avanto-page .vibe-avanto-hero-stamp span:last-child {
+  max-width: 90px;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.vibe-avanto-page .vibe-avanto-intro {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
+  gap: 64px;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 132px var(--avanto-gutter) 104px;
+}
+
+.vibe-avanto-page .vibe-avanto-intro .vibe-avanto-eyebrow {
+  padding-top: 12px;
+  color: #85501f;
+}
+
+.vibe-avanto-page .vibe-avanto-intro h2 {
+  max-width: 760px;
+  color: var(--avanto-navy);
+  font-size: clamp(2.6rem, 4.5vw, 4.65rem);
+}
+
+.vibe-avanto-page .vibe-avanto-intro div > p {
+  max-width: 670px;
+  margin-top: 28px;
+  color: var(--avanto-copy);
+  font-size: 1.02rem;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(300px, 0.88fr);
+  gap: clamp(48px, 7vw, 110px);
+  align-items: center;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 var(--avanto-gutter) 132px;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-image {
+  position: relative;
+  min-height: 620px;
+  overflow: hidden;
+  background: var(--avanto-mist);
+  border-radius: 240px 240px 10px 10px;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-image img {
+  object-position: 50% 55%;
+  transition: transform 700ms ease;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-image:hover img {
+  transform: scale(1.025);
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-image > span,
+.vibe-avanto-page .vibe-avanto-virta-image > span {
+  position: absolute;
+  right: 22px;
+  bottom: 20px;
+  padding: 8px 12px;
+  background: rgb(247 250 252 / 92%);
+  color: var(--avanto-navy);
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.vibe-avanto-page .vibe-avanto-feature-number {
+  display: block;
+  margin-bottom: 34px;
+  color: #9b4e1d;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.vibe-avanto-page .vibe-avanto-feature-label {
+  margin-bottom: 16px;
+  color: var(--avanto-lake);
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-copy h3,
+.vibe-avanto-page .vibe-avanto-virta-copy h3 {
+  max-width: 480px;
+  font-size: clamp(1.75rem, 2.8vw, 2.75rem);
+  line-height: 1.12;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-copy h3 {
+  color: var(--avanto-navy);
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-copy > p:not(.vibe-avanto-feature-label),
+.vibe-avanto-page .vibe-avanto-virta-copy > p:not(.vibe-avanto-feature-label) {
+  max-width: 470px;
+  margin-top: 24px;
+  font-size: 0.96rem;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-copy > p:not(.vibe-avanto-feature-label) {
+  color: var(--avanto-copy);
+}
+
+.vibe-avanto-page .vibe-avanto-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+  padding-bottom: 7px;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-bottom: 1px solid currentColor;
+}
+
+.vibe-avanto-page .vibe-avanto-aalto-copy .vibe-avanto-inline-link {
+  color: var(--avanto-lake);
+}
+
+.vibe-avanto-page .vibe-avanto-inline-link svg {
+  transition: transform 180ms ease;
+}
+
+.vibe-avanto-page .vibe-avanto-inline-link:hover svg {
+  transform: translateX(5px);
+}
+
+.vibe-avanto-page .vibe-avanto-virta {
+  padding: 112px var(--avanto-gutter);
+  background: var(--avanto-navy);
+  color: var(--avanto-paper);
+}
+
+.vibe-avanto-page .vibe-avanto-virta-inner {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(52px, 8vw, 126px);
+  align-items: center;
+  max-width: 1192px;
+  margin: 0 auto;
+}
+
+.vibe-avanto-page .vibe-avanto-virta-copy .vibe-avanto-feature-number {
+  color: var(--avanto-sand);
+}
+
+.vibe-avanto-page .vibe-avanto-virta-copy .vibe-avanto-feature-label {
+  color: var(--avanto-sand);
+}
+
+.vibe-avanto-page .vibe-avanto-virta-copy h3 {
+  color: #f7fafc;
+}
+
+.vibe-avanto-page .vibe-avanto-virta-copy > p:not(.vibe-avanto-feature-label) {
+  color: #d3dee6;
+}
+
+.vibe-avanto-page .vibe-avanto-virta-copy .vibe-avanto-inline-link {
+  color: var(--avanto-sand);
+}
+
+.vibe-avanto-page .vibe-avanto-virta-image {
+  position: relative;
+  min-height: 600px;
+  overflow: hidden;
+  background: #526577;
+  border-radius: 12px 260px 12px 12px;
+}
+
+.vibe-avanto-page .vibe-avanto-virta-image img {
+  object-position: 50% 54%;
+  transition: transform 700ms ease;
+}
+
+.vibe-avanto-page .vibe-avanto-virta-image:hover img {
+  transform: scale(1.025);
+}
+
+.vibe-avanto-page .vibe-avanto-included {
+  display: grid;
+  grid-template-columns: 56px minmax(250px, 0.9fr) minmax(0, 1.1fr);
+  gap: 38px;
+  align-items: start;
+  max-width: 1192px;
+  margin: 0 auto;
+  padding: 104px var(--avanto-gutter);
+  border-bottom: 1px solid var(--avanto-line);
+}
+
+.vibe-avanto-page .vibe-avanto-included .vibe-avanto-feature-number {
+  margin: 8px 0 0;
+}
+
+.vibe-avanto-page .vibe-avanto-included h2 {
+  color: var(--avanto-navy);
+  font-size: clamp(2rem, 3.4vw, 3.35rem);
+}
+
+.vibe-avanto-page .vibe-avanto-included > p {
+  max-width: 560px;
+  padding-top: 7px;
+  color: var(--avanto-copy);
+}
+
+.vibe-avanto-page .vibe-avanto-pricing {
+  padding: 120px var(--avanto-gutter);
+  background: #edf3f8;
+}
+
+.vibe-avanto-page .vibe-avanto-pricing-inner {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.75fr) minmax(0, 1.25fr);
+  gap: clamp(54px, 8vw, 130px);
+  max-width: 1192px;
+  margin: 0 auto;
+}
+
+.vibe-avanto-page .vibe-avanto-pricing-heading .vibe-avanto-eyebrow {
+  color: #85501f;
+}
+
+.vibe-avanto-page .vibe-avanto-pricing-heading h2 {
+  max-width: 450px;
+  margin-top: 24px;
+  color: var(--avanto-navy);
+  font-size: clamp(2.5rem, 4vw, 4rem);
+}
+
+.vibe-avanto-page .vibe-avanto-pricing-heading > p:last-child:not(.vibe-avanto-eyebrow) {
+  max-width: 400px;
+  margin-top: 28px;
+  color: var(--avanto-copy);
+  font-size: 0.84rem;
+  line-height: 1.7;
+}
+
+.vibe-avanto-page .vibe-avanto-price-list {
+  border-bottom: 1px solid #aebeca;
+}
+
+.vibe-avanto-page .vibe-avanto-price-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.1fr) minmax(140px, 0.9fr) minmax(120px, 0.65fr);
+  gap: 24px;
+  align-items: center;
+  padding: 28px 0;
+  border-top: 1px solid #aebeca;
+}
+
+.vibe-avanto-page .vibe-avanto-price-row h3 {
+  color: var(--avanto-navy);
+  font-family: var(--vibe-font-body), sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.vibe-avanto-page .vibe-avanto-price {
+  color: var(--avanto-navy);
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.35;
+}
+
+.vibe-avanto-page .vibe-avanto-early-bird {
+  justify-self: start;
+  padding: 7px 10px;
+  background: #fff0db;
+  color: #7a390f;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.vibe-avanto-page .vibe-avanto-price-note {
+  color: var(--avanto-copy);
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(54px, 8vw, 126px);
+  align-items: center;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 132px var(--avanto-gutter);
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-image {
+  position: relative;
+  min-height: 650px;
+  overflow: hidden;
+  background: var(--avanto-mist);
+  border-radius: 200px 200px 0 0;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-image::after {
+  position: absolute;
+  inset: 55% 0 0;
+  background: linear-gradient(180deg, transparent, rgb(16 35 52 / 68%));
+  content: "";
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-image img {
+  object-position: 50% 48%;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-image > p {
+  position: absolute;
+  right: 28px;
+  bottom: 26px;
+  left: 28px;
+  z-index: 1;
+  color: #f7fafc;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy .vibe-avanto-eyebrow {
+  color: #85501f;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy h2 {
+  max-width: 560px;
+  margin-top: 24px;
+  color: var(--avanto-navy);
+  font-size: clamp(2.6rem, 4.4vw, 4.4rem);
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy ol {
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--avanto-line);
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 20px;
+  padding: 25px 0;
+  border-top: 1px solid var(--avanto-line);
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy li > span {
+  padding-top: 5px;
+  color: #85501f;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy h3 {
+  color: var(--avanto-navy);
+  font-size: 1.45rem;
+  letter-spacing: -0.035em;
+}
+
+.vibe-avanto-page .vibe-avanto-rhythm-copy li p {
+  max-width: 500px;
+  margin-top: 8px;
+  color: var(--avanto-copy);
+  font-size: 0.88rem;
+}
+
+.vibe-avanto-page .vibe-avanto-booking {
+  padding: 116px var(--avanto-gutter) 108px;
+  background: var(--avanto-lake);
+  color: #f7fafc;
+  text-align: center;
+}
+
+.vibe-avanto-page .vibe-avanto-booking h2 {
+  max-width: 930px;
+  margin: 26px auto 0;
+  color: #fff;
+  font-size: clamp(3rem, 6vw, 6rem);
+}
+
+.vibe-avanto-page .vibe-avanto-booking > p:not(.vibe-avanto-eyebrow) {
+  max-width: 580px;
+  margin: 26px auto 0;
+  color: #f0f5ff;
+}
+
+.vibe-avanto-page .vibe-avanto-booking-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 44px;
+}
+
+.vibe-avanto-page .vibe-avanto-booking-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 42px;
+  min-width: min(100%, 350px);
+  padding: 19px 22px;
+  background: #f7fafc;
+  color: var(--avanto-navy);
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 3px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.vibe-avanto-page .vibe-avanto-booking-link:hover {
+  background: var(--avanto-sand);
+  transform: translateY(-2px);
+}
+
+.vibe-avanto-page .vibe-avanto-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0 6px;
+  color: #fff;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.8rem;
+  border-bottom: 1px solid #fff;
+}
+
+@media (max-width: 1100px) {
+  .vibe-avanto-page .vibe-avanto-hero-copy {
+    padding-right: 38px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero h1 {
+    font-size: clamp(3rem, 5.5vw, 4.5rem);
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-visual {
+    min-height: 620px;
+    margin: 34px 34px 34px 0;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-image {
+    border-radius: 220px 20px 20px 20px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-aalto,
+  .vibe-avanto-page .vibe-avanto-virta-inner,
+  .vibe-avanto-page .vibe-avanto-rhythm {
+    gap: 54px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-aalto-image,
+  .vibe-avanto-page .vibe-avanto-virta-image {
+    min-height: 520px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-pricing-inner {
+    grid-template-columns: 1fr;
+    gap: 54px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-pricing-heading h2,
+  .vibe-avanto-page .vibe-avanto-pricing-heading > p:last-child:not(.vibe-avanto-eyebrow) {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 760px) {
+  .vibe-avanto-page .vibe-avanto-hero {
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-copy {
+    padding: 72px var(--avanto-gutter) 54px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero h1 {
+    margin-top: 22px;
+    font-size: clamp(2.85rem, 12vw, 4.5rem);
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-text {
+    margin-top: 26px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 32px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-footnote {
+    margin-top: 38px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-visual {
+    min-height: 540px;
+    margin: 0 var(--avanto-gutter) 28px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-image {
+    border-radius: 190px 190px 12px 12px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-caption {
+    top: 24px;
+    right: 18px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-hero-stamp {
+    right: -8px;
+    bottom: 20px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-intro {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 86px var(--avanto-gutter) 70px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-intro .vibe-avanto-eyebrow {
+    padding-top: 0;
+  }
+
+  .vibe-avanto-page .vibe-avanto-intro h2 {
+    font-size: clamp(2.55rem, 10vw, 3.6rem);
+  }
+
+  .vibe-avanto-page .vibe-avanto-aalto {
+    grid-template-columns: 1fr;
+    gap: 42px;
+    padding-bottom: 86px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-aalto-image {
+    min-height: 490px;
+    border-radius: 170px 170px 10px 10px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-feature-number {
+    margin-bottom: 24px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-feature-label {
+    font-size: 3.5rem;
+  }
+
+  .vibe-avanto-page .vibe-avanto-virta {
+    padding: 78px var(--avanto-gutter);
+  }
+
+  .vibe-avanto-page .vibe-avanto-virta-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    align-items: stretch;
+  }
+
+  .vibe-avanto-page .vibe-avanto-virta-copy {
+    order: 2;
+  }
+
+  .vibe-avanto-page .vibe-avanto-virta-image {
+    order: 1;
+    min-height: 490px;
+    border-radius: 12px 180px 12px 12px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-included {
+    grid-template-columns: 38px 1fr;
+    gap: 22px;
+    padding: 78px var(--avanto-gutter);
+  }
+
+  .vibe-avanto-page .vibe-avanto-included > p {
+    grid-column: 2;
+    padding-top: 0;
+  }
+
+  .vibe-avanto-page .vibe-avanto-pricing {
+    padding: 82px var(--avanto-gutter);
+  }
+
+  .vibe-avanto-page .vibe-avanto-pricing-inner {
+    gap: 44px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-price-row {
+    grid-template-columns: 1fr auto;
+    gap: 12px 20px;
+    padding: 24px 0;
+  }
+
+  .vibe-avanto-page .vibe-avanto-price {
+    text-align: right;
+  }
+
+  .vibe-avanto-page .vibe-avanto-early-bird,
+  .vibe-avanto-page .vibe-avanto-price-note {
+    grid-column: 1 / -1;
+  }
+
+  .vibe-avanto-page .vibe-avanto-rhythm {
+    grid-template-columns: 1fr;
+    gap: 58px;
+    padding: 86px var(--avanto-gutter);
+  }
+
+  .vibe-avanto-page .vibe-avanto-rhythm-image {
+    min-height: 540px;
+    border-radius: 170px 170px 0 0;
+  }
+
+  .vibe-avanto-page .vibe-avanto-rhythm-copy h2 {
+    font-size: clamp(2.55rem, 10vw, 3.7rem);
+  }
+
+  .vibe-avanto-page .vibe-avanto-booking {
+    padding: 86px var(--avanto-gutter);
+  }
+
+  .vibe-avanto-page .vibe-avanto-booking h2 {
+    font-size: clamp(2.9rem, 12vw, 4.4rem);
+  }
+
+  .vibe-avanto-page .vibe-avanto-booking-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-booking-link {
+    width: 100%;
+  }
+
+  .vibe-avanto-page .vibe-avanto-home-link {
+    align-self: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .vibe-avanto-page .vibe-avanto-hero h1 {
+    font-size: 2.75rem;
+  }
+
+  .vibe-avanto-hero-visual {
+    min-height: 480px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-button {
+    width: 100%;
+  }
+
+  .vibe-avanto-aalto-image,
+  .vibe-avanto-virta-image,
+  .vibe-avanto-rhythm-image {
+    min-height: 430px;
+  }
+
+  .vibe-avanto-price-row {
+    grid-template-columns: 1fr;
+  }
+
+  .vibe-avanto-page .vibe-avanto-price {
+    text-align: left;
+  }
+
+  .vibe-avanto-page .vibe-avanto-early-bird,
+  .vibe-avanto-page .vibe-avanto-price-note {
+    grid-column: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vibe-avanto-page *,
+  .vibe-avanto-page *::before,
+  .vibe-avanto-page *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.vibe-avanto-page .vibe-boat-gallery-main {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: zoom-in;
+}
+
+.vibe-avanto-page .vibe-boat-gallery-main img {
+  object-fit: cover;
+}
+
+.vibe-avanto-page .vibe-boat-gallery-expand {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: #101820;
+  background: rgb(247 250 252 / 92%);
+  border-radius: 50%;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 12%);
+}
+
+.vibe-avanto-page .vibe-boat-gallery-controls {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  color: #f7fafc;
+  background: rgb(16 24 32 / 82%);
+  border-radius: 999px;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.75rem;
+  backdrop-filter: blur(12px);
+}
+
+.vibe-avanto-page .vibe-boat-gallery-controls button,
+.vibe-avanto-page .vibe-boat-lightbox button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.vibe-avanto-page .vibe-boat-gallery-controls button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.vibe-avanto-page .vibe-boat-gallery-controls button:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.vibe-avanto-page .vibe-boat-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 78px 32px 42px;
+  color: #f7fafc;
+  background: rgb(5 12 18 / 96%);
+}
+
+.vibe-avanto-page .vibe-boat-lightbox-stage {
+  position: relative;
+  width: 100%;
+  height: min(76vh, 850px);
+  min-width: 0;
+  cursor: default;
+}
+
+.vibe-avanto-page .vibe-boat-lightbox-stage img {
+  object-fit: contain;
+}
+
+.vibe-avanto-page .vibe-boat-lightbox-stage p {
+  position: absolute;
+  right: 0;
+  bottom: -34px;
+  left: 0;
+  margin: 0;
+  color: #d3dee6;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.vibe-avanto-page .vibe-boat-lightbox > button {
+  width: 52px;
+  height: 52px;
+  color: #f7fafc;
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 50%;
+}
+
+.vibe-avanto-page .vibe-boat-lightbox > button:hover {
+  background: rgb(255 255 255 / 18%);
+}
+
+.vibe-avanto-page .vibe-boat-lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+}
+
+@media (max-width: 760px) {
+  .vibe-avanto-page .vibe-boat-lightbox {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    gap: 8px;
+    padding: 76px 12px 40px;
+  }
+
+  .vibe-avanto-page .vibe-boat-lightbox-stage {
+    height: 68vh;
+  }
+
+  .vibe-avanto-page .vibe-boat-lightbox > button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .vibe-avanto-page .vibe-boat-lightbox-close {
+    top: 18px;
+    right: 18px;
+  }
+}

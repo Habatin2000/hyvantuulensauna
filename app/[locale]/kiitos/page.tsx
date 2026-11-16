@@ -40,7 +40,7 @@ export default async function ThankYouPage({
   const content = thankYouPageContent[safeLocale];
 
   return (
-    <section className="section-padding bg-stone-50 min-h-[60vh] flex items-center">
+    <main id="main-content" className="section-padding bg-stone-50 min-h-[60vh] flex items-center">
       {/* Conversions are fired by the booking flows themselves
           (lib/analytics.ts trackAdsPurchase) with the real value — no
           hardcoded thank-you-page conversion here, to avoid duplicates. */}
@@ -104,6 +104,6 @@ export default async function ThankYouPage({
           </Link>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

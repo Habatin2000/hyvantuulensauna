@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
-import HomePageContent from "@/components/pages/HomePageContent";
+import VibePageContent from "@/components/vibe/VibePageContent";
 import { SITE_URL } from "@/lib/site";
-import type { Locale } from "@/content/homepage";
+import type { Locale } from "@/components/vibe/content";
 import fiMessages from "@/messages/fi.json";
 import enMessages from "@/messages/en.json";
 
@@ -59,6 +58,5 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   const safeLocale = (locale === "en" ? "en" : "fi") as Locale;
-  const t = await getTranslations({ locale });
-  return <HomePageContent locale={safeLocale} t={t} />;
+  return <VibePageContent locale={safeLocale} />;
 }

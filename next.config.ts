@@ -7,6 +7,26 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   async redirects() {
     return [
+      // Public design-preview URLs resolve to their exact production counterparts.
+      { source: '/vibe/', destination: '/', permanent: true },
+      { source: '/vibe/en/', destination: '/en/', permanent: true },
+      { source: '/vibe/avanto/', destination: '/avanto/', permanent: true },
+      { source: '/vibe/en/avanto/', destination: '/en/ice-swimming-sauna-helsinki/', permanent: true },
+      { source: '/vibe/julkinen-sauna/', destination: '/julkinen-sauna/', permanent: true },
+      { source: '/vibe/en/julkinen-sauna/', destination: '/en/public-sauna-helsinki/', permanent: true },
+      { source: '/vibe/saunalauttaristeilyt/', destination: '/saunalauttaristeilyt-helsingissa/', permanent: true },
+      { source: '/vibe/en/saunalauttaristeilyt/', destination: '/en/sauna-boat-cruises-helsinki/', permanent: true },
+      { source: '/vibe/tapahtumat/', destination: '/polttarit-yritystilaisuudet/', permanent: true },
+      { source: '/vibe/en/tapahtumat/', destination: '/en/bachelor-parties-corporate-events-helsinki/', permanent: true },
+      { source: '/vibe/sijainti/', destination: '/sijainti/', permanent: true },
+      { source: '/vibe/en/sijainti/', destination: '/en/location/', permanent: true },
+      { source: '/vibe/meista/', destination: '/toiminnastamme/', permanent: true },
+      { source: '/vibe/en/meista/', destination: '/en/about/', permanent: true },
+      { source: '/vibe/ukk/', destination: '/usein-kysyttya/', permanent: true },
+      { source: '/vibe/en/ukk/', destination: '/en/faq/', permanent: true },
+      { source: '/vibe/galleria/', destination: '/galleria/', permanent: true },
+      { source: '/vibe/en/galleria/', destination: '/en/gallery/', permanent: true },
+
       // Legacy blog URLs indexed by Google (?post=... rendered the homepage)
       {
         source: '/',

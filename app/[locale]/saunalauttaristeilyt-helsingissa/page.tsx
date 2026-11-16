@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { getFAQsByCategory } from '@/content/faq';
-import { generateServiceSchema, generateFAQSchema, generateBreadcrumbSchema, generateArticleSchema, generateEventSchema, generateHowToSchema } from '../schema';
+import VibeInnerPage from '@/components/vibe/VibeInnerPage';
+import { getVibePage } from '@/components/vibe/pages';
+import type { Locale } from '@/components/vibe/content';
+import { generateServiceSchema, generateBreadcrumbSchema, generateArticleSchema, generateEventSchema, generateHowToSchema } from '../schema';
 import { SITE_URL } from '@/lib/site';
-import SummerSaunaPageClient from './SummerSaunaPageClient';
-import type { Locale } from '@/content/pages';
 
 const PAGE_IMAGE = `${SITE_URL}/images/gallery-deck-view.webp`;
 const DATE_PUBLISHED = '2024-01-15';
@@ -66,8 +66,7 @@ export default async function SummerSaunaPage({
   const { locale } = await params;
   const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
   const isEn = safeLocale === 'en';
-
-  const faqItems = getFAQsByCategory('summer', safeLocale);
+  const data = getVibePage('saunalauttaristeilyt', safeLocale);
   const pageUrl = `${SITE_URL}${isEn ? '/en/sauna-boat-cruises-helsinki' : '/saunalauttaristeilyt-helsingissa'}`;
 
   const serviceSchema = generateServiceSchema(
@@ -77,10 +76,6 @@ export default async function SummerSaunaPage({
       : 'Kesäkauden saunalauttaristeilyt Itä-Helsingin saaristossa. Kaksi saunalauttaa, Aalto ja Virta, lähtevät Kalkkihiekantorilta Vuosaaressa.',
     pageUrl,
     PAGE_IMAGE
-  );
-
-  const faqSchema = generateFAQSchema(
-    faqItems.map(item => ({ question: item.question, answer: item.answer }))
   );
 
   const breadcrumbSchema = generateBreadcrumbSchema([
@@ -109,38 +104,25 @@ export default async function SummerSaunaPage({
     '2026-05-01T10:00:00+03:00',
     '2026-09-30T22:00:00+03:00',
     isEn ? 'Kalkkihiekantori boat pier' : 'Kalkkihiekantorin laivalaituri',
-    '175',
+    '225',
     '2026-05-01'
   );
 
   const howToSchema = generateHowToSchema(
-    isEn ? 'Booking a sauna boat in Helsinki' : 'Saunalautan varaaminen Helsingissä',
-    isEn
-      ? 'How to book a sauna boat cruise with Hyvän Tuulen Sauna.'
-      : 'Näin varaat saunalauttaristeilyn Hyvän Tuulen Saunalla.',
-    isEn ? [
-      { name: 'Choose a boat', text: 'Choose Aalto (for larger groups) or Virta (for smaller groups).' },
-      { name: 'Choose a day', text: 'Open the booking calendar and choose a suitable day from May to September.' },
-      { name: 'Choose a time', text: 'Choose an available time slot (minimum 3 hours).' },
-      { name: 'Fill in details', text: 'Fill in your contact details and confirm the booking by email.' }
-    ] : [
-      { name: 'Valitse lautta', text: 'Valitse Aalto (isommille ryhmille) tai Virta (pienemmälle porukalle).' },
-      { name: 'Valitse päivä', text: 'Avaa varauskalenteri ja valitse sopiva päivä touko-syyskuulta.' },
-      { name: 'Valitse aika', text: 'Valitse käytettävissä oleva aikaväli (minimi 3 tuntia).' },
-      { name: 'Täytä tiedot', text: 'Täytä yhteystietosi ja vahvista varaus sähköpostilla.' }
-    ]
+    data.timelineTitle ?? (isEn ? 'Your cruise' : 'Risteilysi'),
+    data.detailText,
+    data.timeline?.map(step => ({ name: step.title, text: step.text })) ?? []
   );
 
   return (
-    <SummerSaunaPageClient
-      faqItems={faqItems}
-      serviceSchema={serviceSchema}
-      faqSchema={faqSchema}
-      breadcrumbSchema={breadcrumbSchema}
-      articleSchema={articleSchema}
-      eventSchema={eventSchema}
-      howToSchema={howToSchema}
-      locale={safeLocale}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([serviceSchema, breadcrumbSchema, articleSchema, eventSchema, howToSchema]),
+        }}
+      />
+      <VibeInnerPage data={data} locale={safeLocale} slug="saunalauttaristeilyt" />
+    </>
   );
 }

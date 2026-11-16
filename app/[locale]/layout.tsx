@@ -6,8 +6,9 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getMessages } from 'next-intl/server';
 import "../globals.css";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import "../vibe/vibe.css";
+import VibeHeader from "@/components/vibe/VibeHeader";
+import VibeFooter from "@/components/vibe/VibeFooter";
 import RouteTracker from "@/components/analytics/RouteTracker";
 import { getOrganizationSchema, websiteSchema } from "./schema";
 import { SITE_URL } from "@/lib/site";
@@ -202,12 +203,20 @@ export default async function LocaleLayout({
         {/* End Meta Pixel Code */}
       </head>
       <body
-        className={`${quicksand.variable} ${corben.variable} ${pacifico.variable} theme-avanto font-sans antialiased min-h-screen flex flex-col`}
+        className={`${quicksand.variable} ${corben.variable} ${pacifico.variable} vibe-shell theme-avanto font-sans antialiased min-h-screen flex flex-col`}
+        style={{
+          '--vibe-font-body': 'var(--font-quicksand)',
+          '--vibe-font-display': 'var(--font-display)',
+          '--vibe-font-logo': 'var(--font-pacifico)',
+        } as React.CSSProperties}
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <a className="vibe-skip-link" href="#main-content">
+            {locale === 'en' ? 'Skip to content' : 'Siirry sisältöön'}
+          </a>
+          <VibeHeader locale={locale === 'en' ? 'en' : 'fi'} />
+          {children}
+          <VibeFooter locale={locale === 'en' ? 'en' : 'fi'} />
           <RouteTracker />
           <ConsentBanner />
         </NextIntlClientProvider>
