@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowDown, ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 import { vibeCopy, type Locale } from './content';
 import VibeClosingSummary from './VibeClosingSummary';
+import VibeHeroBackdrop from './VibeHeroBackdrop';
 
 export default function VibePageContent({ locale }: { locale: Locale }) {
   const c = vibeCopy[locale];
@@ -13,6 +14,7 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
   return (
     <main id="main-content">
       <section className="vibe-hero" aria-labelledby="vibe-hero-title">
+        <VibeHeroBackdrop />
         <div className="vibe-hero-copy">
           <p className="vibe-eyebrow">{c.heroEyebrow}</p>
           <h1 id="vibe-hero-title">
@@ -32,23 +34,6 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
               {c.heroLink}<ArrowDown size={16} aria-hidden="true" />
             </a>
           </div>
-        </div>
-        <div className="vibe-hero-visual">
-          <div className="vibe-hero-image-wrap">
-            <Image
-              src="/images/vibe-hero-new.webp"
-              alt={isEn ? 'A floating sauna in winter sunlight' : 'Saunalautta talvisessa auringonvalossa'}
-              fill
-              priority
-              sizes="(max-width: 760px) 100vw, 48vw"
-            />
-          </div>
-          <p className="vibe-hero-note">{c.heroNote}</p>
-          <aside className="vibe-hero-detail">
-            <span className="vibe-detail-rule" aria-hidden="true" />
-            <h2>{c.heroCardTitle}</h2>
-            <p>{c.heroCardText}</p>
-          </aside>
         </div>
       </section>
 

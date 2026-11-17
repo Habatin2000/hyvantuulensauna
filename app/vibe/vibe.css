@@ -213,11 +213,44 @@ html {
 }
 
 .vibe-hero {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-columns: minmax(0, 1fr);
   min-height: calc(100svh - var(--vibe-header-height));
   background: var(--vibe-navy);
   color: var(--vibe-linen);
+}
+
+.vibe-hero-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.vibe-hero-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(11 62 183 / 88%) 0%, rgb(11 62 183 / 70%) 52%, rgb(11 62 183 / 48%) 100%);
+}
+
+.vibe-hero-backdrop-image {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.vibe-hero-backdrop-image.is-visible {
+  opacity: 1;
+}
+
+.vibe-hero-copy,
+.vibe-hero-visual {
+  position: relative;
+  z-index: 1;
 }
 
 .vibe-hero-copy {

@@ -84,10 +84,10 @@ export default async function SummerSaunaPage({
   ]);
 
   const articleSchema = generateArticleSchema(
-    isEn ? 'Sauna Boat Cruises in Helsinki 2026 | Aalto & Virta | Kalkkihiekantori' : 'Saunalauttaristeilyt Helsingissä 2026 | Aalto ja Virta | Kalkkihiekantori',
+    isEn ? 'Sauna Boat Cruises in Helsinki 2027 | Aalto & Virta | Kalkkihiekantori' : 'Saunalauttaristeilyt Helsingissä 2027 | Aalto ja Virta | Kalkkihiekantori',
     isEn
-      ? 'Book a sauna boat in Helsinki for summer 2026! Two unique sauna boats, Aalto and Virta, in the Eastern Helsinki archipelago. Departing from Kalkkihiekantori, Vuosaari.'
-      : 'Varaa saunalautta Helsingistä kesäksi 2026! Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, Itä-Helsingin saaristossa. Lähtö Kalkkihiekantorilta, Vuosaari.',
+      ? 'Book a sauna boat in Helsinki for summer 2027! Two unique sauna boats, Aalto and Virta, in the Eastern Helsinki archipelago. Departing from Kalkkihiekantori, Vuosaari.'
+      : 'Varaa saunalautta Helsingistä kesäksi 2027! Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, Itä-Helsingin saaristossa. Lähtö Kalkkihiekantorilta, Vuosaari.',
     pageUrl,
     PAGE_IMAGE,
     DATE_PUBLISHED,
@@ -95,17 +95,17 @@ export default async function SummerSaunaPage({
   );
 
   const eventSchema = generateEventSchema(
-    isEn ? 'Sauna boat cruise season 2026' : 'Saunalauttaristeilyt kesäkausi 2026',
+    isEn ? 'Sauna boat cruise season 2027' : 'Saunalauttaristeilyt kesäkausi 2027',
     isEn
       ? 'Summer season sauna boat cruises with Hyvän Tuulen Sauna. Two sauna boats, Aalto and Virta.'
       : 'Kesäkauden saunalauttaristeilyt Hyvän Tuulen Saunalla. Kaksi saunalauttaa, Aalto ja Virta.',
     pageUrl,
     PAGE_IMAGE,
-    '2026-05-01T10:00:00+03:00',
-    '2026-09-30T22:00:00+03:00',
+    '2027-05-01T10:00:00+03:00',
+    '2027-09-30T22:00:00+03:00',
     isEn ? 'Kalkkihiekantori boat pier' : 'Kalkkihiekantorin laivalaituri',
     '225',
-    '2026-05-01'
+    '2027-05-01'
   );
 
   const howToSchema = generateHowToSchema(

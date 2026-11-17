@@ -31,9 +31,7 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "opens": "09:00",
-      "closes": "22:00"
+      "description": locale === 'en' ? "Open by appointment" : "Aukiolo varauksen mukaan"
     }
   ],
   "image": [
@@ -43,7 +41,7 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   ],
   "priceRange": "€€",
   "currenciesAccepted": "EUR",
-  "paymentAccepted": "Cash, Credit Card",
+  "paymentAccepted": "Cash, Credit Card, ePassi, Online payment",
   "areaServed": {
     "@type": "City",
     "name": "Helsinki"
@@ -106,7 +104,7 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.9",
-    "reviewCount": "333"
+    "reviewCount": "344"
   },
   "sameAs": [
     "https://maps.app.goo.gl/VtS6aSXd3hxFEPxH6",
