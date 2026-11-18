@@ -9,6 +9,7 @@ import VibeavantoContent from './VibeavantoContent';
 import VibejulkinenSaunaContent from './Vibejulkinen-saunaContent';
 import VibesaunalauttaristeilytContent from './VibesaunalauttaristeilytContent';
 import type { VibeSlug } from './pages';
+import VibeHeroBackdrop from './VibeHeroBackdrop';
 
 export default function VibeInnerPage({ data, locale, slug }: { data: VibePageData; locale: Locale; slug?: VibeSlug }) {
   if (slug === 'avanto') return <VibeavantoContent data={data} locale={locale} />;
@@ -21,6 +22,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
   return (
     <main id="main-content">
       <section className="vibe-inner-hero" aria-labelledby="vibe-inner-title">
+        <VibeHeroBackdrop />
         <div className="vibe-inner-hero-copy">
           <p className="vibe-eyebrow">{data.eyebrow}</p>
           <h1 id="vibe-inner-title">{data.heroTitle}</h1>

@@ -11,7 +11,7 @@ const images = [
   { src: '/images/vibe-hero-upright.webp', alt: '' },
 ];
 
-export default function VibeHeroBackdrop() {
+export default function VibeHeroBackdrop({ tone = 'blue' }: { tone?: 'blue' | 'dark' }) {
   const [index, setIndex] = useState(0);
   const [previousIndex, setPreviousIndex] = useState<number | null>(null);
   const [inView, setInView] = useState(true);
@@ -40,7 +40,7 @@ export default function VibeHeroBackdrop() {
   }, [previousIndex]);
 
   return (
-    <div ref={rootRef} className="vibe-hero-backdrop" aria-hidden="true">
+    <div ref={rootRef} className={`vibe-hero-backdrop vibe-hero-backdrop--${tone}`} aria-hidden="true">
       {previousIndex !== null && (
         <Image className="vibe-hero-backdrop-image is-visible" src={images[previousIndex].src} alt="" fill sizes="100vw" />
       )}

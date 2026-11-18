@@ -6,6 +6,7 @@ import type { VibePageData } from './pages';
 import VibeBookingFrame from './VibeBookingFrame';
 import VibeFaq from './VibeFaq';
 import VibeClosingSummary from './VibeClosingSummary';
+import VibeHeroBackdrop from './VibeHeroBackdrop';
 import '../../app/vibe/julkinen-sauna.css';
 
 export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibePageData; locale: Locale }) {
@@ -60,6 +61,7 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
   return (
     <main id="main-content" className="vibe-julkinen-sauna-page">
       <section className="vibe-julkinen-sauna-hero" aria-labelledby="vibe-julkinen-sauna-title">
+        <VibeHeroBackdrop />
         <div className="vibe-julkinen-sauna-hero-copy">
           <p className="vibe-julkinen-sauna-eyebrow">{data.eyebrow}</p>
           <h1 id="vibe-julkinen-sauna-title">{data.heroTitle}</h1>

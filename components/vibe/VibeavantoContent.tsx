@@ -6,6 +6,7 @@ import type { VibePageData } from './pages';
 import VibeBookingFrame from './VibeBookingFrame';
 import VibeBoatGallery from './VibeBoatGallery';
 import VibeClosingSummary from './VibeClosingSummary';
+import VibeHeroBackdrop from './VibeHeroBackdrop';
 import '../../app/vibe/avanto.css';
 
 export default function VibeavantoContent({ data, locale }: { data: VibePageData; locale: Locale }) {
@@ -16,6 +17,7 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
   return (
     <main id="main-content" className="vibe-avanto-page">
       <section className="vibe-avanto-hero" aria-labelledby="vibe-avanto-title">
+        <VibeHeroBackdrop tone="dark" />
         <div className="vibe-avanto-hero-copy">
           <p className="vibe-avanto-eyebrow">{data.eyebrow}</p>
           <h1 id="vibe-avanto-title">{data.heroTitle}</h1>

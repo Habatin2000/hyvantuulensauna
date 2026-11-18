@@ -236,6 +236,10 @@ html {
   background: linear-gradient(90deg, rgb(11 62 183 / 88%) 0%, rgb(11 62 183 / 70%) 52%, rgb(11 62 183 / 48%) 100%);
 }
 
+.vibe-hero-backdrop--dark::after {
+  background: linear-gradient(90deg, rgb(16 24 32 / 88%) 0%, rgb(16 24 32 / 68%) 52%, rgb(16 24 32 / 45%) 100%);
+}
+
 .vibe-hero-backdrop-image {
   position: absolute;
   inset: 0;
@@ -249,6 +253,26 @@ html {
 
 .vibe-hero-copy,
 .vibe-hero-visual {
+  position: relative;
+  z-index: 1;
+}
+
+.vibe-inner-hero,
+.vibe-avanto-hero,
+.vibe-julkinen-sauna-hero,
+.cruise-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.vibe-inner-hero-copy,
+.vibe-inner-hero-image,
+.vibe-avanto-hero-copy,
+.vibe-avanto-hero-visual,
+.vibe-julkinen-sauna-hero-copy,
+.vibe-julkinen-sauna-hero-visual,
+.cruise-hero-copy,
+.cruise-hero-visual {
   position: relative;
   z-index: 1;
 }

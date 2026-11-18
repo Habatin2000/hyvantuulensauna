@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
 import type { Locale } from './content';
 import type { VibePageData } from './pages';
 import VibeBookingFrame from './VibeBookingFrame';
+import VibeHeroBackdrop from './VibeHeroBackdrop';
 import '../../app/vibe/saunalauttaristeilyt.css';
 
 export default function VibesaunalauttaristeilytContent({ data, locale }: { data: VibePageData; locale: Locale }) {
@@ -15,6 +16,7 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
   return (
     <main id="main-content" className="vibe-saunalauttaristeilyt-page">
       <section className="cruise-hero" aria-labelledby="cruise-hero-title">
+        <VibeHeroBackdrop tone="dark" />
         <div className="cruise-hero-copy">
           <p className="cruise-eyebrow">{data.eyebrow}</p>
           <h1 id="cruise-hero-title">{data.heroTitle}</h1>
