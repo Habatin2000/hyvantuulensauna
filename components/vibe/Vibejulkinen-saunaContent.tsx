@@ -6,6 +6,7 @@ import type { VibePageData } from './pages';
 import VibeBookingFrame from './VibeBookingFrame';
 import VibeFaq from './VibeFaq';
 import VibeClosingSummary from './VibeClosingSummary';
+import VibeWinterGallery from './VibeWinterGallery';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
 import '../../app/vibe/julkinen-sauna.css';
 
@@ -141,6 +142,23 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
         </div>
       </section>
 
+      <section className="vibe-julkinen-sauna-winter-gallery" aria-label={isEn ? 'Winter sauna gallery' : 'Talvinen saunagalleria'}>
+        <VibeWinterGallery
+          label={isEn ? 'Winter at Hyvän Tuulen Sauna' : 'Talvi Hyvän Tuulen Saunalla'}
+          locale={locale}
+          images={[
+            { src: '/images/gallery-winter-sunset.webp', alt: isEn ? 'Sauna boat in winter sunset' : 'Saunalautta talvisessa auringonlaskussa' },
+            { src: '/images/gallery-sauna-group.webp', alt: isEn ? 'Friends enjoying the wood-fired sauna together' : 'Ystävät nauttivat puusaunasta yhdessä' },
+            { src: '/images/gallery-winter-dock.webp', alt: isEn ? 'Snowy dock and winter sauna' : 'Luminen laituri ja talvisauna' },
+            { src: '/images/gallery-sauna-woman.webp', alt: isEn ? 'Guest relaxing on the sauna benches' : 'Saunoja rentoutuu lauteilla' },
+            { src: '/images/vibe-aurora-final.webp', alt: isEn ? 'Northern lights above the sauna boat' : 'Revontulet saunalautan yllä' },
+            { src: '/images/gallery-avanto-woman.webp', alt: isEn ? 'Guest in a bathrobe by the icy sea' : 'Saunoja kylpytakissa jäätyneen meren äärellä' },
+            { src: '/images/gallery-ice-swimming.webp', alt: isEn ? 'Winter swimmer by the sauna raft' : 'Talviuimari saunalautan vierellä' },
+            { src: '/images/gallery-sauna-bench.webp', alt: isEn ? 'Wooden benches inside the warm sauna' : 'Lämpimän puusaunan puiset lauteet' },
+          ]}
+        />
+      </section>
+
       <section className="vibe-julkinen-sauna-pricing" aria-labelledby="vibe-julkinen-sauna-pricing-title">
         <div className="vibe-julkinen-sauna-pricing-inner">
           <div className="vibe-julkinen-sauna-pricing-heading">
@@ -217,6 +235,7 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
           <p>{isEn ? 'Breathe slowly. Listen to your body.' : 'Hengitä rauhassa. Kuuntele kehoasi.'}</p>
         </div>
       </section>
+
 
       <section className="vibe-faq-section" aria-labelledby="vibe-julkinen-sauna-faq-title">
         <div className="vibe-faq-heading">

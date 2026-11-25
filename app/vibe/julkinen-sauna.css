@@ -672,6 +672,150 @@
   text-align: center;
 }
 
+.vibe-julkinen-sauna-winter-gallery {
+  padding: 0 var(--julkinen-gutter);
+  background: var(--julkinen-paper);
+}
+
+.vibe-julkinen-sauna-winter-gallery-content {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+}
+
+.vibe-julkinen-sauna-winter-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 24px);
+}
+
+.vibe-julkinen-sauna-winter-gallery-item {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  padding: 0;
+  background: var(--julkinen-navy-soft);
+  border: 0;
+  border-radius: 140px 140px 10px 10px;
+  cursor: zoom-in;
+}
+
+.vibe-julkinen-sauna-winter-gallery-item img {
+  object-fit: cover;
+  transition: transform 700ms ease;
+}
+
+.vibe-julkinen-sauna-winter-gallery-item:hover img {
+  transform: scale(1.025);
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-gallery-expand {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--julkinen-navy);
+  background: rgb(247 250 252 / 92%);
+  border-radius: 50%;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 12%);
+}
+
+
+.vibe-julkinen-sauna-page .vibe-boat-gallery-controls {
+  position: static;
+  z-index: 3;
+  display: flex;
+  width: max-content;
+  margin: 24px auto 0;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  color: var(--julkinen-white);
+  background: rgb(16 24 32 / 82%);
+  border-radius: 999px;
+  font-family: var(--vibe-font-display), Georgia, serif;
+  font-size: 0.75rem;
+  backdrop-filter: blur(12px);
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-gallery-controls button,
+.vibe-julkinen-sauna-page .vibe-boat-lightbox button {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-gallery-controls button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-gallery-controls button:hover {
+  background: rgb(255 255 255 / 12%);
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 78px 32px 42px;
+  color: var(--julkinen-white);
+  background: rgb(5 12 18 / 96%);
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox-stage {
+  position: relative;
+  width: 100%;
+  height: min(76vh, 850px);
+  min-width: 0;
+  cursor: default;
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox-stage img {
+  object-fit: contain;
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox-stage p {
+  position: absolute;
+  right: 0;
+  bottom: -34px;
+  left: 0;
+  margin: 0;
+  color: var(--julkinen-line);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox > button {
+  width: 52px;
+  height: 52px;
+  color: var(--julkinen-white);
+  background: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 50%;
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox > button:hover {
+  background: rgb(255 255 255 / 18%);
+}
+
+.vibe-julkinen-sauna-page .vibe-boat-lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+}
+
 .vibe-julkinen-sauna-next {
   padding: clamp(5.5rem, 9vw, 8.5rem) max(var(--julkinen-gutter), calc((100vw - var(--vibe-width)) / 2 + var(--julkinen-gutter)));
   background: var(--julkinen-lake-deep);
@@ -981,6 +1125,38 @@
     min-height: 0;
     height: min(132vw, 600px);
     border-radius: 170px 170px 0 0;
+  }
+
+  .vibe-julkinen-sauna-winter-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vibe-julkinen-sauna-winter-gallery-item {
+    border-radius: 80px 80px 8px 8px;
+  }
+
+  .vibe-julkinen-sauna-winter-gallery-item:nth-child(3) {
+    display: none;
+  }
+
+  .vibe-julkinen-sauna-page .vibe-boat-lightbox {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    gap: 8px;
+    padding: 76px 12px 40px;
+  }
+
+  .vibe-julkinen-sauna-page .vibe-boat-lightbox-stage {
+    height: 68vh;
+  }
+
+  .vibe-julkinen-sauna-page .vibe-boat-lightbox > button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .vibe-julkinen-sauna-page .vibe-boat-lightbox-close {
+    top: 18px;
+    right: 18px;
   }
 
   .vibe-julkinen-sauna-next {
