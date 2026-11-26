@@ -16,6 +16,14 @@ interface FAQAccordionProps {
   locale?: Locale;
 }
 
+const showAllLinkText: Record<Locale, string> = {
+  fi: 'Katso kaikki usein kysytyt kysymykset →',
+  en: 'See all frequently asked questions →',
+  es: 'Ver todas las preguntas frecuentes →',
+  fr: 'Voir toutes les questions fréquentes →',
+  de: 'Alle häufig gestellten Fragen ansehen →',
+};
+
 export default function FAQAccordion({ 
   items, 
   title, 
@@ -71,9 +79,7 @@ export default function FAQAccordion({
               href="/usein-kysyttya" 
               className="text-sm font-medium text-lake hover:underline"
             >
-              {locale === 'en'
-                ? 'See all frequently asked questions →'
-                : 'Katso kaikki usein kysytyt kysymykset →'}
+              {showAllLinkText[locale]}
             </Link>
           </div>
         )}

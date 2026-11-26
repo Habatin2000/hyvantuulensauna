@@ -4,12 +4,96 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 import { vibeCopy, type Locale } from './content';
 import VibeClosingSummary from './VibeClosingSummary';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
+import { getVibeBookingRoute, getVibeRoute } from './routes';
+
+const pageCopy = {
+  fi: {
+    publicSessionCta: 'Varaa yleinen saunavuoro',
+    journeyCaption: 'Meri-ilmaa, lämmintä puuta, talven valoa',
+    closing: {
+      eyebrow: 'Tervetuloa',
+      title: 'Hyvän Tuulen Sauna ei somistusta tarvitse.',
+      paragraphs: [
+        'Monipuolisilla palveluillamme haluammekin tarjota jokaiselle jotakin.',
+        'Meillä on ollut saunoja Helsingissä jo kohta kymmenen vuotta, joten löyly on kuuma, avanto on kylmä ja homma toimii nätisti!',
+        'Valitse joko Yleinen tai Yksityinen vuoro ja tule nauttimaan!',
+        'Puulöylyt ja meri, uimista ja ajanviettoa. Tänne tullaan nauttimaan ympäri Helsinkiä suomalaisesta saunakulttuurista. Tervetuloa!',
+      ],
+      publicSaunaLabel: 'Yleinen sauna',
+      privateSaunaLabel: 'Yksityinen sauna',
+    },
+  },
+  en: {
+    publicSessionCta: 'Book a public sauna session',
+    journeyCaption: 'Sea air, warm timber, winter light',
+    closing: {
+      eyebrow: 'Welcome',
+      title: 'Hyvän Tuulen Sauna needs no decoration.',
+      paragraphs: [
+        'Our varied services offer something for everyone.',
+        'We have been hosting saunas in Helsinki for nearly ten years, so the löyly is hot, the ice hole is cold and everything runs smoothly!',
+        'Choose a public or private session and come enjoy yourself!',
+        'Wood-fired löyly and the sea, swimming and time well spent. People come here from all over Helsinki to enjoy Finnish sauna culture. Welcome!',
+      ],
+      publicSaunaLabel: 'Public sauna',
+      privateSaunaLabel: 'Private sauna',
+    },
+  },
+  es: {
+    publicSessionCta: 'Reserva una sesión de sauna pública',
+    journeyCaption: 'Aire de mar, madera cálida, luz de invierno',
+    closing: {
+      eyebrow: 'Te damos la bienvenida',
+      title: 'Hyvän Tuulen Sauna no necesita adornos.',
+      paragraphs: [
+        'Nuestra variada oferta tiene algo para todos.',
+        'Llevamos casi diez años ofreciendo saunas en Helsinki, así que el löyly está caliente, el agua helada y todo funciona a la perfección.',
+        'Elige una sesión pública o privada y ven a disfrutar.',
+        'Calor de leña y mar, natación y tiempo bien aprovechado. Personas de toda Helsinki vienen aquí para disfrutar de la cultura finlandesa de la sauna. ¡Te damos la bienvenida!',
+      ],
+      publicSaunaLabel: 'Sauna pública',
+      privateSaunaLabel: 'Sauna privada',
+    },
+  },
+  fr: {
+    publicSessionCta: 'Réservez une séance de sauna public',
+    journeyCaption: 'Air marin, bois chaleureux, lumière d’hiver',
+    closing: {
+      eyebrow: 'Bienvenue',
+      title: 'Hyvän Tuulen Sauna n’a pas besoin d’artifices.',
+      paragraphs: [
+        'Notre offre variée propose quelque chose pour chacun.',
+        'Nous vous accueillons dans nos saunas à Helsinki depuis presque dix ans : le löyly est chaud, le trou dans la glace est froid et tout fonctionne parfaitement !',
+        'Choisissez une séance publique ou privée et venez en profiter !',
+        'Chaleur du poêle à bois et mer, baignade et moments de détente. Des visiteurs de tout Helsinki viennent ici pour découvrir la culture finlandaise du sauna. Bienvenue !',
+      ],
+      publicSaunaLabel: 'Sauna public',
+      privateSaunaLabel: 'Sauna privé',
+    },
+  },
+  de: {
+    publicSessionCta: 'Buche eine öffentliche Saunasession',
+    journeyCaption: 'Meeresluft, warmes Holz, winterliches Licht',
+    closing: {
+      eyebrow: 'Willkommen',
+      title: 'Hyvän Tuulen Sauna braucht keinen Schnickschnack.',
+      paragraphs: [
+        'Unser vielfältiges Angebot hält für jeden etwas bereit.',
+        'Seit fast zehn Jahren betreiben wir Saunen in Helsinki – das Löyly ist heiß, das Eisloch ist kalt und alles läuft reibungslos!',
+        'Wähle eine öffentliche oder private Saunasession und komm vorbei!',
+        'Holzfeuer und Meer, Schwimmen und schöne Stunden. Menschen aus ganz Helsinki kommen hierher, um die finnische Saunakultur zu genießen. Willkommen!',
+      ],
+      publicSaunaLabel: 'Öffentliche Sauna',
+      privateSaunaLabel: 'Private Sauna',
+    },
+  },
+};
 
 export default function VibePageContent({ locale }: { locale: Locale }) {
   const c = vibeCopy[locale];
-  const isEn = locale === 'en';
-  const bookingHref = isEn ? '/en/ice-swimming-sauna-helsinki/#varaus' : '/avanto/#varaus';
-  const publicBookingHref = isEn ? '/en/public-sauna-helsinki/#varaus' : '/julkinen-sauna/#varaus';
+  const ui = pageCopy[locale];
+  const bookingHref = getVibeBookingRoute('avanto', locale);
+  const publicBookingHref = getVibeBookingRoute('julkinen-sauna', locale);
 
   return (
     <main id="main-content">
@@ -28,7 +112,7 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
               {c.heroCta}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>
             <Link className="vibe-button vibe-button-secondary" href={publicBookingHref}>
-              {isEn ? 'Book a public sauna session' : 'Varaa yleinen saunavuoro'}<ArrowRight size={18} aria-hidden="true" />
+              {ui.publicSessionCta}<ArrowRight size={18} aria-hidden="true" />
             </Link>
             <a className="vibe-text-link" href="#elamykset">
               {c.heroLink}<ArrowDown size={16} aria-hidden="true" />
@@ -71,7 +155,7 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
             fill
             sizes="(max-width: 760px) 100vw, 52vw"
           />
-          <span>{isEn ? 'Sea air, warm timber, winter light' : 'Meri-ilmaa, lämmintä puuta, talven valoa'}</span>
+          <span>{ui.journeyCaption}</span>
         </div>
         <div className="vibe-journey-copy">
           <p className="vibe-eyebrow">{c.journeyEyebrow}</p>
@@ -112,22 +196,12 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
       </section>
 
       <VibeClosingSummary
-        eyebrow={isEn ? 'Welcome' : 'Tervetuloa'}
-        title={isEn ? 'Hyvän Tuulen Sauna needs no decoration.' : 'Hyvän Tuulen Sauna ei somistusta tarvitse.'}
-        paragraphs={isEn ? [
-          'Our varied services offer something for everyone.',
-          'We have been hosting saunas in Helsinki for nearly ten years, so the löyly is hot, the ice hole is cold and everything runs smoothly!',
-          'Choose a public or private session and come enjoy yourself!',
-          'Wood-fired löyly and the sea, swimming and time well spent. People come here from all over Helsinki to enjoy Finnish sauna culture. Welcome!',
-        ] : [
-          'Monipuolisilla palveluillamme haluammekin tarjota jokaiselle jotakin.',
-          'Meillä on ollut saunoja Helsingissä jo kohta kymmenen vuotta, joten löyly on kuuma, avanto on kylmä ja homma toimii nätisti!',
-          'Valitse joko Yleinen tai Yksityinen vuoro ja tule nauttimaan!',
-          'Puulöylyt ja meri, uimista ja ajanviettoa. Tänne tullaan nauttimaan ympäri Helsinkiä suomalaisesta saunakulttuurista. Tervetuloa!',
-        ]}
+        eyebrow={ui.closing.eyebrow}
+        title={ui.closing.title}
+        paragraphs={ui.closing.paragraphs}
         links={[
-          { href: isEn ? '/en/public-sauna-helsinki/' : '/julkinen-sauna/', label: isEn ? 'Public sauna' : 'Yleinen sauna' },
-          { href: isEn ? '/en/ice-swimming-sauna-helsinki/' : '/avanto/', label: isEn ? 'Private sauna' : 'Yksityinen sauna' },
+          { href: getVibeRoute('julkinen-sauna', locale), label: ui.closing.publicSaunaLabel },
+          { href: getVibeRoute('avanto', locale), label: ui.closing.privateSaunaLabel },
         ]}
       />
 

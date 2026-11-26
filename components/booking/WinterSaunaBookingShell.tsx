@@ -36,13 +36,301 @@ interface CustomerInfo {
   phone: string;
 }
 
+type WinterBookingLocale = Locale | 'es' | 'fr' | 'de';
+
 interface WinterSaunaBookingShellProps {
   /** Pre-selected sauna resource; if omitted the user picks one on step 1. */
   resourceId?: string;
   resourceName?: string;
   onClose?: () => void;
-  locale?: Locale;
+  locale?: WinterBookingLocale;
 }
+
+const LOCALE_TAGS: Record<WinterBookingLocale, string> = {
+  fi: 'fi-FI',
+  en: 'en-GB',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+};
+
+const TRANSLATIONS = {
+  fi: {
+    title: 'Varaa yksityinen avantosauna',
+    close: 'Sulje',
+    steps: ['Sauna', 'Päivä ja aika', 'Yhteystiedot', 'Vahvistus'],
+    selectSauna: 'Valitse sauna',
+    selectSaunaSubtitle: 'Molemmat saunat ovat puulämmitteisiä ja avanto kuuluu mukaan.',
+    saunaNames: {
+      aalto: 'Aalto-sauna',
+      virta: 'Virta-sauna',
+    },
+    saunaCapacity: {
+      aalto: 'Max 10 hlö',
+      virta: 'Max 6 hlö',
+    },
+    saunaPrice: {
+      aalto: '140 € / 2 h',
+      virta: '120 € / 2 h',
+    },
+    selectDate: 'Valitse päivämäärä',
+    selectDateSubtitle: 'Talvikausi pyörii marraskuusta huhtikuuhun.',
+    loadingCalendar: 'Ladataan kalenteria...',
+    changeDay: 'Vaihda päivä',
+    selectTime: 'Valitse aloitusaika',
+    loadingTimes: 'Ladataan aikoja...',
+    noSlots: 'Ei vapaita aikoja valitulle päivälle',
+    chooseAnotherDay: 'Valitse toinen päivä',
+    contactTitle: 'Yhteystiedot',
+    firstName: 'Etunimi',
+    lastName: 'Sukunimi',
+    email: 'Sähköposti',
+    phone: 'Puhelinnumero',
+    marketingConsent: 'Haluan saada Hyvän Tuulen Saunan tarjouksia ja uutisia sähköpostiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
+    summary: 'Varauksen yhteenveto',
+    sauna: 'Sauna',
+    date: 'Päivämäärä',
+    time: 'Aika',
+    duration: 'Kesto',
+    booker: 'Varaaja',
+    total: 'Yhteensä',
+    paymentInfoTitle: 'Maksutiedot',
+    paymentInfoText: 'Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
+    successTitle: 'Varaus vahvistettu!',
+    successText: 'Sauna on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
+    bookingNumber: 'Varausnumero',
+    back: 'Takaisin',
+    continue: 'Jatka',
+    proceedToPayment: 'Siirry maksuun',
+    submitting: 'Varataan...',
+    errorLoadDates: 'Päivämäärien lataaminen epäonnistui',
+    errorLoadSlots: 'Aikojen lataaminen epäonnistui',
+    errorSelectTime: 'Valitse aika ennen varausta',
+    errorBookingFailed: 'Varauksen luominen epäonnistui',
+    includesIceHole: 'Avanto sisältyy',
+    perSession: '/ vuoro',
+  },
+  en: {
+    title: 'Book a private ice sauna',
+    close: 'Close',
+    steps: ['Sauna', 'Date & time', 'Contact details', 'Confirmation'],
+    selectSauna: 'Choose a sauna',
+    selectSaunaSubtitle: 'Both saunas are wood-fired and include access to the ice hole.',
+    saunaNames: {
+      aalto: 'Sauna boat Aalto',
+      virta: 'Sauna boat Virta',
+    },
+    saunaCapacity: {
+      aalto: 'Max 10 people',
+      virta: 'Max 6 people',
+    },
+    saunaPrice: {
+      aalto: '140 € / 2 h',
+      virta: '120 € / 2 h',
+    },
+    selectDate: 'Choose a date',
+    selectDateSubtitle: 'The winter season runs from November to April.',
+    loadingCalendar: 'Loading calendar...',
+    changeDay: 'Change day',
+    selectTime: 'Choose a start time',
+    loadingTimes: 'Loading times...',
+    noSlots: 'No available times for the selected day',
+    chooseAnotherDay: 'Choose another day',
+    contactTitle: 'Contact details',
+    firstName: 'First name',
+    lastName: 'Last name',
+    email: 'Email',
+    phone: 'Phone number',
+    marketingConsent: 'I want to receive offers and news from Hyvän Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)',
+    summary: 'Booking summary',
+    sauna: 'Sauna',
+    date: 'Date',
+    time: 'Time',
+    duration: 'Duration',
+    booker: 'Booked by',
+    total: 'Total',
+    paymentInfoTitle: 'Payment details',
+    paymentInfoText: 'By clicking "Proceed to payment" you will be redirected to a secure payment system. The booking is confirmed after payment.',
+    successTitle: 'Booking confirmed!',
+    successText: 'The sauna is now booked for you. A confirmation has been sent to your email.',
+    bookingNumber: 'Booking number',
+    back: 'Back',
+    continue: 'Continue',
+    proceedToPayment: 'Proceed to payment',
+    submitting: 'Booking...',
+    errorLoadDates: 'Failed to load dates',
+    errorLoadSlots: 'Failed to load times',
+    errorSelectTime: 'Select a time before booking',
+    errorBookingFailed: 'Failed to create booking',
+    includesIceHole: 'Ice hole included',
+    perSession: '/ session',
+  },
+  es: {
+    title: 'Reserva una sauna privada con baño helado',
+    close: 'Cerrar',
+    steps: ['Sauna', 'Fecha y hora', 'Datos de contacto', 'Confirmación'],
+    selectSauna: 'Elige una sauna',
+    selectSaunaSubtitle: 'Ambas saunas son de leña e incluyen acceso al baño helado.',
+    saunaNames: {
+      aalto: 'Barco sauna Aalto',
+      virta: 'Barco sauna Virta',
+    },
+    saunaCapacity: {
+      aalto: 'Máx. 10 personas',
+      virta: 'Máx. 6 personas',
+    },
+    saunaPrice: {
+      aalto: '140 € / 2 h',
+      virta: '120 € / 2 h',
+    },
+    selectDate: 'Elige una fecha',
+    selectDateSubtitle: 'La temporada de invierno va de noviembre a abril.',
+    loadingCalendar: 'Cargando calendario...',
+    changeDay: 'Cambiar de día',
+    selectTime: 'Elige una hora de inicio',
+    loadingTimes: 'Cargando horarios...',
+    noSlots: 'No hay horarios disponibles para el día seleccionado',
+    chooseAnotherDay: 'Elegir otro día',
+    contactTitle: 'Datos de contacto',
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    email: 'Correo electrónico',
+    phone: 'Número de teléfono',
+    marketingConsent: 'Quiero recibir ofertas y novedades de Hyvän Tuulen Sauna por correo electrónico. Puedo retirar mi consentimiento en cualquier momento. (Opcional)',
+    summary: 'Resumen de la reserva',
+    sauna: 'Sauna',
+    date: 'Fecha',
+    time: 'Hora',
+    duration: 'Duración',
+    booker: 'Reserva a nombre de',
+    total: 'Total',
+    paymentInfoTitle: 'Datos de pago',
+    paymentInfoText: 'Al hacer clic en «Ir al pago», serás redirigido a un sistema de pago seguro. La reserva se confirmará después del pago.',
+    successTitle: '¡Reserva confirmada!',
+    successText: 'La sauna ya está reservada para ti. Hemos enviado una confirmación a tu correo electrónico.',
+    bookingNumber: 'Número de reserva',
+    back: 'Atrás',
+    continue: 'Continuar',
+    proceedToPayment: 'Ir al pago',
+    submitting: 'Reservando...',
+    errorLoadDates: 'No se pudieron cargar las fechas',
+    errorLoadSlots: 'No se pudieron cargar los horarios',
+    errorSelectTime: 'Selecciona una hora antes de reservar',
+    errorBookingFailed: 'No se pudo crear la reserva',
+    includesIceHole: 'Baño helado incluido',
+    perSession: '/ sesión',
+  },
+  fr: {
+    title: 'Réserver un sauna privé avec bain glacé',
+    close: 'Fermer',
+    steps: ['Sauna', 'Date et heure', 'Coordonnées', 'Confirmation'],
+    selectSauna: 'Choisissez un sauna',
+    selectSaunaSubtitle: 'Les deux saunas sont chauffés au bois et comprennent l’accès au bain glacé.',
+    saunaNames: {
+      aalto: 'Bateau-sauna Aalto',
+      virta: 'Bateau-sauna Virta',
+    },
+    saunaCapacity: {
+      aalto: '10 personnes max.',
+      virta: '6 personnes max.',
+    },
+    saunaPrice: {
+      aalto: '140 € / 2 h',
+      virta: '120 € / 2 h',
+    },
+    selectDate: 'Choisissez une date',
+    selectDateSubtitle: 'La saison d’hiver s’étend de novembre à avril.',
+    loadingCalendar: 'Chargement du calendrier...',
+    changeDay: 'Modifier le jour',
+    selectTime: 'Choisissez une heure de début',
+    loadingTimes: 'Chargement des horaires...',
+    noSlots: 'Aucun horaire disponible pour la date sélectionnée',
+    chooseAnotherDay: 'Choisir un autre jour',
+    contactTitle: 'Coordonnées',
+    firstName: 'Prénom',
+    lastName: 'Nom',
+    email: 'Adresse e-mail',
+    phone: 'Numéro de téléphone',
+    marketingConsent: 'Je souhaite recevoir les offres et actualités de Hyvän Tuulen Sauna par e-mail. Je peux retirer mon consentement à tout moment. (Facultatif)',
+    summary: 'Récapitulatif de la réservation',
+    sauna: 'Sauna',
+    date: 'Date',
+    time: 'Horaire',
+    duration: 'Durée',
+    booker: 'Réservé par',
+    total: 'Total',
+    paymentInfoTitle: 'Informations de paiement',
+    paymentInfoText: 'En cliquant sur « Procéder au paiement », vous serez redirigé vers un système de paiement sécurisé. La réservation sera confirmée après le paiement.',
+    successTitle: 'Réservation confirmée !',
+    successText: 'Le sauna est maintenant réservé pour vous. Une confirmation a été envoyée à votre adresse e-mail.',
+    bookingNumber: 'Numéro de réservation',
+    back: 'Retour',
+    continue: 'Continuer',
+    proceedToPayment: 'Procéder au paiement',
+    submitting: 'Réservation en cours...',
+    errorLoadDates: 'Échec du chargement des dates',
+    errorLoadSlots: 'Échec du chargement des horaires',
+    errorSelectTime: 'Sélectionnez un horaire avant de réserver',
+    errorBookingFailed: 'Échec de la création de la réservation',
+    includesIceHole: 'Bain glacé inclus',
+    perSession: '/ séance',
+  },
+  de: {
+    title: 'Private Sauna mit Eisbad buchen',
+    close: 'Schließen',
+    steps: ['Sauna', 'Datum und Uhrzeit', 'Kontaktdaten', 'Bestätigung'],
+    selectSauna: 'Sauna auswählen',
+    selectSaunaSubtitle: 'Beide Saunen sind holzbeheizt und der Zugang zum Eisloch ist inklusive.',
+    saunaNames: {
+      aalto: 'Saunaboot Aalto',
+      virta: 'Saunaboot Virta',
+    },
+    saunaCapacity: {
+      aalto: 'Max. 10 Personen',
+      virta: 'Max. 6 Personen',
+    },
+    saunaPrice: {
+      aalto: '140 € / 2 h',
+      virta: '120 € / 2 h',
+    },
+    selectDate: 'Datum auswählen',
+    selectDateSubtitle: 'Die Wintersaison dauert von November bis April.',
+    loadingCalendar: 'Kalender wird geladen...',
+    changeDay: 'Tag ändern',
+    selectTime: 'Startzeit auswählen',
+    loadingTimes: 'Zeiten werden geladen...',
+    noSlots: 'Keine verfügbaren Zeiten am ausgewählten Tag',
+    chooseAnotherDay: 'Anderen Tag wählen',
+    contactTitle: 'Kontaktdaten',
+    firstName: 'Vorname',
+    lastName: 'Nachname',
+    email: 'E-Mail-Adresse',
+    phone: 'Telefonnummer',
+    marketingConsent: 'Ich möchte Angebote und Neuigkeiten von Hyvän Tuulen Sauna per E-Mail erhalten. Ich kann meine Einwilligung jederzeit widerrufen. (Optional)',
+    summary: 'Buchungsübersicht',
+    sauna: 'Sauna',
+    date: 'Datum',
+    time: 'Uhrzeit',
+    duration: 'Dauer',
+    booker: 'Gebucht von',
+    total: 'Gesamt',
+    paymentInfoTitle: 'Zahlungsinformationen',
+    paymentInfoText: 'Wenn Sie auf „Zur Zahlung“ klicken, werden Sie zu einem sicheren Zahlungssystem weitergeleitet. Die Buchung wird nach der Zahlung bestätigt.',
+    successTitle: 'Buchung bestätigt!',
+    successText: 'Die Sauna ist jetzt für Sie reserviert. Eine Bestätigung wurde an Ihre E-Mail-Adresse gesendet.',
+    bookingNumber: 'Buchungsnummer',
+    back: 'Zurück',
+    continue: 'Weiter',
+    proceedToPayment: 'Zur Zahlung',
+    submitting: 'Buchung läuft...',
+    errorLoadDates: 'Termine konnten nicht geladen werden',
+    errorLoadSlots: 'Zeiten konnten nicht geladen werden',
+    errorSelectTime: 'Wählen Sie vor der Buchung eine Uhrzeit aus',
+    errorBookingFailed: 'Buchung konnte nicht erstellt werden',
+    includesIceHole: 'Eisbad inklusive',
+    perSession: '/ Termin',
+  },
+} satisfies Record<WinterBookingLocale, unknown>;
 
 export default function WinterSaunaBookingShell({
   resourceId: initialResourceId,
@@ -51,73 +339,7 @@ export default function WinterSaunaBookingShell({
   locale = 'fi',
 }: WinterSaunaBookingShellProps) {
   const isEn = locale === 'en';
-  const t = {
-    title: isEn ? 'Book a private ice sauna' : 'Varaa yksityinen avantosauna',
-    close: isEn ? 'Close' : 'Sulje',
-    steps: isEn
-      ? ['Sauna', 'Date & time', 'Contact details', 'Confirmation']
-      : ['Sauna', 'Päivä ja aika', 'Yhteystiedot', 'Vahvistus'],
-    selectSauna: isEn ? 'Choose a sauna' : 'Valitse sauna',
-    selectSaunaSubtitle: isEn
-      ? 'Both saunas are wood-fired and include access to the ice hole.'
-      : 'Molemmat saunat ovat puulämmitteisiä ja avanto kuuluu mukaan.',
-    saunaNames: {
-      aalto: isEn ? 'Sauna boat Aalto' : 'Aalto-sauna',
-      virta: isEn ? 'Sauna boat Virta' : 'Virta-sauna',
-    },
-    saunaCapacity: {
-      aalto: isEn ? 'Max 10 people' : 'Max 10 hlö',
-      virta: isEn ? 'Max 6 people' : 'Max 6 hlö',
-    },
-    saunaPrice: {
-      aalto: '140 € / 2 h',
-      virta: '120 € / 2 h',
-    },
-    selectDate: isEn ? 'Choose a date' : 'Valitse päivämäärä',
-    selectDateSubtitle: isEn
-      ? 'The winter season runs from November to April.'
-      : 'Talvikausi pyörii marraskuusta huhtikuuhun.',
-    loadingCalendar: isEn ? 'Loading calendar...' : 'Ladataan kalenteria...',
-    changeDay: isEn ? 'Change day' : 'Vaihda päivä',
-    selectTime: isEn ? 'Choose a start time' : 'Valitse aloitusaika',
-    loadingTimes: isEn ? 'Loading times...' : 'Ladataan aikoja...',
-    noSlots: isEn ? 'No available times for the selected day' : 'Ei vapaita aikoja valitulle päivälle',
-    chooseAnotherDay: isEn ? 'Choose another day' : 'Valitse toinen päivä',
-    contactTitle: isEn ? 'Contact details' : 'Yhteystiedot',
-    firstName: isEn ? 'First name' : 'Etunimi',
-    lastName: isEn ? 'Last name' : 'Sukunimi',
-    email: isEn ? 'Email' : 'Sähköposti',
-    phone: isEn ? 'Phone number' : 'Puhelinnumero',
-    marketingConsent: isEn
-      ? 'I want to receive offers and news from Hyvän Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
-      : 'Haluan saada Hyvän Tuulen Saunan tarjouksia ja uutisia sähköpostiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
-    summary: isEn ? 'Booking summary' : 'Varauksen yhteenveto',
-    sauna: isEn ? 'Sauna' : 'Sauna',
-    date: isEn ? 'Date' : 'Päivämäärä',
-    time: isEn ? 'Time' : 'Aika',
-    duration: isEn ? 'Duration' : 'Kesto',
-    booker: isEn ? 'Booked by' : 'Varaaja',
-    total: isEn ? 'Total' : 'Yhteensä',
-    paymentInfoTitle: isEn ? 'Payment details' : 'Maksutiedot',
-    paymentInfoText: isEn
-      ? 'By clicking "Proceed to payment" you will be redirected to a secure payment system. The booking is confirmed after payment.'
-      : 'Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
-    successTitle: isEn ? 'Booking confirmed!' : 'Varaus vahvistettu!',
-    successText: isEn
-      ? 'The sauna is now booked for you. A confirmation has been sent to your email.'
-      : 'Sauna on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
-    bookingNumber: isEn ? 'Booking number' : 'Varausnumero',
-    back: isEn ? 'Back' : 'Takaisin',
-    continue: isEn ? 'Continue' : 'Jatka',
-    proceedToPayment: isEn ? 'Proceed to payment' : 'Siirry maksuun',
-    submitting: isEn ? 'Booking...' : 'Varataan...',
-    errorLoadDates: isEn ? 'Failed to load dates' : 'Päivämäärien lataaminen epäonnistui',
-    errorLoadSlots: isEn ? 'Failed to load times' : 'Aikojen lataaminen epäonnistui',
-    errorSelectTime: isEn ? 'Select a time before booking' : 'Valitse aika ennen varausta',
-    errorBookingFailed: isEn ? 'Failed to create booking' : 'Varauksen luominen epäonnistui',
-    includesIceHole: isEn ? 'Ice hole included' : 'Avanto sisältyy',
-    perSession: isEn ? '/ session' : '/ vuoro',
-  };
+  const t = TRANSLATIONS[locale];
 
   const AALTO_ID = '3dd71bee-f303-463e-ad78-e05b4faa2234';
   const VIRTA_ID = '3bffeff6-4ef4-4865-a99b-370b956e355e';
@@ -211,7 +433,7 @@ export default function WinterSaunaBookingShell({
   }, [selectedSauna, selectedDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr + 'T12:00:00').toLocaleDateString(isEn ? 'en-GB' : 'fi-FI', {
+    return new Date(dateStr + 'T12:00:00').toLocaleDateString(LOCALE_TAGS[locale], {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -220,7 +442,7 @@ export default function WinterSaunaBookingShell({
   };
 
   const formatTime = (isoString: string) =>
-    new Date(isoString).toLocaleTimeString(isEn ? 'en-GB' : 'fi-FI', { hour: '2-digit', minute: '2-digit' });
+    new Date(isoString).toLocaleTimeString(LOCALE_TAGS[locale], { hour: '2-digit', minute: '2-digit' });
 
   const formatPrice = (cents: number | null | undefined) => {
     if (!cents) return '';

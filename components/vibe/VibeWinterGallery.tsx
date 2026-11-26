@@ -11,13 +11,56 @@ interface VibeWinterGalleryProps {
   locale: Locale;
 }
 
+const copyByLocale = {
+  fi: {
+    expandImage: 'Laajenna kuva',
+    previousImages: 'Edelliset kuvat',
+    nextImages: 'Seuraavat kuvat',
+    closeGallery: 'Sulje galleria',
+    previousImage: 'Edellinen kuva',
+    nextImage: 'Seuraava kuva',
+  },
+  en: {
+    expandImage: 'Expand image',
+    previousImages: 'Previous images',
+    nextImages: 'Next images',
+    closeGallery: 'Close gallery',
+    previousImage: 'Previous image',
+    nextImage: 'Next image',
+  },
+  es: {
+    expandImage: 'Ampliar imagen',
+    previousImages: 'Imágenes anteriores',
+    nextImages: 'Imágenes siguientes',
+    closeGallery: 'Cerrar galería',
+    previousImage: 'Imagen anterior',
+    nextImage: 'Imagen siguiente',
+  },
+  fr: {
+    expandImage: 'Agrandir l’image',
+    previousImages: 'Images précédentes',
+    nextImages: 'Images suivantes',
+    closeGallery: 'Fermer la galerie',
+    previousImage: 'Image précédente',
+    nextImage: 'Image suivante',
+  },
+  de: {
+    expandImage: 'Bild vergrößern',
+    previousImages: 'Vorherige Bilder',
+    nextImages: 'Nächste Bilder',
+    closeGallery: 'Galerie schließen',
+    previousImage: 'Vorheriges Bild',
+    nextImage: 'Nächstes Bild',
+  },
+};
+
 export default function VibeWinterGallery({ images, label, locale }: VibeWinterGalleryProps) {
   const [index, setIndex] = useState(0);
   const [expanded, setExpanded] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const isEn = locale === 'en';
+  const copy = copyByLocale[locale];
   const isExpanded = expanded !== null;
 
   const goNext = useCallback(() => {
@@ -89,7 +132,7 @@ export default function VibeWinterGallery({ images, label, locale }: VibeWinterG
               triggerRef.current = event.currentTarget;
               setExpanded(imageIndex);
             }}
-            aria-label={`${isEn ? 'Expand image' : 'Laajenna kuva'}: ${image.alt}`}
+            aria-label={`${copy.expandImage}: ${image.alt}`}
           >
             <Image src={image.src} alt={image.alt} fill sizes="(max-width: 760px) 50vw, 33vw" />
             <span className="vibe-boat-gallery-expand" aria-hidden="true"><Maximize2 size={19} /></span>
@@ -98,28 +141,28 @@ export default function VibeWinterGallery({ images, label, locale }: VibeWinterG
       </div>
 
       <div className="vibe-boat-gallery-controls">
-        <button type="button" onClick={goPrevious} aria-label={isEn ? 'Previous images' : 'Edelliset kuvat'}>
+        <button type="button" onClick={goPrevious} aria-label={copy.previousImages}>
           <ChevronLeft size={20} aria-hidden="true" />
         </button>
         <span aria-live="polite">{index + 1} / {images.length}</span>
-        <button type="button" onClick={goNext} aria-label={isEn ? 'Next images' : 'Seuraavat kuvat'}>
+        <button type="button" onClick={goNext} aria-label={copy.nextImages}>
           <ChevronRight size={20} aria-hidden="true" />
         </button>
       </div>
 
       {expandedImage && (
         <div className="vibe-boat-lightbox" role="dialog" aria-modal="true" aria-label={label} onClick={() => setExpanded(null)}>
-          <button ref={closeButtonRef} type="button" className="vibe-boat-lightbox-close" onClick={() => setExpanded(null)} aria-label={isEn ? 'Close gallery' : 'Sulje galleria'}>
+          <button ref={closeButtonRef} type="button" className="vibe-boat-lightbox-close" onClick={() => setExpanded(null)} aria-label={copy.closeGallery}>
             <X size={26} aria-hidden="true" />
           </button>
-          <button type="button" onClick={(event) => { event.stopPropagation(); expandPrevious(); }} aria-label={isEn ? 'Previous image' : 'Edellinen kuva'}>
+          <button type="button" onClick={(event) => { event.stopPropagation(); expandPrevious(); }} aria-label={copy.previousImage}>
             <ChevronLeft size={32} aria-hidden="true" />
           </button>
           <div className="vibe-boat-lightbox-stage" onClick={(event) => event.stopPropagation()}>
             <Image key={expandedImage.src} src={expandedImage.src} alt={expandedImage.alt} fill sizes="100vw" />
             <p>{label} · {(expanded ?? 0) + 1} / {images.length}</p>
           </div>
-          <button type="button" onClick={(event) => { event.stopPropagation(); expandNext(); }} aria-label={isEn ? 'Next image' : 'Seuraava kuva'}>
+          <button type="button" onClick={(event) => { event.stopPropagation(); expandNext(); }} aria-label={copy.nextImage}>
             <ChevronRight size={32} aria-hidden="true" />
           </button>
         </div>

@@ -3,6 +3,9 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 
+type BookingLocale = 'fi' | 'en' | 'es' | 'fr' | 'de';
+type DayStatus = 'disabled' | 'selected' | 'soldout' | 'available' | 'unavailable';
+
 interface PublicSaunaCalendarProps {
   selectedDate: string | null;
   onSelectDate: (date: string) => void;
@@ -10,14 +13,107 @@ interface PublicSaunaCalendarProps {
   availableDates?: Set<string>;
   soldOutDates?: Set<string>;
   onMonthChange?: (year: number, month: number) => void;
-  locale?: 'fi' | 'en';
+  locale?: BookingLocale;
 }
 
-const WEEKDAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
-const MONTH_NAMES = [
-  'Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu',
-  'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'
-];
+const DATE_LOCALES: Record<BookingLocale, string> = {
+  fi: 'fi-FI',
+  en: 'en-GB',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+};
+
+const WEEKDAYS: Record<BookingLocale, string[]> = {
+  fi: ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'],
+  en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+  es: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+  fr: ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'],
+  de: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+};
+
+const texts = {
+  fi: {
+    title: 'Valitse päivämäärä',
+    availabilityHint: 'Vihreällä merkityt päivät ovat varattavissa.',
+    previousMonth: 'Edellinen kuukausi',
+    nextMonth: 'Seuraava kuukausi',
+    loading: 'Haetaan aikoja...',
+    available: 'Vapaa',
+    soldOut: 'Loppuunmyyty',
+    selected: 'Valittu',
+    status: {
+      selected: 'valittu',
+      available: 'vapaa',
+      soldout: 'loppuunmyyty',
+      unavailable: 'ei varattavissa',
+    },
+  },
+  en: {
+    title: 'Select a date',
+    availabilityHint: 'Days marked in green are available to book.',
+    previousMonth: 'Previous month',
+    nextMonth: 'Next month',
+    loading: 'Loading times...',
+    available: 'Available',
+    soldOut: 'Sold out',
+    selected: 'Selected',
+    status: {
+      selected: 'selected',
+      available: 'available',
+      soldout: 'sold out',
+      unavailable: 'not available',
+    },
+  },
+  es: {
+    title: 'Selecciona una fecha',
+    availabilityHint: 'Los días marcados en verde están disponibles para reservar.',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente',
+    loading: 'Cargando horarios...',
+    available: 'Disponible',
+    soldOut: 'Agotado',
+    selected: 'Seleccionado',
+    status: {
+      selected: 'seleccionado',
+      available: 'disponible',
+      soldout: 'agotado',
+      unavailable: 'no disponible',
+    },
+  },
+  fr: {
+    title: 'Sélectionnez une date',
+    availabilityHint: 'Les jours indiqués en vert peuvent être réservés.',
+    previousMonth: 'Mois précédent',
+    nextMonth: 'Mois suivant',
+    loading: 'Chargement des horaires...',
+    available: 'Disponible',
+    soldOut: 'Complet',
+    selected: 'Sélectionné',
+    status: {
+      selected: 'sélectionné',
+      available: 'disponible',
+      soldout: 'complet',
+      unavailable: 'non disponible',
+    },
+  },
+  de: {
+    title: 'Datum auswählen',
+    availabilityHint: 'Grün markierte Tage können gebucht werden.',
+    previousMonth: 'Vorheriger Monat',
+    nextMonth: 'Nächster Monat',
+    loading: 'Zeiten werden geladen...',
+    available: 'Verfügbar',
+    soldOut: 'Ausgebucht',
+    selected: 'Ausgewählt',
+    status: {
+      selected: 'ausgewählt',
+      available: 'verfügbar',
+      soldout: 'ausgebucht',
+      unavailable: 'nicht verfügbar',
+    },
+  },
+} as const;
 
 const TIME_ZONE = 'Europe/Helsinki';
 
@@ -42,7 +138,8 @@ export default function PublicSaunaCalendar({
   onMonthChange,
   locale = 'fi',
 }: PublicSaunaCalendarProps) {
-  const isEn = locale === 'en';
+  const t = texts[locale];
+  const dateLocale = DATE_LOCALES[locale];
   // Start from current month, but not before May 1st
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
@@ -126,6 +223,22 @@ export default function PublicSaunaCalendar({
     return days;
   }, [currentMonth, today]);
 
+  const weekdayNames = useMemo(() => {
+    const formatter = new Intl.DateTimeFormat(dateLocale, { weekday: 'long', timeZone: 'UTC' });
+    return WEEKDAYS[locale].map((short, index) => ({
+      short,
+      long: formatter.format(new Date(Date.UTC(2024, 0, index + 1))),
+    }));
+  }, [dateLocale, locale]);
+
+  const monthLabel = useMemo(() => {
+    const label = new Intl.DateTimeFormat(dateLocale, {
+      month: 'long',
+      year: 'numeric',
+    }).format(currentMonth);
+    return label.charAt(0).toLocaleUpperCase(dateLocale) + label.slice(1);
+  }, [currentMonth, dateLocale]);
+
   const navigateMonth = (direction: 'prev' | 'next') => {
     const newMonth = new Date(currentMonth);
     if (direction === 'prev') {
@@ -137,7 +250,7 @@ export default function PublicSaunaCalendar({
     onMonthChange?.(newMonth.getFullYear(), newMonth.getMonth() + 1);
   };
 
-  const getDayStatus = (date: string, isPast: boolean, isCurrentMonth: boolean) => {
+  const getDayStatus = (date: string, isPast: boolean, isCurrentMonth: boolean): DayStatus => {
     if (isPast || !isCurrentMonth) return 'disabled';
     if (selectedDate === date) return 'selected';
     if (soldOutDates.has(date)) return 'soldout';
@@ -145,7 +258,7 @@ export default function PublicSaunaCalendar({
     return 'unavailable';
   };
 
-  const getDayStyles = (status: string) => {
+  const getDayStyles = (status: DayStatus) => {
     switch (status) {
       case 'selected':
         return 'bg-lake text-white ring-2 ring-lake ring-offset-2';
@@ -163,33 +276,23 @@ export default function PublicSaunaCalendar({
     }
   };
 
-  // Full-date bilingual accessible name, e.g. "12. kesäkuuta, vapaa" / "12 June, available"
-  const getDayAriaLabel = (date: string, status: string) => {
-    const dateText = new Intl.DateTimeFormat(isEn ? 'en-GB' : 'fi-FI', {
+  const getDayAriaLabel = (date: string, status: DayStatus) => {
+    const dateText = new Intl.DateTimeFormat(dateLocale, {
       day: 'numeric',
       month: 'long',
     }).format(new Date(date + 'T00:00:00'));
-    const statusText = (() => {
-      switch (status) {
-        case 'selected':
-          return isEn ? 'selected' : 'valittu';
-        case 'available':
-          return isEn ? 'available' : 'vapaa';
-        case 'soldout':
-          return isEn ? 'sold out' : 'loppuunmyyty';
-        default:
-          return isEn ? 'not available' : 'ei varattavissa';
-      }
-    })();
+    const statusText = status === 'disabled' || status === 'unavailable'
+      ? t.status.unavailable
+      : t.status[status];
     return `${dateText}, ${statusText}`;
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="mb-3 text-base font-semibold text-stone-900">Valitse päivämäärä</h3>
+        <h3 className="mb-3 text-base font-semibold text-stone-900">{t.title}</h3>
         <p className="mb-3 text-xs text-stone-600">
-          Vihreällä merkityt päivät ovat varattavissa.
+          {t.availabilityHint}
         </p>
 
         <div className="rounded-xl border border-stone-200 bg-white p-3 max-w-md mx-auto">
@@ -198,35 +301,36 @@ export default function PublicSaunaCalendar({
             <button
               onClick={() => navigateMonth('prev')}
               className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
-              aria-label="Edellinen kuukausi"
+              aria-label={t.previousMonth}
             >
-              <ChevronLeft className="h-[18px] w-[18px] text-stone-600" />
+              <ChevronLeft className="h-[18px] w-[18px] text-stone-600" aria-hidden="true" />
             </button>
             <h4 className="text-base font-semibold text-stone-900">
-              {MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+              {monthLabel}
             </h4>
             <button
               onClick={() => navigateMonth('next')}
               className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
-              aria-label="Seuraava kuukausi"
+              aria-label={t.nextMonth}
             >
-              <ChevronRight className="h-[18px] w-[18px] text-stone-600" />
+              <ChevronRight className="h-[18px] w-[18px] text-stone-600" aria-hidden="true" />
             </button>
           </div>
 
           {/* Loading indicator */}
           {isLoading && (
-            <div className="flex items-center justify-center py-3 mb-2">
-              <Loader2 className="h-5 w-5 animate-spin text-lake" />
-              <span className="ml-2 text-xs text-stone-600">Haetaan aikoja...</span>
+            <div className="flex items-center justify-center py-3 mb-2" role="status">
+              <Loader2 className="h-5 w-5 animate-spin text-lake" aria-hidden="true" />
+              <span className="ml-2 text-xs text-stone-600">{t.loading}</span>
             </div>
           )}
 
           {/* Weekday headers */}
           <div className="grid grid-cols-7 gap-0.5 mb-1.5">
-            {WEEKDAYS.map(day => (
-              <div key={day} className="text-center text-xs font-medium text-stone-500 py-1.5">
-                {day}
+            {weekdayNames.map(day => (
+              <div key={day.long} className="text-center text-xs font-medium text-stone-500 py-1.5">
+                <span aria-hidden="true">{day.short}</span>
+                <span className="sr-only">{day.long}</span>
               </div>
             ))}
           </div>
@@ -247,6 +351,7 @@ export default function PublicSaunaCalendar({
                   }}
                   disabled={!isClickable}
                   aria-label={getDayAriaLabel(day.date, status)}
+                  aria-pressed={selectedDate === day.date}
                   className={`
                     aspect-square rounded-md text-xs transition-all
                     ${getDayStyles(status)}
@@ -262,16 +367,16 @@ export default function PublicSaunaCalendar({
           {/* Legend */}
           <div className="mt-3 flex flex-wrap gap-3 text-xs text-stone-600 justify-center">
             <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-green-500"></div>
-              <span>Vapaa</span>
+              <div className="h-2.5 w-2.5 rounded bg-green-500" aria-hidden="true"></div>
+              <span>{t.available}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-red-500"></div>
-              <span>Loppuunmyyty</span>
+              <div className="h-2.5 w-2.5 rounded bg-red-500" aria-hidden="true"></div>
+              <span>{t.soldOut}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-lake"></div>
-              <span>Valittu</span>
+              <div className="h-2.5 w-2.5 rounded bg-lake" aria-hidden="true"></div>
+              <span>{t.selected}</span>
             </div>
           </div>
         </div>

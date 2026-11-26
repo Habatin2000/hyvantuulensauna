@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "siteName": "Hyvän Tuulen Sauna",
+    "defaultTitle": "Schwimmende Sauna in Helsinki | Hyvän Tuulen Sauna",
+    "defaultDescription": "Erleben Sie eine schwimmende holzbeheizte Sauna in Aurinkolahti, Helsinki. Buchen Sie eine öffentliche Saunazeit oder eine private Saunabootfahrt für Ihre Gruppe.",
+    "socialImageAlt": "Hyvän Tuulen Sauna - Saunaboot bei Sonnenuntergang"
+  },
+  "nav": {
+    "home": "Startseite",
+    "saunaBoat": "Saunabootfahrten",
+    "avanto": "Eisbaden und Sauna",
+    "occasions": "Feiern und Firmen",
+    "events": "Veranstaltungen",
+    "privateSauna": "Private Sauna",
+    "publicSauna": "Öffentliche Sauna und Winterbaden",
+    "gallery": "Galerie",
+    "location": "Standort",
+    "about": "Über uns",
+    "faq": "Häufige Fragen",
+    "bookNow": "Sauna buchen",
+    "private": "Private Sauna",
+    "public": "Öffentliche Sauna",
+    "phone": "Anrufen",
+    "contact": "Kontakt",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen"
+  },
+  "footer": {
+    "companyName": "Hyvän Tuulen Sauna",
+    "tagline": "Authentisches Saunaerlebnis in Helsinki — Saunaboote im Sommer und private Sauna das ganze Jahr über.",
+    "links": "Links",
+    "contact": "Kontakt",
+    "social": "Folgen Sie uns",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "consent": {
+    "description": "Wir verwenden Cookies und Analysedienste, um Ihr Erlebnis zu verbessern. Mit Ihrer Zustimmung erlauben Sie das Tracking durch Google Analytics und Google Ads.",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren"
+  }
+}

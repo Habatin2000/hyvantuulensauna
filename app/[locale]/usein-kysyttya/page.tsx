@@ -2,9 +2,20 @@ import type { Metadata } from 'next';
 import VibeInnerPage from '@/components/vibe/VibeInnerPage';
 import { getVibePage } from '@/components/vibe/pages';
 import type { Locale } from '@/components/vibe/content';
-import { generateFAQSchema, generateBreadcrumbSchema, generateArticleSchema } from '../schema';
+import {
+  generateFAQSchema,
+  generateBreadcrumbSchema,
+  generateArticleSchema,
+  getHomeLabel,
+  getLanguageAlternates,
+  getLocalizedPageUrl,
+  getOpenGraphLocale,
+  normalizePageLocale,
+} from '../schema';
 import { SITE_URL } from '@/lib/site';
 
+const PAGE_PATH = '/usein-kysyttya';
+const PAGE_IMAGE = `${SITE_URL}/images/gallery-raft-sunset.webp`;
 const DATE_PUBLISHED = '2024-01-15';
 const DATE_MODIFIED = '2026-04-14';
 
@@ -14,34 +25,36 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en/faq' : '/usein-kysyttya'}`;
+  const safeLocale = normalizePageLocale(locale) as Locale;
+  const data = getVibePage('ukk', safeLocale);
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
 
   return {
-    title: isEn
-      ? 'Sauna & Boat Cruise FAQ'
-      : 'Usein kysyttyä saunasta ja risteilyistä',
-    description: isEn
-      ? 'What should you bring to the sauna, and how do you book a cruise? Find answers about public sauna sessions, private cruises, prices and bookings.'
-      : 'Mitä mukaan saunaan ja miten saunalautta varataan? Löydä vastaukset yleisiin kysymyksiin saunavuoroista, risteilyistä, hinnoista ja varauksista.',
+    title: { absolute: data.title },
+    description: data.description,
     alternates: {
       canonical: pageUrl,
-      languages: {
-        'fi-FI': `${SITE_URL}/usein-kysyttya`,
-        'en-US': `${SITE_URL}/en/faq`,
-        'en-GB': `${SITE_URL}/en/faq`,
-        'x-default': `${SITE_URL}/usein-kysyttya`,
-      },
+      languages: getLanguageAlternates(PAGE_PATH),
     },
     openGraph: {
-      title: isEn
-        ? 'FAQ | Hyvän Tuulen Sauna'
-        : 'Usein Kysyttyä | Hyvän Tuulen Sauna',
-      description: isEn
-        ? 'Answers to the most common questions about the sauna and sauna boats.'
-        : 'Vastaukset yleisimpiin kysymyksiin saunasta ja saunalautoista.',
+      title: data.title,
+      description: data.description,
       url: pageUrl,
-      locale: isEn ? 'en_US' : 'fi_FI',
+      locale: getOpenGraphLocale(safeLocale),
+      images: [
+        {
+          url: PAGE_IMAGE,
+          width: 1200,
+          height: 630,
+          alt: data.imageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.description,
+      images: [{ url: PAGE_IMAGE, alt: data.imageAlt }],
     },
   };
 }
@@ -52,25 +65,23 @@ export default async function FAQPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
-  const isEn = safeLocale === 'en';
+  const safeLocale = normalizePageLocale(locale) as Locale;
   const data = getVibePage('ukk', safeLocale);
-  const pageUrl = `${SITE_URL}${isEn ? '/en/faq' : '/usein-kysyttya'}`;
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
+  const pageName = data.title.split(' | ')[0];
 
   const faqSchema = generateFAQSchema(data.faqs ?? []);
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: isEn ? 'Home' : 'Etusivu', url: `${SITE_URL}${isEn ? '/en' : ''}` },
-    { name: isEn ? 'FAQ' : 'Usein kysyttyä', url: pageUrl }
+    { name: getHomeLabel(safeLocale), url: getLocalizedPageUrl('/', safeLocale) },
+    { name: pageName, url: pageUrl },
   ]);
 
   const articleSchema = generateArticleSchema(
-    isEn ? 'FAQ – Sauna and Sauna Boats' : 'Usein Kysyttyä | Sauna ja Saunalautta Helsinki',
-    isEn
-      ? 'Answers to the most common questions about sauna boat cruises, the public sauna and bookings.'
-      : 'Vastaukset yleisimpiin kysymyksiin saunalauttaristeilyistä, julkisesta saunasta ja varauksista.',
+    data.title,
+    data.description,
     pageUrl,
-    `${SITE_URL}/images/gallery-raft-sunset.webp`,
+    PAGE_IMAGE,
     DATE_PUBLISHED,
     DATE_MODIFIED
   );

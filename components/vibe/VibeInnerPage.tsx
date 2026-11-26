@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, MapPin } from 'lucide-react';
 import { vibeCopy, type Locale } from './content';
 import type { VibePageData } from './pages';
+import { getVibeRoute } from './routes';
 import VibeFaq from './VibeFaq';
 import VibeCommunity from './VibeCommunity';
 import VibeavantoContent from './VibeavantoContent';
@@ -11,13 +12,62 @@ import VibesaunalauttaristeilytContent from './VibesaunalauttaristeilytContent';
 import type { VibeSlug } from './pages';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
 
+const innerPageCopy = {
+  fi: {
+    readMore: 'Lue lisää',
+    pricing: 'Hinnoittelu',
+    journeyEyebrow: 'Yksinkertainen retki',
+    faqEyebrow: 'Käytännön vastaukset',
+    galleryLabel: 'Kuvagalleria',
+    nextTitle: 'Tule sellaisena kuin olet.',
+    backToExperiences: 'Takaisin elämyksiin',
+  },
+  en: {
+    readMore: 'Read more',
+    pricing: 'Pricing',
+    journeyEyebrow: 'The simple journey',
+    faqEyebrow: 'Practical answers',
+    galleryLabel: 'Photo gallery',
+    nextTitle: 'Come as you are.',
+    backToExperiences: 'Back to experiences',
+  },
+  es: {
+    readMore: 'Leer más',
+    pricing: 'Precios',
+    journeyEyebrow: 'Una experiencia sencilla',
+    faqEyebrow: 'Respuestas prácticas',
+    galleryLabel: 'Galería de fotos',
+    nextTitle: 'Ven como eres.',
+    backToExperiences: 'Volver a las experiencias',
+  },
+  fr: {
+    readMore: 'En savoir plus',
+    pricing: 'Tarifs',
+    journeyEyebrow: 'Une expérience toute simple',
+    faqEyebrow: 'Réponses pratiques',
+    galleryLabel: 'Galerie photos',
+    nextTitle: 'Venez comme vous êtes.',
+    backToExperiences: 'Retour aux expériences',
+  },
+  de: {
+    readMore: 'Mehr erfahren',
+    pricing: 'Preise',
+    journeyEyebrow: 'Ganz einfach',
+    faqEyebrow: 'Praktische Antworten',
+    galleryLabel: 'Fotogalerie',
+    nextTitle: 'Komm, wie du bist.',
+    backToExperiences: 'Zurück zu den Erlebnissen',
+  },
+};
+
 export default function VibeInnerPage({ data, locale, slug }: { data: VibePageData; locale: Locale; slug?: VibeSlug }) {
   if (slug === 'avanto') return <VibeavantoContent data={data} locale={locale} />;
   if (slug === 'julkinen-sauna') return <VibejulkinenSaunaContent data={data} locale={locale} />;
   if (slug === 'saunalauttaristeilyt') return <VibesaunalauttaristeilytContent data={data} locale={locale} />;
 
   const c = vibeCopy[locale];
-  const isEn = locale === 'en';
+  const ui = innerPageCopy[locale];
+  const homeHref = getVibeRoute('home', locale);
 
   return (
     <main id="main-content">
@@ -32,7 +82,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
               {data.ctaLabel}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>
             <a className="vibe-text-link" href="#lisatietoa">
-              {isEn ? 'Read more' : 'Lue lisää'}<ArrowRight size={16} aria-hidden="true" />
+              {ui.readMore}<ArrowRight size={16} aria-hidden="true" />
             </a>
           </div>
         </div>
@@ -65,7 +115,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
       {data.prices && (
         <section className="vibe-pricing" aria-labelledby="vibe-pricing-title">
           <div className="vibe-pricing-heading">
-            <p className="vibe-eyebrow">{isEn ? 'Pricing' : 'Hinnoittelu'}</p>
+            <p className="vibe-eyebrow">{ui.pricing}</p>
             <h2 id="vibe-pricing-title">{data.priceTitle}</h2>
           </div>
           <div className="vibe-price-table" role="table" aria-label={data.priceTitle}>
@@ -87,7 +137,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
             <Image src={data.timelineImage ?? data.image} alt={data.timelineImageAlt ?? ''} fill sizes="(max-width: 760px) 100vw, 40vw" />
           </div>
           <div className="vibe-timeline-copy">
-            <p className="vibe-eyebrow">{isEn ? 'The simple journey' : 'Yksinkertainen retki'}</p>
+            <p className="vibe-eyebrow">{ui.journeyEyebrow}</p>
             <h2 id="vibe-timeline-title">{data.timelineTitle}</h2>
             <ol>
               {data.timeline.map((step) => (
@@ -110,7 +160,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
       {data.faqs && (
         <section className="vibe-faq-section" aria-labelledby="vibe-faq-title">
           <div className="vibe-faq-heading">
-            <p className="vibe-eyebrow">{isEn ? 'Practical answers' : 'Käytännön vastaukset'}</p>
+            <p className="vibe-eyebrow">{ui.faqEyebrow}</p>
             <h2 id="vibe-faq-title">{data.faqTitle}</h2>
           </div>
           <VibeFaq items={data.faqs} />
@@ -118,7 +168,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
       )}
 
       {data.gallery && (
-        <section className="vibe-gallery" aria-label={isEn ? 'Photo gallery' : 'Kuvagalleria'}>
+        <section className="vibe-gallery" aria-label={ui.galleryLabel}>
           {data.gallery.map((image, index) => (
             <div className={`vibe-gallery-image vibe-gallery-image-${(index % 4) + 1}`} key={image.src}>
               <Image src={image.src} alt={image.alt} fill sizes="(max-width: 760px) 100vw, 50vw" />
@@ -144,14 +194,14 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
 
       <section className="vibe-next" aria-labelledby="vibe-next-title">
         <p className="vibe-eyebrow">{c.nextEyebrow}</p>
-        <h2 id="vibe-next-title">{isEn ? 'Come as you are.' : 'Tule sellaisena kuin olet.'}</h2>
+        <h2 id="vibe-next-title">{ui.nextTitle}</h2>
         <p>{data.heroText}</p>
         <div className="vibe-next-actions">
           <Link className="vibe-next-main" href={data.ctaHref}>
             {data.ctaLabel}<ArrowUpRight aria-hidden="true" />
           </Link>
-          <Link className="vibe-next-secondary" href={locale === 'en' ? '/en/' : '/'}>
-            {isEn ? 'Back to experiences' : 'Takaisin elämyksiin'}<ArrowRight size={16} aria-hidden="true" />
+          <Link className="vibe-next-secondary" href={homeHref}>
+            {ui.backToExperiences}<ArrowRight size={16} aria-hidden="true" />
           </Link>
         </div>
       </section>

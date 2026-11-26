@@ -2,8 +2,70 @@ import type { Metadata } from 'next';
 import { Check } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { thankYouPageContent } from '@/content/pages';
-import { SITE_URL } from '@/lib/site';
-import type { Locale } from '@/content/pages';
+import { getLocalizedPageUrl, normalizePageLocale } from '../schema';
+
+const localizedContent = {
+  fi: thankYouPageContent.fi,
+  en: thankYouPageContent.en,
+  es: {
+    title: '¡Gracias por tu reserva!',
+    description: 'Hemos recibido tu solicitud de reserva. Confirmaremos tu reserva por correo electrónico en un plazo de 24 horas.',
+    nextSteps: [
+      'Revisa tu correo electrónico (incluida la carpeta de spam) para encontrar la confirmación de la reserva',
+      'Llega al menos 5 minutos antes de la hora reservada',
+    ],
+    contact: {
+      title: '¿Tienes preguntas?',
+      description: 'Ponte en contacto con nosotros; estaremos encantados de ayudarte.',
+      phone: '+358 44 231 3546',
+      email: 'info@hyvantuulensauna.fi',
+    },
+  },
+  fr: {
+    title: 'Merci pour votre réservation !',
+    description: 'Nous avons bien reçu votre demande de réservation. Nous confirmerons votre réservation par e-mail dans les 24 heures.',
+    nextSteps: [
+      'Consultez votre boîte mail (y compris les courriers indésirables) pour trouver la confirmation de réservation',
+      'Arrivez au moins 5 minutes avant l’horaire réservé',
+    ],
+    contact: {
+      title: 'Des questions ?',
+      description: 'Contactez-nous, nous serons ravis de vous aider.',
+      phone: '+358 44 231 3546',
+      email: 'info@hyvantuulensauna.fi',
+    },
+  },
+  de: {
+    title: 'Vielen Dank für Ihre Buchung!',
+    description: 'Wir haben Ihre Buchungsanfrage erhalten. Wir bestätigen Ihre Buchung innerhalb von 24 Stunden per E-Mail.',
+    nextSteps: [
+      'Prüfen Sie Ihr E-Mail-Postfach (einschließlich des Spam-Ordners) auf die Buchungsbestätigung',
+      'Kommen Sie mindestens 5 Minuten vor dem gebuchten Termin an',
+    ],
+    contact: {
+      title: 'Haben Sie Fragen?',
+      description: 'Kontaktieren Sie uns, wir helfen Ihnen gerne weiter.',
+      phone: '+358 44 231 3546',
+      email: 'info@hyvantuulensauna.fi',
+    },
+  },
+};
+
+const nextStepsLabels = {
+  fi: 'Seuraavaksi:',
+  en: 'Next steps:',
+  es: 'Próximos pasos:',
+  fr: 'Prochaines étapes :',
+  de: 'Nächste Schritte:',
+};
+
+const returnHomeLabels = {
+  fi: 'Palaa etusivulle',
+  en: 'Return to homepage',
+  es: 'Volver a la página de inicio',
+  fr: 'Retour à l’accueil',
+  de: 'Zurück zur Startseite',
+};
 
 export async function generateMetadata({
   params,
@@ -11,16 +73,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const isEn = locale === 'en';
+  const safeLocale = normalizePageLocale(locale);
+  const content = localizedContent[safeLocale];
 
   // SEO Metadata - ei indeksoitava / not indexable
   return {
-    title: isEn ? 'Thank You for Your Booking!' : 'Kiitos varauksestasi!',
-    description: isEn
-      ? 'We have received your booking request. We will be in touch soon!'
-      : 'Vastaanotimme varauskyselysi. Olemme sinuun yhteydessä pian!',
+    title: content.title,
+    description: content.description,
     alternates: {
-      canonical: `${SITE_URL}${isEn ? '/en/thank-you' : '/kiitos'}`,
+      canonical: getLocalizedPageUrl('/kiitos', safeLocale),
     },
     robots: {
       index: false,
@@ -35,9 +96,8 @@ export default async function ThankYouPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
-  const isEn = safeLocale === 'en';
-  const content = thankYouPageContent[safeLocale];
+  const safeLocale = normalizePageLocale(locale);
+  const content = localizedContent[safeLocale];
 
   return (
     <main id="main-content" className="section-padding bg-stone-50 min-h-[60vh] flex items-center">
@@ -60,7 +120,7 @@ export default async function ThankYouPage({
 
           <div className="bg-white rounded-xl p-6 mb-8 text-left">
             <h2 className="font-semibold text-stone-900 mb-4">
-              {isEn ? 'Next steps:' : 'Seuraavaksi:'}
+              {nextStepsLabels[safeLocale]}
             </h2>
             <ul className="space-y-3 text-stone-600">
               {content.nextSteps.map((step, index) => (
@@ -100,7 +160,7 @@ export default async function ThankYouPage({
             href="/"
             className="inline-flex items-center gap-2 rounded-lg bg-lake px-6 py-3 font-medium text-white hover:bg-lake-deep"
           >
-            {isEn ? 'Return to homepage' : 'Palaa etusivulle'}
+            {returnHomeLabels[safeLocale]}
           </Link>
         </div>
       </div>

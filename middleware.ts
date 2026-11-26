@@ -1,21 +1,18 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { getVibeRoute } from './components/vibe/routes';
 
 const intlMiddleware = createMiddleware(routing);
 
 // Known public slugs (without locale prefix). Used for typo-tolerant redirects.
-const KNOWN_SLUGS = [
-  'saunalauttaristeilyt-helsingissa',
-  'julkinen-sauna',
-  'avanto',
-  'polttarit-yritystilaisuudet',
-  'sijainti',
-  'toiminnastamme',
-  'usein-kysyttya',
-  'galleria',
-  'kiitos',
-];
+const KNOWN_SLUGS = Object.entries(routing.pathnames)
+  .flatMap(([internalPath, path]) => [
+    internalPath,
+    ...(typeof path === 'string' ? [path] : Object.values(path)),
+  ])
+  .map((path) => path.replace(/^\/+|\/+$/g, ''))
+  .filter(Boolean);
 
 const normalizeSlug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -41,11 +38,15 @@ export default function middleware(request: NextRequest) {
 
   // Typo-tolerant redirect: if the path doesn't match a known page but matches
   // one after removing hyphens/spaces (e.g. /julkinensauna → /julkinen-sauna),
-  // 308 to the correct URL. Preserves the /en prefix.
+  // 308 to the correct URL. Preserves any non-default locale prefix.
   const pathname = request.nextUrl.pathname.replace(/\/+$/, '');
   if (pathname && pathname !== '/') {
-    const localePrefix = pathname.startsWith('/en/') ? '/en' : '';
-    const bare = localePrefix ? pathname.slice(3) : pathname;
+    const locale = routing.locales.find((option) =>
+      option !== routing.defaultLocale &&
+      (pathname === `/${option}` || pathname.startsWith(`/${option}/`))
+    );
+    const localePrefix = locale ? `/${locale}` : '';
+    const bare = localePrefix ? pathname.slice(localePrefix.length) : pathname;
     const slug = bare.replace(/^\//, '');
     if (
       slug &&
@@ -70,10 +71,12 @@ export default function middleware(request: NextRequest) {
   // keep their targeted destinations from next.config.ts.
   if (request.nextUrl.searchParams.has('post')) {
     const p = pathname;
-    if (p === '' || p === '/' || p === '/en') {
-      const isEn = p === '/en';
+    const locale = p === '' || p === '/'
+      ? routing.defaultLocale
+      : routing.locales.find((option) => p === `/${option}`);
+    if (locale) {
       return NextResponse.redirect(
-        new URL(isEn ? '/en/sauna-boat-cruises-helsinki/' : '/saunalauttaristeilyt-helsingissa/', request.url),
+        new URL(getVibeRoute('saunalauttaristeilyt', locale), request.url),
         308
       );
     }

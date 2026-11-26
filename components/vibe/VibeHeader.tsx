@@ -4,25 +4,96 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
 import type { Locale } from './content';
-import { getVibeBookingRoute, getVibeLanguageSwitch, getVibeRoute } from './routes';
+import { getVibeBookingRoute, getVibeLanguageSwitch, getVibeRoute, isVibeBookingPathname } from './routes';
+
+const locales: Locale[] = ['fi', 'en', 'es', 'fr', 'de'];
+const languageNames: Record<Locale, string> = {
+  fi: 'Suomi',
+  en: 'English',
+  es: 'Español',
+  fr: 'Français',
+  de: 'Deutsch',
+};
+
+const headerCopy: Record<Locale, {
+  home: string;
+  mainNavigation: string;
+  mobileNavigation: string;
+  languageSelector: string;
+  book: string;
+  mobileBook: string;
+  openMenu: string;
+  closeMenu: string;
+}> = {
+  fi: {
+    home: 'Etusivu',
+    mainNavigation: 'Päävalikko',
+    mobileNavigation: 'Mobiilivalikko',
+    languageSelector: 'Valitse kieli',
+    book: 'Varaa sauna',
+    mobileBook: 'Varaa yksityinen sauna',
+    openMenu: 'Avaa valikko',
+    closeMenu: 'Sulje valikko',
+  },
+  en: {
+    home: 'Home',
+    mainNavigation: 'Main navigation',
+    mobileNavigation: 'Mobile navigation',
+    languageSelector: 'Select language',
+    book: 'Book a sauna',
+    mobileBook: 'Book a private sauna',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+  },
+  es: {
+    home: 'Inicio',
+    mainNavigation: 'Navegación principal',
+    mobileNavigation: 'Navegación móvil',
+    languageSelector: 'Seleccionar idioma',
+    book: 'Reservar',
+    mobileBook: 'Reservar una sauna privada',
+    openMenu: 'Abrir menú',
+    closeMenu: 'Cerrar menú',
+  },
+  fr: {
+    home: 'Accueil',
+    mainNavigation: 'Navigation principale',
+    mobileNavigation: 'Navigation mobile',
+    languageSelector: 'Choisir la langue',
+    book: 'Réserver',
+    mobileBook: 'Réserver un sauna privé',
+    openMenu: 'Ouvrir le menu',
+    closeMenu: 'Fermer le menu',
+  },
+  de: {
+    home: 'Startseite',
+    mainNavigation: 'Hauptnavigation',
+    mobileNavigation: 'Mobile Navigation',
+    languageSelector: 'Sprache auswählen',
+    book: 'Buchen',
+    mobileBook: 'Private Sauna buchen',
+    openMenu: 'Menü öffnen',
+    closeMenu: 'Menü schließen',
+  },
+};
 
 export default function VibeHeader({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const firstLink = useRef<HTMLAnchorElement>(null);
-  const isEn = locale === 'en';
+  const c = headerCopy[locale];
   const home = getVibeRoute('home', locale);
-  const hasBookingCalendar = /\/(?:avanto|julkinen-sauna|saunalauttaristeilyt-helsingissa|ice-swimming-sauna-helsinki|public-sauna-helsinki|sauna-boat-cruises-helsinki)\/?$/.test(pathname);
-  const bookingHref = hasBookingCalendar ? `${pathname}#varaus` : getVibeBookingRoute('avanto', locale);
+  const bookingHref = isVibeBookingPathname(pathname) ? `${pathname}#varaus` : getVibeBookingRoute('avanto', locale);
   const links = [
-    { href: `${home}#elamykset`, fi: 'Elämykset', en: 'Experiences' },
-    { href: getVibeRoute('julkinen-sauna', locale), fi: 'Yleinen sauna', en: 'Public sauna' },
-    { href: getVibeRoute('avanto', locale), fi: 'Yksityinen sauna', en: 'Private sauna' },
-    { href: getVibeRoute('saunalauttaristeilyt', locale), fi: 'Saunalauttaristeilyt', en: 'Sauna boat cruises' },
-    { href: getVibeRoute('tapahtumat', locale), fi: 'Tapahtumat', en: 'Events' },
-    { href: getVibeRoute('sijainti', locale), fi: 'Sijainti ja info', en: 'Location & info' },
+    { href: `${home}#elamykset`, fi: 'Elämykset', en: 'Experiences', es: 'Experiencias', fr: 'Expériences', de: 'Erlebnisse' },
+    { href: getVibeRoute('julkinen-sauna', locale), fi: 'Yleinen sauna', en: 'Public sauna', es: 'Sauna pública', fr: 'Sauna public', de: 'Öffentliche Sauna' },
+    { href: `${getVibeRoute('julkinen-sauna', locale)}#sarjakortit`, fi: 'Sarjakortit', en: 'Sauna cards', es: 'Tarjetas', fr: 'Cartes', de: 'Saunakarten' },
+    { href: getVibeRoute('avanto', locale), fi: 'Yksityinen sauna', en: 'Private sauna', es: 'Sauna privada', fr: 'Sauna privé', de: 'Private Sauna' },
+    { href: getVibeRoute('saunalauttaristeilyt', locale), fi: 'Saunalauttaristeilyt', en: 'Sauna boat cruises', es: 'Cruceros', fr: 'Croisières', de: 'Saunafahrten' },
+    { href: getVibeRoute('tapahtumat', locale), fi: 'Tapahtumat', en: 'Events', es: 'Eventos', fr: 'Événements', de: 'Events' },
+    { href: getVibeRoute('sijainti', locale), fi: 'Sijainti ja info', en: 'Location & info', es: 'Ubicación', fr: 'Infos', de: 'Infos' },
   ];
 
   useEffect(() => {
@@ -41,27 +112,45 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
   return (
     <header className="vibe-header">
       <div className="vibe-header-inner">
-        <Link href={home} className="vibe-brand" aria-label={isEn ? 'Home' : 'Etusivu'}>
+        <Link href={home} className="vibe-brand" aria-label={c.home}>
           <Image src="/images/logo.png" alt="" width={42} height={42} priority />
           <span>Hyvän Tuulen Sauna</span>
         </Link>
-        <nav className="vibe-desktop-nav" aria-label={isEn ? 'Main navigation' : 'Päävalikko'}>
+        <nav className="vibe-desktop-nav" aria-label={c.mainNavigation}>
           {links.map((link) => (
-            <a key={link.href} href={link.href}>{isEn ? link.en : link.fi}</a>
+            <a key={link.href} href={link.href}>{link[locale]}</a>
           ))}
         </nav>
         <div className="vibe-header-actions">
-          <Link className="vibe-language" href={getVibeLanguageSwitch(pathname, isEn ? 'fi' : 'en')}>
-            {isEn ? 'FI' : 'EN'}
-          </Link>
+          <details className="vibe-language">
+            <summary aria-label={c.languageSelector} title={c.languageSelector}>
+              {locale.toUpperCase()}
+              <ChevronDown size={13} aria-hidden="true" />
+            </summary>
+            <nav className="vibe-language-menu" aria-label={c.languageSelector}>
+              {locales.map((option) => (
+                <Link
+                  key={option}
+                  className="vibe-language-option"
+                  href={getVibeLanguageSwitch(pathname, option)}
+                  hrefLang={option}
+                  lang={option}
+                  aria-current={option === locale ? 'page' : undefined}
+                >
+                  <span>{languageNames[option]}</span>
+                  <span>{option.toUpperCase()}</span>
+                </Link>
+              ))}
+            </nav>
+          </details>
           <Link className="vibe-book" href={bookingHref}>
-            {isEn ? 'Book a sauna' : 'Varaa sauna'}
+            {c.book}
             <ArrowUpRight size={16} aria-hidden="true" />
           </Link>
           <button
             type="button"
             className="vibe-menu-button"
-            aria-label={open ? (isEn ? 'Close menu' : 'Sulje valikko') : (isEn ? 'Open menu' : 'Avaa valikko')}
+            aria-label={open ? c.closeMenu : c.openMenu}
             aria-expanded={open}
             aria-controls="vibe-mobile-menu"
             onClick={() => setOpen((value) => !value)}
@@ -71,7 +160,7 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
         </div>
       </div>
       <div id="vibe-mobile-menu" className={`vibe-mobile-menu ${open ? 'is-open' : ''}`} inert={!open}>
-        <nav aria-label={isEn ? 'Mobile navigation' : 'Mobiilivalikko'}>
+        <nav aria-label={c.mobileNavigation}>
           {links.map((link, index) => (
             <a
               key={link.href}
@@ -80,14 +169,30 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
               onClick={() => setOpen(false)}
             >
               <span>0{index + 1}</span>
-              {isEn ? link.en : link.fi}
+              {link[locale]}
               <ArrowUpRight aria-hidden="true" />
             </a>
           ))}
           <Link href={bookingHref} onClick={() => setOpen(false)} className="vibe-mobile-book">
-            {isEn ? 'Book a private sauna' : 'Varaa yksityinen sauna'}
+            {c.mobileBook}
             <ArrowUpRight aria-hidden="true" />
           </Link>
+          <div className="vibe-mobile-languages" role="group" aria-label={c.languageSelector}>
+            {locales.map((option) => (
+              <Link
+                key={option}
+                className="vibe-mobile-language"
+                href={getVibeLanguageSwitch(pathname, option)}
+                hrefLang={option}
+                lang={option}
+                aria-current={option === locale ? 'page' : undefined}
+                onClick={() => setOpen(false)}
+              >
+                {option.toUpperCase()}
+                <span className="sr-only">{languageNames[option]}</span>
+              </Link>
+            ))}
+          </div>
         </nav>
       </div>
     </header>

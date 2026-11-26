@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { getCookie, setCookie } from '@/lib/cookies';
 
 /**
@@ -28,8 +28,7 @@ function updateGtagConsent(granted: boolean) {
 
 export default function ConsentBanner() {
   const [visible, setVisible] = useState(false);
-  const locale = useLocale();
-  const isEn = locale === 'en';
+  const t = useTranslations('consent');
 
   useEffect(() => {
     const consent = getCookie('analytics_consent');
@@ -59,22 +58,20 @@ export default function ConsentBanner() {
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-stone-900 text-white p-4 shadow-2xl">
       <div className="container-padding mx-auto max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm leading-relaxed">
-          {isEn
-            ? 'We use cookies and analytics to improve your experience. By accepting, you allow Google Analytics and Google Ads tracking.'
-            : 'Käytämme evästeitä ja analytiikkaa parantaaksemme käyttökokemusta. Hyväksymällä sallit Google Analytics - ja Google Ads -seurannan.'}
+          {t('description')}
         </p>
         <div className="flex gap-3 shrink-0">
           <button
             onClick={handleDecline}
             className="rounded-lg border border-stone-600 px-4 py-2 text-sm font-medium text-stone-300 hover:bg-stone-800 transition-colors"
           >
-            {isEn ? 'Decline' : 'Hylkää'}
+            {t('decline')}
           </button>
           <button
             onClick={handleAccept}
             className="rounded-lg bg-lake px-4 py-2 text-sm font-medium text-white hover:bg-lake-deep transition-colors"
           >
-            {isEn ? 'Accept' : 'Hyväksy'}
+            {t('accept')}
           </button>
         </div>
       </div>

@@ -25,6 +25,14 @@ const AALTO_RESOURCE_ID = '3dd71bee-f303-463e-ad78-e05b4faa2234';
 const VIRTA_RESOURCE_ID = '3bffeff6-4ef4-4865-a99b-370b956e355e';
 const TIME_ZONE = 'Europe/Helsinki';
 
+const localeTags = {
+  fi: 'fi-FI',
+  en: 'en-GB',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+} as const;
+
 // Format date to YYYY-MM-DD in Helsinki timezone
 const formatDateInHelsinki = (date: Date): string => {
   return new Intl.DateTimeFormat('en-CA', {
@@ -63,67 +71,251 @@ interface MiniCruiseBookingShellProps {
   locale?: Locale;
 }
 
+const miniCruiseCopy = {
+  fi: {
+    title: 'Varaa miniristeily',
+    close: 'Sulje',
+    steps: ['Vene', 'Päivä ja aika', 'Yhteystiedot', 'Vahvistus'],
+    selectBoat: 'Valitse saunalautta',
+    selectBoatSubtitle: 'Miniristeily on saatavilla molemmilla saunalautoillamme.',
+    selectDate: 'Valitse päivämäärä',
+    selectDateSubtitle: 'Miniristeilyt saatavilla sunnuntaisin.',
+    loadingCalendar: 'Ladataan kalenteria...',
+    changeDay: 'Vaihda päivä',
+    selectTime: 'Valitse aloitusaika',
+    loadingTimes: 'Ladataan aikoja...',
+    noSlots: 'Ei vapaita aikoja valitulle päivälle',
+    chooseAnotherDay: 'Valitse toinen päivä',
+    contactTitle: 'Yhteystiedot',
+    firstName: 'Etunimi',
+    lastName: 'Sukunimi',
+    email: 'Sähköposti',
+    phone: 'Puhelinnumero',
+    marketingConsent: 'Haluan saada Hyv\u00e4n Tuulen Saunan tarjouksia ja uutisia s\u00e4hk\u00f6postiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
+    firstNamePlaceholder: 'Matti',
+    lastNamePlaceholder: 'Meikäläinen',
+    emailPlaceholder: 'matti@example.com',
+    summary: 'Varauksen yhteenveto',
+    boat: 'Vene',
+    date: 'Päivämäärä',
+    time: 'Aika',
+    booker: 'Varaaja',
+    total: 'Yhteensä',
+    paymentInfoTitle: 'Maksutiedot',
+    paymentInfoText: 'Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
+    successTitle: 'Varaus vahvistettu!',
+    successText: 'Miniristeily on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
+    bookingNumber: 'Varausnumero',
+    back: 'Takaisin',
+    continue: 'Jatka',
+    proceedToPayment: 'Siirry maksuun',
+    submitting: 'Varataan...',
+    errorLoadDates: 'Päivämäärien lataaminen epäonnistui',
+    errorLoadSlots: 'Aikojen lataaminen epäonnistui',
+    errorSelectBoatAndTime: 'Valitse vene ja aika ennen varausta',
+    errorBookingFailed: 'Varauksen luominen epäonnistui',
+    previousDay: 'Edellinen päivä',
+    nextDay: 'Seuraava päivä',
+    selectBoatOption: (name: string) => `Valitse ${name}`,
+    selectTimeOption: (time: string, price: string) => `Valitse klo ${time}, ${price}`,
+    capacity: (boatId: string) => `Max ${getMaxCapacity(boatId)} hlö`,
+  },
+  en: {
+    title: 'Book a mini cruise',
+    close: 'Close',
+    steps: ['Boat', 'Date & time', 'Contact details', 'Confirmation'],
+    selectBoat: 'Choose a sauna boat',
+    selectBoatSubtitle: 'The mini cruise is available on both of our sauna boats.',
+    selectDate: 'Choose a date',
+    selectDateSubtitle: 'Mini cruises are available on Sundays.',
+    loadingCalendar: 'Loading calendar...',
+    changeDay: 'Change day',
+    selectTime: 'Choose a start time',
+    loadingTimes: 'Loading times...',
+    noSlots: 'No available times for the selected day',
+    chooseAnotherDay: 'Choose another day',
+    contactTitle: 'Contact details',
+    firstName: 'First name',
+    lastName: 'Last name',
+    email: 'Email',
+    phone: 'Phone number',
+    marketingConsent: 'I want to receive offers and news from Hyv\u00e4n Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)',
+    firstNamePlaceholder: 'John',
+    lastNamePlaceholder: 'Doe',
+    emailPlaceholder: 'john@example.com',
+    summary: 'Booking summary',
+    boat: 'Boat',
+    date: 'Date',
+    time: 'Time',
+    booker: 'Booked by',
+    total: 'Total',
+    paymentInfoTitle: 'Payment details',
+    paymentInfoText: 'By clicking "Proceed to payment" you will be redirected to a secure payment system. The booking is confirmed after payment.',
+    successTitle: 'Booking confirmed!',
+    successText: 'The mini cruise is now booked for you. A confirmation has been sent to your email.',
+    bookingNumber: 'Booking number',
+    back: 'Back',
+    continue: 'Continue',
+    proceedToPayment: 'Proceed to payment',
+    submitting: 'Booking...',
+    errorLoadDates: 'Failed to load dates',
+    errorLoadSlots: 'Failed to load times',
+    errorSelectBoatAndTime: 'Select a boat and time before booking',
+    errorBookingFailed: 'Failed to create booking',
+    previousDay: 'Previous day',
+    nextDay: 'Next day',
+    selectBoatOption: (name: string) => `Select ${name}`,
+    selectTimeOption: (time: string, price: string) => `Select ${time}, ${price}`,
+    capacity: (boatId: string) => `Max ${getMaxCapacity(boatId)} people`,
+  },
+  es: {
+    title: 'Reserva un minicrucero',
+    close: 'Cerrar',
+    steps: ['Barco', 'Fecha y hora', 'Datos de contacto', 'Confirmación'],
+    selectBoat: 'Elige un barco sauna',
+    selectBoatSubtitle: 'El minicrucero está disponible en nuestros dos barcos sauna.',
+    selectDate: 'Elige una fecha',
+    selectDateSubtitle: 'Los minicruceros están disponibles los domingos.',
+    loadingCalendar: 'Cargando calendario...',
+    changeDay: 'Cambiar de día',
+    selectTime: 'Elige una hora de inicio',
+    loadingTimes: 'Cargando horarios...',
+    noSlots: 'No hay horarios disponibles para el día seleccionado',
+    chooseAnotherDay: 'Elige otro día',
+    contactTitle: 'Datos de contacto',
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    email: 'Correo electrónico',
+    phone: 'Número de teléfono',
+    marketingConsent: 'Quiero recibir ofertas y novedades de Hyvän Tuulen Sauna por correo electrónico. Puedo retirar mi consentimiento en cualquier momento. (Opcional)',
+    firstNamePlaceholder: 'Juan',
+    lastNamePlaceholder: 'García',
+    emailPlaceholder: 'juan@example.com',
+    summary: 'Resumen de la reserva',
+    boat: 'Barco',
+    date: 'Fecha',
+    time: 'Hora',
+    booker: 'Titular de la reserva',
+    total: 'Total',
+    paymentInfoTitle: 'Datos de pago',
+    paymentInfoText: 'Al hacer clic en «Ir al pago», accederás a un sistema de pago seguro. La reserva se confirmará después del pago.',
+    successTitle: '¡Reserva confirmada!',
+    successText: 'Tu minicrucero ya está reservado. Hemos enviado una confirmación a tu correo electrónico.',
+    bookingNumber: 'Número de reserva',
+    back: 'Volver',
+    continue: 'Continuar',
+    proceedToPayment: 'Ir al pago',
+    submitting: 'Reservando...',
+    errorLoadDates: 'No se han podido cargar las fechas',
+    errorLoadSlots: 'No se han podido cargar los horarios',
+    errorSelectBoatAndTime: 'Selecciona un barco y una hora antes de reservar',
+    errorBookingFailed: 'No se ha podido crear la reserva',
+    previousDay: 'Día anterior',
+    nextDay: 'Día siguiente',
+    selectBoatOption: (name: string) => `Seleccionar ${name}`,
+    selectTimeOption: (time: string, price: string) => `Seleccionar las ${time}, ${price}`,
+    capacity: (boatId: string) => `Máx. ${getMaxCapacity(boatId)} personas`,
+  },
+  fr: {
+    title: 'Réservez une mini-croisière',
+    close: 'Fermer',
+    steps: ['Bateau', 'Date et heure', 'Coordonnées', 'Confirmation'],
+    selectBoat: 'Choisissez un bateau-sauna',
+    selectBoatSubtitle: 'La mini-croisière est disponible à bord de nos deux bateaux-saunas.',
+    selectDate: 'Choisissez une date',
+    selectDateSubtitle: 'Les mini-croisières sont disponibles le dimanche.',
+    loadingCalendar: 'Chargement du calendrier...',
+    changeDay: 'Changer de date',
+    selectTime: 'Choisissez une heure de départ',
+    loadingTimes: 'Chargement des horaires...',
+    noSlots: 'Aucun horaire disponible pour la date sélectionnée',
+    chooseAnotherDay: 'Choisissez une autre date',
+    contactTitle: 'Coordonnées',
+    firstName: 'Prénom',
+    lastName: 'Nom',
+    email: 'E-mail',
+    phone: 'Numéro de téléphone',
+    marketingConsent: 'Je souhaite recevoir les offres et actualités de Hyvän Tuulen Sauna par e-mail. Je peux retirer mon consentement à tout moment. (Facultatif)',
+    firstNamePlaceholder: 'Jean',
+    lastNamePlaceholder: 'Dupont',
+    emailPlaceholder: 'jean@example.com',
+    summary: 'Récapitulatif de la réservation',
+    boat: 'Bateau',
+    date: 'Date',
+    time: 'Horaire',
+    booker: 'Réservé par',
+    total: 'Total',
+    paymentInfoTitle: 'Informations de paiement',
+    paymentInfoText: 'En cliquant sur « Procéder au paiement », vous accéderez à un système de paiement sécurisé. La réservation sera confirmée après le paiement.',
+    successTitle: 'Réservation confirmée !',
+    successText: 'Votre mini-croisière est désormais réservée. Une confirmation a été envoyée à votre adresse e-mail.',
+    bookingNumber: 'Numéro de réservation',
+    back: 'Retour',
+    continue: 'Continuer',
+    proceedToPayment: 'Procéder au paiement',
+    submitting: 'Réservation en cours...',
+    errorLoadDates: 'Impossible de charger les dates',
+    errorLoadSlots: 'Impossible de charger les horaires',
+    errorSelectBoatAndTime: 'Sélectionnez un bateau et un horaire avant de réserver',
+    errorBookingFailed: 'Impossible de créer la réservation',
+    previousDay: 'Jour précédent',
+    nextDay: 'Jour suivant',
+    selectBoatOption: (name: string) => `Sélectionner ${name}`,
+    selectTimeOption: (time: string, price: string) => `Sélectionner le créneau de ${time}, ${price}`,
+    capacity: (boatId: string) => `Max. ${getMaxCapacity(boatId)} personnes`,
+  },
+  de: {
+    title: 'Minikreuzfahrt buchen',
+    close: 'Schließen',
+    steps: ['Boot', 'Datum und Uhrzeit', 'Kontaktdaten', 'Bestätigung'],
+    selectBoat: 'Saunaboot auswählen',
+    selectBoatSubtitle: 'Die Minikreuzfahrt ist auf beiden Saunabooten verfügbar.',
+    selectDate: 'Datum auswählen',
+    selectDateSubtitle: 'Minikreuzfahrten finden sonntags statt.',
+    loadingCalendar: 'Kalender wird geladen...',
+    changeDay: 'Tag wechseln',
+    selectTime: 'Startzeit auswählen',
+    loadingTimes: 'Termine werden geladen...',
+    noSlots: 'Für den gewählten Tag sind keine Termine verfügbar',
+    chooseAnotherDay: 'Anderen Tag auswählen',
+    contactTitle: 'Kontaktdaten',
+    firstName: 'Vorname',
+    lastName: 'Nachname',
+    email: 'E-Mail',
+    phone: 'Telefonnummer',
+    marketingConsent: 'Ich möchte Angebote und Neuigkeiten von Hyvän Tuulen Sauna per E-Mail erhalten. Ich kann meine Einwilligung jederzeit widerrufen. (Optional)',
+    firstNamePlaceholder: 'Max',
+    lastNamePlaceholder: 'Mustermann',
+    emailPlaceholder: 'max@example.com',
+    summary: 'Buchungsübersicht',
+    boat: 'Boot',
+    date: 'Datum',
+    time: 'Uhrzeit',
+    booker: 'Gebucht von',
+    total: 'Gesamt',
+    paymentInfoTitle: 'Zahlungsinformationen',
+    paymentInfoText: 'Wenn Sie auf „Zur Zahlung“ klicken, werden Sie zu einem sicheren Zahlungssystem weitergeleitet. Die Buchung wird nach der Zahlung bestätigt.',
+    successTitle: 'Buchung bestätigt!',
+    successText: 'Ihre Minikreuzfahrt ist jetzt reserviert. Eine Bestätigung wurde an Ihre E-Mail-Adresse gesendet.',
+    bookingNumber: 'Buchungsnummer',
+    back: 'Zurück',
+    continue: 'Weiter',
+    proceedToPayment: 'Zur Zahlung',
+    submitting: 'Buchung läuft...',
+    errorLoadDates: 'Die Termine konnten nicht geladen werden',
+    errorLoadSlots: 'Die Uhrzeiten konnten nicht geladen werden',
+    errorSelectBoatAndTime: 'Wählen Sie vor der Buchung ein Boot und eine Uhrzeit aus',
+    errorBookingFailed: 'Die Buchung konnte nicht erstellt werden',
+    previousDay: 'Vorheriger Tag',
+    nextDay: 'Nächster Tag',
+    selectBoatOption: (name: string) => `${name} auswählen`,
+    selectTimeOption: (time: string, price: string) => `${time} Uhr auswählen, ${price}`,
+    capacity: (boatId: string) => `Max. ${getMaxCapacity(boatId)} Personen`,
+  },
+} as const;
+
 export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniCruiseBookingShellProps) {
-  const isEn = locale === 'en';
-  const t = {
-    title: isEn ? 'Book a mini cruise' : 'Varaa miniristeily',
-    close: isEn ? 'Close' : 'Sulje',
-    steps: isEn
-      ? ['Boat', 'Date & time', 'Contact details', 'Confirmation']
-      : ['Vene', 'Päivä ja aika', 'Yhteystiedot', 'Vahvistus'],
-    selectBoat: isEn ? 'Choose a sauna boat' : 'Valitse saunalautta',
-    selectBoatSubtitle: isEn
-      ? 'The mini cruise is available on both of our sauna boats.'
-      : 'Miniristeily on saatavilla molemmilla saunalautoillamme.',
-    selectDate: isEn ? 'Choose a date' : 'Valitse päivämäärä',
-    selectDateSubtitle: isEn
-      ? 'Mini cruises are available on Sundays.'
-      : 'Miniristeilyt saatavilla sunnuntaisin.',
-    loadingCalendar: isEn ? 'Loading calendar...' : 'Ladataan kalenteria...',
-    changeDay: isEn ? 'Change day' : 'Vaihda päivä',
-    selectTime: isEn ? 'Choose a start time' : 'Valitse aloitusaika',
-    loadingTimes: isEn ? 'Loading times...' : 'Ladataan aikoja...',
-    noSlots: isEn ? 'No available times for the selected day' : 'Ei vapaita aikoja valitulle päivälle',
-    chooseAnotherDay: isEn ? 'Choose another day' : 'Valitse toinen päivä',
-    contactTitle: isEn ? 'Contact details' : 'Yhteystiedot',
-    firstName: isEn ? 'First name' : 'Etunimi',
-    lastName: isEn ? 'Last name' : 'Sukunimi',
-    email: isEn ? 'Email' : 'Sähköposti',
-    phone: isEn ? 'Phone number' : 'Puhelinnumero',
-    marketingConsent: isEn
-      ? 'I want to receive offers and news from Hyv\u00e4n Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
-      : 'Haluan saada Hyv\u00e4n Tuulen Saunan tarjouksia ja uutisia s\u00e4hk\u00f6postiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
-    firstNamePlaceholder: isEn ? 'John' : 'Matti',
-    lastNamePlaceholder: isEn ? 'Doe' : 'Meikäläinen',
-    emailPlaceholder: isEn ? 'john@example.com' : 'matti@example.com',
-    summary: isEn ? 'Booking summary' : 'Varauksen yhteenveto',
-    boat: isEn ? 'Boat' : 'Vene',
-    date: isEn ? 'Date' : 'Päivämäärä',
-    time: isEn ? 'Time' : 'Aika',
-    booker: isEn ? 'Booked by' : 'Varaaja',
-    total: isEn ? 'Total' : 'Yhteensä',
-    paymentInfoTitle: isEn ? 'Payment details' : 'Maksutiedot',
-    paymentInfoText: isEn
-      ? 'By clicking "Proceed to payment" you will be redirected to a secure payment system. The booking is confirmed after payment.'
-      : 'Painamalla "Siirry maksuun" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
-    successTitle: isEn ? 'Booking confirmed!' : 'Varaus vahvistettu!',
-    successText: isEn
-      ? 'The mini cruise is now booked for you. A confirmation has been sent to your email.'
-      : 'Miniristeily on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
-    bookingNumber: isEn ? 'Booking number' : 'Varausnumero',
-    back: isEn ? 'Back' : 'Takaisin',
-    continue: isEn ? 'Continue' : 'Jatka',
-    proceedToPayment: isEn ? 'Proceed to payment' : 'Siirry maksuun',
-    submitting: isEn ? 'Booking...' : 'Varataan...',
-    errorLoadDates: isEn ? 'Failed to load dates' : 'Päivämäärien lataaminen epäonnistui',
-    errorLoadSlots: isEn ? 'Failed to load times' : 'Aikojen lataaminen epäonnistui',
-    errorSelectBoatAndTime: isEn
-      ? 'Select a boat and time before booking'
-      : 'Valitse vene ja aika ennen varausta',
-    errorBookingFailed: isEn ? 'Failed to create booking' : 'Varauksen luominen epäonnistui',
-    capacity: (boatId: string) =>
-      isEn ? `Max ${getMaxCapacity(boatId)} people` : `Max ${getMaxCapacity(boatId)} hlö`,
-  };
+  const t = miniCruiseCopy[locale];
 
   const requestIdRef = useRef(0);
   
@@ -283,16 +475,16 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString(isEn ? 'en-GB' : 'fi-FI', { 
-      weekday: 'short', 
-      day: 'numeric', 
-      month: 'long' 
+    return date.toLocaleDateString(localeTags[locale], {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'long'
     });
   };
 
   const formatTime = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleTimeString(isEn ? 'en-GB' : 'fi-FI', { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString(localeTags[locale], { hour: '2-digit', minute: '2-digit' });
   };
 
   const formatPrice = (cents: number | null | undefined) => {
@@ -495,6 +687,8 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
               {cruiseBoats.map((boat) => (
                 <button
                   key={boat.id}
+                  aria-label={t.selectBoatOption(boat.name)}
+                  aria-pressed={selectedBoat === boat.id}
                   onClick={() => {
                     setSelectedBoat(boat.id);
                     setSelectedDate(null);
@@ -565,6 +759,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => navigateDay('prev')}
+                    aria-label={t.previousDay}
                     className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
                   >
                     <ChevronLeft className="h-5 w-5 text-stone-600" />
@@ -574,6 +769,7 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                   </h4>
                   <button
                     onClick={() => navigateDay('next')}
+                    aria-label={t.nextDay}
                     className="flex h-8 w-8 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
                   >
                     <ChevronRight className="h-5 w-5 text-stone-600" />
@@ -615,6 +811,8 @@ export default function MiniCruiseBookingShell({ onClose, locale = 'fi' }: MiniC
                     {timeSlots.map((slot) => (
                       <button
                         key={slot.startTime}
+                        aria-label={t.selectTimeOption(formatTime(slot.startTime), formatPrice(slot.price?.amount))}
+                        aria-pressed={selectedSlot?.startTime === slot.startTime}
                         onClick={() => {
                           setSelectedSlot(slot);
                           trackSchedule({

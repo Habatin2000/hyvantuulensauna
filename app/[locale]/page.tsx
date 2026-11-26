@@ -1,9 +1,25 @@
 import type { Metadata } from "next";
 import VibePageContent from "@/components/vibe/VibePageContent";
-import { SITE_URL } from "@/lib/site";
 import type { Locale } from "@/components/vibe/content";
 import fiMessages from "@/messages/fi.json";
 import enMessages from "@/messages/en.json";
+import esMessages from "@/messages/es.json";
+import frMessages from "@/messages/fr.json";
+import deMessages from "@/messages/de.json";
+import {
+  getLanguageAlternates,
+  getLocalizedPageUrl,
+  getOpenGraphLocale,
+  normalizePageLocale,
+} from "./schema";
+
+const messages = {
+  fi: fiMessages,
+  en: enMessages,
+  es: esMessages,
+  fr: frMessages,
+  de: deMessages,
+};
 
 export async function generateMetadata({
   params,
@@ -14,27 +30,22 @@ export async function generateMetadata({
   // NOTE: read messages directly — next-intl's getTranslations({ locale })
   // resolves the request-locale (fi) instead of the explicit locale in this
   // generateMetadata context, which served Finnish titles on /en/.
-  const meta = (locale === "en" ? enMessages : fiMessages).metadata;
-  const isEn = locale === "en";
-  const pageUrl = isEn ? `${SITE_URL}/en` : SITE_URL;
+  const safeLocale = normalizePageLocale(locale);
+  const meta = messages[safeLocale].metadata;
+  const pageUrl = getLocalizedPageUrl('/', safeLocale);
 
   return {
     title: { absolute: meta.defaultTitle },
     description: meta.defaultDescription,
     alternates: {
       canonical: pageUrl,
-      languages: {
-        "fi-FI": `${SITE_URL}/`,
-        "en-US": `${SITE_URL}/en/`,
-        "en-GB": `${SITE_URL}/en/`,
-        "x-default": `${SITE_URL}/`,
-      },
+      languages: getLanguageAlternates('/'),
     },
     openGraph: {
       type: "website",
-      locale: isEn ? "en_US" : "fi_FI",
+      locale: getOpenGraphLocale(safeLocale),
       url: pageUrl,
-      siteName: "Hyvän Tuulen Sauna",
+      siteName: meta.siteName,
       title: meta.defaultTitle,
       description: meta.defaultDescription,
       images: [
@@ -42,9 +53,18 @@ export async function generateMetadata({
           url: "/images/gallery-raft-sunset.webp",
           width: 1200,
           height: 630,
-          alt: isEn
-            ? "Hyvän Tuulen Sauna - Sauna boat at sunset"
-            : "Hyvän Tuulen Sauna - Saunalautta auringonlaskussa",
+          alt: meta.socialImageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: meta.defaultTitle,
+      description: meta.defaultDescription,
+      images: [
+        {
+          url: "/images/gallery-raft-sunset.webp",
+          alt: meta.socialImageAlt,
         },
       ],
     },
@@ -57,6 +77,6 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = (locale === "en" ? "en" : "fi") as Locale;
+  const safeLocale = normalizePageLocale(locale) as Locale;
   return <VibePageContent locale={safeLocale} />;
 }

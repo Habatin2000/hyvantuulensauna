@@ -2,6 +2,15 @@
 
 import Image from 'next/image';
 import { Check } from 'lucide-react';
+import type { Locale } from '@/content/pages';
+
+const boatSelectorCopy = {
+  fi: { select: (name: string) => `Valitse ${name}` },
+  en: { select: (name: string) => `Select ${name}` },
+  es: { select: (name: string) => `Seleccionar ${name}` },
+  fr: { select: (name: string) => `Sélectionner ${name}` },
+  de: { select: (name: string) => `${name} auswählen` },
+} as const;
 
 export interface BoatOption {
   id: string;
@@ -17,9 +26,12 @@ interface BoatSelectorProps {
   selectedId: string | null;
   onSelect: (id: string) => void;
   compact?: boolean;
+  locale?: Locale;
 }
 
-export default function BoatSelector({ boats, selectedId, onSelect, compact = false }: BoatSelectorProps) {
+export default function BoatSelector({ boats, selectedId, onSelect, compact = false, locale = 'fi' }: BoatSelectorProps) {
+  const t = boatSelectorCopy[locale];
+
   return (
     <div className={`grid gap-3 ${compact ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2'}`}>
       {boats.map((boat) => {
@@ -28,6 +40,8 @@ export default function BoatSelector({ boats, selectedId, onSelect, compact = fa
           <button
             key={boat.id}
             data-boat={boat.id}
+            aria-label={t.select(boat.name)}
+            aria-pressed={isSelected}
             onClick={() => onSelect(boat.id)}
             className={`relative overflow-hidden rounded-2xl border-2 bg-white text-left transition-all hover:shadow-md ${
               isSelected
@@ -45,7 +59,7 @@ export default function BoatSelector({ boats, selectedId, onSelect, compact = fa
               />
               {isSelected && (
                 <div className={`absolute right-2 top-2 flex items-center justify-center rounded-full bg-teal-600 text-white shadow-sm ${compact ? 'h-6 w-6' : 'h-8 w-8'}`}>
-                  <Check className={compact ? 'h-3.5 w-3.5' : 'h-5 w-5'} />
+                  <Check aria-hidden="true" className={compact ? 'h-3.5 w-3.5' : 'h-5 w-5'} />
                 </div>
               )}
             </div>

@@ -1,16 +1,174 @@
 // JSON-LD Structured Data for Hyvän Tuulen Sauna
 
-type SchemaLocale = 'fi' | 'en';
+import { SITE_URL } from '@/lib/site';
 
-export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
+export type SchemaLocale = 'fi' | 'en' | 'es' | 'fr' | 'de';
+
+const supportedLocales: SchemaLocale[] = ['fi', 'en', 'es', 'fr', 'de'];
+
+const localizedPaths: Record<string, Partial<Record<SchemaLocale, string>>> = {
+  '/saunalauttaristeilyt-helsingissa': {
+    en: '/sauna-boat-cruises-helsinki',
+    es: '/cruceros-en-sauna-helsinki',
+    fr: '/croisieres-sauna-helsinki',
+    de: '/sauna-bootstouren-helsinki',
+  },
+  '/julkinen-sauna': {
+    en: '/public-sauna-helsinki',
+    es: '/sauna-publica-helsinki',
+    fr: '/sauna-public-helsinki',
+    de: '/oeffentliche-sauna-helsinki',
+  },
+  '/avanto': {
+    en: '/ice-swimming-sauna-helsinki',
+    es: '/sauna-privada-helsinki',
+    fr: '/sauna-prive-helsinki',
+    de: '/private-sauna-helsinki',
+  },
+  '/polttarit-yritystilaisuudet': {
+    en: '/bachelor-parties-corporate-events-helsinki',
+    es: '/eventos-despedidas-empresas-helsinki',
+    fr: '/evenements-helsinki',
+    de: '/junggesellenabschiede-firmenevents-helsinki',
+  },
+  '/sijainti': {
+    en: '/location',
+    es: '/ubicacion',
+    fr: '/acces',
+    de: '/standort',
+  },
+  '/toiminnastamme': {
+    en: '/about',
+    es: '/sobre-nosotros',
+    fr: '/a-propos',
+    de: '/ueber-uns',
+  },
+  '/usein-kysyttya': {
+    en: '/faq',
+    es: '/preguntas-frecuentes',
+    fr: '/faq',
+    de: '/faq',
+  },
+  '/galleria': {
+    en: '/gallery',
+    es: '/galeria',
+    fr: '/galerie',
+    de: '/galerie',
+  },
+  '/kiitos': {
+    en: '/thank-you',
+    es: '/gracias',
+    fr: '/merci',
+    de: '/danke',
+  },
+};
+
+export const normalizePageLocale = (locale: string): SchemaLocale =>
+  supportedLocales.includes(locale as SchemaLocale) ? locale as SchemaLocale : 'fi';
+
+export const getLocalizedPagePath = (path: string, locale: SchemaLocale) => {
+  if (locale === 'fi') return path;
+  const localizedPath = localizedPaths[path]?.[locale] ?? path;
+  return `/${locale}${localizedPath === '/' ? '' : localizedPath}`;
+};
+
+export const getLocalizedPageUrl = (path: string, locale: SchemaLocale) =>
+  `${SITE_URL}${getLocalizedPagePath(path, locale)}`;
+
+export const getLanguageAlternates = (path: string) => ({
+  'fi-FI': getLocalizedPageUrl(path, 'fi'),
+  'en-US': `${getLocalizedPageUrl(path, 'en')}${path === '/' ? '/' : ''}`,
+  'en-GB': `${getLocalizedPageUrl(path, 'en')}${path === '/' ? '/' : ''}`,
+  'es-ES': `${getLocalizedPageUrl(path, 'es')}${path === '/' ? '/' : ''}`,
+  'fr-FR': `${getLocalizedPageUrl(path, 'fr')}${path === '/' ? '/' : ''}`,
+  'de-DE': `${getLocalizedPageUrl(path, 'de')}${path === '/' ? '/' : ''}`,
+  'x-default': getLocalizedPageUrl(path, 'fi'),
+});
+
+export const getOpenGraphLocale = (locale: SchemaLocale) => ({
+  fi: 'fi_FI',
+  en: 'en_US',
+  es: 'es_ES',
+  fr: 'fr_FR',
+  de: 'de_DE',
+})[locale];
+
+export const getHomeLabel = (locale: SchemaLocale) => ({
+  fi: 'Etusivu',
+  en: 'Home',
+  es: 'Inicio',
+  fr: 'Accueil',
+  de: 'Startseite',
+})[locale];
+
+const organizationCopy: Record<SchemaLocale, {
+  description: string;
+  openingHours: string;
+  catalogName: string;
+  offers: Array<{ name: string; description: string }>;
+}> = {
+  fi: {
+    description: 'Aito suomalainen saunaelämys merellisessä Helsingissä. Saunalauttaristeilyt, yksityissauna ja julkinen sauna.',
+    openingHours: 'Aukiolo varauksen mukaan',
+    catalogName: 'Saunapalvelut',
+    offers: [
+      { name: 'Saunalauttaristeilyt', description: 'Kesäkauden saunalauttaristeilyt Helsingin itäisessä saaristossa' },
+      { name: 'Julkinen sauna', description: 'Avoimet saunavuorot yleisölle' },
+      { name: 'Yksityissauna', description: 'Yksityistilaisuuksien saunavuorot' },
+    ],
+  },
+  en: {
+    description: 'Authentic Finnish sauna experience in maritime Helsinki. Sauna boat cruises, private sauna and public sauna.',
+    openingHours: 'Open by appointment',
+    catalogName: 'Sauna services',
+    offers: [
+      { name: 'Sauna boat cruises', description: 'Summer season sauna boat cruises in the Eastern Helsinki archipelago' },
+      { name: 'Public sauna', description: 'Open sauna sessions for the public' },
+      { name: 'Private sauna', description: 'Sauna sessions for private events' },
+    ],
+  },
+  es: {
+    description: 'Auténtica experiencia de sauna finlandesa en el Helsinki marítimo. Cruceros en sauna flotante, sauna privada y sauna pública.',
+    openingHours: 'Abierto con reserva previa',
+    catalogName: 'Servicios de sauna',
+    offers: [
+      { name: 'Cruceros en sauna flotante', description: 'Cruceros de verano en sauna flotante por el archipiélago del este de Helsinki' },
+      { name: 'Sauna pública', description: 'Sesiones de sauna abiertas al público' },
+      { name: 'Sauna privada', description: 'Sesiones de sauna para eventos privados' },
+    ],
+  },
+  fr: {
+    description: 'Authentique expérience de sauna finlandais dans le Helsinki maritime. Croisières en sauna flottant, sauna privé et sauna public.',
+    openingHours: 'Ouvert sur rendez-vous',
+    catalogName: 'Services de sauna',
+    offers: [
+      { name: 'Croisières en sauna flottant', description: 'Croisières estivales en sauna flottant dans l’archipel de l’est d’Helsinki' },
+      { name: 'Sauna public', description: 'Séances de sauna ouvertes au public' },
+      { name: 'Sauna privé', description: 'Séances de sauna pour événements privés' },
+    ],
+  },
+  de: {
+    description: 'Authentisches finnisches Saunaerlebnis im maritimen Helsinki. Saunabootfahrten, private Sauna und öffentliche Sauna.',
+    openingHours: 'Nach Vereinbarung geöffnet',
+    catalogName: 'Sauna-Angebote',
+    offers: [
+      { name: 'Saunabootfahrten', description: 'Saunabootfahrten in der Sommersaison durch den Schärengarten von Ost-Helsinki' },
+      { name: 'Öffentliche Sauna', description: 'Öffentliche Saunazeiten für alle Gäste' },
+      { name: 'Private Sauna', description: 'Saunazeiten für private Veranstaltungen' },
+    ],
+  },
+};
+
+export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => {
+  const copy = organizationCopy[locale];
+
+  return {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": "https://www.hyvantuulensauna.fi/#organization",
   "name": "Hyvän Tuulen Sauna",
   "alternateName": "Hyvän Tuulen Sauna Oy",
-  "description": locale === 'en'
-    ? "Authentic Finnish sauna experience in maritime Helsinki. Sauna boat cruises, private sauna and public sauna."
-    : "Aito suomalainen saunaelämys merellisessä Helsingissä. Saunalauttaristeilyt, yksityissauna ja julkinen sauna.",
+  "description": copy.description,
   "url": "https://www.hyvantuulensauna.fi",
   "telephone": "+358442313546",
   "email": "info@hyvantuulensauna.fi",
@@ -31,7 +189,7 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "description": locale === 'en' ? "Open by appointment" : "Aukiolo varauksen mukaan"
+      "description": copy.openingHours
     }
   ],
   "image": [
@@ -48,58 +206,15 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
   },
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": locale === 'en' ? "Sauna services" : "Saunapalvelut",
-    "itemListElement": locale === 'en' ? [
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Sauna boat cruises",
-          "description": "Summer season sauna boat cruises in the Eastern Helsinki archipelago"
-        }
+    "name": copy.catalogName,
+    "itemListElement": copy.offers.map(offer => ({
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": offer.name,
+        "description": offer.description,
       },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Public sauna",
-          "description": "Open sauna sessions for the public"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Private sauna",
-          "description": "Sauna sessions for private events"
-        }
-      }
-    ] : [
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Saunalauttaristeilyt",
-          "description": "Kesäkauden saunalauttaristeilyt Helsingin itäisessä saaristossa"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Julkinen sauna",
-          "description": "Avoimet saunavuorot yleisölle"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Yksityissauna",
-          "description": "Yksityistilaisuuksien saunavuorot"
-        }
-      }
-    ]
+    })),
   },
   "aggregateRating": {
     "@type": "AggregateRating",
@@ -111,7 +226,8 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => ({
     "https://instagram.com/hyvantuulensauna",
     "https://facebook.com/hyvantuulensauna"
   ]
-});
+  };
+};
 
 export const websiteSchema = {
   "@context": "https://schema.org",

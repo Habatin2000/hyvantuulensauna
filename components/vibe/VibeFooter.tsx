@@ -4,6 +4,14 @@ import { ArrowUp } from 'lucide-react';
 import { vibeCopy, type Locale } from './content';
 import { getVibeRoute } from './routes';
 
+const backToTop: Record<Locale, string> = {
+  fi: 'Takaisin ylös',
+  en: 'Back to top',
+  es: 'Volver arriba',
+  fr: 'Retour en haut',
+  de: 'Nach oben',
+};
+
 export default function VibeFooter({ locale }: { locale: Locale }) {
   const c = vibeCopy[locale];
   return (
@@ -17,7 +25,7 @@ export default function VibeFooter({ locale }: { locale: Locale }) {
       </div>
       <div className="vibe-footer-bottom">
         <p>{c.footerContact}</p>
-        <a href="#main-content" aria-label={locale === 'en' ? 'Back to top' : 'Takaisin ylös'}>
+        <a href="#main-content" aria-label={backToTop[locale]}>
           <ArrowUp size={18} aria-hidden="true" />
         </a>
       </div>

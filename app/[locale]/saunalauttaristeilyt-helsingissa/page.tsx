@@ -2,12 +2,32 @@ import type { Metadata } from 'next';
 import VibeInnerPage from '@/components/vibe/VibeInnerPage';
 import { getVibePage } from '@/components/vibe/pages';
 import type { Locale } from '@/components/vibe/content';
-import { generateServiceSchema, generateBreadcrumbSchema, generateArticleSchema, generateEventSchema, generateHowToSchema } from '../schema';
+import {
+  generateServiceSchema,
+  generateBreadcrumbSchema,
+  generateArticleSchema,
+  generateEventSchema,
+  generateHowToSchema,
+  getHomeLabel,
+  getLanguageAlternates,
+  getLocalizedPageUrl,
+  getOpenGraphLocale,
+  normalizePageLocale,
+} from '../schema';
 import { SITE_URL } from '@/lib/site';
 
+const PAGE_PATH = '/saunalauttaristeilyt-helsingissa';
 const PAGE_IMAGE = `${SITE_URL}/images/gallery-deck-view.webp`;
 const DATE_PUBLISHED = '2024-01-15';
 const DATE_MODIFIED = '2026-06-08';
+
+const eventLocations = {
+  fi: 'Kalkkihiekantorin laivalaituri',
+  en: 'Kalkkihiekantori boat pier',
+  es: 'Embarcadero de Kalkkihiekantori',
+  fr: 'Quai de Kalkkihiekantori',
+  de: 'Bootsanleger Kalkkihiekantori',
+};
 
 export async function generateMetadata({
   params,
@@ -15,45 +35,36 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
-  const isEn = safeLocale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en/sauna-boat-cruises-helsinki' : '/saunalauttaristeilyt-helsingissa'}`;
+  const safeLocale = normalizePageLocale(locale) as Locale;
+  const data = getVibePage('saunalauttaristeilyt', safeLocale);
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
 
   return {
-    title: isEn
-      ? 'Private Sauna Boat Cruises in Helsinki'
-      : 'Saunalauttaristeilyt Helsingissä',
-    description: isEn
-      ? 'Book a private sauna boat cruise in Helsinki. Celebrate birthdays, bachelor parties or corporate events aboard Aalto or Virta. Explore and book!'
-      : 'Varaa yksityinen saunalauttaristeily Helsingissä. Aalto ja Virta tarjoavat puitteet polttareihin, juhliin ja yritystilaisuuksiin. Tutustu ja varaa!',
+    title: { absolute: data.title },
+    description: data.description,
     alternates: {
       canonical: pageUrl,
-      languages: {
-        'fi-FI': `${SITE_URL}/saunalauttaristeilyt-helsingissa`,
-        'en-US': `${SITE_URL}/en/sauna-boat-cruises-helsinki`,
-        'en-GB': `${SITE_URL}/en/sauna-boat-cruises-helsinki`,
-        'x-default': `${SITE_URL}/saunalauttaristeilyt-helsingissa`,
-      },
+      languages: getLanguageAlternates(PAGE_PATH),
     },
     openGraph: {
-      title: isEn
-        ? 'Sauna Boat Cruises in Helsinki | Hyvän Tuulen Sauna'
-        : 'Saunalauttaristeilyt Helsingissä | Hyvän Tuulen Sauna',
-      description: isEn
-        ? 'Book a sauna boat for summer 2026! Two unique sauna boats in the Eastern Helsinki archipelago.'
-        : 'Varaa saunalautta kesäksi 2026! Kaksi ainutlaatuista saunalauttaa Itä-Helsingin saaristossa.',
+      title: data.title,
+      description: data.description,
       url: pageUrl,
-      locale: isEn ? 'en_US' : 'fi_FI',
+      locale: getOpenGraphLocale(safeLocale),
       images: [
         {
-          url: '/images/gallery-deck-view.webp',
+          url: PAGE_IMAGE,
           width: 1200,
           height: 630,
-          alt: isEn
-            ? 'Sauna boat in Helsinki - Hyvän Tuulen Sauna'
-            : 'Saunalautta Helsingissä - Hyvän Tuulen Sauna',
+          alt: data.imageAlt,
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.description,
+      images: [{ url: PAGE_IMAGE, alt: data.imageAlt }],
     },
   };
 }
@@ -64,30 +75,21 @@ export default async function SummerSaunaPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
-  const isEn = safeLocale === 'en';
+  const safeLocale = normalizePageLocale(locale) as Locale;
   const data = getVibePage('saunalauttaristeilyt', safeLocale);
-  const pageUrl = `${SITE_URL}${isEn ? '/en/sauna-boat-cruises-helsinki' : '/saunalauttaristeilyt-helsingissa'}`;
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
+  const pageName = data.title.split(' | ')[0];
 
-  const serviceSchema = generateServiceSchema(
-    isEn ? 'Sauna Boat Cruises in Helsinki | Aalto and Virta' : 'Saunalauttaristeilyt Helsingissä | Aalto ja Virta',
-    isEn
-      ? 'Summer season sauna boat cruises in Eastern Helsinki archipelago. Two sauna boats, Aalto and Virta, departing from Kalkkihiekantori in Vuosaari.'
-      : 'Kesäkauden saunalauttaristeilyt Itä-Helsingin saaristossa. Kaksi saunalauttaa, Aalto ja Virta, lähtevät Kalkkihiekantorilta Vuosaaressa.',
-    pageUrl,
-    PAGE_IMAGE
-  );
+  const serviceSchema = generateServiceSchema(data.title, data.description, pageUrl, PAGE_IMAGE);
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: isEn ? 'Home' : 'Etusivu', url: `${SITE_URL}${isEn ? '/en' : ''}` },
-    { name: isEn ? 'Sauna Boat Cruises' : 'Saunalauttaristeilyt', url: pageUrl }
+    { name: getHomeLabel(safeLocale), url: getLocalizedPageUrl('/', safeLocale) },
+    { name: pageName, url: pageUrl },
   ]);
 
   const articleSchema = generateArticleSchema(
-    isEn ? 'Sauna Boat Cruises in Helsinki 2027 | Aalto & Virta | Kalkkihiekantori' : 'Saunalauttaristeilyt Helsingissä 2027 | Aalto ja Virta | Kalkkihiekantori',
-    isEn
-      ? 'Book a sauna boat in Helsinki for summer 2027! Two unique sauna boats, Aalto and Virta, in the Eastern Helsinki archipelago. Departing from Kalkkihiekantori, Vuosaari.'
-      : 'Varaa saunalautta Helsingistä kesäksi 2027! Kaksi ainutlaatuista saunalauttaa, Aalto ja Virta, Itä-Helsingin saaristossa. Lähtö Kalkkihiekantorilta, Vuosaari.',
+    data.title,
+    data.description,
     pageUrl,
     PAGE_IMAGE,
     DATE_PUBLISHED,
@@ -95,21 +97,19 @@ export default async function SummerSaunaPage({
   );
 
   const eventSchema = generateEventSchema(
-    isEn ? 'Sauna boat cruise season 2027' : 'Saunalauttaristeilyt kesäkausi 2027',
-    isEn
-      ? 'Summer season sauna boat cruises with Hyvän Tuulen Sauna. Two sauna boats, Aalto and Virta.'
-      : 'Kesäkauden saunalauttaristeilyt Hyvän Tuulen Saunalla. Kaksi saunalauttaa, Aalto ja Virta.',
+    data.heroTitle,
+    data.heroText,
     pageUrl,
     PAGE_IMAGE,
     '2027-05-01T10:00:00+03:00',
     '2027-09-30T22:00:00+03:00',
-    isEn ? 'Kalkkihiekantori boat pier' : 'Kalkkihiekantorin laivalaituri',
+    eventLocations[safeLocale],
     '225',
     '2027-05-01'
   );
 
   const howToSchema = generateHowToSchema(
-    data.timelineTitle ?? (isEn ? 'Your cruise' : 'Risteilysi'),
+    data.timelineTitle ?? data.detailTitle,
     data.detailText,
     data.timeline?.map(step => ({ name: step.title, text: step.text })) ?? []
   );

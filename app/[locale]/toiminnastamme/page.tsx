@@ -2,9 +2,18 @@ import type { Metadata } from 'next';
 import VibeInnerPage from '@/components/vibe/VibeInnerPage';
 import { getVibePage } from '@/components/vibe/pages';
 import type { Locale } from '@/components/vibe/content';
-import { generateBreadcrumbSchema, generateArticleSchema } from '../schema';
+import {
+  generateBreadcrumbSchema,
+  generateArticleSchema,
+  getHomeLabel,
+  getLanguageAlternates,
+  getLocalizedPageUrl,
+  getOpenGraphLocale,
+  normalizePageLocale,
+} from '../schema';
 import { SITE_URL } from '@/lib/site';
 
+const PAGE_PATH = '/toiminnastamme';
 const PAGE_IMAGE = `${SITE_URL}/images/gallery-crew.webp`;
 const DATE_PUBLISHED = '2024-01-15';
 const DATE_MODIFIED = '2026-04-14';
@@ -15,42 +24,36 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en/about' : '/toiminnastamme'}`;
+  const safeLocale = normalizePageLocale(locale) as Locale;
+  const data = getVibePage('meista', safeLocale);
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
 
   return {
-    title: isEn ? 'Our Story' : 'Meidän tarinamme',
-    description: isEn
-      ? "Discover the story of Hyvän Tuulen Sauna. We've offered sauna boat cruises and sauna experiences in Helsinki since 2018. Learn more about us."
-      : 'Tutustu Hyvän Tuulen Saunan tarinaan. Olemme tarjonneet saunalauttaristeilyjä ja saunaelämyksiä Helsingissä vuodesta 2018. Lue lisää toiminnastamme.',
+    title: { absolute: data.title },
+    description: data.description,
     alternates: {
       canonical: pageUrl,
-      languages: {
-        'fi-FI': `${SITE_URL}/toiminnastamme`,
-        'en-US': `${SITE_URL}/en/about`,
-        'en-GB': `${SITE_URL}/en/about`,
-        'x-default': `${SITE_URL}/toiminnastamme`,
-      },
+      languages: getLanguageAlternates(PAGE_PATH),
     },
     openGraph: {
-      title: isEn
-        ? 'About Us | Hyvän Tuulen Sauna'
-        : 'Toiminnastamme | Hyvän Tuulen Sauna',
-      description: isEn
-        ? 'Discover our story. Sauna boat cruises in Helsinki with 8 years of experience.'
-        : 'Tutustu tarinaamme. 8 vuoden kokemuksella saunalauttaristeilyjä Helsingissä.',
+      title: data.title,
+      description: data.description,
       url: pageUrl,
-      locale: isEn ? 'en_US' : 'fi_FI',
+      locale: getOpenGraphLocale(safeLocale),
       images: [
         {
-          url: '/images/gallery-crew.webp',
+          url: PAGE_IMAGE,
           width: 1200,
           height: 630,
-          alt: isEn
-            ? 'Hyvän Tuulen Sauna team'
-            : 'Hyvän Tuulen Saunan tiimi',
+          alt: data.imageAlt,
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.description,
+      images: [{ url: PAGE_IMAGE, alt: data.imageAlt }],
     },
   };
 }
@@ -61,21 +64,19 @@ export default async function AboutPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
-  const isEn = safeLocale === 'en';
+  const safeLocale = normalizePageLocale(locale) as Locale;
   const data = getVibePage('meista', safeLocale);
-  const pageUrl = `${SITE_URL}${isEn ? '/en/about' : '/toiminnastamme'}`;
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
+  const pageName = data.title.split(' | ')[0];
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: isEn ? 'Home' : 'Etusivu', url: `${SITE_URL}${isEn ? '/en' : ''}` },
-    { name: isEn ? 'About Us' : 'Toiminnastamme', url: pageUrl }
+    { name: getHomeLabel(safeLocale), url: getLocalizedPageUrl('/', safeLocale) },
+    { name: pageName, url: pageUrl },
   ]);
 
   const articleSchema = generateArticleSchema(
-    isEn ? 'About Us | Hyvän Tuulen Sauna Oy' : 'Toiminnastamme | Hyvän Tuulen Sauna Oy',
-    isEn
-      ? 'Discover the story of Hyvän Tuulen Sauna. We have offered sauna boat cruises and sauna experiences in Helsinki since 2018.'
-      : 'Tutustu Hyvän Tuulen Saunan tarinaan. Olemme tarjonneet saunalauttaristeilyjä ja saunaelämyksiä Helsingissä jo vuodesta 2018.',
+    data.title,
+    data.description,
     pageUrl,
     PAGE_IMAGE,
     DATE_PUBLISHED,
@@ -85,14 +86,12 @@ export default async function AboutPage({
   const aboutPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
-    name: isEn ? 'About Us' : 'Toiminnastamme',
-    description: isEn
-      ? 'The story, values and team of Hyvän Tuulen Sauna.'
-      : 'Hyvän Tuulen Saunan tarina, arvot ja tiimi.',
+    name: data.title,
+    description: data.description,
     url: pageUrl,
     mainEntity: {
-      '@id': `${SITE_URL}/#organization`
-    }
+      '@id': `${SITE_URL}/#organization`,
+    },
   };
 
   return (

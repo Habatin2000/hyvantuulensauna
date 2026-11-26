@@ -1,6 +1,6 @@
 import { HeroContent, Feature } from '@/types';
 
-export type Locale = 'fi' | 'en';
+export type Locale = 'fi' | 'en' | 'es' | 'fr' | 'de';
 
 export const getHomepageHero = (locale: Locale): HeroContent => {
   if (locale === 'en') {

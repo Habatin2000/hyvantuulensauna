@@ -459,6 +459,7 @@
 
 .vibe-julkinen-sauna-passes {
   display: grid;
+  scroll-margin-top: calc(var(--vibe-header-height) + 20px);
   grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
   margin-top: 68px;
   border-left: 4px solid var(--julkinen-ember);
@@ -496,77 +497,16 @@
   line-height: 1.75;
 }
 
-.vibe-julkinen-sauna-pass-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-left: 1px solid rgb(255 255 255 / 16%);
-}
-
-.vibe-julkinen-sauna-pass {
+.vibe-julkinen-sauna-purchase {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 42px;
-  padding: 44px clamp(1.5rem, 3vw, 2.75rem);
+  padding: clamp(12px, 2vw, 24px);
+  background: var(--julkinen-paper);
+  color: var(--julkinen-navy);
 }
 
-.vibe-julkinen-sauna-pass + .vibe-julkinen-sauna-pass {
-  border-left: 1px dashed rgb(255 255 255 / 28%);
-}
-
-.vibe-julkinen-sauna-pass-name {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.vibe-julkinen-sauna-pass-name > span {
-  color: var(--julkinen-amber);
-  font-family: var(--vibe-font-display), Georgia, serif;
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.vibe-julkinen-sauna-pass-name h4 {
-  color: var(--julkinen-white);
-  font-family: var(--vibe-font-body), sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
-.vibe-julkinen-sauna-pass-prices {
-  display: flex;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 26px;
-  margin: 0;
-}
-
-.vibe-julkinen-sauna-pass-prices dt {
-  color: rgb(255 255 255 / 65%);
-  font-size: 0.62rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.vibe-julkinen-sauna-pass-prices div:first-child dt {
-  color: var(--julkinen-amber);
-}
-
-.vibe-julkinen-sauna-pass-prices dd {
-  margin: 7px 0 0;
-  font-family: var(--vibe-font-display), Georgia, serif;
-  font-size: clamp(2rem, 3.4vw, 3.35rem);
-  letter-spacing: -0.045em;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.vibe-julkinen-sauna-pass-prices div:first-child dd {
-  color: var(--julkinen-amber);
+.vibe-julkinen-sauna-purchase > div {
+  width: 100%;
+  margin: auto;
 }
 
 .vibe-julkinen-sauna-price-note {
@@ -911,9 +851,6 @@
     grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
   }
 
-  .vibe-julkinen-sauna-pass-prices {
-    gap: 18px;
-  }
 
   .vibe-julkinen-sauna-visit {
     gap: 3rem;
@@ -962,10 +899,6 @@
     grid-template-columns: 1fr;
   }
 
-  .vibe-julkinen-sauna-pass-grid {
-    border-top: 1px solid rgb(255 255 255 / 16%);
-    border-left: 0;
-  }
 
   .vibe-julkinen-sauna-visit-photo {
     min-height: 630px;
@@ -1082,28 +1015,6 @@
     padding: 38px 30px;
   }
 
-  .vibe-julkinen-sauna-pass-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .vibe-julkinen-sauna-pass {
-    gap: 30px;
-    padding: 32px 30px;
-  }
-
-  .vibe-julkinen-sauna-pass + .vibe-julkinen-sauna-pass {
-    border-top: 1px dashed rgb(255 255 255 / 28%);
-    border-left: 0;
-  }
-
-  .vibe-julkinen-sauna-pass-prices {
-    justify-content: space-between;
-    gap: 24px;
-  }
-
-  .vibe-julkinen-sauna-pass-prices dd {
-    font-size: clamp(2.7rem, 12vw, 3.6rem);
-  }
 
   .vibe-julkinen-sauna-visit {
     display: flex;
@@ -1218,8 +1129,7 @@
     font-size: 1.2rem;
   }
 
-  .vibe-julkinen-sauna-passes-intro,
-  .vibe-julkinen-sauna-pass {
+  .vibe-julkinen-sauna-passes-intro {
     padding-right: 24px;
     padding-left: 24px;
   }

@@ -5,6 +5,39 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import type { Locale } from './content';
 
+const galleryCopy = {
+  fi: {
+    expandImage: 'Laajenna kuva',
+    previousImage: 'Edellinen kuva',
+    nextImage: 'Seuraava kuva',
+    closeGallery: 'Sulje galleria',
+  },
+  en: {
+    expandImage: 'Expand image',
+    previousImage: 'Previous image',
+    nextImage: 'Next image',
+    closeGallery: 'Close gallery',
+  },
+  es: {
+    expandImage: 'Ampliar imagen',
+    previousImage: 'Imagen anterior',
+    nextImage: 'Imagen siguiente',
+    closeGallery: 'Cerrar galería',
+  },
+  fr: {
+    expandImage: 'Agrandir l’image',
+    previousImage: 'Image précédente',
+    nextImage: 'Image suivante',
+    closeGallery: 'Fermer la galerie',
+  },
+  de: {
+    expandImage: 'Bild vergrößern',
+    previousImage: 'Vorheriges Bild',
+    nextImage: 'Nächstes Bild',
+    closeGallery: 'Galerie schließen',
+  },
+} as const;
+
 interface VibeBoatGalleryProps {
   images: { src: string; alt: string }[];
   label: string;
@@ -21,7 +54,7 @@ export default function VibeBoatGallery({ images, label, badge, className, sizes
   const expandButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const current = images[index];
-  const isEn = locale === 'en';
+  const copy = galleryCopy[locale];
 
   const goNext = useCallback(() => {
     setIndex((currentIndex) => (currentIndex + 1) % images.length);
@@ -74,7 +107,7 @@ export default function VibeBoatGallery({ images, label, badge, className, sizes
         type="button"
         className="vibe-boat-gallery-main"
         onClick={() => setExpanded(true)}
-        aria-label={`${isEn ? 'Expand image' : 'Laajenna kuva'}: ${current.alt}`}
+        aria-label={`${copy.expandImage}: ${current.alt}`}
       >
         <Image key={current.src} src={current.src} alt={current.alt} fill sizes={sizes} />
         <span className="vibe-boat-gallery-expand" aria-hidden="true"><Maximize2 size={19} /></span>
@@ -83,28 +116,28 @@ export default function VibeBoatGallery({ images, label, badge, className, sizes
       <span>{badge}</span>
 
       <div className="vibe-boat-gallery-controls">
-        <button type="button" onClick={goPrevious} aria-label={isEn ? 'Previous image' : 'Edellinen kuva'}>
+        <button type="button" onClick={goPrevious} aria-label={copy.previousImage}>
           <ChevronLeft size={20} aria-hidden="true" />
         </button>
         <span aria-live="polite">{index + 1} / {images.length}</span>
-        <button type="button" onClick={goNext} aria-label={isEn ? 'Next image' : 'Seuraava kuva'}>
+        <button type="button" onClick={goNext} aria-label={copy.nextImage}>
           <ChevronRight size={20} aria-hidden="true" />
         </button>
       </div>
 
       {expanded && (
         <div className="vibe-boat-lightbox" role="dialog" aria-modal="true" aria-label={label} onClick={() => setExpanded(false)}>
-          <button ref={closeButtonRef} type="button" className="vibe-boat-lightbox-close" onClick={() => setExpanded(false)} aria-label={isEn ? 'Close gallery' : 'Sulje galleria'}>
+          <button ref={closeButtonRef} type="button" className="vibe-boat-lightbox-close" onClick={() => setExpanded(false)} aria-label={copy.closeGallery}>
             <X size={26} aria-hidden="true" />
           </button>
-          <button type="button" className="vibe-boat-lightbox-previous" onClick={(event) => { event.stopPropagation(); goPrevious(); }} aria-label={isEn ? 'Previous image' : 'Edellinen kuva'}>
+          <button type="button" className="vibe-boat-lightbox-previous" onClick={(event) => { event.stopPropagation(); goPrevious(); }} aria-label={copy.previousImage}>
             <ChevronLeft size={32} aria-hidden="true" />
           </button>
           <div className="vibe-boat-lightbox-stage" onClick={(event) => event.stopPropagation()}>
             <Image key={current.src} src={current.src} alt={current.alt} fill sizes="100vw" />
             <p>{label} · {index + 1} / {images.length}</p>
           </div>
-          <button type="button" className="vibe-boat-lightbox-next" onClick={(event) => { event.stopPropagation(); goNext(); }} aria-label={isEn ? 'Next image' : 'Seuraava kuva'}>
+          <button type="button" className="vibe-boat-lightbox-next" onClick={(event) => { event.stopPropagation(); goNext(); }} aria-label={copy.nextImage}>
             <ChevronRight size={32} aria-hidden="true" />
           </button>
         </div>

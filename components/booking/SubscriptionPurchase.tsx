@@ -9,30 +9,156 @@ import { getAttribution } from '@/lib/attribution';
 import { trackLead, trackInitiateCheckout, trackAddPaymentInfo, trackPurchase } from '@/lib/meta';
 
 interface SubscriptionPurchaseProps {
-  locale: 'fi' | 'en';
+  locale: 'fi' | 'en' | 'es' | 'fr' | 'de';
 }
 
 const PRODUCTS = {
   '5x': {
     id: 'ca646e7f-4a9c-4c5c-af59-b9538c49ecb3',
-    price: 45,
-    originalPrice: 55,
-    fi: { name: '5 x saunavuoroa', perSession: '9 € / vuoro', cta: 'Osta 5 x -kortti' },
-    en: { name: '5 x sauna sessions', perSession: '9 € / session', cta: 'Buy 5 x card' },
+    price: 55,
+    fi: { name: '5 x saunavuoroa', perSession: '11 € / vuoro', cta: 'Osta 5 x -kortti' },
+    en: { name: '5 x sauna sessions', perSession: '11 € / session', cta: 'Buy 5 x card' },
+    es: { name: '5 sesiones de sauna', perSession: '11 € / sesión', cta: 'Comprar bono de 5 sesiones' },
+    fr: { name: '5 séances de sauna', perSession: '11 € / séance', cta: 'Acheter la carte 5 séances' },
+    de: { name: '5 Saunabesuche', perSession: '11 € / Besuch', cta: '5er-Karte kaufen' },
   },
   '10x': {
     id: '74e4fe83-5aa6-46e7-8248-9b39d5451a3a',
-    price: 70,
-    originalPrice: 90,
-    fi: { name: '10 x saunavuoroa', perSession: '7 € / vuoro', cta: 'Osta 10 x -kortti' },
-    en: { name: '10 x sauna sessions', perSession: '7 € / session', cta: 'Buy 10 x card' },
+    price: 90,
+    fi: { name: '10 x saunavuoroa', perSession: '9 € / vuoro', cta: 'Osta 10 x -kortti' },
+    en: { name: '10 x sauna sessions', perSession: '9 € / session', cta: 'Buy 10 x card' },
+    es: { name: '10 sesiones de sauna', perSession: '9 € / sesión', cta: 'Comprar bono de 10 sesiones' },
+    fr: { name: '10 séances de sauna', perSession: '9 € / séance', cta: 'Acheter la carte 10 séances' },
+    de: { name: '10 Saunabesuche', perSession: '9 € / Besuch', cta: '10er-Karte kaufen' },
+  },
+};
+
+const textsByLocale = {
+  fi: {
+    seasonPass: 'Kausikortit',
+    title: 'Sarjakortit',
+    subtitle: 'Yleiseen saunaan edullisemmin',
+    modalTitle: 'Osta sarjakortti',
+    modalDescription: 'Valitse kortti ja täytä yhteystietosi. Sinut ohjataan turvalliseen Stripe-maksuun.',
+    hintTitle: 'Tärkeää',
+    hint: 'Käytä ostoa tehdessäsi samaa sähköpostiosoitetta kuin varatessasi. Jatkossa sähköpostiosoitteesi toimii käyttäjätunnuksenasi!',
+    firstName: 'Etunimi',
+    lastName: 'Sukunimi',
+    email: 'Sähköposti',
+    phone: 'Puhelinnumero',
+    marketingConsent: 'Haluan saada Hyvän Tuulen Saunan tarjouksia ja uutisia sähköpostiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
+    required: 'Pakollinen',
+    invalidEmail: 'Tarkista sähköpostiosoite',
+    submit: 'Jatka maksuun',
+    submitting: 'Ohjataan maksuun…',
+    close: 'Sulje',
+    errorGeneric: 'Oston aloittaminen epäonnistui. Yritä uudelleen.',
+    errorNoPaymentUrl: 'Maksulinkin luominen epäonnistui. Ota yhteyttä meihin.',
+    firstNamePlaceholder: 'Matti',
+    lastNamePlaceholder: 'Meikäläinen',
+    emailPlaceholder: 'matti@example.com',
+  },
+  en: {
+    seasonPass: 'Season passes',
+    title: 'Sauna cards',
+    subtitle: 'Cheaper access to the public sauna',
+    modalTitle: 'Buy a sauna card',
+    modalDescription: 'Choose a card and fill in your details. You will be redirected to a secure Stripe checkout.',
+    hintTitle: 'Important',
+    hint: 'Use the same email address for the purchase as you do for booking. From now on, your email address will be your username!',
+    firstName: 'First name',
+    lastName: 'Last name',
+    email: 'Email',
+    phone: 'Phone number',
+    marketingConsent: 'I want to receive offers and news from Hyvän Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)',
+    required: 'Required',
+    invalidEmail: 'Please check the email address',
+    submit: 'Continue to payment',
+    submitting: 'Redirecting…',
+    close: 'Close',
+    errorGeneric: 'Could not start the purchase. Please try again.',
+    errorNoPaymentUrl: 'Payment link could not be created. Please contact us.',
+    firstNamePlaceholder: 'John',
+    lastNamePlaceholder: 'Doe',
+    emailPlaceholder: 'john@example.com',
+  },
+  es: {
+    seasonPass: 'Abonos',
+    title: 'Bonos de sauna',
+    subtitle: 'Acceso más económico a la sauna pública',
+    modalTitle: 'Comprar un bono de sauna',
+    modalDescription: 'Elige un bono e introduce tus datos. Te redirigiremos a una pasarela de pago segura de Stripe.',
+    hintTitle: 'Importante',
+    hint: 'Usa la misma dirección de correo electrónico para la compra y las reservas. A partir de ahora, tu correo electrónico será tu nombre de usuario.',
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    email: 'Correo electrónico',
+    phone: 'Número de teléfono',
+    marketingConsent: 'Quiero recibir ofertas y noticias de Hyvän Tuulen Sauna por correo electrónico. Puedo retirar mi consentimiento en cualquier momento. (Opcional)',
+    required: 'Obligatorio',
+    invalidEmail: 'Comprueba la dirección de correo electrónico',
+    submit: 'Continuar al pago',
+    submitting: 'Redirigiendo…',
+    close: 'Cerrar',
+    errorGeneric: 'No se ha podido iniciar la compra. Inténtalo de nuevo.',
+    errorNoPaymentUrl: 'No se ha podido crear el enlace de pago. Ponte en contacto con nosotros.',
+    firstNamePlaceholder: 'Juan',
+    lastNamePlaceholder: 'García',
+    emailPlaceholder: 'juan@example.com',
+  },
+  fr: {
+    seasonPass: 'Cartes d’abonnement',
+    title: 'Cartes de sauna',
+    subtitle: 'Accédez plus économiquement au sauna public',
+    modalTitle: 'Acheter une carte de sauna',
+    modalDescription: 'Choisissez une carte et renseignez vos coordonnées. Vous serez redirigé vers le paiement sécurisé Stripe.',
+    hintTitle: 'Important',
+    hint: 'Utilisez la même adresse e-mail pour votre achat et vos réservations. Désormais, votre adresse e-mail servira de nom d’utilisateur !',
+    firstName: 'Prénom',
+    lastName: 'Nom',
+    email: 'E-mail',
+    phone: 'Numéro de téléphone',
+    marketingConsent: 'Je souhaite recevoir les offres et actualités de Hyvän Tuulen Sauna par e-mail. Je peux retirer mon consentement à tout moment. (Facultatif)',
+    required: 'Obligatoire',
+    invalidEmail: 'Veuillez vérifier l’adresse e-mail',
+    submit: 'Continuer vers le paiement',
+    submitting: 'Redirection…',
+    close: 'Fermer',
+    errorGeneric: 'Impossible de lancer l’achat. Veuillez réessayer.',
+    errorNoPaymentUrl: 'Le lien de paiement n’a pas pu être créé. Veuillez nous contacter.',
+    firstNamePlaceholder: 'Jean',
+    lastNamePlaceholder: 'Dupont',
+    emailPlaceholder: 'jean@example.com',
+  },
+  de: {
+    seasonPass: 'Saisonkarten',
+    title: 'Saunakarten',
+    subtitle: 'Günstiger Zugang zur öffentlichen Sauna',
+    modalTitle: 'Saunakarte kaufen',
+    modalDescription: 'Wähle eine Karte und gib deine Daten ein. Du wirst zur sicheren Stripe-Kasse weitergeleitet.',
+    hintTitle: 'Wichtig',
+    hint: 'Verwende für den Kauf dieselbe E-Mail-Adresse wie für deine Buchungen. Ab jetzt dient deine E-Mail-Adresse als Benutzername!',
+    firstName: 'Vorname',
+    lastName: 'Nachname',
+    email: 'E-Mail',
+    phone: 'Telefonnummer',
+    marketingConsent: 'Ich möchte Angebote und Neuigkeiten von Hyvän Tuulen Sauna per E-Mail erhalten. Ich kann meine Einwilligung jederzeit widerrufen. (Optional)',
+    required: 'Pflichtfeld',
+    invalidEmail: 'Bitte überprüfe die E-Mail-Adresse',
+    submit: 'Weiter zur Zahlung',
+    submitting: 'Weiterleitung…',
+    close: 'Schließen',
+    errorGeneric: 'Der Kauf konnte nicht gestartet werden. Bitte versuche es erneut.',
+    errorNoPaymentUrl: 'Der Zahlungslink konnte nicht erstellt werden. Bitte kontaktiere uns.',
+    firstNamePlaceholder: 'Max',
+    lastNamePlaceholder: 'Mustermann',
+    emailPlaceholder: 'max@example.com',
   },
 };
 
 type ProductKey = keyof typeof PRODUCTS;
 
 export default function SubscriptionPurchase({ locale }: SubscriptionPurchaseProps) {
-  const isEn = locale === 'en';
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<ProductKey>('10x');
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '' });
@@ -41,36 +167,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const texts = {
-    title: isEn ? 'Sauna cards' : 'Sarjakortit',
-    subtitle: isEn ? 'Cheaper access to the public sauna' : 'Yleiseen saunaan edullisemmin',
-    modalTitle: isEn ? 'Buy a sauna card' : 'Osta sarjakortti',
-    modalDescription: isEn
-      ? 'Choose a card and fill in your details. You will be redirected to a secure Stripe checkout.'
-      : 'Valitse kortti ja täytä yhteystietosi. Sinut ohjataan turvalliseen Stripe-maksuun.',
-    hintTitle: isEn ? 'Important' : 'Tärkeää',
-    hint: isEn
-      ? 'Use the same email address for the purchase as you do for booking. From now on, your email address will be your username!'
-      : 'Käytä ostoa tehdessäsi samaa sähköpostiosoitetta kuin varatessasi. Jatkossa sähköpostiosoitteesi toimii käyttäjätunnuksenasi!',
-    firstName: isEn ? 'First name' : 'Etunimi',
-    lastName: isEn ? 'Last name' : 'Sukunimi',
-    email: isEn ? 'Email' : 'Sähköposti',
-    phone: isEn ? 'Phone number' : 'Puhelinnumero',
-    marketingConsent: isEn
-      ? 'I want to receive offers and news from Hyvän Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
-      : 'Haluan saada Hyvän Tuulen Saunan tarjouksia ja uutisia sähköpostiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
-    required: isEn ? 'Required' : 'Pakollinen',
-    invalidEmail: isEn ? 'Please check the email address' : 'Tarkista sähköpostiosoite',
-    submit: isEn ? 'Continue to payment' : 'Jatka maksuun',
-    submitting: isEn ? 'Redirecting…' : 'Ohjataan maksuun…',
-    close: isEn ? 'Close' : 'Sulje',
-    errorGeneric: isEn
-      ? 'Could not start the purchase. Please try again.'
-      : 'Oston aloittaminen epäonnistui. Yritä uudelleen.',
-    errorNoPaymentUrl: isEn
-      ? 'Payment link could not be created. Please contact us.'
-      : 'Maksulinkin luominen epäonnistui. Ota yhteyttä meihin.',
-  };
+  const texts = textsByLocale[locale];
 
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -182,11 +279,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
           </span>
         )}
         <span className="text-sm font-medium text-stone-600">{labels.name}</span>
-        <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-ember">Early bird</span>
-        <span className="mt-1 text-2xl font-extrabold text-lake">
-          {product.price} €{' '}
-          <span className="ml-1 text-sm font-medium text-stone-400 line-through">{product.originalPrice} €</span>
-        </span>
+        <span className="mt-1 text-2xl font-extrabold text-lake">{product.price} €</span>
         <span className="mt-1 text-xs text-stone-500">{labels.perSession}</span>
       </button>
     );
@@ -199,7 +292,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
           <div className="flex items-center gap-2 text-lake">
             <Sparkles className="h-4 w-4" />
             <span className="text-xs font-semibold uppercase tracking-wider">
-              {isEn ? 'Season passes' : 'Kausikortit'}
+              {texts.seasonPass}
             </span>
           </div>
           <CardTitle className="text-xl font-bold text-stone-900">{texts.title}</CardTitle>
@@ -218,11 +311,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                   className="group relative flex flex-col items-start rounded-xl border border-stone-200 bg-white p-4 text-left transition-all hover:border-lake/50 hover:shadow-sm"
                 >
                   <span className="text-sm font-medium text-stone-600">{labels.name}</span>
-                  <span className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-ember">Early bird</span>
-                  <span className="mt-1 text-2xl font-extrabold text-lake">
-                    {product.price} €{' '}
-                    <span className="ml-1 text-sm font-medium text-stone-400 line-through">{product.originalPrice} €</span>
-                  </span>
+                  <span className="mt-1 text-2xl font-extrabold text-lake">{product.price} €</span>
                   <span className="mt-1 text-xs text-stone-500">{labels.perSession}</span>
                   <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-lake">
                     {labels.cta}
@@ -280,7 +369,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                       value={form.firstName}
                       onChange={(e) => setForm({ ...form, firstName: e.target.value })}
                       className={inputClass}
-                      placeholder={isEn ? 'John' : 'Matti'}
+                      placeholder={texts.firstNamePlaceholder}
                       disabled={isSubmitting}
                     />
                   </div>
@@ -298,7 +387,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                       value={form.lastName}
                       onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                       className={inputClass}
-                      placeholder={isEn ? 'Doe' : 'Meikäläinen'}
+                      placeholder={texts.lastNamePlaceholder}
                       disabled={isSubmitting}
                     />
                   </div>
@@ -316,7 +405,7 @@ export default function SubscriptionPurchase({ locale }: SubscriptionPurchasePro
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       className={inputClass}
-                      placeholder={isEn ? 'john@example.com' : 'matti@example.com'}
+                      placeholder={texts.emailPlaceholder}
                       disabled={isSubmitting}
                     />
                   </div>

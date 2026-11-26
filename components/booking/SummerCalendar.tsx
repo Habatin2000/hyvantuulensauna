@@ -3,6 +3,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, RefreshCw, Loader2 } from 'lucide-react';
 
+type CalendarLocale = 'fi' | 'en' | 'es' | 'fr' | 'de';
+
 interface SummerCalendarProps {
   selectedDate: string | null;
   onSelectDate: (date: string) => void;
@@ -12,14 +14,109 @@ interface SummerCalendarProps {
   isLoading?: boolean; // Loading state for fetching month data
   onRefresh?: () => void; // Refresh button handler
   onNavigateDay?: (direction: 'prev' | 'next') => void; // Day navigation handler
-  locale?: 'fi' | 'en';
+  locale?: CalendarLocale;
 }
 
-const WEEKDAYS = ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'];
-const MONTH_NAMES = [
-  'Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu',
-  'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'
-];
+const LOCALE_TAGS: Record<CalendarLocale, string> = {
+  fi: 'fi-FI',
+  en: 'en-GB',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+};
+
+const TRANSLATIONS = {
+  fi: {
+    loadingCalendar: 'Ladataan kalenteria...',
+    previousMonth: 'Edellinen kuukausi',
+    refresh: 'Päivitä',
+    nextMonth: 'Seuraava kuukausi',
+    loadingTimes: 'Haetaan aikoja...',
+    weekdays: ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'],
+    status: {
+      selected: 'valittu',
+      available: 'vapaa',
+      booked: 'osittain varattu',
+      unavailable: 'ei varattavissa',
+    },
+    availableLegend: 'Vapaa (ei varauksia)',
+    bookedLegend: 'Osittain varattu',
+    selectedLegend: 'Valittu',
+    paymentNotice: 'Haluatko maksaa myöhemmin? Tiedustele saatavuutta puhelimitse, Whatsapilla tai sähköpostilla!',
+  },
+  en: {
+    loadingCalendar: 'Loading calendar...',
+    previousMonth: 'Previous month',
+    refresh: 'Refresh',
+    nextMonth: 'Next month',
+    loadingTimes: 'Loading times...',
+    weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    status: {
+      selected: 'selected',
+      available: 'available',
+      booked: 'partially booked',
+      unavailable: 'not available',
+    },
+    availableLegend: 'Available (no bookings)',
+    bookedLegend: 'Partially booked',
+    selectedLegend: 'Selected',
+    paymentNotice: 'Would you prefer to pay later? Ask about availability by phone, WhatsApp or email!',
+  },
+  es: {
+    loadingCalendar: 'Cargando calendario...',
+    previousMonth: 'Mes anterior',
+    refresh: 'Actualizar',
+    nextMonth: 'Mes siguiente',
+    loadingTimes: 'Cargando horarios...',
+    weekdays: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+    status: {
+      selected: 'seleccionado',
+      available: 'disponible',
+      booked: 'parcialmente reservado',
+      unavailable: 'no disponible',
+    },
+    availableLegend: 'Disponible (sin reservas)',
+    bookedLegend: 'Parcialmente reservado',
+    selectedLegend: 'Seleccionado',
+    paymentNotice: '¿Prefieres pagar más tarde? Consulta la disponibilidad por teléfono, WhatsApp o correo electrónico.',
+  },
+  fr: {
+    loadingCalendar: 'Chargement du calendrier...',
+    previousMonth: 'Mois précédent',
+    refresh: 'Actualiser',
+    nextMonth: 'Mois suivant',
+    loadingTimes: 'Chargement des horaires...',
+    weekdays: ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'],
+    status: {
+      selected: 'sélectionné',
+      available: 'disponible',
+      booked: 'partiellement réservé',
+      unavailable: 'non disponible',
+    },
+    availableLegend: 'Disponible (aucune réservation)',
+    bookedLegend: 'Partiellement réservé',
+    selectedLegend: 'Sélectionné',
+    paymentNotice: 'Vous préférez payer plus tard ? Renseignez-vous sur les disponibilités par téléphone, WhatsApp ou e-mail !',
+  },
+  de: {
+    loadingCalendar: 'Kalender wird geladen...',
+    previousMonth: 'Vorheriger Monat',
+    refresh: 'Aktualisieren',
+    nextMonth: 'Nächster Monat',
+    loadingTimes: 'Zeiten werden geladen...',
+    weekdays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+    status: {
+      selected: 'ausgewählt',
+      available: 'verfügbar',
+      booked: 'teilweise gebucht',
+      unavailable: 'nicht verfügbar',
+    },
+    availableLegend: 'Verfügbar (keine Buchungen)',
+    bookedLegend: 'Teilweise gebucht',
+    selectedLegend: 'Ausgewählt',
+    paymentNotice: 'Möchten Sie später bezahlen? Fragen Sie telefonisch, per WhatsApp oder E-Mail nach der Verfügbarkeit!',
+  },
+};
 
 const TIME_ZONE = 'Europe/Helsinki';
 
@@ -43,7 +140,8 @@ export default function SummerCalendar({
   onRefresh,
   locale = 'fi',
 }: SummerCalendarProps) {
-  const isEn = locale === 'en';
+  const t = TRANSLATIONS[locale];
+  const intlLocale = LOCALE_TAGS[locale];
   const [mounted, setMounted] = useState(false);
 
   // Start from May 1st of current year (summer season start)
@@ -168,22 +266,21 @@ export default function SummerCalendar({
     }
   };
 
-  // Full-date bilingual accessible name, e.g. "12. kesäkuuta, vapaa" / "12 June, available"
   const getDayAriaLabel = (date: string, status: string) => {
-    const dateText = new Intl.DateTimeFormat(isEn ? 'en-GB' : 'fi-FI', {
+    const dateText = new Intl.DateTimeFormat(intlLocale, {
       day: 'numeric',
       month: 'long',
     }).format(new Date(date + 'T00:00:00'));
     const statusText = (() => {
       switch (status) {
         case 'selected':
-          return isEn ? 'selected' : 'valittu';
+          return t.status.selected;
         case 'available':
-          return isEn ? 'available' : 'vapaa';
+          return t.status.available;
         case 'booked':
-          return isEn ? 'partially booked' : 'osittain varattu';
+          return t.status.booked;
         default:
-          return isEn ? 'not available' : 'ei varattavissa';
+          return t.status.unavailable;
       }
     })();
     return `${dateText}, ${statusText}`;
@@ -193,7 +290,7 @@ export default function SummerCalendar({
     return (
       <div className="rounded-xl border border-stone-200 bg-white p-3 w-full flex items-center justify-center py-12">
         <Loader2 className="h-6 w-6 animate-spin text-lake" />
-        <span className="ml-2 text-sm text-stone-600">Ladataan kalenteria...</span>
+        <span className="ml-2 text-sm text-stone-600">{t.loadingCalendar}</span>
       </div>
     );
   }
@@ -206,7 +303,7 @@ export default function SummerCalendar({
           <button
             onClick={() => navigateMonth('prev')}
             className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
-            aria-label="Edellinen kuukausi"
+            aria-label={t.previousMonth}
           >
             <ChevronLeft className="h-[18px] w-[18px] text-stone-600" />
           </button>
@@ -215,20 +312,20 @@ export default function SummerCalendar({
               onClick={onRefresh}
               disabled={isLoading}
               className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors disabled:opacity-50"
-              aria-label="Päivitä"
-              title="Päivitä"
+              aria-label={t.refresh}
+              title={t.refresh}
             >
               <RefreshCw className={`h-[18px] w-[18px] text-stone-600 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
           )}
         </div>
         <h4 className="font-semibold text-stone-900 text-sm md:text-base">
-          {MONTH_NAMES[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+          {new Intl.DateTimeFormat(intlLocale, { month: 'long', year: 'numeric' }).format(currentMonth)}
         </h4>
         <button
           onClick={() => navigateMonth('next')}
           className="flex h-7 w-7 items-center justify-center rounded-lg hover:bg-stone-100 transition-colors"
-          aria-label="Seuraava kuukausi"
+          aria-label={t.nextMonth}
         >
           <ChevronRight className="h-[18px] w-[18px] text-stone-600" />
         </button>
@@ -238,13 +335,13 @@ export default function SummerCalendar({
       {isLoading && (
         <div className="flex items-center justify-center py-4 mb-2">
           <Loader2 className="h-6 w-6 animate-spin text-lake" />
-          <span className="ml-2 text-sm text-stone-600">Haetaan aikoja...</span>
+          <span className="ml-2 text-sm text-stone-600">{t.loadingTimes}</span>
         </div>
       )}
 
       {/* Weekday headers */}
       <div className="grid grid-cols-7 gap-0.5 mb-1.5">
-        {WEEKDAYS.map(day => (
+        {t.weekdays.map(day => (
           <div key={day} className="text-center font-medium text-stone-500 text-[10px] md:text-xs py-1 md:py-1.5">
             {day}
           </div>
@@ -283,22 +380,22 @@ export default function SummerCalendar({
       <div className="mt-3 hidden md:flex gap-4 text-[10px] text-stone-600 justify-center">
         <div className="flex items-center gap-1">
           <div className="h-2.5 w-2.5 rounded bg-green-500"></div>
-          <span>Vapaa (ei varauksia)</span>
+          <span>{t.availableLegend}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="h-2.5 w-2.5 rounded bg-amber-200 border border-amber-300"></div>
-          <span>Osittain varattu</span>
+          <span>{t.bookedLegend}</span>
         </div>
         <div className="flex items-center gap-1">
           <div className="h-2.5 w-2.5 rounded bg-lake"></div>
-          <span>Valittu</span>
+          <span>{t.selectedLegend}</span>
         </div>
       </div>
 
       {/* Payment notice */}
       <div className="mt-4 hidden md:block rounded-lg bg-[#fef3c7] border border-amber-200 p-3 text-center">
         <p className="text-xs font-medium text-amber-900">
-          Haluatko maksaa myöhemmin? Tiedustele saatavuutta puhelimitse, Whatsapilla tai sähköpostilla!
+          {t.paymentNotice}
         </p>
       </div>
     </div>

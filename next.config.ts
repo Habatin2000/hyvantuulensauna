@@ -131,7 +131,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/saunalautat-kesalla',
-        destination: '/saunalauttaristeilyt-helsingissa',
+        destination: '/saunalauttaristeilyt-helsingissa/',
         permanent: true,
       },
     ];

@@ -3,61 +3,281 @@ import Link from 'next/link';
 import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
 import type { Locale } from './content';
 import type { VibePageData } from './pages';
+import { getVibeBookingRoute, getVibeRoute } from './routes';
 import VibeBookingFrame from './VibeBookingFrame';
 import VibeFaq from './VibeFaq';
 import VibeClosingSummary from './VibeClosingSummary';
 import VibeWinterGallery from './VibeWinterGallery';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
+import SubscriptionPurchase from '../booking/SubscriptionPurchase';
 import '../../app/vibe/julkinen-sauna.css';
 
+const copyByLocale = {
+  fi: {
+    heroNote: 'Yksin, kaksin tai kaveriporukalla',
+    heroLocation: 'Puotila · Helsinki · Meren äärellä',
+    explore: 'Katso, mitä vuoroon kuuluu',
+    session: 'yksi vuoro',
+    photoCaption: 'Kuumat kiukaat, kaksi tuntia ilman hoppua',
+    pricing: 'Selkeä hinnoittelu',
+    pricingIntro: 'Varaa kerta tai ota sarjakortti ja tule useammin!',
+    earlyBird: 'Sarjakortit',
+    passTitle: 'Lisää syitä palata lauteille.',
+    passText: 'Valitse viisi tai kymmenen käyntiä ja tee saunomisesta tapa.',
+    firstVisit: 'Ensimmäinen kertasi',
+    finalEyebrow: 'Saunat on kuumana',
+    finalTitle: 'Nähdään löylyissä.',
+    back: 'Takaisin kaikkiin elämyksiin',
+    verticalNote: 'TULI · MERI · KAIKKI',
+    admissionIncluded: 'Sauna, avanto ja ohjaus sisältyvät',
+    interiorAlt: 'Lämpimän puusaunan sisätila',
+    twoHoursLabel: 'Kaksi tuntia yhdellä vuorolla',
+    winterGalleryAria: 'Talvinen saunagalleria',
+    winterGalleryLabel: 'Talvi Hyvän Tuulen Saunalla',
+    galleryAlts: [
+      'Saunalautta talvisessa auringonlaskussa',
+      'Ystävät nauttivat puusaunasta yhdessä',
+      'Luminen laituri ja talvisauna',
+      'Saunoja rentoutuu lauteilla',
+      'Revontulet saunalautan yllä',
+      'Saunoja kylpytakissa jäätyneen meren äärellä',
+      'Talviuimari saunalautan vierellä',
+      'Lämpimän puusaunan puiset lauteet',
+    ],
+    winterSwimmerAlt: 'Talviuimari nousee merestä saunalautan portaikkoa pitkin',
+    breathingText: 'Hengitä rauhassa. Kuuntele kehoasi.',
+    faqEyebrow: 'Hyvä tietää',
+    faqTitle: 'Usein kysyttyä ennen vuoroa',
+    faqItems: [
+      { question: 'Milloin yleisiä vuoroja on?', answer: 'Yleisiä vuoroja järjestetään läpi viikon. Näet vapaat ajat varauskalenterista.' },
+      { question: 'Mitä otan mukaan?', answer: 'Pyyhe, uimapuku ja juomapullo riittävät. Ota myös sään mukainen vaatetus ja tarvittaessa sandaalit.' },
+      { question: 'Voinko tulla ensimmäistä kertaa?', answer: 'Kyllä. Opastamme ensikertalaisia talviuinnin pariin, ja voit myös vain saunoa.' },
+      { question: 'Mitä vuoro maksaa?', answer: 'Yleinen vuoro maksaa 15 € / 2 h. Opiskelijat, eläkeläiset ja alle 15-vuotiaat saunovat hintaan 12,50 € / 2 h.' },
+      { question: 'Onko käytössä pukuhuone ja WC?', answer: 'Kyllä. Myös terassi on käytössäsi vuoron ajan.' },
+    ],
+    closingEyebrow: 'Tule sellaisena kuin olet',
+    closingTitle: 'Meidän Yleiset vuorot ovat loistava tapa tulla nauttimaan vapaa-ajasta ja tutustua talviuintiin.',
+    closingParagraphs: [
+      'Ohjatulla vuorolla ensikertalaisilla opastetaan avantoon meneminen ja hengityksen kontrollointi. Ei rakettitiedettä mutta tsempin kanssa helpompaa! Yleiset vuorot ovat yhteisöllisiä vuoroja, jolloin huolet voi jättää mantereen puolelle.',
+      'Jos haluat koko paikan itsellesi, varaa joko kaikki vapaat liput (17kpl) tai varaa yksityinen vuoro!',
+    ],
+    bookAll: 'Varaa kaikki 17 paikkaa',
+    bookPrivate: 'Varaa yksityinen vuoro',
+  },
+  en: {
+    heroNote: 'Alone, together or with friends',
+    heroLocation: 'Puotila · Helsinki · By the sea',
+    explore: 'See what is included',
+    session: 'per session',
+    photoCaption: 'Hot stoves, two hours without rushing',
+    pricing: 'Simple pricing',
+    pricingIntro: 'Book one visit or get a punch card and come more often!',
+    earlyBird: 'Punch cards',
+    passTitle: 'More reasons to return.',
+    passText: 'Choose five or ten visits and make sauna a regular habit.',
+    firstVisit: 'Your first visit',
+    finalEyebrow: 'The saunas are hot',
+    finalTitle: 'See you at the löyly.',
+    back: 'Back to all experiences',
+    verticalNote: 'FIRE · SEA · EVERYONE',
+    admissionIncluded: 'Sauna, ice hole and guidance included',
+    interiorAlt: 'Inside a warm wood-fired sauna',
+    twoHoursLabel: 'Two hours per session',
+    winterGalleryAria: 'Winter sauna gallery',
+    winterGalleryLabel: 'Winter at Hyvän Tuulen Sauna',
+    galleryAlts: [
+      'Sauna boat in winter sunset',
+      'Friends enjoying the wood-fired sauna together',
+      'Snowy dock and winter sauna',
+      'Guest relaxing on the sauna benches',
+      'Northern lights above the sauna boat',
+      'Guest in a bathrobe by the icy sea',
+      'Winter swimmer by the sauna raft',
+      'Wooden benches inside the warm sauna',
+    ],
+    winterSwimmerAlt: 'A winter swimmer climbing from the sea by the sauna raft',
+    breathingText: 'Breathe slowly. Listen to your body.',
+    faqEyebrow: 'Good to know',
+    faqTitle: 'Questions before your session',
+    faqItems: [
+      { question: 'When are public sessions available?', answer: 'Public sessions run throughout the week. See the booking calendar for available times.' },
+      { question: 'What should I bring?', answer: 'Bring a towel, swimwear and a water bottle. Weather-appropriate clothing and sandals are useful too.' },
+      { question: 'Can I come for my first time?', answer: 'Yes. We guide first-timers through winter swimming, and you can also simply enjoy the sauna.' },
+      { question: 'How much does a session cost?', answer: 'A public session costs 15 € / 2 h. Students, pensioners and children under 15 pay 12.50 € / 2 h.' },
+      { question: 'Are changing rooms and toilets available?', answer: 'Yes. You also have access to the terrace during your session.' },
+    ],
+    closingEyebrow: 'Come as you are',
+    closingTitle: 'Our public sessions are a great way to enjoy your free time and discover winter swimming.',
+    closingParagraphs: [
+      'Guided sessions teach first-timers how to enter the ice hole and control their breathing. It is not rocket science, but it is easier with a little encouragement! Public sessions are social occasions where you can leave your worries on the mainland.',
+      'Want the whole place to yourself? Book all 17 available tickets or book a private session!',
+    ],
+    bookAll: 'Book all 17 places',
+    bookPrivate: 'Book a private session',
+  },
+  es: {
+    heroNote: 'Solo, en pareja o con amigos',
+    heroLocation: 'Puotila · Helsinki · Junto al mar',
+    explore: 'Descubre qué incluye la sesión',
+    session: 'por sesión',
+    photoCaption: 'Estufas calientes y dos horas sin prisas',
+    pricing: 'Precios claros',
+    pricingIntro: 'Reserva una visita o consigue un bono y ven más a menudo.',
+    earlyBird: 'Bonos de sauna',
+    passTitle: 'Más motivos para volver.',
+    passText: 'Elige cinco o diez visitas y convierte la sauna en un hábito.',
+    firstVisit: 'Tu primera visita',
+    finalEyebrow: 'Las saunas están calientes',
+    finalTitle: 'Nos vemos en la sauna.',
+    back: 'Volver a todas las experiencias',
+    verticalNote: 'FUEGO · MAR · TODOS',
+    admissionIncluded: 'Sauna, baño en el hielo y asesoramiento incluidos',
+    interiorAlt: 'Interior cálido de una sauna de leña',
+    twoHoursLabel: 'Dos horas por sesión',
+    winterGalleryAria: 'Galería de sauna en invierno',
+    winterGalleryLabel: 'Invierno en Hyvän Tuulen Sauna',
+    galleryAlts: [
+      'Barco sauna al atardecer en invierno',
+      'Amigos disfrutando juntos de la sauna de leña',
+      'Muelle nevado y sauna en invierno',
+      'Visitante relajándose en los bancos de la sauna',
+      'Auroras boreales sobre el barco sauna',
+      'Visitante en albornoz junto al mar helado',
+      'Persona practicando natación invernal junto a la sauna flotante',
+      'Bancos de madera en el interior de la sauna cálida',
+    ],
+    winterSwimmerAlt: 'Una persona sube del mar por la escalera de la sauna flotante en invierno',
+    breathingText: 'Respira despacio. Escucha a tu cuerpo.',
+    faqEyebrow: 'Información útil',
+    faqTitle: 'Preguntas antes de tu sesión',
+    faqItems: [
+      { question: '¿Cuándo hay sesiones públicas?', answer: 'Las sesiones públicas se organizan durante toda la semana. Consulta el calendario de reservas para ver los horarios disponibles.' },
+      { question: '¿Qué debo llevar?', answer: 'Trae una toalla, bañador y una botella de agua. También conviene llevar ropa adecuada para el clima y sandalias.' },
+      { question: '¿Puedo venir por primera vez?', answer: 'Sí. Guiamos a quienes se inician en la natación invernal; también puedes limitarte a disfrutar de la sauna.' },
+      { question: '¿Cuánto cuesta una sesión?', answer: 'Una sesión pública cuesta 15 € / 2 h. Los estudiantes, jubilados y menores de 15 años pagan 12,50 € / 2 h.' },
+      { question: '¿Hay vestuarios y aseos?', answer: 'Sí. También puedes usar la terraza durante la sesión.' },
+    ],
+    closingEyebrow: 'Ven como eres',
+    closingTitle: 'Nuestras sesiones públicas son una forma estupenda de disfrutar del tiempo libre y descubrir la natación invernal.',
+    closingParagraphs: [
+      'En las sesiones guiadas, enseñamos a los principiantes a entrar en el agua helada y a controlar la respiración. No es ciencia espacial, ¡pero resulta más fácil con un poco de ánimo! Las sesiones públicas son encuentros sociales en los que puedes dejar tus preocupaciones en tierra firme.',
+      '¿Quieres todo el lugar para ti? Reserva las 17 entradas disponibles o una sesión privada.',
+    ],
+    bookAll: 'Reserva las 17 plazas',
+    bookPrivate: 'Reserva una sesión privada',
+  },
+  fr: {
+    heroNote: 'Seul, à deux ou entre amis',
+    heroLocation: 'Puotila · Helsinki · Au bord de la mer',
+    explore: 'Découvrir ce que comprend la séance',
+    session: 'par séance',
+    photoCaption: 'Poêles bien chauds, deux heures sans se presser',
+    pricing: 'Tarifs simples',
+    pricingIntro: 'Réservez une visite ou choisissez une carte multi-entrées pour venir plus souvent !',
+    earlyBird: 'Cartes multi-entrées',
+    passTitle: 'Encore plus de raisons de revenir.',
+    passText: 'Choisissez cinq ou dix visites et faites du sauna une habitude.',
+    firstVisit: 'Votre première visite',
+    finalEyebrow: 'Les saunas sont chauds',
+    finalTitle: 'À bientôt au sauna.',
+    back: 'Retour à toutes les expériences',
+    verticalNote: 'FEU · MER · TOUS',
+    admissionIncluded: 'Sauna, bain glacé et accompagnement inclus',
+    interiorAlt: 'Intérieur chaleureux d’un sauna au bois',
+    twoHoursLabel: 'Deux heures par séance',
+    winterGalleryAria: 'Galerie du sauna en hiver',
+    winterGalleryLabel: 'L’hiver à Hyvän Tuulen Sauna',
+    galleryAlts: [
+      'Sauna flottant au coucher du soleil en hiver',
+      'Des amis profitent ensemble du sauna au bois',
+      'Ponton enneigé et sauna en hiver',
+      'Une visiteuse se détend sur les bancs du sauna',
+      'Aurores boréales au-dessus du sauna flottant',
+      'Une visiteuse en peignoir au bord de la mer glacée',
+      'Une nageuse en eau glacée près du sauna flottant',
+      'Bancs en bois à l’intérieur du sauna chaleureux',
+    ],
+    winterSwimmerAlt: 'Une nageuse en eau glacée remonte de la mer par l’échelle du sauna flottant',
+    breathingText: 'Respirez lentement. Écoutez votre corps.',
+    faqEyebrow: 'Bon à savoir',
+    faqTitle: 'Questions avant votre séance',
+    faqItems: [
+      { question: 'Quand ont lieu les séances publiques ?', answer: 'Les séances publiques ont lieu tout au long de la semaine. Consultez le calendrier de réservation pour voir les horaires disponibles.' },
+      { question: 'Que dois-je apporter ?', answer: 'Apportez une serviette, un maillot de bain et une gourde. Prévoyez aussi des vêtements adaptés à la météo et des sandales.' },
+      { question: 'Puis-je venir pour la première fois ?', answer: 'Oui. Nous accompagnons les débutants pour leur premier bain glacé, et vous pouvez aussi simplement profiter du sauna.' },
+      { question: 'Combien coûte une séance ?', answer: 'Une séance publique coûte 15 € / 2 h. Les étudiants, les retraités et les moins de 15 ans paient 12,50 € / 2 h.' },
+      { question: 'Y a-t-il des vestiaires et des toilettes ?', answer: 'Oui. Vous avez également accès à la terrasse pendant votre séance.' },
+    ],
+    closingEyebrow: 'Venez comme vous êtes',
+    closingTitle: 'Nos séances publiques sont idéales pour profiter de votre temps libre et découvrir la baignade en eau glacée.',
+    closingParagraphs: [
+      'Lors des séances accompagnées, nous apprenons aux débutants à entrer dans l’eau glacée et à contrôler leur respiration. Rien de bien compliqué, mais c’est plus facile avec un peu d’encouragement ! Les séances publiques sont des moments conviviaux où vous pouvez laisser vos soucis sur la terre ferme.',
+      'Envie de privatiser les lieux ? Réservez les 17 billets disponibles ou une séance privée !',
+    ],
+    bookAll: 'Réserver les 17 places',
+    bookPrivate: 'Réserver une séance privée',
+  },
+  de: {
+    heroNote: 'Allein, zu zweit oder mit Freunden',
+    heroLocation: 'Puotila · Helsinki · Am Meer',
+    explore: 'Entdecke, was im Termin enthalten ist',
+    session: 'pro Session',
+    photoCaption: 'Heiße Öfen, zwei Stunden ohne Eile',
+    pricing: 'Einfache Preise',
+    pricingIntro: 'Buche einen Besuch oder hol dir eine Mehrfachkarte und komm öfter vorbei!',
+    earlyBird: 'Mehrfachkarten',
+    passTitle: 'Mehr Gründe, wiederzukommen.',
+    passText: 'Wähle fünf oder zehn Besuche und mach die Sauna zu deiner Gewohnheit.',
+    firstVisit: 'Dein erster Besuch',
+    finalEyebrow: 'Die Saunen sind heiß',
+    finalTitle: 'Bis bald in der Sauna.',
+    back: 'Zurück zu allen Erlebnissen',
+    verticalNote: 'FEUER · MEER · ALLE',
+    admissionIncluded: 'Sauna, Eisbad und Anleitung inklusive',
+    interiorAlt: 'Innenraum einer warmen holzbeheizten Sauna',
+    twoHoursLabel: 'Zwei Stunden pro Session',
+    winterGalleryAria: 'Winterliche Saunagalerie',
+    winterGalleryLabel: 'Winter bei Hyvän Tuulen Sauna',
+    galleryAlts: [
+      'Saunaboot im winterlichen Sonnenuntergang',
+      'Freunde genießen gemeinsam die holzbeheizte Sauna',
+      'Verschneiter Steg und Wintersauna',
+      'Gast entspannt auf den Saunabänken',
+      'Nordlichter über dem Saunaboot',
+      'Gast im Bademantel am eisigen Meer',
+      'Winterschwimmer neben der Saunaplattform',
+      'Holzbänke in der warmen Sauna',
+    ],
+    winterSwimmerAlt: 'Ein Winterschwimmer steigt über die Treppe der Saunaplattform aus dem Meer',
+    breathingText: 'Atme langsam. Hör auf deinen Körper.',
+    faqEyebrow: 'Gut zu wissen',
+    faqTitle: 'Fragen vor deiner Session',
+    faqItems: [
+      { question: 'Wann finden öffentliche Sessions statt?', answer: 'Öffentliche Sessions finden die ganze Woche über statt. Die verfügbaren Termine findest du im Buchungskalender.' },
+      { question: 'Was sollte ich mitbringen?', answer: 'Bring ein Handtuch, Badekleidung und eine Trinkflasche mit. Außerdem sind wettergerechte Kleidung und Sandalen praktisch.' },
+      { question: 'Kann ich zum ersten Mal kommen?', answer: 'Ja. Wir begleiten Anfänger beim Winterschwimmen; du kannst aber auch einfach nur die Sauna genießen.' },
+      { question: 'Wie viel kostet eine Session?', answer: 'Eine öffentliche Session kostet 15 € / 2 h. Studierende, Rentner und Kinder unter 15 Jahren zahlen 12,50 € / 2 h.' },
+      { question: 'Gibt es Umkleiden und Toiletten?', answer: 'Ja. Während deiner Session kannst du auch die Terrasse nutzen.' },
+    ],
+    closingEyebrow: 'Komm, wie du bist',
+    closingTitle: 'Unsere öffentlichen Sessions sind ideal, um deine Freizeit zu genießen und das Winterschwimmen kennenzulernen.',
+    closingParagraphs: [
+      'In den geführten Sessions zeigen wir Anfängern, wie sie ins Eisloch steigen und ihre Atmung kontrollieren. Das ist keine Raketenwissenschaft, aber mit ein bisschen Ermutigung geht es leichter! Öffentliche Sessions sind gesellige Treffen, bei denen du deine Sorgen am Festland lassen kannst.',
+      'Möchtest du den ganzen Ort für dich? Buche alle 17 verfügbaren Tickets oder eine private Session!',
+    ],
+    bookAll: 'Alle 17 Plätze buchen',
+    bookPrivate: 'Private Session buchen',
+  },
+};
+
 export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibePageData; locale: Locale }) {
-  const isEn = locale === 'en';
+  const copy = copyByLocale[locale];
   const sessionPrices = data.prices?.slice(0, 2) ?? [];
   const admission = sessionPrices[0];
   const visitSteps = data.timeline ?? [];
   const bookingHref = '#varaus';
-
-  const copy = {
-    heroNote: isEn ? 'Alone, together or with friends' : 'Yksin, kaksin tai kaveriporukalla',
-    heroLocation: isEn ? 'Puotila · Helsinki · By the sea' : 'Puotila · Helsinki · Meren äärellä',
-    explore: isEn ? 'See what is included' : 'Katso, mitä vuoroon kuuluu',
-    session: isEn ? 'per session' : 'yksi vuoro',
-    photoCaption: isEn ? 'Hot stoves, two hours without rushing' : 'Kuumat kiukaat, kaksi tuntia ilman hoppua',
-    pricing: isEn ? 'Simple pricing' : 'Selkeä hinnoittelu',
-    pricingIntro: isEn
-      ? 'Book one visit or get a punch card and come more often!'
-      : 'Varaa kerta tai ota sarjakortti ja tule useammin!',
-    earlyBird: isEn ? 'Punch cards' : 'Sarjakortit',
-    passTitle: isEn ? 'More reasons to return.' : 'Lisää syitä palata lauteille.',
-    passText: isEn
-      ? 'Choose five or ten visits and make sauna a regular habit.'
-      : 'Valitse viisi tai kymmenen käyntiä ja tee saunomisesta tapa.',
-    punchCard: isEn ? 'punch card' : 'sarjakortti',
-    regular: isEn ? 'Regular price' : 'Normaalihinta',
-    firstVisit: isEn ? 'Your first visit' : 'Ensimmäinen kertasi',
-    finalEyebrow: isEn ? 'The saunas are hot' : 'Saunat on kuumana',
-    finalTitle: isEn ? 'See you at the löyly.' : 'Nähdään löylyissä.',
-    back: isEn ? 'Back to all experiences' : 'Takaisin kaikkiin elämyksiin',
-  };
-
-  const punchCards = [
-    { count: '5×', regular: '55 €' },
-    { count: '10×', regular: '90 €' },
-  ];
-
-  const faqItems = isEn ? [
-    { question: 'When are public sessions available?', answer: 'Public sessions run throughout the week. See the booking calendar for available times.' },
-    { question: 'What should I bring?', answer: 'Bring a towel, swimwear and a water bottle. Weather-appropriate clothing and sandals are useful too.' },
-    { question: 'Can I come for my first time?', answer: 'Yes. We guide first-timers through winter swimming, and you can also simply enjoy the sauna.' },
-    { question: 'How much does a session cost?', answer: 'A public session costs 15 € / 2 h. Students, pensioners and children under 15 pay 12.50 € / 2 h.' },
-    { question: 'Are changing rooms and toilets available?', answer: 'Yes. You also have access to the terrace during your session.' },
-  ] : [
-    { question: 'Milloin yleisiä vuoroja on?', answer: 'Yleisiä vuoroja järjestetään läpi viikon. Näet vapaat ajat varauskalenterista.' },
-    { question: 'Mitä otan mukaan?', answer: 'Pyyhe, uimapuku ja juomapullo riittävät. Ota myös sään mukainen vaatetus ja tarvittaessa sandaalit.' },
-    { question: 'Voinko tulla ensimmäistä kertaa?', answer: 'Kyllä. Opastamme ensikertalaisia talviuinnin pariin, ja voit myös vain saunoa.' },
-    { question: 'Mitä vuoro maksaa?', answer: 'Yleinen vuoro maksaa 15 € / 2 h. Opiskelijat, eläkeläiset ja alle 15-vuotiaat saunovat hintaan 12,50 € / 2 h.' },
-    { question: 'Onko käytössä pukuhuone ja WC?', answer: 'Kyllä. Myös terassi on käytössäsi vuoron ajan.' },
-  ];
+  const privateSessionHref = getVibeBookingRoute('avanto', locale);
+  const homeHref = getVibeRoute('home', locale);
 
   return (
     <main id="main-content" className="vibe-julkinen-sauna-page">
@@ -90,13 +310,13 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
             />
           </div>
           <span className="vibe-julkinen-sauna-vertical-note" aria-hidden="true">
-            {isEn ? 'FIRE · SEA · EVERYONE' : 'TULI · MERI · KAIKKI'}
+            {copy.verticalNote}
           </span>
           {admission && (
             <div className="vibe-julkinen-sauna-admission">
               <span>{admission.label}</span>
               <strong>{admission.price}</strong>
-              <small>{isEn ? 'Sauna, ice hole and guidance included' : 'Sauna, avanto ja ohjaus sisältyvät'}</small>
+              <small>{copy.admissionIncluded}</small>
             </div>
           )}
         </div>
@@ -116,12 +336,12 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
             <div className="vibe-julkinen-sauna-included-photo">
               <Image
                 src="/images/gallery-sauna-interior.webp"
-                alt={isEn ? 'Inside a warm wood-fired sauna' : 'Lämpimän puusaunan sisätila'}
+                alt={copy.interiorAlt}
                 fill
                 sizes="(max-width: 760px) 100vw, 38vw"
               />
             </div>
-            <div className="vibe-julkinen-sauna-time-stamp" aria-label={isEn ? 'Two hours per session' : 'Kaksi tuntia yhdellä vuorolla'}>
+            <div className="vibe-julkinen-sauna-time-stamp" aria-label={copy.twoHoursLabel}>
               <strong>2 h</strong>
               <span>{copy.session}</span>
             </div>
@@ -142,19 +362,19 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
         </div>
       </section>
 
-      <section className="vibe-julkinen-sauna-winter-gallery" aria-label={isEn ? 'Winter sauna gallery' : 'Talvinen saunagalleria'}>
+      <section className="vibe-julkinen-sauna-winter-gallery" aria-label={copy.winterGalleryAria}>
         <VibeWinterGallery
-          label={isEn ? 'Winter at Hyvän Tuulen Sauna' : 'Talvi Hyvän Tuulen Saunalla'}
+          label={copy.winterGalleryLabel}
           locale={locale}
           images={[
-            { src: '/images/gallery-winter-sunset.webp', alt: isEn ? 'Sauna boat in winter sunset' : 'Saunalautta talvisessa auringonlaskussa' },
-            { src: '/images/gallery-sauna-group.webp', alt: isEn ? 'Friends enjoying the wood-fired sauna together' : 'Ystävät nauttivat puusaunasta yhdessä' },
-            { src: '/images/gallery-winter-dock.webp', alt: isEn ? 'Snowy dock and winter sauna' : 'Luminen laituri ja talvisauna' },
-            { src: '/images/gallery-sauna-woman.webp', alt: isEn ? 'Guest relaxing on the sauna benches' : 'Saunoja rentoutuu lauteilla' },
-            { src: '/images/vibe-aurora-final.webp', alt: isEn ? 'Northern lights above the sauna boat' : 'Revontulet saunalautan yllä' },
-            { src: '/images/gallery-avanto-woman.webp', alt: isEn ? 'Guest in a bathrobe by the icy sea' : 'Saunoja kylpytakissa jäätyneen meren äärellä' },
-            { src: '/images/gallery-ice-swimming.webp', alt: isEn ? 'Winter swimmer by the sauna raft' : 'Talviuimari saunalautan vierellä' },
-            { src: '/images/gallery-sauna-bench.webp', alt: isEn ? 'Wooden benches inside the warm sauna' : 'Lämpimän puusaunan puiset lauteet' },
+            { src: '/images/gallery-winter-sunset.webp', alt: copy.galleryAlts[0] },
+            { src: '/images/gallery-sauna-group.webp', alt: copy.galleryAlts[1] },
+            { src: '/images/gallery-winter-dock.webp', alt: copy.galleryAlts[2] },
+            { src: '/images/gallery-sauna-woman.webp', alt: copy.galleryAlts[3] },
+            { src: '/images/vibe-aurora-final.webp', alt: copy.galleryAlts[4] },
+            { src: '/images/gallery-avanto-woman.webp', alt: copy.galleryAlts[5] },
+            { src: '/images/gallery-ice-swimming.webp', alt: copy.galleryAlts[6] },
+            { src: '/images/gallery-sauna-bench.webp', alt: copy.galleryAlts[7] },
           ]}
         />
       </section>
@@ -179,27 +399,14 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
             ))}
           </dl>
 
-          <div className="vibe-julkinen-sauna-passes">
+          <div id="sarjakortit" className="vibe-julkinen-sauna-passes">
             <div className="vibe-julkinen-sauna-passes-intro">
               <p>{copy.earlyBird}</p>
               <h3>{copy.passTitle}</h3>
               <span>{copy.passText}</span>
             </div>
-            <div className="vibe-julkinen-sauna-pass-grid">
-              {punchCards.map((card) => (
-                <article className="vibe-julkinen-sauna-pass" key={card.count}>
-                  <div className="vibe-julkinen-sauna-pass-name">
-                    <span>{card.count}</span>
-                    <h4>{copy.punchCard}</h4>
-                  </div>
-                  <dl className="vibe-julkinen-sauna-pass-prices">
-                    <div>
-                      <dt>{copy.regular}</dt>
-                      <dd>{card.regular}</dd>
-                    </div>
-                  </dl>
-                </article>
-              ))}
+            <div className="vibe-julkinen-sauna-purchase">
+              <SubscriptionPurchase locale={locale} />
             </div>
           </div>
 
@@ -228,36 +435,30 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
         <div className="vibe-julkinen-sauna-visit-photo">
           <Image
             src="/images/gallery-ice-swimming.webp"
-            alt={isEn ? 'A winter swimmer climbing from the sea by the sauna raft' : 'Talviuimari nousee merestä saunalautan portaikkoa pitkin'}
+            alt={copy.winterSwimmerAlt}
             fill
             sizes="(max-width: 760px) calc(100vw - 44px), 44vw"
           />
-          <p>{isEn ? 'Breathe slowly. Listen to your body.' : 'Hengitä rauhassa. Kuuntele kehoasi.'}</p>
+          <p>{copy.breathingText}</p>
         </div>
       </section>
 
 
       <section className="vibe-faq-section" aria-labelledby="vibe-julkinen-sauna-faq-title">
         <div className="vibe-faq-heading">
-          <p className="vibe-eyebrow">{isEn ? 'Good to know' : 'Hyvä tietää'}</p>
-          <h2 id="vibe-julkinen-sauna-faq-title">{isEn ? 'Questions before your session' : 'Usein kysyttyä ennen vuoroa'}</h2>
+          <p className="vibe-eyebrow">{copy.faqEyebrow}</p>
+          <h2 id="vibe-julkinen-sauna-faq-title">{copy.faqTitle}</h2>
         </div>
-        <VibeFaq items={faqItems} />
+        <VibeFaq items={copy.faqItems} />
       </section>
 
       <VibeClosingSummary
-        eyebrow={isEn ? 'Come as you are' : 'Tule sellaisena kuin olet'}
-        title={isEn ? 'Our public sessions are a great way to enjoy your free time and discover winter swimming.' : 'Meidän Yleiset vuorot ovat loistava tapa tulla nauttimaan vapaa-ajasta ja tutustua talviuintiin.'}
-        paragraphs={isEn ? [
-          'Guided sessions teach first-timers how to enter the ice hole and control their breathing. It is not rocket science, but it is easier with a little encouragement! Public sessions are social occasions where you can leave your worries on the mainland.',
-          'Want the whole place to yourself? Book all 17 available tickets or book a private session!',
-        ] : [
-          'Ohjatulla vuorolla ensikertalaisilla opastetaan avantoon meneminen ja hengityksen kontrollointi. Ei rakettitiedettä mutta tsempin kanssa helpompaa! Yleiset vuorot ovat yhteisöllisiä vuoroja, jolloin huolet voi jättää mantereen puolelle.',
-          'Jos haluat koko paikan itsellesi, varaa joko kaikki vapaat liput (17kpl) tai varaa yksityinen vuoro!',
-        ]}
+        eyebrow={copy.closingEyebrow}
+        title={copy.closingTitle}
+        paragraphs={copy.closingParagraphs}
         links={[
-          { href: bookingHref, label: isEn ? 'Book all 17 places' : 'Varaa kaikki 17 paikkaa' },
-          { href: isEn ? '/en/ice-swimming-sauna-helsinki/#varaus' : '/avanto/#varaus', label: isEn ? 'Book a private session' : 'Varaa yksityinen vuoro' },
+          { href: bookingHref, label: copy.bookAll },
+          { href: privateSessionHref, label: copy.bookPrivate },
         ]}
       />
 
@@ -269,7 +470,7 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
           <span>{data.ctaLabel}</span>
           <ArrowUpRight size={38} strokeWidth={1.5} aria-hidden="true" />
         </Link>
-        <Link className="vibe-julkinen-sauna-back" href={isEn ? '/en/' : '/'}>
+        <Link className="vibe-julkinen-sauna-back" href={homeHref}>
           {copy.back}<ArrowRight size={17} aria-hidden="true" />
         </Link>
       </section>

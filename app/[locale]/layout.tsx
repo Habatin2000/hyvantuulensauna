@@ -9,6 +9,8 @@ import "../globals.css";
 import "../vibe/vibe.css";
 import VibeHeader from "@/components/vibe/VibeHeader";
 import VibeFooter from "@/components/vibe/VibeFooter";
+import type { Locale } from "@/components/vibe/content";
+import { getVibeRoute } from "@/components/vibe/routes";
 import RouteTracker from "@/components/analytics/RouteTracker";
 import { getOrganizationSchema, websiteSchema } from "./schema";
 import { SITE_URL } from "@/lib/site";
@@ -32,22 +34,59 @@ const pacifico = Pacifico({
   weight: "400",
 });
 
+const metadataCopy: Record<Locale, { title: string; description: string; imageAlt: string }> = {
+  fi: {
+    title: "Hyvän Tuulen Sauna | Saunalautat Helsingissä",
+    description: "Aito suomalainen saunaelämys merellisessä Helsingissä. Varaa saunalautta kesäksi tai yksityissauna ympäri vuoden. Kalkkihiekantori, Aurinkolahti, Helsinki.",
+    imageAlt: "Hyvän Tuulen Sauna - Saunalautta auringonlaskussa",
+  },
+  en: {
+    title: "Hyvän Tuulen Sauna | Sauna Boats in Helsinki",
+    description: "Authentic Finnish sauna experience by the sea in Helsinki. Book a sauna boat for summer or a private sauna all year round. Kalkkihiekantori, Aurinkolahti, Helsinki.",
+    imageAlt: "Hyvän Tuulen Sauna - Sauna boat at sunset",
+  },
+  es: {
+    title: "Hyvän Tuulen Sauna | Saunas flotantes en Helsinki",
+    description: "Auténtica experiencia de sauna finlandesa junto al mar en Helsinki. Reserva una embarcación con sauna en verano o una sauna privada durante todo el año. Kalkkihiekantori, Aurinkolahti, Helsinki.",
+    imageAlt: "Hyvän Tuulen Sauna - Embarcación con sauna al atardecer",
+  },
+  fr: {
+    title: "Hyvän Tuulen Sauna | Saunas flottants à Helsinki",
+    description: "Une authentique expérience de sauna finlandais au bord de la mer à Helsinki. Réservez un radeau-sauna en été ou un sauna privé toute l’année. Kalkkihiekantori, Aurinkolahti, Helsinki.",
+    imageAlt: "Hyvän Tuulen Sauna - Radeau-sauna au coucher du soleil",
+  },
+  de: {
+    title: "Hyvän Tuulen Sauna | Saunaboote in Helsinki",
+    description: "Authentisches finnisches Saunaerlebnis am Meer in Helsinki. Buchen Sie ein Saunaboot für den Sommer oder eine private Sauna für das ganze Jahr. Kalkkihiekantori, Aurinkolahti, Helsinki.",
+    imageAlt: "Hyvän Tuulen Sauna - Saunaboot bei Sonnenuntergang",
+  },
+};
+
+const openGraphLocales: Record<Locale, string> = {
+  fi: 'fi_FI',
+  en: 'en_US',
+  es: 'es_ES',
+  fr: 'fr_FR',
+  de: 'de_DE',
+};
+
+const skipToContent: Record<Locale, string> = {
+  fi: 'Siirry sisältöön',
+  en: 'Skip to content',
+  es: 'Saltar al contenido',
+  fr: 'Aller au contenu',
+  de: 'Zum Inhalt springen',
+};
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  
-  const isEnglish = locale === 'en';
-  
-  const title = isEnglish
-    ? "Hyvän Tuulen Sauna | Sauna Boats in Helsinki"
-    : "Hyvän Tuulen Sauna | Saunalautat Helsingissä";
-  
-  const description = isEnglish
-    ? "Authentic Finnish sauna experience by the sea in Helsinki. Book a sauna boat for summer or a private sauna all year round. Kalkkihiekantori, Aurinkolahti, Helsinki."
-    : "Aito suomalainen saunaelämys merellisessä Helsingissä. Varaa saunalautta kesäksi tai yksityissauna ympäri vuoden. Kalkkihiekantori, Aurinkolahti, Helsinki.";
+  const safeLocale: Locale = hasLocale(routing.locales, locale) ? locale : routing.defaultLocale;
+  const { title, description, imageAlt } = metadataCopy[safeLocale];
+  const homeUrl = `${SITE_URL}${getVibeRoute('home', safeLocale)}`;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -66,13 +105,16 @@ export async function generateMetadata({
         'fi-FI': `${SITE_URL}/`,
         'en-US': `${SITE_URL}/en/`,
         'en-GB': `${SITE_URL}/en/`,
+        'es-ES': `${SITE_URL}/es/`,
+        'fr-FR': `${SITE_URL}/fr/`,
+        'de-DE': `${SITE_URL}/de/`,
         'x-default': `${SITE_URL}/`,
       },
     },
     openGraph: {
       type: "website",
-      locale: isEnglish ? "en_US" : "fi_FI",
-      url: SITE_URL,
+      locale: openGraphLocales[safeLocale],
+      url: homeUrl,
       siteName: "Hyvän Tuulen Sauna",
       title,
       description,
@@ -81,9 +123,7 @@ export async function generateMetadata({
           url: "/images/gallery-raft-sunset.webp",
           width: 1200,
           height: 630,
-          alt: isEnglish
-            ? "Hyvän Tuulen Sauna - Sauna boat at sunset"
-            : "Hyvän Tuulen Sauna - Saunalautta auringonlaskussa",
+          alt: imageAlt,
         },
       ],
     },
@@ -169,7 +209,7 @@ export default async function LocaleLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([getOrganizationSchema(locale === 'en' ? 'en' : 'fi'), websiteSchema]),
+            __html: JSON.stringify([getOrganizationSchema(locale), websiteSchema]),
           }}
         />
         {/* Meta Pixel Code */}
@@ -212,11 +252,11 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <a className="vibe-skip-link" href="#main-content">
-            {locale === 'en' ? 'Skip to content' : 'Siirry sisältöön'}
+            {skipToContent[locale]}
           </a>
-          <VibeHeader locale={locale === 'en' ? 'en' : 'fi'} />
+          <VibeHeader locale={locale} />
           {children}
-          <VibeFooter locale={locale === 'en' ? 'en' : 'fi'} />
+          <VibeFooter locale={locale} />
           <RouteTracker />
           <ConsentBanner />
         </NextIntlClientProvider>

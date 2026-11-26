@@ -2,9 +2,20 @@ import type { Metadata } from 'next';
 import VibeInnerPage from '@/components/vibe/VibeInnerPage';
 import { getVibePage } from '@/components/vibe/pages';
 import type { Locale } from '@/components/vibe/content';
-import { generateServiceSchema, generateBreadcrumbSchema, generateArticleSchema, generateHowToSchema } from '../schema';
+import {
+  generateServiceSchema,
+  generateBreadcrumbSchema,
+  generateArticleSchema,
+  generateHowToSchema,
+  getHomeLabel,
+  getLanguageAlternates,
+  getLocalizedPageUrl,
+  getOpenGraphLocale,
+  normalizePageLocale,
+} from '../schema';
 import { SITE_URL } from '@/lib/site';
 
+const PAGE_PATH = '/avanto';
 const PAGE_IMAGE = `${SITE_URL}/images/gallery-ice-swimming.webp`;
 const DATE_PUBLISHED = '2026-10-01';
 const DATE_MODIFIED = '2026-10-01';
@@ -15,44 +26,36 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const isEn = locale === 'en';
-  const pageUrl = `${SITE_URL}${isEn ? '/en/ice-swimming-sauna-helsinki' : '/avanto'}`;
+  const safeLocale = normalizePageLocale(locale) as Locale;
+  const data = getVibePage('avanto', safeLocale);
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
 
   return {
-    title: isEn
-      ? 'Ice Swimming & Wood-Fired Sauna'
-      : 'Avantouinti ja sauna Helsingissä',
-    description: isEn
-      ? "Try ice swimming and warm up in a wood-fired sauna by the sea in Puotila, Helsinki. Join a public session or book a private sauna for your group."
-      : 'Koe avantouinti ja puusaunan lämpö meren äärellä Puotilassa, Helsingissä. Tule yleiselle saunavuorolle tai varaa yksityinen sauna omalle porukallesi.',
+    title: { absolute: data.title },
+    description: data.description,
     alternates: {
       canonical: pageUrl,
-      languages: {
-        'fi-FI': `${SITE_URL}/avanto`,
-        'en-US': `${SITE_URL}/en/ice-swimming-sauna-helsinki`,
-        'en-GB': `${SITE_URL}/en/ice-swimming-sauna-helsinki`,
-        'x-default': `${SITE_URL}/avanto`,
-      },
+      languages: getLanguageAlternates(PAGE_PATH),
     },
     openGraph: {
-      title: isEn
-        ? 'Ice Swimming & Sauna in Helsinki | Hyvän Tuulen Sauna'
-        : 'Avantouinti ja puulämmitteinen sauna Helsingissä | Hyvän Tuulen Sauna',
-      description: isEn
-        ? 'Ice swimming and a wood-fired sauna by the sea in Puotila.'
-        : 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa.',
+      title: data.title,
+      description: data.description,
       url: pageUrl,
-      locale: isEn ? 'en_US' : 'fi_FI',
+      locale: getOpenGraphLocale(safeLocale),
       images: [
         {
-          url: '/images/gallery-ice-swimming.webp',
+          url: PAGE_IMAGE,
           width: 1200,
           height: 630,
-          alt: isEn
-            ? 'Ice swimming in Helsinki - Hyvän Tuulen Sauna'
-            : 'Avantouinti Helsingissä - Hyvän Tuulen Sauna',
+          alt: data.imageAlt,
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.description,
+      images: [{ url: PAGE_IMAGE, alt: data.imageAlt }],
     },
   };
 }
@@ -63,24 +66,17 @@ export default async function AvantoPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = (locale === 'en' ? 'en' : 'fi') as Locale;
-  const isEn = safeLocale === 'en';
+  const safeLocale = normalizePageLocale(locale) as Locale;
   const data = getVibePage('avanto', safeLocale);
-  const pageUrl = `${SITE_URL}${isEn ? '/en/ice-swimming-sauna-helsinki' : '/avanto'}`;
+  const pageUrl = getLocalizedPageUrl(PAGE_PATH, safeLocale);
+  const pageName = data.title.split(' | ')[0];
 
   const serviceSchema = {
-    ...generateServiceSchema(
-      isEn ? 'Ice swimming and sauna in Helsinki' : 'Avantouinti ja sauna Helsingissä',
-      isEn
-        ? 'Ice swimming and wood-fired sauna in a maritime setting in Puotila, Helsinki. Public sessions and private bookings all year round.'
-        : 'Avantouinti ja puulämmitteinen sauna merellisessä ympäristössä Puotilassa. Julkiset vuorot ja yksityisvaraukset ympäri vuoden.',
-      pageUrl,
-      PAGE_IMAGE
-    ),
+    ...generateServiceSchema(data.title, data.description, pageUrl, PAGE_IMAGE),
     offers: [
       {
         '@type': 'Offer',
-        name: isEn ? 'Sauna boat Aalto — private session 2 h' : 'Aalto-sauna — yksityinen vuoro 2 h',
+        name: data.prices?.[0] ? `${data.prices[0].label} — ${data.prices[0].note}` : data.title,
         price: '140',
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
@@ -88,7 +84,7 @@ export default async function AvantoPage({
       },
       {
         '@type': 'Offer',
-        name: isEn ? 'Sauna boat Virta — private session 2 h' : 'Virta-sauna — yksityinen vuoro 2 h',
+        name: data.prices?.[1] ? `${data.prices[1].label} — ${data.prices[1].note}` : data.title,
         price: '120',
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
@@ -98,15 +94,13 @@ export default async function AvantoPage({
   };
 
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: isEn ? 'Home' : 'Etusivu', url: `${SITE_URL}${isEn ? '/en' : ''}` },
-    { name: isEn ? 'Ice swimming & sauna' : 'Avanto ja saunatila', url: pageUrl },
+    { name: getHomeLabel(safeLocale), url: getLocalizedPageUrl('/', safeLocale) },
+    { name: pageName, url: pageUrl },
   ]);
 
   const articleSchema = generateArticleSchema(
-    isEn ? 'Ice Swimming & Sauna in Helsinki' : 'Avantouinti ja puulämmitteinen sauna Helsingissä',
-    isEn
-      ? 'Ice swimming and a wood-fired sauna by the sea in Puotila, Helsinki.'
-      : 'Avantouinti ja puulämmitteinen sauna meren äärellä Puotilassa, Helsingissä.',
+    data.title,
+    data.description,
     pageUrl,
     PAGE_IMAGE,
     DATE_PUBLISHED,
@@ -114,7 +108,7 @@ export default async function AvantoPage({
   );
 
   const howToSchema = generateHowToSchema(
-    data.timelineTitle ?? (isEn ? 'Your visit' : 'Saunavuorosi'),
+    data.timelineTitle ?? data.detailTitle,
     data.detailText,
     data.timeline?.map(step => ({ name: step.title, text: step.text })) ?? []
   );

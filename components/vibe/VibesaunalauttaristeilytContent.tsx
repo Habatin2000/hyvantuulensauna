@@ -7,11 +7,109 @@ import VibeBookingFrame from './VibeBookingFrame';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
 import '../../app/vibe/saunalauttaristeilyt.css';
 
+const cruiseCopy = {
+  fi: {
+    fromPrice: 'alk. 225 € / 2 h',
+    meetBoats: 'Tutustu lautoihin',
+    location: 'Kalkkihiekantori · Itä-Helsingin saaristo',
+    heroAside: 'Löylyä · Merta · Valoa',
+    privateCruise: 'Yksityisristeily',
+    boatChoice: 'Aalto tai Virta',
+    aaltoAlt: 'Aalto-saunalautta ja SUP-laudat merellä',
+    virtaAlt: 'Virta-saunalautta kesäisessä saaristossa',
+    floatingSaunaAlt: 'Kelluva sauna ja SUP-lauta merellä',
+    grillingAlt: 'Eväitä kypsymässä saunalautan grillissä',
+    journeyCaption: 'Saunaa, merta ja omia eväitä',
+    journeyEyebrow: 'Laiturilta saaristoon',
+    pricingEyebrow: 'Oma kelluva saunasi',
+    pricingText: 'Aalto tai Virta vain teidän porukallenne.',
+    nextEyebrow: 'Kun kesä kutsuu',
+    nextTitle: 'Oma paikkasi vedellä.',
+    backToExperiences: 'Takaisin elämyksiin',
+  },
+  en: {
+    fromPrice: 'from 225 € / 2 h',
+    meetBoats: 'Meet the boats',
+    location: 'Kalkkihiekantori · Eastern Helsinki archipelago',
+    heroAside: 'Löyly · Sea · Sunlight',
+    privateCruise: 'Private cruise',
+    boatChoice: 'Aalto or Virta',
+    aaltoAlt: 'Aalto sauna boat with SUP boards on the water',
+    virtaAlt: 'Virta sauna boat in the summer archipelago',
+    floatingSaunaAlt: 'A floating sauna and SUP board at sea',
+    grillingAlt: 'Food cooking on the sauna boat grill',
+    journeyCaption: 'Sauna, sea and your own food',
+    journeyEyebrow: 'From pier to archipelago',
+    pricingEyebrow: 'Your own floating sauna',
+    pricingText: 'Aalto or Virta, just for your group.',
+    nextEyebrow: 'When summer calls',
+    nextTitle: 'Your place on the water.',
+    backToExperiences: 'Back to experiences',
+  },
+  es: {
+    fromPrice: 'desde 225 € / 2 h',
+    meetBoats: 'Descubre las embarcaciones',
+    location: 'Kalkkihiekantori · Archipiélago del este de Helsinki',
+    heroAside: 'Löyly · Mar · Luz del sol',
+    privateCruise: 'Crucero privado',
+    boatChoice: 'Aalto o Virta',
+    aaltoAlt: 'Barco de sauna Aalto con tablas de paddle surf en el agua',
+    virtaAlt: 'Barco de sauna Virta en el archipiélago en verano',
+    floatingSaunaAlt: 'Una sauna flotante y una tabla de paddle surf en el mar',
+    grillingAlt: 'Comida cocinándose en la parrilla del barco de sauna',
+    journeyCaption: 'Sauna, mar y tu propia comida',
+    journeyEyebrow: 'Del embarcadero al archipiélago',
+    pricingEyebrow: 'Tu propia sauna flotante',
+    pricingText: 'Aalto o Virta, solo para tu grupo.',
+    nextEyebrow: 'Cuando el verano llama',
+    nextTitle: 'Tu lugar en el agua.',
+    backToExperiences: 'Volver a las experiencias',
+  },
+  fr: {
+    fromPrice: 'à partir de 225 € / 2 h',
+    meetBoats: 'Découvrez les bateaux',
+    location: 'Kalkkihiekantori · Archipel de l’est d’Helsinki',
+    heroAside: 'Löyly · Mer · Lumière du soleil',
+    privateCruise: 'Croisière privée',
+    boatChoice: 'Aalto ou Virta',
+    aaltoAlt: 'Bateau-sauna Aalto avec des planches de paddle sur l’eau',
+    virtaAlt: 'Bateau-sauna Virta dans l’archipel en été',
+    floatingSaunaAlt: 'Un sauna flottant et une planche de paddle en mer',
+    grillingAlt: 'Des aliments en train de cuire sur le grill du bateau-sauna',
+    journeyCaption: 'Sauna, mer et votre propre pique-nique',
+    journeyEyebrow: 'Du ponton à l’archipel',
+    pricingEyebrow: 'Votre propre sauna flottant',
+    pricingText: 'Aalto ou Virta, rien que pour votre groupe.',
+    nextEyebrow: 'Quand l’été appelle',
+    nextTitle: 'Votre place sur l’eau.',
+    backToExperiences: 'Retour aux expériences',
+  },
+  de: {
+    fromPrice: 'ab 225 € / 2 h',
+    meetBoats: 'Entdecke die Boote',
+    location: 'Kalkkihiekantori · Schärengarten im Osten Helsinkis',
+    heroAside: 'Löyly · Meer · Sonnenlicht',
+    privateCruise: 'Private Bootstour',
+    boatChoice: 'Aalto oder Virta',
+    aaltoAlt: 'Saunaboot Aalto mit SUP-Boards auf dem Wasser',
+    virtaAlt: 'Saunaboot Virta im sommerlichen Schärengarten',
+    floatingSaunaAlt: 'Eine schwimmende Sauna und ein SUP-Board auf dem Meer',
+    grillingAlt: 'Speisen auf dem Grill des Saunaboots',
+    journeyCaption: 'Sauna, Meer und eigenes Essen',
+    journeyEyebrow: 'Vom Steg in den Schärengarten',
+    pricingEyebrow: 'Deine eigene schwimmende Sauna',
+    pricingText: 'Aalto oder Virta ganz für deine Gruppe.',
+    nextEyebrow: 'Wenn der Sommer ruft',
+    nextTitle: 'Dein Platz auf dem Wasser.',
+    backToExperiences: 'Zurück zu den Erlebnissen',
+  },
+} as const;
+
 export default function VibesaunalauttaristeilytContent({ data, locale }: { data: VibePageData; locale: Locale }) {
-  const isEn = locale === 'en';
+  const copy = cruiseCopy[locale];
   const bookingHref = '#varaus';
   const [aalto, virta, provisions] = data.features;
-  const fromPrice = data.prices?.[0]?.price ?? (isEn ? 'from 225 € / 2 h' : 'alk. 225 € / 2 h');
+  const fromPrice = data.prices?.[0]?.price ?? copy.fromPrice;
 
   return (
     <main id="main-content" className="vibe-saunalauttaristeilyt-page">
@@ -26,12 +124,10 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
               {data.ctaLabel}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>
             <a className="cruise-text-link" href="#lautat">
-              {isEn ? 'Meet the boats' : 'Tutustu lautoihin'}<ArrowDown size={16} aria-hidden="true" />
+              {copy.meetBoats}<ArrowDown size={16} aria-hidden="true" />
             </a>
           </div>
-          <p className="cruise-hero-location">
-            {isEn ? 'Kalkkihiekantori · Eastern Helsinki archipelago' : 'Kalkkihiekantori · Itä-Helsingin saaristo'}
-          </p>
+          <p className="cruise-hero-location">{copy.location}</p>
         </div>
         <div className="cruise-hero-visual">
           <div className="cruise-hero-image">
@@ -45,12 +141,12 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
             />
           </div>
           <p className="cruise-hero-aside" aria-hidden="true">
-            {isEn ? 'Löyly · Sea · Sunlight' : 'Löylyä · Merta · Valoa'}
+            {copy.heroAside}
           </p>
           <div className="cruise-hero-price">
-            <span>{isEn ? 'Private cruise' : 'Yksityisristeily'}</span>
+            <span>{copy.privateCruise}</span>
             <strong>{fromPrice}</strong>
-            <small>{isEn ? 'Aalto or Virta' : 'Aalto tai Virta'}</small>
+            <small>{copy.boatChoice}</small>
           </div>
         </div>
       </section>
@@ -67,7 +163,7 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
             <div className="cruise-boat-photo">
               <Image
                 src="/images/aalto-raft.webp"
-                alt={isEn ? 'Aalto sauna boat with SUP boards on the water' : 'Aalto-saunalautta ja SUP-laudat merellä'}
+                alt={copy.aaltoAlt}
                 fill
                 sizes="(max-width: 760px) 100vw, 58vw"
               />
@@ -94,7 +190,7 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
             <div className="cruise-boat-photo">
               <Image
                 src="/images/virta-raft.webp"
-                alt={isEn ? 'Virta sauna boat in the summer archipelago' : 'Virta-saunalautta kesäisessä saaristossa'}
+                alt={copy.virtaAlt}
                 fill
                 sizes="(max-width: 760px) 100vw, 52vw"
               />
@@ -117,7 +213,7 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
             <div className="cruise-journey-sea">
               <Image
                 src="/images/hero-raft-sup.webp"
-                alt={isEn ? 'A floating sauna and SUP board at sea' : 'Kelluva sauna ja SUP-lauta merellä'}
+                alt={copy.floatingSaunaAlt}
                 fill
                 sizes="(max-width: 760px) 100vw, 44vw"
               />
@@ -125,15 +221,15 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
             <div className="cruise-journey-food">
               <Image
                 src="/images/gallery-bbq.webp"
-                alt={isEn ? 'Food cooking on the sauna boat grill' : 'Eväitä kypsymässä saunalautan grillissä'}
+                alt={copy.grillingAlt}
                 fill
                 sizes="(max-width: 760px) 46vw, 22vw"
               />
             </div>
-            <p>{isEn ? 'Sauna, sea and your own food' : 'Saunaa, merta ja omia eväitä'}</p>
+            <p>{copy.journeyCaption}</p>
           </div>
           <div className="cruise-journey-copy">
-            <p className="cruise-eyebrow">{isEn ? 'From pier to archipelago' : 'Laiturilta saaristoon'}</p>
+            <p className="cruise-eyebrow">{copy.journeyEyebrow}</p>
             <h2 id="cruise-journey-title">{data.timelineTitle}</h2>
             <ol>
               {data.timeline.map((step) => (
@@ -156,10 +252,10 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
       {data.prices && (
         <section className="cruise-pricing" aria-labelledby="cruise-pricing-title">
           <div className="cruise-pricing-heading">
-            <p className="cruise-eyebrow">{isEn ? 'Your own floating sauna' : 'Oma kelluva saunasi'}</p>
+            <p className="cruise-eyebrow">{copy.pricingEyebrow}</p>
             <h2 id="cruise-pricing-title">{data.priceTitle}</h2>
             <p className="cruise-from-price">{fromPrice}</p>
-            <span>{isEn ? 'Aalto or Virta, just for your group.' : 'Aalto tai Virta vain teidän porukallenne.'}</span>
+            <span>{copy.pricingText}</span>
           </div>
           <div className="cruise-pricing-detail">
             <ol className="cruise-price-list">
@@ -184,14 +280,14 @@ export default function VibesaunalauttaristeilytContent({ data, locale }: { data
       <VibeBookingFrame kind="summer" locale={locale} />
 
       <section className="cruise-next" aria-labelledby="cruise-next-title">
-        <p className="cruise-eyebrow">{isEn ? 'When summer calls' : 'Kun kesä kutsuu'}</p>
-        <h2 id="cruise-next-title">{isEn ? 'Your place on the water.' : 'Oma paikkasi vedellä.'}</h2>
+        <p className="cruise-eyebrow">{copy.nextEyebrow}</p>
+        <h2 id="cruise-next-title">{copy.nextTitle}</h2>
         <p>{data.heroText}</p>
         <Link className="cruise-next-main" href={bookingHref}>
           <span>{data.ctaLabel}</span><ArrowUpRight aria-hidden="true" />
         </Link>
-        <Link className="cruise-next-secondary" href={locale === 'en' ? '/en/' : '/'}>
-          {isEn ? 'Back to experiences' : 'Takaisin elämyksiin'}<ArrowRight size={16} aria-hidden="true" />
+        <Link className="cruise-next-secondary" href={locale === 'fi' ? '/' : `/${locale}/`}>
+          {copy.backToExperiences}<ArrowRight size={16} aria-hidden="true" />
         </Link>
       </section>
     </main>

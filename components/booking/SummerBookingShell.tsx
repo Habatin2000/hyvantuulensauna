@@ -59,8 +59,16 @@ interface SummerBookingShellProps {
   initialBoatId?: string;
 }
 
+const localeTags = {
+  fi: 'fi-FI',
+  en: 'en-GB',
+  es: 'es-ES',
+  fr: 'fr-FR',
+  de: 'de-DE',
+} as const;
+
 function formatDate(dateStr: string, locale: Locale) {
-  return new Date(dateStr + 'T00:00:00').toLocaleDateString(locale === 'en' ? 'en-GB' : 'fi-FI', {
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString(localeTags[locale], {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -68,8 +76,8 @@ function formatDate(dateStr: string, locale: Locale) {
   });
 }
 
-function formatTime(isoString: string) {
-  return new Date(isoString).toLocaleTimeString('fi-FI', {
+function formatTime(isoString: string, locale: Locale) {
+  return new Date(isoString).toLocaleTimeString(localeTags[locale], {
     hour: '2-digit',
     minute: '2-digit',
   });
@@ -95,64 +103,273 @@ function parseDuration(duration: string): number {
   return hours + minutes / 60;
 }
 
-function slotEndTime(start: string, durationHours: number): string {
+function slotEndTime(start: string, durationHours: number, locale: Locale): string {
   const d = new Date(start);
   d.setHours(d.getHours() + Math.floor(durationHours));
   d.setMinutes(d.getMinutes() + Math.round((durationHours % 1) * 60));
-  return formatTime(d.toISOString());
+  return formatTime(d.toISOString(), locale);
 }
 
+const summerCopy = {
+  fi: {
+    title: 'Varaa saunalautta kesäksi',
+    subtitle: 'Valitse vene, päivämäärä ja aika – varaus valmis minuuteissa',
+    selectBoat: 'Valitse saunalautta',
+    selectDate: 'Valitse päivämäärä',
+    selectTime: 'Valitse aika',
+    stepLabels: ['Vene', 'Päivä', 'Aika', 'Tiedot'],
+    noSlots: 'Ei vapaita aikoja valitulle päivälle',
+    contactTitle: 'Yhteystiedot',
+    firstName: 'Etunimi',
+    lastName: 'Sukunimi',
+    email: 'Sähköposti',
+    phone: 'Puhelinnumero',
+    firstNamePlaceholder: 'Matti',
+    lastNamePlaceholder: 'Meikäläinen',
+    emailPlaceholder: 'matti@example.com',
+    marketingConsent: 'Haluan saada Hyv\u00e4n Tuulen Saunan tarjouksia ja uutisia s\u00e4hk\u00f6postiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
+    summary: 'Varausyhteenveto',
+    boat: 'Vene',
+    date: 'Päivämäärä',
+    time: 'Aika',
+    duration: 'Kesto',
+    total: 'Yhteensä',
+    vat: 'sis. alv 13,5%',
+    bookNow: 'Varaa nyt',
+    continue: 'Jatka',
+    back: 'Takaisin',
+    close: 'Sulje',
+    submitting: 'Varataan...',
+    successTitle: 'Varaus vahvistettu!',
+    successText: 'Saunalautta on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
+    bookingNumber: 'Varausnumero',
+    paymentInfo: 'Painamalla "Varaa nyt" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
+    cancellation: 'Varaus on sitova. Peruutus 7 vrk ennen veloituksetta.',
+    extrasTitle: 'Lisäpalvelut',
+    extrasNote: 'Haluatko lisäpalveluita? Olethan yhteydessä puhelimitse 0442313546 tai sähköpostilla info@hyvantuulensauna.fi.',
+    loadingCalendar: 'Ladataan kalenteria...',
+    loadingTimes: 'Ladataan aikoja...',
+    hours: 'tuntia',
+    errorExtraHourUnavailable: 'Lisätunti ei ole saatavilla tähän vuoroon',
+    errorExtendFailed: 'Lisätunnin hakeminen epäonnistui',
+    errorReduceUnavailable: 'Lyhyempi kesto ei ole saatavilla tähän vuoroon',
+    errorReduceFailed: 'Keston lyhentäminen epäonnistui',
+    errorBookingFailed: 'Varauksen luominen epäonnistui',
+    boatNames: { virta: 'Saunalautta Virta', aalto: 'Saunalautta Aalto' },
+    boatDescriptions: {
+      virta: 'Risteily saaristossa – intiimimpi kokemus pienemmälle porukalle.',
+      aalto: 'Ankkuroituna merellä – täydellinen isommille seurueille.',
+    },
+    capacity: (max: number) => `Max ${max} hlö`,
+  },
+  en: {
+    title: 'Book a sauna boat for summer',
+    subtitle: 'Choose a boat, day and time – booking ready in minutes',
+    selectBoat: 'Choose a sauna boat',
+    selectDate: 'Choose a date',
+    selectTime: 'Choose a time',
+    stepLabels: ['Boat', 'Date', 'Time', 'Details'],
+    noSlots: 'No slots for the selected day',
+    contactTitle: 'Contact details',
+    firstName: 'First name',
+    lastName: 'Last name',
+    email: 'Email',
+    phone: 'Phone',
+    firstNamePlaceholder: 'Matti',
+    lastNamePlaceholder: 'Meikäläinen',
+    emailPlaceholder: 'matti@example.com',
+    marketingConsent: 'I want to receive offers and news from Hyv\u00e4n Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)',
+    summary: 'Booking summary',
+    boat: 'Boat',
+    date: 'Date',
+    time: 'Time',
+    duration: 'Duration',
+    total: 'Total',
+    vat: 'incl. VAT 13.5%',
+    bookNow: 'Book now',
+    continue: 'Continue',
+    back: 'Back',
+    close: 'Close',
+    submitting: 'Booking...',
+    successTitle: 'Booking confirmed!',
+    successText: 'The sauna boat is now reserved for you. A confirmation has been sent to your email.',
+    bookingNumber: 'Booking number',
+    paymentInfo: 'By clicking "Book now" you will be redirected to a secure payment system. The booking is confirmed after payment.',
+    cancellation: 'Booking is binding. Cancellation up to 7 days before is free of charge.',
+    extrasTitle: 'Additional services',
+    extrasNote: 'Want extras? Please contact us by phone 0442313546 or email info@hyvantuulensauna.fi.',
+    loadingCalendar: 'Loading calendar...',
+    loadingTimes: 'Loading times...',
+    hours: 'hours',
+    errorExtraHourUnavailable: 'Extra hour is not available for this slot',
+    errorExtendFailed: 'Failed to add extra hour',
+    errorReduceUnavailable: 'Shorter duration is not available for this slot',
+    errorReduceFailed: 'Failed to reduce duration',
+    errorBookingFailed: 'Failed to create booking',
+    boatNames: { virta: 'Sauna boat Virta', aalto: 'Sauna boat Aalto' },
+    boatDescriptions: {
+      virta: 'Cruise through the archipelago – a more intimate experience for smaller groups.',
+      aalto: 'Anchored at sea – perfect for larger groups.',
+    },
+    capacity: (max: number) => `Max ${max} people`,
+  },
+  es: {
+    title: 'Reserva un barco sauna para el verano',
+    subtitle: 'Elige el barco, el día y la hora: tu reserva estará lista en pocos minutos',
+    selectBoat: 'Elige un barco sauna',
+    selectDate: 'Elige una fecha',
+    selectTime: 'Elige una hora',
+    stepLabels: ['Barco', 'Fecha', 'Hora', 'Datos'],
+    noSlots: 'No hay horarios disponibles para el día seleccionado',
+    contactTitle: 'Datos de contacto',
+    firstName: 'Nombre',
+    lastName: 'Apellidos',
+    email: 'Correo electrónico',
+    phone: 'Teléfono',
+    firstNamePlaceholder: 'Juan',
+    lastNamePlaceholder: 'García',
+    emailPlaceholder: 'juan@example.com',
+    marketingConsent: 'Quiero recibir ofertas y novedades de Hyvän Tuulen Sauna por correo electrónico. Puedo retirar mi consentimiento en cualquier momento. (Opcional)',
+    summary: 'Resumen de la reserva',
+    boat: 'Barco',
+    date: 'Fecha',
+    time: 'Hora',
+    duration: 'Duración',
+    total: 'Total',
+    vat: 'IVA incluido (13,5 %)',
+    bookNow: 'Reservar ahora',
+    continue: 'Continuar',
+    back: 'Volver',
+    close: 'Cerrar',
+    submitting: 'Reservando...',
+    successTitle: '¡Reserva confirmada!',
+    successText: 'El barco sauna ya está reservado para ti. Hemos enviado una confirmación a tu correo electrónico.',
+    bookingNumber: 'Número de reserva',
+    paymentInfo: 'Al hacer clic en «Reservar ahora», accederás a un sistema de pago seguro. La reserva se confirmará después del pago.',
+    cancellation: 'La reserva es vinculante. Puedes cancelarla gratuitamente hasta 7 días antes.',
+    extrasTitle: 'Servicios adicionales',
+    extrasNote: '¿Quieres añadir servicios adicionales? Llámanos al 0442313546 o escríbenos a info@hyvantuulensauna.fi.',
+    loadingCalendar: 'Cargando calendario...',
+    loadingTimes: 'Cargando horarios...',
+    hours: 'horas',
+    errorExtraHourUnavailable: 'No es posible añadir una hora adicional a este horario',
+    errorExtendFailed: 'No se ha podido añadir la hora adicional',
+    errorReduceUnavailable: 'No es posible reducir la duración de este horario',
+    errorReduceFailed: 'No se ha podido reducir la duración',
+    errorBookingFailed: 'No se ha podido crear la reserva',
+    boatNames: { virta: 'Barco sauna Virta', aalto: 'Barco sauna Aalto' },
+    boatDescriptions: {
+      virta: 'Un crucero por el archipiélago: una experiencia más íntima para grupos pequeños.',
+      aalto: 'Fondeado en el mar: perfecto para grupos más grandes.',
+    },
+    capacity: (max: number) => `Máx. ${max} personas`,
+  },
+  fr: {
+    title: 'Réservez un bateau-sauna pour l’été',
+    subtitle: 'Choisissez le bateau, la date et l’heure : votre réservation sera finalisée en quelques minutes',
+    selectBoat: 'Choisissez un bateau-sauna',
+    selectDate: 'Choisissez une date',
+    selectTime: 'Choisissez un horaire',
+    stepLabels: ['Bateau', 'Date', 'Horaire', 'Coordonnées'],
+    noSlots: 'Aucun horaire disponible pour la date sélectionnée',
+    contactTitle: 'Coordonnées',
+    firstName: 'Prénom',
+    lastName: 'Nom',
+    email: 'E-mail',
+    phone: 'Téléphone',
+    firstNamePlaceholder: 'Jean',
+    lastNamePlaceholder: 'Dupont',
+    emailPlaceholder: 'jean@example.com',
+    marketingConsent: 'Je souhaite recevoir les offres et actualités de Hyvän Tuulen Sauna par e-mail. Je peux retirer mon consentement à tout moment. (Facultatif)',
+    summary: 'Récapitulatif de la réservation',
+    boat: 'Bateau',
+    date: 'Date',
+    time: 'Horaire',
+    duration: 'Durée',
+    total: 'Total',
+    vat: 'TVA de 13,5 % incluse',
+    bookNow: 'Réserver maintenant',
+    continue: 'Continuer',
+    back: 'Retour',
+    close: 'Fermer',
+    submitting: 'Réservation en cours...',
+    successTitle: 'Réservation confirmée !',
+    successText: 'Votre bateau-sauna est désormais réservé. Une confirmation a été envoyée à votre adresse e-mail.',
+    bookingNumber: 'Numéro de réservation',
+    paymentInfo: 'En cliquant sur « Réserver maintenant », vous accéderez à un système de paiement sécurisé. La réservation sera confirmée après le paiement.',
+    cancellation: 'La réservation est ferme. Annulation gratuite jusqu’à 7 jours avant la date réservée.',
+    extrasTitle: 'Services supplémentaires',
+    extrasNote: 'Pour ajouter des services, contactez-nous par téléphone au 0442313546 ou par e-mail à info@hyvantuulensauna.fi.',
+    loadingCalendar: 'Chargement du calendrier...',
+    loadingTimes: 'Chargement des horaires...',
+    hours: 'heures',
+    errorExtraHourUnavailable: 'Aucune heure supplémentaire n’est disponible pour cet horaire',
+    errorExtendFailed: 'Impossible d’ajouter une heure supplémentaire',
+    errorReduceUnavailable: 'Une durée plus courte n’est pas disponible pour cet horaire',
+    errorReduceFailed: 'Impossible de réduire la durée',
+    errorBookingFailed: 'Impossible de créer la réservation',
+    boatNames: { virta: 'Bateau-sauna Virta', aalto: 'Bateau-sauna Aalto' },
+    boatDescriptions: {
+      virta: 'Une croisière dans l’archipel, pour une expérience plus intimiste en petit groupe.',
+      aalto: 'Ancré en mer : idéal pour les groupes plus nombreux.',
+    },
+    capacity: (max: number) => `Max. ${max} personnes`,
+  },
+  de: {
+    title: 'Saunaboot für den Sommer buchen',
+    subtitle: 'Wählen Sie Boot, Datum und Uhrzeit – Ihre Buchung ist in wenigen Minuten abgeschlossen',
+    selectBoat: 'Saunaboot auswählen',
+    selectDate: 'Datum auswählen',
+    selectTime: 'Uhrzeit auswählen',
+    stepLabels: ['Boot', 'Datum', 'Uhrzeit', 'Daten'],
+    noSlots: 'Für den gewählten Tag sind keine Termine verfügbar',
+    contactTitle: 'Kontaktdaten',
+    firstName: 'Vorname',
+    lastName: 'Nachname',
+    email: 'E-Mail',
+    phone: 'Telefonnummer',
+    firstNamePlaceholder: 'Max',
+    lastNamePlaceholder: 'Mustermann',
+    emailPlaceholder: 'max@example.com',
+    marketingConsent: 'Ich möchte Angebote und Neuigkeiten von Hyvän Tuulen Sauna per E-Mail erhalten. Ich kann meine Einwilligung jederzeit widerrufen. (Optional)',
+    summary: 'Buchungsübersicht',
+    boat: 'Boot',
+    date: 'Datum',
+    time: 'Uhrzeit',
+    duration: 'Dauer',
+    total: 'Gesamt',
+    vat: 'inkl. 13,5 % MwSt.',
+    bookNow: 'Jetzt buchen',
+    continue: 'Weiter',
+    back: 'Zurück',
+    close: 'Schließen',
+    submitting: 'Buchung läuft...',
+    successTitle: 'Buchung bestätigt!',
+    successText: 'Das Saunaboot ist jetzt für Sie reserviert. Eine Bestätigung wurde an Ihre E-Mail-Adresse gesendet.',
+    bookingNumber: 'Buchungsnummer',
+    paymentInfo: 'Wenn Sie auf „Jetzt buchen“ klicken, werden Sie zu einem sicheren Zahlungssystem weitergeleitet. Die Buchung wird nach der Zahlung bestätigt.',
+    cancellation: 'Die Buchung ist verbindlich. Eine Stornierung ist bis 7 Tage vorher kostenfrei.',
+    extrasTitle: 'Zusatzleistungen',
+    extrasNote: 'Sie möchten Zusatzleistungen buchen? Kontaktieren Sie uns telefonisch unter 0442313546 oder per E-Mail an info@hyvantuulensauna.fi.',
+    loadingCalendar: 'Kalender wird geladen...',
+    loadingTimes: 'Termine werden geladen...',
+    hours: 'Stunden',
+    errorExtraHourUnavailable: 'Für diesen Termin ist keine zusätzliche Stunde verfügbar',
+    errorExtendFailed: 'Die zusätzliche Stunde konnte nicht hinzugefügt werden',
+    errorReduceUnavailable: 'Für diesen Termin ist keine kürzere Dauer verfügbar',
+    errorReduceFailed: 'Die Dauer konnte nicht verkürzt werden',
+    errorBookingFailed: 'Die Buchung konnte nicht erstellt werden',
+    boatNames: { virta: 'Saunaboot Virta', aalto: 'Saunaboot Aalto' },
+    boatDescriptions: {
+      virta: 'Eine Kreuzfahrt durch den Schärengarten – ein persönlicheres Erlebnis für kleinere Gruppen.',
+      aalto: 'Vor Anker auf dem Meer – ideal für größere Gruppen.',
+    },
+    capacity: (max: number) => `Max. ${max} Personen`,
+  },
+} as const;
+
 export default function SummerBookingShell({ showTitle = true, onClose, locale = 'fi', className, initialBoatId }: SummerBookingShellProps) {
-  const isEn = locale === 'en';
-  const t = {
-    title: isEn ? 'Book a sauna boat for summer' : 'Varaa saunalautta kesäksi',
-    subtitle: isEn ? 'Choose a boat, day and time – booking ready in minutes' : 'Valitse vene, päivämäärä ja aika – varaus valmis minuuteissa',
-    selectBoat: isEn ? 'Choose a sauna boat' : 'Valitse saunalautta',
-    selectDate: isEn ? 'Choose a date' : 'Valitse päivämäärä',
-    selectTime: isEn ? 'Choose a time' : 'Valitse aika',
-    stepLabels: [
-      isEn ? 'Boat' : 'Vene',
-      isEn ? 'Date' : 'Päivä',
-      isEn ? 'Time' : 'Aika',
-      isEn ? 'Details' : 'Tiedot',
-    ],
-    noSlots: isEn ? 'No slots for the selected day' : 'Ei vapaita aikoja valitulle päivälle',
-    changeDay: isEn ? 'Choose another day' : 'Valitse toinen päivä',
-    contactTitle: isEn ? 'Contact details' : 'Yhteystiedot',
-    firstName: isEn ? 'First name' : 'Etunimi',
-    lastName: isEn ? 'Last name' : 'Sukunimi',
-    email: isEn ? 'Email' : 'Sähköposti',
-    phone: isEn ? 'Phone' : 'Puhelinnumero',
-    marketingConsent: isEn
-      ? 'I want to receive offers and news from Hyv\u00e4n Tuulen Sauna by email. I can withdraw my consent at any time. (Optional)'
-      : 'Haluan saada Hyv\u00e4n Tuulen Saunan tarjouksia ja uutisia s\u00e4hk\u00f6postiini. Voin perua suostumuksen milloin tahansa. (Vapaaehtoinen)',
-    summary: isEn ? 'Booking summary' : 'Varausyhteenveto',
-    boat: isEn ? 'Boat' : 'Vene',
-    date: isEn ? 'Date' : 'Päivämäärä',
-    time: isEn ? 'Time' : 'Aika',
-    duration: isEn ? 'Duration' : 'Kesto',
-    total: isEn ? 'Total' : 'Yhteensä',
-    vat: isEn ? 'incl. VAT 13.5%' : 'sis. alv 13,5%',
-    bookNow: isEn ? 'Book now' : 'Varaa nyt',
-    continue: isEn ? 'Continue' : 'Jatka',
-    back: isEn ? 'Back' : 'Takaisin',
-    submitting: isEn ? 'Booking...' : 'Varataan...',
-    successTitle: isEn ? 'Booking confirmed!' : 'Varaus vahvistettu!',
-    successText: isEn
-      ? 'The sauna boat is now reserved for you. A confirmation has been sent to your email.'
-      : 'Saunalautta on nyt varattu sinulle. Vahvistus on lähetetty sähköpostiisi.',
-    bookingNumber: isEn ? 'Booking number' : 'Varausnumero',
-    paymentInfo: isEn
-      ? 'By clicking "Book now" you will be redirected to a secure payment system. The booking is confirmed after payment.'
-      : 'Painamalla "Varaa nyt" ohjaudut turvalliseen maksujärjestelmään. Varaus vahvistuu maksun jälkeen.',
-    cancellation: isEn
-      ? 'Booking is binding. Cancellation up to 7 days before is free of charge.'
-      : 'Varaus on sitova. Peruutus 7 vrk ennen veloituksetta.',
-    extrasTitle: isEn ? 'Additional services' : 'Lisäpalvelut',
-    extrasNote: isEn
-      ? 'Want extras? Please contact us by phone 0442313546 or email info@hyvantuulensauna.fi.'
-      : 'Haluatko lisäpalveluita? Olethan yhteydessä puhelimitse 0442313546 tai sähköpostilla info@hyvantuulensauna.fi.',
-  };
+  const t = summerCopy[locale];
 
   const boatOptions: BoatOption[] = useMemo(() => {
     const boats = getBoats(locale);
@@ -160,25 +377,25 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
       {
         id: 'virta',
         resourceId: VIRTA_RESOURCE_ID,
-        name: boats.find((b) => b.id === 'virta')?.name || 'Saunalautta Virta',
-        capacity: `Max ${boats.find((b) => b.id === 'virta')?.capacity.max || 10} hlö`,
+        name: boats.find((b) => b.id === 'virta')?.name || t.boatNames.virta,
+        capacity: t.capacity(boats.find((b) => b.id === 'virta')?.capacity.max || 10),
         description:
           boats.find((b) => b.id === 'virta')?.description.split('\n\n')[0] ||
-          'Risteily saaristossa – intiimimpi kokemus pienemmälle porukalle.',
+          t.boatDescriptions.virta,
         image: '/images/virta-01.webp',
       },
       {
         id: 'aalto',
         resourceId: AALTO_RESOURCE_ID,
-        name: boats.find((b) => b.id === 'aalto')?.name || 'Saunalautta Aalto',
-        capacity: `Max ${boats.find((b) => b.id === 'aalto')?.capacity.max || 12} hlö`,
+        name: boats.find((b) => b.id === 'aalto')?.name || t.boatNames.aalto,
+        capacity: t.capacity(boats.find((b) => b.id === 'aalto')?.capacity.max || 12),
         description:
           boats.find((b) => b.id === 'aalto')?.description.split('\n\n')[0] ||
-          'Ankkuroituna merellä – täydellinen isommille seurueille.',
+          t.boatDescriptions.aalto,
         image: '/images/aalto-01.webp',
       },
     ];
-  }, [locale]);
+  }, [locale, t]);
 
   const TOTAL_STEPS = 4; // boat, date, time, contact
   const [stepIndex, setStepIndex] = useState(0);
@@ -333,11 +550,11 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
         setTimeSlots(slots);
         setSelectedSlot(matching);
       } else {
-        setError(isEn ? 'Extra hour is not available for this slot' : 'Lisätunti ei ole saatavilla tähän vuoroon');
+        setError(t.errorExtraHourUnavailable);
       }
     } catch (e) {
       console.error('Error extending slot:', e);
-      setError(isEn ? 'Failed to add extra hour' : 'Lisätunnin hakeminen epäonnistui');
+      setError(t.errorExtendFailed);
     } finally {
       setIsLoadingSlots(false);
     }
@@ -371,11 +588,11 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
         setTimeSlots(slots);
         setSelectedSlot(matching);
       } else {
-        setError(isEn ? 'Shorter duration is not available for this slot' : 'Lyhyempi kesto ei ole saatavilla tähän vuoroon');
+        setError(t.errorReduceUnavailable);
       }
     } catch (e) {
       console.error('Error reducing slot:', e);
-      setError(isEn ? 'Failed to reduce duration' : 'Keston lyhentäminen epäonnistui');
+      setError(t.errorReduceFailed);
     } finally {
       setIsLoadingSlots(false);
     }
@@ -412,7 +629,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || t.submitting);
+        throw new Error(data.error || t.errorBookingFailed);
       }
 
       setBookingResult(data);
@@ -458,7 +675,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
       }
     } catch (e) {
       console.error('Error creating booking:', e);
-      setError(e instanceof Error && e.message ? e.message : t.submitting);
+      setError(e instanceof Error && e.message ? e.message : t.errorBookingFailed);
     } finally {
       setIsSubmitting(false);
     }
@@ -473,7 +690,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
     ? boatOptions.find((b) => b.id === selectedBoatId)?.name
     : undefined;
 
-  const durationLabel = `${duration} ${isEn ? 'hours' : 'tuntia'}`;
+  const durationLabel = `${duration} ${t.hours}`;
 
   return (
     <div className={cn('mx-auto flex max-w-5xl flex-col', className)}>
@@ -485,7 +702,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
             <button
               onClick={onClose}
               className="absolute top-0 right-0 p-1 text-stone-400 hover:text-stone-600"
-              aria-label="Sulje"
+              aria-label={t.close}
             >
               ✕
             </button>
@@ -561,6 +778,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                     boats={boatOptions}
                     selectedId={selectedBoatId}
                     onSelect={handleSelectBoat}
+                    locale={locale}
                     compact
                   />
                 </div>
@@ -584,7 +802,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                   {isLoadingDates ? (
                     <div className="flex items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white py-8 text-stone-600">
                       <Loader2 className="h-5 w-5 animate-spin" />
-                      <span>{isEn ? 'Loading calendar...' : 'Ladataan kalenteria...'}</span>
+                      <span>{t.loadingCalendar}</span>
                     </div>
                   ) : (
                     <SummerCalendar
@@ -631,7 +849,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                   {isLoadingSlots ? (
                     <div className="flex items-center justify-center gap-2 py-8 text-stone-600">
                       <Loader2 className="h-5 w-5 animate-spin" />
-                      <span>{isEn ? 'Loading times...' : 'Ladataan aikoja...'}</span>
+                      <span>{t.loadingTimes}</span>
                     </div>
                   ) : (
                     <SlotList
@@ -650,6 +868,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                       isExtending={isLoadingSlots}
                       isReducing={isLoadingSlots}
                       canReduce={duration > minDuration}
+                      locale={locale}
                     />
                   )}
                 </div>
@@ -709,7 +928,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                           value={customerInfo.firstName}
                           onChange={(e) => setCustomerInfo({ ...customerInfo, firstName: e.target.value })}
                           className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                          placeholder={isEn ? 'Matti' : 'Matti'}
+                          placeholder={t.firstNamePlaceholder}
                         />
                       </div>
                     </div>
@@ -725,7 +944,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                           value={customerInfo.lastName}
                           onChange={(e) => setCustomerInfo({ ...customerInfo, lastName: e.target.value })}
                           className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                          placeholder={isEn ? 'Meikäläinen' : 'Meikäläinen'}
+                          placeholder={t.lastNamePlaceholder}
                         />
                       </div>
                     </div>
@@ -743,7 +962,7 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                         value={customerInfo.email}
                         onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
                         className="w-full rounded-lg border border-stone-300 py-2 pl-10 pr-4 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
-                        placeholder="matti@example.com"
+                        placeholder={t.emailPlaceholder}
                       />
                     </div>
                   </div>
@@ -854,8 +1073,8 @@ export default function SummerBookingShell({ showTitle = true, onClose, locale =
                   <div>
                     <p className="text-sm text-stone-500">{t.time}</p>
                     <p className="font-medium">
-                      {formatTime(selectedSlot.startTime)}–
-                      {slotEndTime(selectedSlot.startTime, parseDuration(selectedSlot.duration))}
+                      {formatTime(selectedSlot.startTime, locale)}–
+                      {slotEndTime(selectedSlot.startTime, parseDuration(selectedSlot.duration), locale)}
                     </p>
                   </div>
                 </div>

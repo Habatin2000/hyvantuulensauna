@@ -2,7 +2,8 @@
   "metadata": {
     "siteName": "Hyvän Tuulen Sauna",
     "defaultTitle": "Kelluva sauna Helsingissä | Hyvän Tuulen Sauna",
-    "defaultDescription": "Koe kelluva puusauna ja virkistävä meri Helsingin Aurinkolahdessa. Varaa julkinen saunavuoro tai yksityinen saunalauttaristeily omalle porukallesi."
+    "defaultDescription": "Koe kelluva puusauna ja virkistävä meri Helsingin Aurinkolahdessa. Varaa julkinen saunavuoro tai yksityinen saunalauttaristeily omalle porukallesi.",
+    "socialImageAlt": "Hyvän Tuulen Sauna - Saunalautta auringonlaskussa"
   },
   "nav": {
     "home": "Etusivu",
@@ -31,5 +32,10 @@
     "contact": "Yhteystiedot",
     "social": "Seuraa meitä",
     "rights": "Kaikki oikeudet pidätetään."
+  },
+  "consent": {
+    "description": "Käytämme evästeitä ja analytiikkaa parantaaksemme käyttökokemusta. Hyväksymällä sallit Google Analytics - ja Google Ads -seurannan.",
+    "decline": "Hylkää",
+    "accept": "Hyväksy"
   }
 }

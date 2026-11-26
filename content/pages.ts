@@ -1,6 +1,6 @@
 import { HeroContent } from '@/types';
 
-export type Locale = 'fi' | 'en';
+export type Locale = 'fi' | 'en' | 'es' | 'fr' | 'de';
 
 const isEn = (locale: Locale) => locale === 'en';
 

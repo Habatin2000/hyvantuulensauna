@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "siteName": "Hyvän Tuulen Sauna",
+    "defaultTitle": "Sauna flottant à Helsinki | Hyvän Tuulen Sauna",
+    "defaultDescription": "Profitez d’un sauna flottant chauffé au bois à Aurinkolahti, Helsinki. Réservez une séance de sauna public ou une croisière privée en sauna flottant pour votre groupe.",
+    "socialImageAlt": "Hyvän Tuulen Sauna - Sauna flottant au coucher du soleil"
+  },
+  "nav": {
+    "home": "Accueil",
+    "saunaBoat": "Croisières en sauna flottant",
+    "avanto": "Baignade glaciale et sauna",
+    "occasions": "Fêtes et entreprises",
+    "events": "Événements",
+    "privateSauna": "Sauna privé",
+    "publicSauna": "Sauna public et baignade hivernale",
+    "gallery": "Galerie",
+    "location": "Accès",
+    "about": "À propos",
+    "faq": "Questions fréquentes",
+    "bookNow": "Réserver un sauna",
+    "private": "Sauna privé",
+    "public": "Sauna public",
+    "phone": "Appeler",
+    "contact": "Contact",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
+  },
+  "footer": {
+    "companyName": "Hyvän Tuulen Sauna",
+    "tagline": "Une expérience de sauna authentique à Helsinki — saunas flottants en été et sauna privé toute l’année.",
+    "links": "Liens",
+    "contact": "Contact",
+    "social": "Suivez-nous",
+    "rights": "Tous droits réservés."
+  },
+  "consent": {
+    "description": "Nous utilisons des cookies et des outils d’analyse pour améliorer votre expérience. En acceptant, vous autorisez le suivi par Google Analytics et Google Ads.",
+    "decline": "Refuser",
+    "accept": "Accepter"
+  }
+}

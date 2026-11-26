@@ -9,8 +9,191 @@ import VibeClosingSummary from './VibeClosingSummary';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
 import '../../app/vibe/avanto.css';
 
+const avantoCopy = {
+  fi: {
+    meetSaunas: 'Tutustu lautoihin',
+    entirelyYours: 'Kokonaan teidän',
+    privateSauna: 'Yksityinen sauna',
+    aaltoAlts: [
+      'Aalto-saunalautta lumisella jäällä',
+      'Aallon puulämmitteisen saunan sisätila',
+      'Aallon terassi meren äärellä',
+      'Eväitä Aallon grillissä',
+    ],
+    chooseAalto: 'Valitse Aalto',
+    virtaAlts: [
+      'Virta-saunalautta tyynessä vedessä',
+      'Virran puulämmitteisen saunan sisätila',
+      'Virran puiset lauteet',
+      'Virta lumisella laiturilla auringonlaskussa',
+    ],
+    chooseVirta: 'Valitse Virta',
+    privateSessions: 'Yksityisvuorot',
+    rhythmImageAlt: 'Saunoja palaamassa merestä saunan terassille',
+    rhythmCaption: 'Lämmitä. Vilvoittele. Toista.',
+    rhythmEyebrow: 'Kaksi tuntia omaan tahtiin',
+    closingEyebrow: 'Helppo tapa saunoa',
+    closingTitle: 'Yksityinen saunavuoro on oiva tapa nauttia luonnosta, merestä ja saunasta matalalla kynnyksellä.',
+    closingParagraphs: [
+      'Meidän palvelun ytimessä on lämmin asiakaspalvelu, toimivat tilat ja rustiikkinen fiilis. Meidän yksityisillä saunavuoroilla ei ole kaikki liian fiiniä, vaan kokemus on mökkimäinen. Kuitenkin ilman ajomatkaa, saunan lämmitystä, avannon sahaamista ja puiden kantoa! Me pidämme niistä huolen.',
+      'Jos olet tulossa yksin tai kaksin, kurkkaa meidän Yleiset saunavuorot.',
+    ],
+    publicSaunaHref: '/julkinen-sauna/',
+    publicSaunaLabel: 'Kurkkaa yleiset saunavuorot',
+    bookingEyebrow: 'Aalto vai Virta?',
+    bookingTitle: 'Ny Saunotaan',
+    bookingText: 'Vuokraa luonnollisin sauna Helsingissä',
+    homeHref: '/',
+    homeLabel: 'Takaisin elämyksiin',
+  },
+  en: {
+    meetSaunas: 'Meet the saunas',
+    entirelyYours: 'Entirely yours',
+    privateSauna: 'Private sauna',
+    aaltoAlts: [
+      'Aalto sauna on snowy ice',
+      'Inside the Aalto wood-fired sauna',
+      'Aalto terrace by the sea',
+      'Food cooking on the Aalto grill',
+    ],
+    chooseAalto: 'Choose Aalto',
+    virtaAlts: [
+      'Virta floating sauna in calm water',
+      'Inside the Virta wood-fired sauna',
+      'Wooden benches inside Virta',
+      'Virta at the snowy dock at sunset',
+    ],
+    chooseVirta: 'Choose Virta',
+    privateSessions: 'Private sessions',
+    rhythmImageAlt: 'A guest returning from the sea to the sauna terrace',
+    rhythmCaption: 'Warm up. Cool down. Repeat.',
+    rhythmEyebrow: 'Two hours at your own pace',
+    closingEyebrow: 'The easy way to sauna',
+    closingTitle: 'A private sauna session is an easy way to enjoy nature, the sea and the sauna.',
+    closingParagraphs: [
+      'At the heart of our service are warm customer care, working facilities and a rustic feel. Nothing about our private sessions is too fancy — the experience is like a cottage getaway, but without the drive, heating the sauna, cutting the ice hole or carrying wood. We take care of those.',
+      'Coming alone or as a pair? Take a look at our public sauna sessions.',
+    ],
+    publicSaunaHref: '/en/public-sauna-helsinki/',
+    publicSaunaLabel: 'See public sauna sessions',
+    bookingEyebrow: 'Aalto or Virta?',
+    bookingTitle: 'Let’s sauna now',
+    bookingText: 'Book the most natural sauna in Helsinki for your group.',
+    homeHref: '/en/',
+    homeLabel: 'Back to all experiences',
+  },
+  es: {
+    meetSaunas: 'Descubre las saunas',
+    entirelyYours: 'Todo para vosotros',
+    privateSauna: 'Sauna privada',
+    aaltoAlts: [
+      'Sauna Aalto sobre el hielo cubierto de nieve',
+      'Interior de la sauna de leña Aalto',
+      'Terraza de Aalto junto al mar',
+      'Comida cocinándose en la parrilla de Aalto',
+    ],
+    chooseAalto: 'Elegir Aalto',
+    virtaAlts: [
+      'Sauna flotante Virta en aguas tranquilas',
+      'Interior de la sauna de leña Virta',
+      'Bancos de madera en el interior de Virta',
+      'Virta en el muelle nevado al atardecer',
+    ],
+    chooseVirta: 'Elegir Virta',
+    privateSessions: 'Sesiones privadas',
+    rhythmImageAlt: 'Una persona volviendo del mar a la terraza de la sauna',
+    rhythmCaption: 'Calienta. Refréscate. Repite.',
+    rhythmEyebrow: 'Dos horas a tu propio ritmo',
+    closingEyebrow: 'La forma más sencilla de disfrutar de la sauna',
+    closingTitle: 'Una sesión de sauna privada es una forma sencilla de disfrutar de la naturaleza, el mar y la sauna.',
+    closingParagraphs: [
+      'Nuestro servicio se basa en un trato cercano, instalaciones funcionales y un ambiente rústico. En nuestras sesiones privadas no hay lujos innecesarios: la experiencia recuerda a una escapada a una cabaña, pero sin conducir, calentar la sauna, abrir un agujero en el hielo ni transportar leña. De todo eso nos ocupamos nosotros.',
+      '¿Vienes solo o en pareja? Echa un vistazo a nuestras sesiones públicas de sauna.',
+    ],
+    publicSaunaHref: '/es/julkinen-sauna/',
+    publicSaunaLabel: 'Ver las sesiones públicas de sauna',
+    bookingEyebrow: '¿Aalto o Virta?',
+    bookingTitle: 'Ahora, a disfrutar de la sauna',
+    bookingText: 'Reserva la sauna más natural de Helsinki para tu grupo.',
+    homeHref: '/es/',
+    homeLabel: 'Volver a todas las experiencias',
+  },
+  fr: {
+    meetSaunas: 'Découvrir les saunas',
+    entirelyYours: 'Rien que pour vous',
+    privateSauna: 'Sauna privé',
+    aaltoAlts: [
+      'Sauna Aalto sur la glace enneigée',
+      'Intérieur du sauna Aalto chauffé au bois',
+      'Terrasse d’Aalto au bord de la mer',
+      'Plats cuisant sur le grill d’Aalto',
+    ],
+    chooseAalto: 'Choisir Aalto',
+    virtaAlts: [
+      'Sauna flottant Virta sur une eau calme',
+      'Intérieur du sauna Virta chauffé au bois',
+      'Bancs en bois à l’intérieur de Virta',
+      'Virta au ponton enneigé au coucher du soleil',
+    ],
+    chooseVirta: 'Choisir Virta',
+    privateSessions: 'Séances privées',
+    rhythmImageAlt: 'Retour de la mer vers la terrasse du sauna',
+    rhythmCaption: 'Réchauffez-vous. Rafraîchissez-vous. Recommencez.',
+    rhythmEyebrow: 'Deux heures à votre rythme',
+    closingEyebrow: 'Le sauna en toute simplicité',
+    closingTitle: 'Une séance de sauna privée est une manière simple de profiter de la nature, de la mer et du sauna.',
+    closingParagraphs: [
+      'Notre service repose sur un accueil chaleureux, des installations fonctionnelles et une ambiance rustique. Nos séances privées ne sont pas sophistiquées à l’excès : l’expérience rappelle un séjour dans un chalet, mais sans trajet en voiture, sans devoir chauffer le sauna, creuser un trou dans la glace ni porter du bois. Nous nous occupons de tout cela.',
+      'Vous venez seul ou à deux ? Découvrez nos séances publiques de sauna.',
+    ],
+    publicSaunaHref: '/fr/julkinen-sauna/',
+    publicSaunaLabel: 'Voir les séances publiques de sauna',
+    bookingEyebrow: 'Aalto ou Virta ?',
+    bookingTitle: 'Et maintenant, place au sauna',
+    bookingText: 'Réservez le sauna le plus naturel de Helsinki pour votre groupe.',
+    homeHref: '/fr/',
+    homeLabel: 'Retour à toutes les expériences',
+  },
+  de: {
+    meetSaunas: 'Die Saunen entdecken',
+    entirelyYours: 'Ganz für euch allein',
+    privateSauna: 'Private Sauna',
+    aaltoAlts: [
+      'Die Sauna Aalto auf schneebedecktem Eis',
+      'Innenraum der holzbeheizten Aalto-Sauna',
+      'Aaltos Terrasse am Meer',
+      'Speisen auf dem Aalto-Grill',
+    ],
+    chooseAalto: 'Aalto wählen',
+    virtaAlts: [
+      'Schwimmende Virta-Sauna auf ruhigem Wasser',
+      'Innenraum der holzbeheizten Virta-Sauna',
+      'Holzbänke in der Virta',
+      'Virta bei Sonnenuntergang am verschneiten Steg',
+    ],
+    chooseVirta: 'Virta wählen',
+    privateSessions: 'Private Saunatermine',
+    rhythmImageAlt: 'Ein Gast kehrt vom Meer auf die Saunaterrasse zurück',
+    rhythmCaption: 'Aufwärmen. Abkühlen. Wiederholen.',
+    rhythmEyebrow: 'Zwei Stunden in eurem eigenen Tempo',
+    closingEyebrow: 'Der einfache Weg in die Sauna',
+    closingTitle: 'Eine private Saunasession ist eine unkomplizierte Möglichkeit, Natur, Meer und Sauna zu genießen.',
+    closingParagraphs: [
+      'Im Mittelpunkt unseres Angebots stehen herzlicher Service, funktionierende Einrichtungen und eine rustikale Atmosphäre. Bei unseren privaten Saunagängen ist nichts übermäßig fein – das Erlebnis fühlt sich an wie ein Ausflug zur Hütte, nur ohne Anfahrt, Saunaheizen, Eislochsägen und Holztragen. Darum kümmern wir uns.',
+      'Kommst du allein oder zu zweit? Dann schau dir unsere öffentlichen Saunagänge an.',
+    ],
+    publicSaunaHref: '/de/julkinen-sauna/',
+    publicSaunaLabel: 'Öffentliche Saunagänge ansehen',
+    bookingEyebrow: 'Aalto oder Virta?',
+    bookingTitle: 'Jetzt ist Saunazeit',
+    bookingText: 'Buche die natürlichste Sauna Helsinkis für deine Gruppe.',
+    homeHref: '/de/',
+    homeLabel: 'Zurück zu allen Erlebnissen',
+  },
+} as const;
+
 export default function VibeavantoContent({ data, locale }: { data: VibePageData; locale: Locale }) {
-  const isEn = locale === 'en';
+  const copy = avantoCopy[locale];
   const bookingHref = '#varaus';
   const [aalto, virta, included] = data.features;
 
@@ -27,12 +210,12 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
               {data.ctaLabel}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>
             <a className="vibe-avanto-text-link" href="#lautat">
-              {isEn ? 'Meet the saunas' : 'Tutustu lautoihin'}<ArrowDown size={16} aria-hidden="true" />
+              {copy.meetSaunas}<ArrowDown size={16} aria-hidden="true" />
             </a>
           </div>
           <p className="vibe-avanto-hero-footnote">
             <span aria-hidden="true">02 h</span>
-            {isEn ? 'Entirely yours' : 'Kokonaan teidän'}
+            {copy.entirelyYours}
           </p>
         </div>
         <div className="vibe-avanto-hero-visual">
@@ -48,7 +231,7 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
           <p className="vibe-avanto-hero-caption">Aalto <span>/</span> Virta</p>
           <div className="vibe-avanto-hero-stamp" aria-hidden="true">
             <span>01</span>
-            <span>{isEn ? 'Private sauna' : 'Yksityinen sauna'}</span>
+            <span>{copy.privateSauna}</span>
           </div>
         </div>
       </section>
@@ -70,10 +253,10 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
             locale={locale}
             sizes="(max-width: 760px) calc(100vw - 44px), 55vw"
             images={[
-              { src: '/images/vibe-hero-upright.webp', alt: isEn ? 'Aalto sauna on snowy ice' : 'Aalto-saunalautta lumisella jäällä' },
-              { src: '/images/aalto-08.webp', alt: isEn ? 'Inside the Aalto wood-fired sauna' : 'Aallon puulämmitteisen saunan sisätila' },
-              { src: '/images/gallery-aalto-7547.webp', alt: isEn ? 'Aalto terrace by the sea' : 'Aallon terassi meren äärellä' },
-              { src: '/images/aalto-07.webp', alt: isEn ? 'Food cooking on the Aalto grill' : 'Eväitä Aallon grillissä' },
+              { src: '/images/vibe-hero-upright.webp', alt: copy.aaltoAlts[0] },
+              { src: '/images/aalto-08.webp', alt: copy.aaltoAlts[1] },
+              { src: '/images/gallery-aalto-7547.webp', alt: copy.aaltoAlts[2] },
+              { src: '/images/aalto-07.webp', alt: copy.aaltoAlts[3] },
             ]}
           />
           <div className="vibe-avanto-aalto-copy">
@@ -82,7 +265,7 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
             <h3 id="vibe-avanto-aalto-title">{aalto.title}</h3>
             <p>{aalto.text}</p>
             <Link href={bookingHref} className="vibe-avanto-inline-link">
-              {isEn ? 'Choose Aalto' : 'Valitse Aalto'}<ArrowRight size={17} aria-hidden="true" />
+              {copy.chooseAalto}<ArrowRight size={17} aria-hidden="true" />
             </Link>
           </div>
         </article>
@@ -97,7 +280,7 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
               <h3 id="vibe-avanto-virta-title">{virta.title}</h3>
               <p>{virta.text}</p>
               <Link href={bookingHref} className="vibe-avanto-inline-link">
-                {isEn ? 'Choose Virta' : 'Valitse Virta'}<ArrowRight size={17} aria-hidden="true" />
+                {copy.chooseVirta}<ArrowRight size={17} aria-hidden="true" />
               </Link>
             </div>
             <VibeBoatGallery
@@ -107,10 +290,10 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
               locale={locale}
               sizes="(max-width: 760px) calc(100vw - 44px), 48vw"
               images={[
-                { src: '/images/virta-stern-calm.webp', alt: isEn ? 'Virta floating sauna in calm water' : 'Virta-saunalautta tyynessä vedessä' },
-                { src: '/images/virta-02.webp', alt: isEn ? 'Inside the Virta wood-fired sauna' : 'Virran puulämmitteisen saunan sisätila' },
-                { src: '/images/virta-04.webp', alt: isEn ? 'Wooden benches inside Virta' : 'Virran puiset lauteet' },
-                { src: '/images/gallery-winter-sunset.webp', alt: isEn ? 'Virta at the snowy dock at sunset' : 'Virta lumisella laiturilla auringonlaskussa' },
+                { src: '/images/virta-stern-calm.webp', alt: copy.virtaAlts[0] },
+                { src: '/images/virta-02.webp', alt: copy.virtaAlts[1] },
+                { src: '/images/virta-04.webp', alt: copy.virtaAlts[2] },
+                { src: '/images/gallery-winter-sunset.webp', alt: copy.virtaAlts[3] },
               ]}
             />
           </div>
@@ -129,7 +312,7 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
         <section className="vibe-avanto-pricing" aria-labelledby="vibe-avanto-pricing-title">
           <div className="vibe-avanto-pricing-inner">
             <div className="vibe-avanto-pricing-heading">
-              <p className="vibe-avanto-eyebrow">{isEn ? 'Private sessions' : 'Yksityisvuorot'}</p>
+              <p className="vibe-avanto-eyebrow">{copy.privateSessions}</p>
               <h2 id="vibe-avanto-pricing-title">{data.priceTitle}</h2>
               {data.priceNote && <p>{data.priceNote}</p>}
             </div>
@@ -151,14 +334,14 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
           <div className="vibe-avanto-rhythm-image">
             <Image
               src="/images/gallery-ice-swimming.webp"
-              alt={isEn ? 'A guest returning from the sea to the sauna terrace' : 'Saunoja palaamassa merestä saunan terassille'}
+              alt={copy.rhythmImageAlt}
               fill
               sizes="(max-width: 760px) calc(100vw - 44px), 38vw"
             />
-            <p>{isEn ? 'Warm up. Cool down. Repeat.' : 'Lämmitä. Vilvoittele. Toista.'}</p>
+            <p>{copy.rhythmCaption}</p>
           </div>
           <div className="vibe-avanto-rhythm-copy">
-            <p className="vibe-avanto-eyebrow">{isEn ? 'Two hours at your own pace' : 'Kaksi tuntia omaan tahtiin'}</p>
+            <p className="vibe-avanto-eyebrow">{copy.rhythmEyebrow}</p>
             <h2 id="vibe-avanto-rhythm-title">{data.timelineTitle}</h2>
             <ol>
               {data.timeline.map((step) => (
@@ -178,32 +361,26 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
       <VibeBookingFrame kind="winter" locale={locale} />
 
       <VibeClosingSummary
-        eyebrow={isEn ? 'The easy way to sauna' : 'Helppo tapa saunoa'}
-        title={isEn ? 'A private sauna session is an easy way to enjoy nature, the sea and the sauna.' : 'Yksityinen saunavuoro on oiva tapa nauttia luonnosta, merestä ja saunasta matalalla kynnyksellä.'}
-        paragraphs={isEn ? [
-          'At the heart of our service are warm customer care, working facilities and a rustic feel. Nothing about our private sessions is too fancy — the experience is like a cottage getaway, but without the drive, heating the sauna, cutting the ice hole or carrying wood. We take care of those.',
-          'Coming alone or as a pair? Take a look at our public sauna sessions.',
-        ] : [
-          'Meidän palvelun ytimessä on lämmin asiakaspalvelu, toimivat tilat ja rustiikkinen fiilis. Meidän yksityisillä saunavuoroilla ei ole kaikki liian fiiniä, vaan kokemus on mökkimäinen. Kuitenkin ilman ajomatkaa, saunan lämmitystä, avannon sahaamista ja puiden kantoa! Me pidämme niistä huolen.',
-          'Jos olet tulossa yksin tai kaksin, kurkkaa meidän Yleiset saunavuorot.',
-        ]}
+        eyebrow={copy.closingEyebrow}
+        title={copy.closingTitle}
+        paragraphs={[...copy.closingParagraphs]}
         links={[
-          { href: isEn ? '/en/public-sauna-helsinki/' : '/julkinen-sauna/', label: isEn ? 'See public sauna sessions' : 'Kurkkaa yleiset saunavuorot' },
+          { href: copy.publicSaunaHref, label: copy.publicSaunaLabel },
         ]}
       />
 
       <section className="vibe-avanto-booking" aria-labelledby="vibe-avanto-booking-title">
-        <p className="vibe-avanto-eyebrow">{isEn ? 'Aalto or Virta?' : 'Aalto vai Virta?'}</p>
+        <p className="vibe-avanto-eyebrow">{copy.bookingEyebrow}</p>
         <h2 id="vibe-avanto-booking-title">
-          {isEn ? 'Let’s sauna now' : 'Ny Saunotaan'}
+          {copy.bookingTitle}
         </h2>
-        <p>{isEn ? 'Book the most natural sauna in Helsinki for your group.' : 'Vuokraa luonnollisin sauna Helsingissä'}</p>
+        <p>{copy.bookingText}</p>
         <div className="vibe-avanto-booking-actions">
           <Link className="vibe-avanto-booking-link" href={bookingHref}>
             <span>{data.ctaLabel}</span><ArrowUpRight aria-hidden="true" />
           </Link>
-          <Link className="vibe-avanto-home-link" href={locale === 'en' ? '/en/' : '/'}>
-            {isEn ? 'Back to all experiences' : 'Takaisin elämyksiin'}<ArrowRight size={17} aria-hidden="true" />
+          <Link className="vibe-avanto-home-link" href={copy.homeHref}>
+            {copy.homeLabel}<ArrowRight size={17} aria-hidden="true" />
           </Link>
         </div>
       </section>
