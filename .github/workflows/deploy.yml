@@ -21,7 +21,9 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run cf:build
+        run: |
+          NEXT_PRIVATE_STANDALONE=true npx next build --webpack
+          npx opennextjs-cloudflare build --skipNextBuild
 
       - name: Deploy
         run: npx wrangler deploy

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { booklaFetch, getBooklaConfig } from '../../lib/bookla-fetch';
-import { WINTER_SERVICE_ID } from '../dates/route';
+
+const WINTER_SERVICE_ID = '8ecd1d49-ae5b-4c56-a62d-2cffb2314143';
 
 const TIME_ZONE = 'Europe/Helsinki';
 
