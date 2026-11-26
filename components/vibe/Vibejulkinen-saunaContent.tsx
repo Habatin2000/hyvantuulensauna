@@ -14,6 +14,8 @@ import '../../app/vibe/julkinen-sauna.css';
 
 const copyByLocale = {
   fi: {
+    publicIntroTitle: 'Hyvän Tuulen Saunan julkiset saunavuorot:',
+    publicIntroText: 'Hyvän Tuulen Sauna on järjestänyt julkisia saunavuoroja vuoden ympäri vuodesta 2023! Meille tärkeintä julkisilla vuoroilla on hyvät saunat, rento tunnelma ja ystävällinen palvelu. Kaksi pukkaria, kaksi saunaa, kaksi avantoa. Homma toimii ja ihmiset nauttii. Tervetuloa❤️',
     heroNote: 'Yksin, kaksin tai kaveriporukalla',
     heroLocation: 'Puotila · Helsinki · Meren äärellä',
     explore: 'Katso, mitä vuoroon kuuluu',
@@ -66,6 +68,8 @@ const copyByLocale = {
     bookPrivate: 'Varaa yksityinen vuoro',
   },
   en: {
+    publicIntroTitle: 'Public sauna sessions at Hyvän Tuulen Sauna:',
+    publicIntroText: 'Hyvän Tuulen Sauna has been organising public sauna sessions all year round since 2023! At our public sessions, what matters most to us is great saunas, a relaxed atmosphere and friendly service. Two changing rooms, two saunas, two ice holes. It all works, and people love it. Welcome ❤️',
     heroNote: 'Alone, together or with friends',
     heroLocation: 'Puotila · Helsinki · By the sea',
     explore: 'See what is included',
@@ -118,6 +122,8 @@ const copyByLocale = {
     bookPrivate: 'Book a private session',
   },
   es: {
+    publicIntroTitle: 'Sesiones públicas de sauna en Hyvän Tuulen Sauna:',
+    publicIntroText: 'Hyvän Tuulen Sauna organiza sesiones públicas de sauna durante todo el año desde 2023. En nuestras sesiones públicas, lo más importante para nosotros es ofrecer buenas saunas, un ambiente relajado y un servicio amable. Dos vestuarios, dos saunas y dos agujeros en el hielo. Todo funciona y la gente disfruta. ¡Te damos la bienvenida! ❤️',
     heroNote: 'Solo, en pareja o con amigos',
     heroLocation: 'Puotila · Helsinki · Junto al mar',
     explore: 'Descubre qué incluye la sesión',
@@ -170,6 +176,8 @@ const copyByLocale = {
     bookPrivate: 'Reserva una sesión privada',
   },
   fr: {
+    publicIntroTitle: 'Séances publiques de sauna à Hyvän Tuulen Sauna :',
+    publicIntroText: 'Hyvän Tuulen Sauna organise des séances publiques de sauna toute l’année depuis 2023 ! Lors de nos séances publiques, l’essentiel pour nous est de proposer de bons saunas, une ambiance détendue et un accueil chaleureux. Deux vestiaires, deux saunas, deux trous dans la glace. Tout fonctionne et les gens s’y plaisent. Bienvenue ❤️',
     heroNote: 'Seul, à deux ou entre amis',
     heroLocation: 'Puotila · Helsinki · Au bord de la mer',
     explore: 'Découvrir ce que comprend la séance',
@@ -222,6 +230,8 @@ const copyByLocale = {
     bookPrivate: 'Réserver une séance privée',
   },
   de: {
+    publicIntroTitle: 'Öffentliche Saunazeiten bei Hyvän Tuulen Sauna:',
+    publicIntroText: 'Hyvän Tuulen Sauna veranstaltet seit 2023 das ganze Jahr über öffentliche Saunazeiten! Bei unseren öffentlichen Saunazeiten sind uns gute Saunen, eine entspannte Atmosphäre und freundlicher Service am wichtigsten. Zwei Umkleiden, zwei Saunen, zwei Eislöcher. Alles funktioniert und die Menschen genießen es. Willkommen ❤️',
     heroNote: 'Allein, zu zweit oder mit Freunden',
     heroLocation: 'Puotila · Helsinki · Am Meer',
     explore: 'Entdecke, was im Termin enthalten ist',
@@ -327,45 +337,11 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
         </div>
       </section>
 
-      <section id="sisalto" className="vibe-julkinen-sauna-included" aria-labelledby="vibe-julkinen-sauna-included-title">
-        <div className="vibe-julkinen-sauna-section-heading">
-          <div>
-            <p className="vibe-julkinen-sauna-eyebrow">{data.detailEyebrow}</p>
-            <h2 id="vibe-julkinen-sauna-included-title">{data.detailTitle}</h2>
-          </div>
-          <p>{data.detailText}</p>
-        </div>
-
-        <div className="vibe-julkinen-sauna-included-layout">
-          <figure className="vibe-julkinen-sauna-included-figure">
-            <div className="vibe-julkinen-sauna-included-photo">
-              <Image
-                src="/images/gallery-sauna-interior.webp"
-                alt={copy.interiorAlt}
-                fill
-                sizes="(max-width: 760px) 100vw, 38vw"
-              />
-            </div>
-            <div className="vibe-julkinen-sauna-time-stamp" aria-label={copy.twoHoursLabel}>
-              <strong>2 h</strong>
-              <span>{copy.session}</span>
-            </div>
-            <figcaption>{copy.photoCaption}</figcaption>
-          </figure>
-
-          <ol className="vibe-julkinen-sauna-included-list">
-            {data.features.map((feature) => (
-              <li key={feature.number}>
-                <span>{feature.number}</span>
-                <div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
+      <section className="vibe-julkinen-sauna-public-intro" aria-labelledby="vibe-julkinen-sauna-public-intro-title">
+        <h2 id="vibe-julkinen-sauna-public-intro-title">{copy.publicIntroTitle}</h2>
+        <p>{copy.publicIntroText}</p>
       </section>
+
 
       <section className="vibe-julkinen-sauna-winter-gallery" aria-label={copy.winterGalleryAria}>
         <VibeWinterGallery
@@ -383,6 +359,8 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
           ]}
         />
       </section>
+
+      <VibeBookingFrame kind="public" locale={locale} />
 
       <section className="vibe-julkinen-sauna-pricing" aria-labelledby="vibe-julkinen-sauna-pricing-title">
         <div className="vibe-julkinen-sauna-pricing-inner">
@@ -418,8 +396,6 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
           {data.priceNote && <p className="vibe-julkinen-sauna-price-note">{data.priceNote}</p>}
         </div>
       </section>
-
-      <VibeBookingFrame kind="public" locale={locale} />
 
       <section className="vibe-julkinen-sauna-visit" aria-labelledby="vibe-julkinen-sauna-visit-title">
         <div className="vibe-julkinen-sauna-visit-copy">

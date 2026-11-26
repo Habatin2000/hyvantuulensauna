@@ -248,6 +248,30 @@
   line-height: 1.55;
 }
 
+.vibe-julkinen-sauna-public-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  width: min(100%, var(--vibe-width));
+  margin: 0 auto;
+  padding: clamp(3.5rem, 6vw, 5rem) var(--julkinen-gutter);
+}
+
+.vibe-julkinen-sauna-public-intro h2 {
+  max-width: 560px;
+  font-size: clamp(1.75rem, 2.7vw, 2.5rem);
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.vibe-julkinen-sauna-public-intro p {
+  max-width: 680px;
+  color: var(--julkinen-muted);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.75;
+}
+
 .vibe-julkinen-sauna-included {
   max-width: var(--vibe-width);
   margin: 0 auto;
@@ -868,6 +892,16 @@
     gap: 16px;
   }
 
+  .vibe-julkinen-sauna-public-intro {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .vibe-julkinen-sauna-public-intro h2,
+  .vibe-julkinen-sauna-public-intro p {
+    max-width: 720px;
+  }
+
   .vibe-julkinen-sauna-section-heading,
   .vibe-julkinen-sauna-pricing-heading {
     grid-template-columns: 1fr;
@@ -945,6 +979,21 @@
   .vibe-julkinen-sauna-admission {
     bottom: 24px;
     left: var(--julkinen-gutter);
+  }
+
+  .vibe-julkinen-sauna-public-intro {
+    gap: 16px;
+    padding: 48px var(--julkinen-gutter);
+  }
+
+  .vibe-julkinen-sauna-public-intro h2 {
+    font-size: clamp(1.6rem, 7vw, 1.9rem);
+    line-height: 1.25;
+  }
+
+  .vibe-julkinen-sauna-public-intro p {
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   .vibe-julkinen-sauna-included {
