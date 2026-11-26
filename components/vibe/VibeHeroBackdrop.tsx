@@ -50,7 +50,6 @@ export default function VibeHeroBackdrop({ tone = 'blue' }: { tone?: 'blue' | 'd
         src={images[index].src}
         alt=""
         fill
-        priority={index === 0}
         sizes="100vw"
       />
     </div>

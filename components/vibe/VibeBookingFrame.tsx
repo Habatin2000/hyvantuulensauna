@@ -78,11 +78,11 @@ const copy = {
       de: 'Wähle Sauna, Datum und Uhrzeit',
     },
     text: {
-      fi: 'Aalto tai Virta kahdeksi tunniksi kokonaan itsellesi. Avanto sisältyy hintaan.',
-      en: 'Aalto or Virta for two hours, entirely yours. The ice hole is included.',
-      es: 'Aalto o Virta durante dos horas, en exclusiva para ti. El baño en agua helada está incluido.',
-      fr: 'Aalto ou Virta pendant deux heures, rien que pour vous. Le bain en eau glacée est inclus.',
-      de: 'Aalto oder Virta für zwei Stunden ganz für dich. Das Eisloch ist inklusive.',
+      fi: 'Aalto tai Virta kahdeksi tunniksi kokonaan itsellesi. Avantouinti sisältyy hintaan.',
+      en: 'Aalto or Virta for two hours, all to yourself. Ice swimming is included in the price.',
+      es: 'Aalto o Virta durante dos horas, en exclusiva para ti. El baño en agua helada está incluido en el precio.',
+      fr: 'Aalto ou Virta pendant deux heures, rien que pour vous. Le bain en eau glacée est inclus dans le prix.',
+      de: 'Aalto oder Virta für zwei Stunden ganz für dich. Eisbaden ist im Preis enthalten.',
     },
   },
 } as const;

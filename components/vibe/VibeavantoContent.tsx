@@ -7,6 +7,7 @@ import VibeBookingFrame from './VibeBookingFrame';
 import VibeBoatGallery from './VibeBoatGallery';
 import VibeClosingSummary from './VibeClosingSummary';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
+import { getVibeRoute } from './routes';
 import '../../app/vibe/avanto.css';
 
 const avantoCopy = {
@@ -35,7 +36,7 @@ const avantoCopy = {
     closingEyebrow: 'Helppo tapa saunoa',
     closingTitle: 'Yksityinen saunavuoro on oiva tapa nauttia luonnosta, merestä ja saunasta matalalla kynnyksellä.',
     closingParagraphs: [
-      'Meidän palvelun ytimessä on lämmin asiakaspalvelu, toimivat tilat ja rustiikkinen fiilis. Meidän yksityisillä saunavuoroilla ei ole kaikki liian fiiniä, vaan kokemus on mökkimäinen. Kuitenkin ilman ajomatkaa, saunan lämmitystä, avannon sahaamista ja puiden kantoa! Me pidämme niistä huolen.',
+      'Palvelun ytimessä ovat lämmin asiakaspalvelu, toimivat tilat ja rustiikkinen fiilis. Yksityisellä saunavuorolla ei tarvitse olla turhan fiini: kokemus on mökkimäinen, mutta ilman ajomatkaa, saunan lämmittämistä, avannon sahaamista tai puiden kantoa. Me hoidamme kaiken valmiiksi, joten pääset heti saunomaan ja avantouimaan Helsingissä.',
       'Jos olet tulossa yksin tai kaksin, kurkkaa meidän Yleiset saunavuorot.',
     ],
     publicSaunaHref: '/julkinen-sauna/',
@@ -71,7 +72,7 @@ const avantoCopy = {
     closingEyebrow: 'The easy way to sauna',
     closingTitle: 'A private sauna session is an easy way to enjoy nature, the sea and the sauna.',
     closingParagraphs: [
-      'At the heart of our service are warm customer care, working facilities and a rustic feel. Nothing about our private sessions is too fancy — the experience is like a cottage getaway, but without the drive, heating the sauna, cutting the ice hole or carrying wood. We take care of those.',
+      'At the heart of our service are warm hospitality, well-functioning facilities and a rustic atmosphere. A private sauna session does not need to be overly fancy: you get the feel of a cottage escape, but without the drive, heating the sauna, cutting a hole in the ice or carrying firewood. We have everything ready for you, so you can get straight to the sauna and ice swimming in Helsinki.',
       'Coming alone or as a pair? Take a look at our public sauna sessions.',
     ],
     publicSaunaHref: '/en/public-sauna-helsinki/',
@@ -107,10 +108,10 @@ const avantoCopy = {
     closingEyebrow: 'La forma más sencilla de disfrutar de la sauna',
     closingTitle: 'Una sesión de sauna privada es una forma sencilla de disfrutar de la naturaleza, el mar y la sauna.',
     closingParagraphs: [
-      'Nuestro servicio se basa en un trato cercano, instalaciones funcionales y un ambiente rústico. En nuestras sesiones privadas no hay lujos innecesarios: la experiencia recuerda a una escapada a una cabaña, pero sin conducir, calentar la sauna, abrir un agujero en el hielo ni transportar leña. De todo eso nos ocupamos nosotros.',
+      'Nuestro servicio se centra en un trato cercano, unas instalaciones funcionales y un ambiente rústico. En una sesión privada de sauna no hacen falta lujos innecesarios: la experiencia es como una escapada a una cabaña, pero sin el trayecto en coche, sin calentar la sauna, sin abrir un agujero en el hielo ni cargar leña. Lo dejamos todo listo para que puedas disfrutar enseguida de la sauna y de un baño en agua helada en Helsinki.',
       '¿Vienes solo o en pareja? Echa un vistazo a nuestras sesiones públicas de sauna.',
     ],
-    publicSaunaHref: '/es/julkinen-sauna/',
+    publicSaunaHref: getVibeRoute('julkinen-sauna', 'es'),
     publicSaunaLabel: 'Ver las sesiones públicas de sauna',
     bookingEyebrow: '¿Aalto o Virta?',
     bookingTitle: 'Ahora, a disfrutar de la sauna',
@@ -143,10 +144,10 @@ const avantoCopy = {
     closingEyebrow: 'Le sauna en toute simplicité',
     closingTitle: 'Une séance de sauna privée est une manière simple de profiter de la nature, de la mer et du sauna.',
     closingParagraphs: [
-      'Notre service repose sur un accueil chaleureux, des installations fonctionnelles et une ambiance rustique. Nos séances privées ne sont pas sophistiquées à l’excès : l’expérience rappelle un séjour dans un chalet, mais sans trajet en voiture, sans devoir chauffer le sauna, creuser un trou dans la glace ni porter du bois. Nous nous occupons de tout cela.',
+      'Au cœur de notre service se trouvent un accueil chaleureux, des installations fonctionnelles et une ambiance rustique. Lors d’une séance de sauna privée, nul besoin d’en faire trop : l’expérience a le charme d’un séjour au chalet, sans le trajet en voiture, sans chauffer le sauna, sans scier un trou dans la glace ni porter le bois. Nous préparons tout pour que vous puissiez profiter immédiatement du sauna et d’un bain en eau glacée à Helsinki.',
       'Vous venez seul ou à deux ? Découvrez nos séances publiques de sauna.',
     ],
-    publicSaunaHref: '/fr/julkinen-sauna/',
+    publicSaunaHref: getVibeRoute('julkinen-sauna', 'fr'),
     publicSaunaLabel: 'Voir les séances publiques de sauna',
     bookingEyebrow: 'Aalto ou Virta ?',
     bookingTitle: 'Et maintenant, place au sauna',
@@ -179,10 +180,10 @@ const avantoCopy = {
     closingEyebrow: 'Der einfache Weg in die Sauna',
     closingTitle: 'Eine private Saunasession ist eine unkomplizierte Möglichkeit, Natur, Meer und Sauna zu genießen.',
     closingParagraphs: [
-      'Im Mittelpunkt unseres Angebots stehen herzlicher Service, funktionierende Einrichtungen und eine rustikale Atmosphäre. Bei unseren privaten Saunagängen ist nichts übermäßig fein – das Erlebnis fühlt sich an wie ein Ausflug zur Hütte, nur ohne Anfahrt, Saunaheizen, Eislochsägen und Holztragen. Darum kümmern wir uns.',
+      'Im Mittelpunkt unseres Angebots stehen herzlicher Service, funktionierende Einrichtungen und eine rustikale Atmosphäre. Bei einer privaten Saunasession kommt es nicht auf unnötigen Luxus an: Das Erlebnis ist so urig wie auf einer Hütte, nur ohne Anfahrt, Saunaheizen, Eislochsägen und Holztragen. Wir bereiten alles vor, damit du in Helsinki sofort saunieren und im eiskalten Wasser baden kannst.',
       'Kommst du allein oder zu zweit? Dann schau dir unsere öffentlichen Saunagänge an.',
     ],
-    publicSaunaHref: '/de/julkinen-sauna/',
+    publicSaunaHref: getVibeRoute('julkinen-sauna', 'de'),
     publicSaunaLabel: 'Öffentliche Saunagänge ansehen',
     bookingEyebrow: 'Aalto oder Virta?',
     bookingTitle: 'Jetzt ist Saunazeit',

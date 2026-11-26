@@ -83,6 +83,7 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const firstLink = useRef<HTMLAnchorElement>(null);
+  const languageDetails = useRef<HTMLDetailsElement>(null);
   const c = headerCopy[locale];
   const home = getVibeRoute('home', locale);
   const bookingHref = isVibeBookingPathname(pathname) ? `${pathname}#varaus` : getVibeBookingRoute('avanto', locale);
@@ -100,7 +101,13 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
     document.body.classList.toggle('vibe-nav-open', open);
     if (open) firstLink.current?.focus();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key === 'Escape') {
+        setOpen(false);
+        if (languageDetails.current?.open) {
+          languageDetails.current.open = false;
+          languageDetails.current.querySelector('summary')?.focus();
+        }
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => {
@@ -122,8 +129,12 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
           ))}
         </nav>
         <div className="vibe-header-actions">
-          <details className="vibe-language">
-            <summary aria-label={c.languageSelector} title={c.languageSelector}>
+          <details className="vibe-language" ref={languageDetails}>
+            <summary
+              aria-label={c.languageSelector}
+              title={c.languageSelector}
+              onClick={() => setOpen(false)}
+            >
               {locale.toUpperCase()}
               <ChevronDown size={13} aria-hidden="true" />
             </summary>
@@ -136,6 +147,10 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
                   hrefLang={option}
                   lang={option}
                   aria-current={option === locale ? 'page' : undefined}
+                  onClick={() => {
+                    setOpen(false);
+                    if (languageDetails.current) languageDetails.current.open = false;
+                  }}
                 >
                   <span>{languageNames[option]}</span>
                   <span>{option.toUpperCase()}</span>
@@ -153,7 +168,10 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
             aria-label={open ? c.closeMenu : c.openMenu}
             aria-expanded={open}
             aria-controls="vibe-mobile-menu"
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => {
+              if (languageDetails.current) languageDetails.current.open = false;
+              setOpen((value) => !value);
+            }}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -177,22 +195,6 @@ export default function VibeHeader({ locale }: { locale: Locale }) {
             {c.mobileBook}
             <ArrowUpRight aria-hidden="true" />
           </Link>
-          <div className="vibe-mobile-languages" role="group" aria-label={c.languageSelector}>
-            {locales.map((option) => (
-              <Link
-                key={option}
-                className="vibe-mobile-language"
-                href={getVibeLanguageSwitch(pathname, option)}
-                hrefLang={option}
-                lang={option}
-                aria-current={option === locale ? 'page' : undefined}
-                onClick={() => setOpen(false)}
-              >
-                {option.toUpperCase()}
-                <span className="sr-only">{languageNames[option]}</span>
-              </Link>
-            ))}
-          </div>
         </nav>
       </div>
     </header>

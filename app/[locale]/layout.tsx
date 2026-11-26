@@ -4,7 +4,6 @@ import { Quicksand, Corben, Pacifico } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import { getMessages } from 'next-intl/server';
 import "../globals.css";
 import "../vibe/vibe.css";
 import VibeHeader from "@/components/vibe/VibeHeader";
@@ -121,8 +120,8 @@ export async function generateMetadata({
       images: [
         {
           url: "/images/gallery-raft-sunset.webp",
-          width: 1200,
-          height: 630,
+          width: 1920,
+          height: 2559,
           alt: imageAlt,
         },
       ],
@@ -167,7 +166,7 @@ export default async function LocaleLayout({
   }
 
   // Providing all messages to the client side is the easiest way to get started
-  const messages = await getMessages();
+  const messages = (await import(`@/messages/${locale}.json`)).default;
 
   return (
     <html lang={locale} data-scroll-behavior="smooth">

@@ -11,6 +11,7 @@ import {
   getLocalizedPageUrl,
   getOpenGraphLocale,
   normalizePageLocale,
+  ORGANIZATION_ID,
 } from '../schema';
 import { SITE_URL } from '@/lib/site';
 
@@ -42,8 +43,8 @@ export async function generateMetadata({
       images: [
         {
           url: PAGE_IMAGE,
-          width: 1200,
-          height: 630,
+          width: 1116,
+          height: 583,
           alt: data.imageAlt,
         },
       ],
@@ -82,8 +83,8 @@ export default async function LocationPage({
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `${SITE_URL}/#location`,
-    name: data.title,
+    '@id': ORGANIZATION_ID,
+    name: 'Hyvän Tuulen Sauna',
     description: data.description,
     url: pageUrl,
     address: {

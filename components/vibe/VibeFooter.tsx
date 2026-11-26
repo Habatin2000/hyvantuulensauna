@@ -22,6 +22,7 @@ export default function VibeFooter({ locale }: { locale: Locale }) {
           <span>Hyvän Tuulen Sauna</span>
         </Link>
         <p>{c.footerNote}</p>
+        <p><a href="mailto:info@hyvantuulensauna.fi">info@hyvantuulensauna.fi</a></p>
       </div>
       <div className="vibe-footer-bottom">
         <p>{c.footerContact}</p>

@@ -10,8 +10,9 @@ import de from '@/messages/de.json';
 const messagesByLocale = { fi, en, es, fr, de } as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {
-  const locale = hasLocale(routing.locales, requestLocale)
-    ? requestLocale
+  const requestedLocale = await requestLocale;
+  const locale = hasLocale(routing.locales, requestedLocale)
+    ? requestedLocale
     : routing.defaultLocale;
 
   return {

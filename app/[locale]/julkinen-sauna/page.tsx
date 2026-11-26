@@ -8,7 +8,6 @@ import {
   generateFAQSchema,
   generateBreadcrumbSchema,
   generateArticleSchema,
-  generateEventSchema,
   generateHowToSchema,
   getHomeLabel,
   getLanguageAlternates,
@@ -22,14 +21,6 @@ const PAGE_PATH = '/julkinen-sauna';
 const PAGE_IMAGE = `${SITE_URL}/images/gallery-ice-swimming.webp`;
 const DATE_PUBLISHED = '2024-01-15';
 const DATE_MODIFIED = '2026-11-03';
-
-const eventLocations = {
-  fi: 'Meripellontien laituri, Puotila',
-  en: 'Meripellontie pier, Puotila',
-  es: 'Embarcadero de Meripellontie, Puotila',
-  fr: 'Quai de Meripellontie, Puotila',
-  de: 'Anleger Meripellontie, Puotila',
-};
 
 const faqItemsByLocale = {
   fi: [
@@ -94,8 +85,8 @@ export async function generateMetadata({
       images: [
         {
           url: PAGE_IMAGE,
-          width: 1200,
-          height: 630,
+          width: 1920,
+          height: 2883,
           alt: data.imageAlt,
         },
       ],
@@ -131,18 +122,6 @@ export default async function PublicSaunaPage({
     DATE_MODIFIED
   );
 
-  const eventSchema = generateEventSchema(
-    data.heroTitle,
-    data.heroText,
-    pageUrl,
-    PAGE_IMAGE,
-    '2026-11-01T09:00:00+02:00',
-    '2027-04-30T21:00:00+03:00',
-    eventLocations[safeLocale],
-    '15',
-    '2026-11-01'
-  );
-
   const howToSchema = generateHowToSchema(
     data.timelineTitle ?? data.detailTitle,
     data.detailText,
@@ -161,7 +140,7 @@ export default async function PublicSaunaPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([serviceSchema, articleSchema, eventSchema, howToSchema, faqSchema, breadcrumbSchema]),
+          __html: JSON.stringify([serviceSchema, articleSchema, howToSchema, faqSchema, breadcrumbSchema]),
         }}
       />
       <VibeInnerPage data={data} locale={safeLocale} slug="julkinen-sauna" />

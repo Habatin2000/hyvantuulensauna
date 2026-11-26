@@ -8,9 +8,11 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [
         '/api/',
-        '/_next/',
         '/kiitos',
         '/en/thank-you',
+        '/es/gracias',
+        '/fr/merci',
+        '/de/danke',
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

@@ -1445,13 +1445,31 @@ html {
   }
 
   .vibe-desktop-nav,
-  .vibe-header-actions > .vibe-book,
-  .vibe-header-actions > .vibe-language {
+  .vibe-header-actions > .vibe-book {
     display: none;
+  }
+
+  .vibe-language summary {
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  .vibe-language-menu {
+    max-width: calc(100vw - 2 * var(--vibe-gutter));
+  }
+
+  .vibe-shell .vibe-language-option {
+    min-height: 44px;
   }
 
   .vibe-menu-button {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .vibe-mobile-menu {
@@ -1511,34 +1529,6 @@ html {
     border: 0;
   }
 
-  .vibe-mobile-languages {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 28px;
-  }
-
-  .vibe-shell .vibe-mobile-language {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 8px 12px;
-    color: var(--vibe-linen);
-    font-family: var(--vibe-font-display), sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    border: 1px solid rgb(243 246 248 / 32%);
-    border-radius: 3px;
-  }
-
-  .vibe-shell .vibe-mobile-language[aria-current='page'] {
-    color: var(--vibe-navy);
-    background: var(--vibe-sand);
-    border-color: var(--vibe-sand);
-  }
-
   .vibe-hero {
     grid-template-columns: 1fr 0.85fr;
   }
@@ -1592,9 +1582,19 @@ html {
     font-size: 16px;
   }
 
+  .vibe-brand {
+    min-width: 0;
+    gap: 10px;
+  }
+
   .vibe-brand span,
   .vibe-footer-brand span {
     font-size: 1.1rem;
+  }
+
+  .vibe-brand span {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .vibe-brand img {
@@ -1752,7 +1752,7 @@ html {
 
 @media (max-width: 420px) {
   .vibe-brand span {
-    max-width: 180px;
+    max-width: min(180px, calc(100vw - 190px));
     font-size: 1rem;
   }
 

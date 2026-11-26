@@ -183,6 +183,7 @@ export default function VibeInnerPage({ data, locale, slug }: { data: VibePageDa
           <div>
             <h2 id="vibe-location-title">{data.mapTitle}</h2>
             <p>{data.mapText}</p>
+            <p><a href="mailto:info@hyvantuulensauna.fi">info@hyvantuulensauna.fi</a></p>
             <Link href={data.ctaHref} className="vibe-journey-link">
               {data.ctaLabel}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>

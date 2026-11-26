@@ -67,8 +67,17 @@ export default function middleware(request: NextRequest) {
   // Legacy blog URLs (?post=...) rendered the homepage on the old site.
   // next.config query-`has` redirects are unreliable for catch-alls in this
   // setup (a key-only condition matched requests without the param too),
-  // so the catch-all lives here where the check is explicit. Specific posts
-  // keep their targeted destinations from next.config.ts.
+  // so the catch-all lives here where the check is explicit. Other specific
+  // posts keep their targeted destinations from next.config.ts.
+  if (
+    pathname === '/en' &&
+    request.nextUrl.searchParams.get('post') === 'saunalauttaristeilyn-kokemukset-helsingissa'
+  ) {
+    return NextResponse.redirect(
+      new URL(getVibeRoute('saunalauttaristeilyt', 'en'), request.url),
+      308
+    );
+  }
   if (request.nextUrl.searchParams.has('post')) {
     const p = pathname;
     const locale = p === '' || p === '/'
@@ -80,6 +89,15 @@ export default function middleware(request: NextRequest) {
         308
       );
     }
+  }
+
+  if (
+    !request.nextUrl.pathname.endsWith('/') &&
+    !request.nextUrl.pathname.startsWith('/.well-known/')
+  ) {
+    const url = new URL(request.url);
+    url.pathname = `${url.pathname}/`;
+    return NextResponse.redirect(url, 308);
   }
 
   const response = intlMiddleware(request);

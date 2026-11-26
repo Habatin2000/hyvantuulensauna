@@ -51,8 +51,8 @@ export async function generateMetadata({
       images: [
         {
           url: "/images/gallery-raft-sunset.webp",
-          width: 1200,
-          height: 630,
+          width: 1920,
+          height: 2559,
           alt: meta.socialImageAlt,
         },
       ],

@@ -5,8 +5,14 @@ const nextConfig: NextConfig = {
   // Image optimization is handled by the OpenNext Cloudflare adapter via the
   // IMAGES binding in wrangler.jsonc (see https://opennext.js.org/cloudflare/howtos/image)
   trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   async redirects() {
     return [
+      {
+        source: '/:file((?!\\.well-known(?:/.*)?)(?:[^/]+/)*[^/]+\\.\\w+)/',
+        destination: '/:file',
+        permanent: true,
+      },
       // Public design-preview URLs resolve to their exact production counterparts.
       { source: '/vibe/', destination: '/', permanent: true },
       { source: '/vibe/en/', destination: '/en/', permanent: true },
@@ -26,22 +32,11 @@ const nextConfig: NextConfig = {
       { source: '/vibe/en/ukk/', destination: '/en/faq/', permanent: true },
       { source: '/vibe/galleria/', destination: '/galleria/', permanent: true },
       { source: '/vibe/en/galleria/', destination: '/en/gallery/', permanent: true },
+      { source: '/fi', destination: '/', permanent: true },
 
       // Legacy blog URLs indexed by Google (?post=... rendered the homepage)
       {
         source: '/',
-        has: [
-          {
-            type: 'query',
-            key: 'post',
-            value: 'saunalauttaristeilyn-kokemukset-helsingissa',
-          },
-        ],
-        destination: '/saunalauttaristeilyt-helsingissa/',
-        permanent: true,
-      },
-      {
-        source: '/en',
         has: [
           {
             type: 'query',
@@ -89,14 +84,13 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        // /yksityissauna merged into the cruises page — keep link equity via 301
         source: '/yksityissauna',
-        destination: '/saunalauttaristeilyt-helsingissa/',
+        destination: '/avanto/',
         permanent: true,
       },
       {
         source: '/en/yksityissauna',
-        destination: '/en/sauna-boat-cruises-helsinki/',
+        destination: '/en/ice-swimming-sauna-helsinki/',
         permanent: true,
       },
       {

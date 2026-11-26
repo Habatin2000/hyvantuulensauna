@@ -2,6 +2,8 @@
 
 import { SITE_URL } from '@/lib/site';
 
+export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+
 export type SchemaLocale = 'fi' | 'en' | 'es' | 'fr' | 'de';
 
 const supportedLocales: SchemaLocale[] = ['fi', 'en', 'es', 'fr', 'de'];
@@ -72,16 +74,18 @@ export const getLocalizedPagePath = (path: string, locale: SchemaLocale) => {
   return `/${locale}${localizedPath === '/' ? '' : localizedPath}`;
 };
 
-export const getLocalizedPageUrl = (path: string, locale: SchemaLocale) =>
-  `${SITE_URL}${getLocalizedPagePath(path, locale)}`;
+export const getLocalizedPageUrl = (path: string, locale: SchemaLocale) => {
+  const localizedPath = getLocalizedPagePath(path, locale);
+  return `${SITE_URL}${localizedPath.endsWith('/') ? localizedPath : `${localizedPath}/`}`;
+};
 
 export const getLanguageAlternates = (path: string) => ({
   'fi-FI': getLocalizedPageUrl(path, 'fi'),
-  'en-US': `${getLocalizedPageUrl(path, 'en')}${path === '/' ? '/' : ''}`,
-  'en-GB': `${getLocalizedPageUrl(path, 'en')}${path === '/' ? '/' : ''}`,
-  'es-ES': `${getLocalizedPageUrl(path, 'es')}${path === '/' ? '/' : ''}`,
-  'fr-FR': `${getLocalizedPageUrl(path, 'fr')}${path === '/' ? '/' : ''}`,
-  'de-DE': `${getLocalizedPageUrl(path, 'de')}${path === '/' ? '/' : ''}`,
+  'en-US': getLocalizedPageUrl(path, 'en'),
+  'en-GB': getLocalizedPageUrl(path, 'en'),
+  'es-ES': getLocalizedPageUrl(path, 'es'),
+  'fr-FR': getLocalizedPageUrl(path, 'fr'),
+  'de-DE': getLocalizedPageUrl(path, 'de'),
   'x-default': getLocalizedPageUrl(path, 'fi'),
 });
 
@@ -165,11 +169,11 @@ export const getOrganizationSchema = (locale: SchemaLocale = 'fi') => {
   return {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "@id": "https://www.hyvantuulensauna.fi/#organization",
+  "@id": ORGANIZATION_ID,
   "name": "Hyvän Tuulen Sauna",
   "alternateName": "Hyvän Tuulen Sauna Oy",
   "description": copy.description,
-  "url": "https://www.hyvantuulensauna.fi",
+  "url": `${SITE_URL}/`,
   "telephone": "+358442313546",
   "email": "info@hyvantuulensauna.fi",
   "foundingDate": "2018",
@@ -233,11 +237,11 @@ export const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": "https://www.hyvantuulensauna.fi/#website",
-  "url": "https://www.hyvantuulensauna.fi",
+  "url": `${SITE_URL}/`,
   "name": "Hyvän Tuulen Sauna",
   "description": "Aito suomalainen saunaelämys merellisessä Helsingissä",
   "publisher": {
-    "@id": "https://www.hyvantuulensauna.fi/#organization"
+    "@id": ORGANIZATION_ID
   }
 };
 
@@ -247,7 +251,7 @@ export const generateServiceSchema = (title: string, description: string, url: s
   "name": title,
   "description": description,
   "provider": {
-    "@id": "https://www.hyvantuulensauna.fi/#organization"
+    "@id": ORGANIZATION_ID
   },
   "areaServed": {
     "@type": "City",
@@ -293,10 +297,10 @@ export const generateArticleSchema = (title: string, description: string, url: s
   "author": {
     "@type": "Organization",
     "name": "Hyvän Tuulen Sauna",
-    "url": "https://www.hyvantuulensauna.fi"
+    "url": `${SITE_URL}/`
   },
   "publisher": {
-    "@id": "https://www.hyvantuulensauna.fi/#organization"
+    "@id": ORGANIZATION_ID
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -320,19 +324,14 @@ export const generateEventSchema = (name: string, description: string, url: stri
     "name": location,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Meripellontie 11C",
+      "streetAddress": "Kalkkihiekantori",
       "addressLocality": "Helsinki",
-      "postalCode": "00970",
+      "postalCode": "00980",
       "addressCountry": "FI"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 60.2078110,
-      "longitude": 25.1059710
     }
   },
   "organizer": {
-    "@id": "https://www.hyvantuulensauna.fi/#organization"
+    "@id": ORGANIZATION_ID
   },
   ...(price && {
     "offers": {
