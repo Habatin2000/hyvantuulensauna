@@ -14,6 +14,13 @@ import { SITE_URL } from '@/lib/site';
 
 const PAGE_PATH = '/galleria';
 const PAGE_IMAGE = `${SITE_URL}/images/gallery-raft-sunset.webp`;
+const SOCIAL_IMAGE_ALT: Record<Locale, string> = {
+  fi: 'Auringonlasku saunalautan peräaallon yllä',
+  en: 'Sunset over the wake of a sauna boat',
+  es: 'Puesta de sol sobre la estela de una sauna flotante',
+  fr: 'Coucher de soleil sur le sillage d’un sauna flottant',
+  de: 'Sonnenuntergang über dem Kielwasser eines Saunaflosses',
+};
 const DATE_PUBLISHED = '2024-01-15';
 const DATE_MODIFIED = '2026-04-14';
 
@@ -44,7 +51,7 @@ export async function generateMetadata({
           url: PAGE_IMAGE,
           width: 1920,
           height: 2559,
-          alt: data.imageAlt,
+          alt: SOCIAL_IMAGE_ALT[safeLocale],
         },
       ],
     },
@@ -52,7 +59,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: data.title,
       description: data.description,
-      images: [{ url: PAGE_IMAGE, alt: data.imageAlt }],
+      images: [{ url: PAGE_IMAGE, alt: SOCIAL_IMAGE_ALT[safeLocale] }],
     },
   };
 }

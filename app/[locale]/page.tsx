@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import VibePageContent from "@/components/vibe/VibePageContent";
+import VibePageContent, { pageCopy } from "@/components/vibe/VibePageContent";
 import type { Locale } from "@/components/vibe/content";
 import fiMessages from "@/messages/fi.json";
 import enMessages from "@/messages/en.json";
@@ -10,6 +10,7 @@ import {
   getLanguageAlternates,
   getLocalizedPageUrl,
   getOpenGraphLocale,
+  generateFAQSchema,
   normalizePageLocale,
 } from "./schema";
 
@@ -78,5 +79,17 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   const safeLocale = normalizePageLocale(locale) as Locale;
-  return <VibePageContent locale={safeLocale} />;
+  const faqSchema = generateFAQSchema(pageCopy[safeLocale].faqItems);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c'),
+        }}
+      />
+      <VibePageContent locale={safeLocale} />
+    </>
+  );
 }

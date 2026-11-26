@@ -3,17 +3,35 @@ import Link from 'next/link';
 import { ArrowDown, ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 import { vibeCopy, type Locale } from './content';
 import VibeClosingSummary from './VibeClosingSummary';
+import VibeFaq from './VibeFaq';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
 import { getVibeBookingRoute, getVibeRoute } from './routes';
 
-const pageCopy = {
+export const pageCopy = {
   fi: {
     publicSessionCta: 'Varaa yleinen saunavuoro',
     journeyCaption: 'Meri-ilmaa, lämmintä puuta, talven valoa',
+    faqEyebrow: 'Hyvä tietää',
+    faqTitle: 'Usein kysytyt kysymykset',
+    faqItems: [
+      {
+        question: 'Voiko tulla ensikertalaisena?',
+        answer: 'Kyllä. Yleisille opastetuille saunavuoroille ovat tervetulleita myös ensikertalaiset, ja saunan voi varata myös yksityiskäyttöön.',
+      },
+      {
+        question: 'Onko tämä sopiva polttariporukalle?',
+        answer: 'Kyllä. Aalto ja Virta sopivat polttareiden lisäksi syntymäpäiville ja yritysryhmille. Voit tuoda mukanasi omat ruoat ja juomat.',
+      },
+      {
+        question: 'Missä Hyvän Tuulen Sauna sijaitsee?',
+        answer: 'Talvella sauna sijaitsee Meripellontie 11C:ssä Puotilassa. Kesällä sauna lähtee Kalkkihiekantorilta Aurinkolahdesta.',
+      },
+    ],
     closing: {
       eyebrow: 'Tervetuloa',
       title: 'Hyvän Tuulen Sauna ei somistusta tarvitse.',
       paragraphs: [
+        'Hyvän Tuulen Sauna on paikka sinulle, joka arvostat luonnollista, autenttista ja alkuperäistä saunakokemusta. Ei tarvitse edes lähteä Helsingistä kokeaksesi mökin kaltaisen saunakokemuksen. Meillä reilu ilmapiiri ja lämpimät kiukaat toivottavat teidät tervetulleeksi.',
         'Monipuolisilla palveluillamme haluammekin tarjota jokaiselle jotakin.',
         'Meillä on ollut saunoja Helsingissä jo kohta kymmenen vuotta, joten löyly on kuuma, avanto on kylmä ja homma toimii nätisti!',
         'Valitse joko Yleinen tai Yksityinen vuoro ja tule nauttimaan!',
@@ -26,10 +44,27 @@ const pageCopy = {
   en: {
     publicSessionCta: 'Book a public sauna session',
     journeyCaption: 'Sea air, warm timber, winter light',
+    faqEyebrow: 'Good to know',
+    faqTitle: 'Frequently asked questions',
+    faqItems: [
+      {
+        question: 'Can first-timers join?',
+        answer: 'Yes. Our guided public sessions welcome first-timers, and private sauna sessions are also available.',
+      },
+      {
+        question: 'Is this suitable for a bachelor party?',
+        answer: 'Yes. Aalto and Virta are suitable for bachelor parties, birthdays and corporate groups. You are welcome to bring your own food and drinks.',
+      },
+      {
+        question: 'Where is Hyvän Tuulen Sauna located?',
+        answer: 'In winter, the sauna is based at Meripellontie 11C in Puotila. In summer, it departs from Kalkkihiekantori in Aurinkolahti.',
+      },
+    ],
     closing: {
       eyebrow: 'Welcome',
       title: 'Hyvän Tuulen Sauna needs no decoration.',
       paragraphs: [
+        'Hyvän Tuulen Sauna is for anyone who appreciates a natural, authentic and traditional sauna experience. You do not even need to leave Helsinki to enjoy a cottage-like sauna. Our welcoming atmosphere and hot stoves are ready to welcome you.',
         'Our varied services offer something for everyone.',
         'We have been hosting saunas in Helsinki for nearly ten years, so the löyly is hot, the ice hole is cold and everything runs smoothly!',
         'Choose a public or private session and come enjoy yourself!',
@@ -42,10 +77,27 @@ const pageCopy = {
   es: {
     publicSessionCta: 'Reserva una sesión de sauna pública',
     journeyCaption: 'Aire de mar, madera cálida, luz de invierno',
+    faqEyebrow: 'Información útil',
+    faqTitle: 'Preguntas frecuentes',
+    faqItems: [
+      {
+        question: '¿Puedo venir si es mi primera vez?',
+        answer: 'Sí. Las sesiones públicas guiadas están abiertas a quienes vienen por primera vez, y también puedes reservar una sesión privada.',
+      },
+      {
+        question: '¿Es adecuado para una despedida de soltero?',
+        answer: 'Sí. Aalto y Virta son adecuados para despedidas de soltero, cumpleaños y grupos de empresa. Puedes traer tu propia comida y bebida.',
+      },
+      {
+        question: '¿Dónde se encuentra Hyvän Tuulen Sauna?',
+        answer: 'En invierno, la sauna está en Meripellontie 11C, en Puotila. En verano, sale de Kalkkihiekantori, en Aurinkolahti.',
+      },
+    ],
     closing: {
       eyebrow: 'Te damos la bienvenida',
       title: 'Hyvän Tuulen Sauna no necesita adornos.',
       paragraphs: [
+        'Hyvän Tuulen Sauna es para quienes valoran una experiencia de sauna natural, auténtica y tradicional. Ni siquiera hace falta salir de Helsinki para sentirse como en una cabaña. Nuestro ambiente acogedor y nuestros hornos calientes os dan la bienvenida.',
         'Nuestra variada oferta tiene algo para todos.',
         'Llevamos casi diez años ofreciendo saunas en Helsinki, así que el löyly está caliente, el agua helada y todo funciona a la perfección.',
         'Elige una sesión pública o privada y ven a disfrutar.',
@@ -58,10 +110,27 @@ const pageCopy = {
   fr: {
     publicSessionCta: 'Réservez une séance de sauna public',
     journeyCaption: 'Air marin, bois chaleureux, lumière d’hiver',
+    faqEyebrow: 'Bon à savoir',
+    faqTitle: 'Questions fréquentes',
+    faqItems: [
+      {
+        question: 'Puis-je venir pour une première expérience ?',
+        answer: 'Oui. Les séances publiques guidées accueillent aussi les débutants, et des séances privées sont également disponibles.',
+      },
+      {
+        question: 'Est-ce adapté à un enterrement de vie de garçon ?',
+        answer: 'Oui. Aalto et Virta conviennent aux enterrements de vie de garçon, aux anniversaires et aux groupes d’entreprise. Vous pouvez apporter votre propre nourriture et vos boissons.',
+      },
+      {
+        question: 'Où se trouve Hyvän Tuulen Sauna ?',
+        answer: 'En hiver, le sauna se trouve au Meripellontie 11C, à Puotila. En été, il part de Kalkkihiekantori, à Aurinkolahti.',
+      },
+    ],
     closing: {
       eyebrow: 'Bienvenue',
       title: 'Hyvän Tuulen Sauna n’a pas besoin d’artifices.',
       paragraphs: [
+        'Hyvän Tuulen Sauna s’adresse à celles et ceux qui apprécient une expérience de sauna naturelle, authentique et traditionnelle. Pas besoin de quitter Helsinki pour retrouver l’ambiance d’un chalet. Notre atmosphère conviviale et nos poêles bien chauds vous accueillent.',
         'Notre offre variée propose quelque chose pour chacun.',
         'Nous vous accueillons dans nos saunas à Helsinki depuis presque dix ans : le löyly est chaud, le trou dans la glace est froid et tout fonctionne parfaitement !',
         'Choisissez une séance publique ou privée et venez en profiter !',
@@ -74,10 +143,27 @@ const pageCopy = {
   de: {
     publicSessionCta: 'Buche eine öffentliche Saunasession',
     journeyCaption: 'Meeresluft, warmes Holz, winterliches Licht',
+    faqEyebrow: 'Gut zu wissen',
+    faqTitle: 'Häufig gestellte Fragen',
+    faqItems: [
+      {
+        question: 'Ist die Sauna für Erstbesucher geeignet?',
+        answer: 'Ja. Erstbesucher sind bei den öffentlichen geführten Saunasessions willkommen. Außerdem kannst du eine private Session buchen.',
+      },
+      {
+        question: 'Eignet sich die Sauna für einen Junggesellenabschied?',
+        answer: 'Ja. Aalto und Virta eignen sich für Junggesellenabschiede, Geburtstage und Firmengruppen. Du kannst dein eigenes Essen und deine Getränke mitbringen.',
+      },
+      {
+        question: 'Wo befindet sich Hyvän Tuulen Sauna?',
+        answer: 'Im Winter befindet sich die Sauna in der Meripellontie 11C in Puotila. Im Sommer legt sie am Kalkkihiekantori in Aurinkolahti ab.',
+      },
+    ],
     closing: {
       eyebrow: 'Willkommen',
       title: 'Hyvän Tuulen Sauna braucht keinen Schnickschnack.',
       paragraphs: [
+        'Hyvän Tuulen Sauna ist für alle, die ein natürliches, authentisches und traditionelles Saunaerlebnis schätzen. Du musst Helsinki nicht einmal verlassen, um dich wie in einer Hütte zu fühlen. Unsere herzliche Atmosphäre und heißen Öfen heißen dich willkommen.',
         'Unser vielfältiges Angebot hält für jeden etwas bereit.',
         'Seit fast zehn Jahren betreiben wir Saunen in Helsinki – das Löyly ist heiß, das Eisloch ist kalt und alles läuft reibungslos!',
         'Wähle eine öffentliche oder private Saunasession und komm vorbei!',
@@ -119,6 +205,11 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
             </a>
           </div>
         </div>
+      </section>
+
+      <section className="vibe-welcome" aria-labelledby="vibe-welcome-title">
+        <h2 id="vibe-welcome-title">{c.welcomeTitle}</h2>
+        <p>{c.welcomeBody}</p>
       </section>
 
       <section id="elamykset" className="vibe-experiences" aria-labelledby="vibe-experiences-title">
@@ -193,6 +284,14 @@ export default function VibePageContent({ locale }: { locale: Locale }) {
           <span>{c.ratingLabel}</span>
           <small>{c.ratingNote}</small>
         </div>
+      </section>
+
+      <section className="vibe-faq-section" aria-labelledby="vibe-faq-title">
+        <div className="vibe-faq-heading">
+          <p className="vibe-eyebrow">{ui.faqEyebrow}</p>
+          <h2 id="vibe-faq-title">{ui.faqTitle}</h2>
+        </div>
+        <VibeFaq items={ui.faqItems} />
       </section>
 
       <VibeClosingSummary
