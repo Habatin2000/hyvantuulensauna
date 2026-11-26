@@ -1,25 +1,38 @@
 import type { ReactNode } from 'react';
-import { Corben, Pacifico, Quicksand } from 'next/font/google';
+import localFont from 'next/font/local';
 import { vibeCopy, type Locale } from '@/components/vibe/content';
 import '../globals.css';
 import './vibe.css';
 
-const quicksand = Quicksand({
+const quicksand = localFont({
+  src: '../../public/fonts/quicksand-latin.woff2',
   variable: '--vibe-font-body',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: '400 700',
+  display: 'swap',
 });
 
-const corben = Corben({
+const corben = localFont({
+  src: [
+    {
+      path: '../../public/fonts/corben-regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/corben-bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   variable: '--vibe-font-display',
-  subsets: ['latin'],
-  weight: ['400', '700'],
+  display: 'swap',
 });
 
-const pacifico = Pacifico({
+const pacifico = localFont({
+  src: '../../public/fonts/pacifico-regular.woff2',
   variable: '--vibe-font-logo',
-  subsets: ['latin'],
   weight: '400',
+  display: 'swap',
 });
 
 export const metadata = {

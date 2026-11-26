@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Quicksand, Corben, Pacifico } from "next/font/google";
+import localFont from "next/font/local";
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
@@ -15,22 +15,35 @@ import { getOrganizationSchema, websiteSchema } from "./schema";
 import { SITE_URL } from "@/lib/site";
 import ConsentBanner from "@/components/analytics/ConsentBanner";
 
-const quicksand = Quicksand({
+const quicksand = localFont({
+  src: "../../public/fonts/quicksand-latin.woff2",
   variable: "--font-quicksand",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400 700",
+  display: "swap",
 });
 
-const corben = Corben({
+const corben = localFont({
+  src: [
+    {
+      path: "../../public/fonts/corben-regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/corben-bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  display: "swap",
 });
 
-const pacifico = Pacifico({
+const pacifico = localFont({
+  src: "../../public/fonts/pacifico-regular.woff2",
   variable: "--font-pacifico",
-  subsets: ["latin"],
   weight: "400",
+  display: "swap",
 });
 
 const metadataCopy: Record<Locale, { title: string; description: string; imageAlt: string }> = {
