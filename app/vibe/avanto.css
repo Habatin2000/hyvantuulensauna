@@ -205,6 +205,31 @@
   text-transform: uppercase;
 }
 
+.vibe-avanto-page .vibe-avanto-private-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding: clamp(3.5rem, 6vw, 5rem) var(--avanto-gutter);
+}
+
+.vibe-avanto-page .vibe-avanto-private-intro h2 {
+  max-width: 560px;
+  color: var(--avanto-navy);
+  font-size: clamp(1.75rem, 2.7vw, 2.5rem);
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.vibe-avanto-page .vibe-avanto-private-intro p {
+  max-width: 680px;
+  color: var(--avanto-copy);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  line-height: 1.75;
+}
+
 .vibe-avanto-page .vibe-avanto-intro {
   display: grid;
   grid-template-columns: minmax(180px, 0.65fr) minmax(0, 1.35fr);
@@ -684,6 +709,18 @@
   }
 }
 
+@media (max-width: 900px) {
+  .vibe-avanto-page .vibe-avanto-private-intro {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-private-intro h2,
+  .vibe-avanto-page .vibe-avanto-private-intro p {
+    max-width: 720px;
+  }
+}
+
 @media (max-width: 760px) {
   .vibe-avanto-page .vibe-avanto-hero {
     display: flex;
@@ -732,6 +769,21 @@
   .vibe-avanto-page .vibe-avanto-hero-stamp {
     right: -8px;
     bottom: 20px;
+  }
+
+  .vibe-avanto-page .vibe-avanto-private-intro {
+    gap: 16px;
+    padding: 48px var(--avanto-gutter);
+  }
+
+  .vibe-avanto-page .vibe-avanto-private-intro h2 {
+    font-size: clamp(1.6rem, 7vw, 1.9rem);
+    line-height: 1.25;
+  }
+
+  .vibe-avanto-page .vibe-avanto-private-intro p {
+    font-size: 0.95rem;
+    line-height: 1.7;
   }
 
   .vibe-avanto-page .vibe-avanto-intro {

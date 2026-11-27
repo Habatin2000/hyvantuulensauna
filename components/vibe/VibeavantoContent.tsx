@@ -12,6 +12,8 @@ import '../../app/vibe/avanto.css';
 
 const avantoCopy = {
   fi: {
+    privateIntroTitle: 'Hyvän Tuulen Saunan yksityiset saunavuorot:',
+    privateIntroText: 'Puulöylyt, meri ja aika omalle porukalle. Varaa Aalto tai Virta kahdeksi tunniksi kokonaan itsellesi. Kippari opastaa alkuun, minkä jälkeen saunot ja avantouit omaan tahtiisi. Reilu hinta, hyvä fiilis ja kaikki valmiina Helsingissä.',
     meetSaunas: 'Tutustu lautoihin',
     entirelyYours: 'Kokonaan teidän',
     privateSauna: 'Yksityinen sauna',
@@ -49,6 +51,8 @@ const avantoCopy = {
     homeLabel: 'Takaisin elämyksiin',
   },
   en: {
+    privateIntroTitle: 'Private sauna sessions at Hyvän Tuulen Sauna:',
+    privateIntroText: 'Wood-fired saunas, the sea and time with your own group. Book Aalto or Virta for two hours, all to yourselves. Your skipper will get you started, then you can enjoy the sauna and ice swimming at your own pace. Fair prices, a great atmosphere and everything ready for you in Helsinki.',
     meetSaunas: 'Meet the saunas',
     entirelyYours: 'Entirely yours',
     privateSauna: 'Private sauna',
@@ -86,6 +90,8 @@ const avantoCopy = {
     homeLabel: 'Back to all experiences',
   },
   es: {
+    privateIntroTitle: 'Sesiones privadas de sauna en Hyvän Tuulen Sauna:',
+    privateIntroText: 'Saunas de leña, el mar y tiempo para tu propio grupo. Reserva Aalto o Virta durante dos horas, solo para vosotros. El capitán os ayudará a empezar y, después, podréis disfrutar de la sauna y del baño en agua helada a vuestro propio ritmo. Un precio justo, buen ambiente y todo listo para vosotros en Helsinki.',
     meetSaunas: 'Descubre las saunas',
     entirelyYours: 'Todo para vosotros',
     privateSauna: 'Sauna privada',
@@ -123,6 +129,8 @@ const avantoCopy = {
     homeLabel: 'Volver a todas las experiencias',
   },
   fr: {
+    privateIntroTitle: 'Séances privées de sauna à Hyvän Tuulen Sauna :',
+    privateIntroText: 'Saunas chauffés au bois, mer et temps rien que pour votre groupe. Réservez Aalto ou Virta pour deux heures, entièrement pour vous. Le capitaine vous expliquera les bases pour commencer, puis vous profiterez du sauna et de la baignade en eau glacée à votre rythme. Un tarif juste, une bonne ambiance et tout est prêt pour vous à Helsinki.',
     meetSaunas: 'Découvrir les saunas',
     entirelyYours: 'Rien que pour vous',
     privateSauna: 'Sauna privé',
@@ -160,6 +168,8 @@ const avantoCopy = {
     homeLabel: 'Retour à toutes les expériences',
   },
   de: {
+    privateIntroTitle: 'Private Saunazeiten bei Hyvän Tuulen Sauna:',
+    privateIntroText: 'Holzsaunen, das Meer und Zeit für deine eigene Gruppe. Buche Aalto oder Virta für zwei Stunden ganz für euch allein. Der Skipper erklärt euch zu Beginn alles Wichtige, danach könnt ihr in eurem eigenen Tempo saunieren und im Eiswasser baden. Ein fairer Preis, eine gute Atmosphäre und alles ist für euch in Helsinki vorbereitet.',
     meetSaunas: 'Die Saunen entdecken',
     entirelyYours: 'Ganz für euch allein',
     privateSauna: 'Private Sauna',
@@ -242,6 +252,11 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
         </div>
       </section>
 
+      <section className="vibe-avanto-private-intro" aria-labelledby="vibe-avanto-private-intro-title">
+        <h2 id="vibe-avanto-private-intro-title">{copy.privateIntroTitle}</h2>
+        <p>{copy.privateIntroText}</p>
+      </section>
+
       <section id="lautat" className="vibe-avanto-intro" aria-labelledby="vibe-avanto-intro-title">
         <p className="vibe-avanto-eyebrow">{data.detailEyebrow}</p>
         <div>
@@ -306,6 +321,8 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
         </article>
       )}
 
+      <VibeBookingFrame kind="winter" locale={locale} />
+
       {included && (
         <section className="vibe-avanto-included" aria-labelledby="vibe-avanto-included-title">
           <span className="vibe-avanto-feature-number">{included.number}</span>
@@ -363,8 +380,6 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
           </div>
         </section>
       )}
-
-      <VibeBookingFrame kind="winter" locale={locale} />
 
       <VibeClosingSummary
         eyebrow={copy.closingEyebrow}
