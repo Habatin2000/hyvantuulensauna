@@ -7,6 +7,7 @@ import VibeBookingFrame from './VibeBookingFrame';
 import VibeBoatGallery from './VibeBoatGallery';
 import VibeClosingSummary from './VibeClosingSummary';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
+import VibeTrustBanner from './VibeTrustBanner';
 import { getVibeRoute } from './routes';
 import '../../app/vibe/avanto.css';
 
@@ -251,6 +252,8 @@ export default function VibeavantoContent({ data, locale }: { data: VibePageData
           </div>
         </div>
       </section>
+
+      <VibeTrustBanner locale={locale} />
 
       <section className="vibe-avanto-private-intro" aria-labelledby="vibe-avanto-private-intro-title">
         <h2 id="vibe-avanto-private-intro-title">{copy.privateIntroTitle}</h2>

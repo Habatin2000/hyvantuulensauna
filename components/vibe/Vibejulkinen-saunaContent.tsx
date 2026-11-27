@@ -9,6 +9,7 @@ import VibeFaq from './VibeFaq';
 import VibeClosingSummary from './VibeClosingSummary';
 import VibeWinterGallery from './VibeWinterGallery';
 import VibeHeroBackdrop from './VibeHeroBackdrop';
+import VibeTrustBanner from './VibeTrustBanner';
 import SubscriptionPurchase from '../booking/SubscriptionPurchase';
 import '../../app/vibe/julkinen-sauna.css';
 
@@ -336,6 +337,8 @@ export default function VibeJulkinenSaunaContent({ data, locale }: { data: VibeP
           )}
         </div>
       </section>
+
+      <VibeTrustBanner locale={locale} />
 
       <section className="vibe-julkinen-sauna-public-intro" aria-labelledby="vibe-julkinen-sauna-public-intro-title">
         <h2 id="vibe-julkinen-sauna-public-intro-title">{copy.publicIntroTitle}</h2>
